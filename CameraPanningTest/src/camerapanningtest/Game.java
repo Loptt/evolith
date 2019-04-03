@@ -38,9 +38,9 @@ public class Game implements Runnable, Commons {
     private KeyManager keyManager;
     
     private Background background;
+    private Camera camera;
     
-    private int x;
-    private int y;
+    private Player player;
     
     /**
     * to create title, width and height and set the game is still not running
@@ -52,10 +52,9 @@ public class Game implements Runnable, Commons {
         this.title = title;
         this.width = width;
         this.height = height;
-        x = 0;
-        y = 0;
         
         keyManager = new KeyManager();
+        camera = new Camera(100, 100, width, height);
     }
     
      /**
@@ -97,6 +96,8 @@ public class Game implements Runnable, Commons {
         background = new Background(Assets.background ,getWidth(), getHeight());
         
         display.getJframe().addKeyListener(keyManager);
+        
+        player = new Player(300, 300, 100, 100, this);
     }
     
     /**
@@ -105,17 +106,19 @@ public class Game implements Runnable, Commons {
     private void tick() {
         keyManager.tick();
         if (keyManager.w) {
-            y -= 5;
+            camera.setY(camera.getY() - 5);
         }
         if (keyManager.a) {
-            x-= 5;
+            camera.setX(camera.getX() - 5);
         }
         if (keyManager.s) {
-            y+= 5;
+            camera.setY(camera.getY() + 5);
         }
         if (keyManager.d) {
-            x+= 5;
+            camera.setX(camera.getX() + 5);
         }
+        
+        player.tick();
     }
     
     /**
@@ -131,7 +134,8 @@ public class Game implements Runnable, Commons {
         else {
             g = bs.getDrawGraphics();
             g.clearRect(0, 0, width, height);
-            g.drawImage(background.getBackground(x, y), 0,0, width, height, null);
+            g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0,0, width, height, null);
+            player.render(g);
             
             bs.show();
             g.dispose();     
@@ -179,6 +183,10 @@ public class Game implements Runnable, Commons {
      */
     public KeyManager getKeyManager() {
         return keyManager;
+    }
+
+    public Camera getCamera() {
+        return camera;
     }
     
     /**
