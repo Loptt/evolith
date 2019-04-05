@@ -105,8 +105,6 @@ public class Game implements Runnable, Commons {
     private void tick() {
         keyManager.tick();
         if (keyManager.w) {
-                        System.out.println("pressed w");
-
             if(y-5<=0){
                 y = 0;
             }
@@ -115,8 +113,6 @@ public class Game implements Runnable, Commons {
             }
         }
         if (keyManager.a) {
-                                    System.out.println("pressed a");
-
             if(x-5<=10){
                 x = 10;
             }
@@ -125,7 +121,6 @@ public class Game implements Runnable, Commons {
             }
         }
         if (keyManager.s) {
-                                                System.out.println("pressed s");
             if(y+5>=background.getHeight()){
                 y = background.getHeight();
             }
@@ -134,8 +129,6 @@ public class Game implements Runnable, Commons {
             }                                    
         }
         if (keyManager.d) {
-                                                System.out.println("pressed d");
-
             if(x+5>=background.getWidth()){
                 x = background.getWidth();
             }
@@ -143,7 +136,6 @@ public class Game implements Runnable, Commons {
                 x+=5;
             }
         }
-
     }
     
     /**
