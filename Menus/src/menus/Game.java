@@ -200,11 +200,12 @@ public class Game implements Runnable, Commons {
             g = bs.getDrawGraphics();
             g.clearRect(0, 0, width, height);
             g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
-            mainMenu.render(g);
 
             for (int i = 0; i < playerSwarm.size(); i++) {
                 playerSwarm.get(i).render(g);
             }
+            mainMenu.render(g);
+
             
             bs.show();
             g.dispose();     

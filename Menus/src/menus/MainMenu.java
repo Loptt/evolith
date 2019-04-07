@@ -25,16 +25,10 @@ public class MainMenu extends Menu{
         super(x, y, width, height, game);
         active = true;
         clickPlay = false;
-        /*
-        play.setWidth(400);
-        play.setHeight(140);
-        
-        instructions.setHeight(400);
-        instructions.setWidth(140);
-        */
+
         buttons = new ArrayList<Button>();
-        buttons.add(new Button(300,350,400,100));
-        buttons.add(new Button(300,550,400,100));
+        buttons.add(new Button(340,390,350,110)); // Play button
+        buttons.add(new Button(340,530,350,110)); // Instructions button
   
     }
     
@@ -72,6 +66,7 @@ public class MainMenu extends Menu{
                 buttons.get(i).setActive(false);
             }
             if(buttons.get(0).isPressed()){
+                setClickPlay(true);
                 setActive(false);
             }
         }
