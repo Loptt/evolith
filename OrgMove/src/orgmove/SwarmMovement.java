@@ -22,12 +22,10 @@ public class SwarmMovement implements Commons{
         int currRow = 0;
         int currCol = 0;
         
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < MAX_ORGANISM_AMOUNT; i++) {
             
             positions.add(new ArrayList<>());
             colLimit = (int) Math.sqrt(i) + 1;
-            //System.out.println(colLimit);
-            
             currCol = 0;
             currRow = 0;
             
@@ -36,12 +34,8 @@ public class SwarmMovement implements Commons{
                     currRow++;
                     currCol = 0;
                 }
-                /*
-                System.out.print(Integer.toString(currCol) + "--");
-                System.out.print(currRow);
-                System.out.print("     ");*/
                 
-                positions.get(i).add(new Point(currCol * ORGANISM_SIZE, currRow * ORGANISM_SIZE));
+                positions.get(i).add(new Point(currCol * (ORGANISM_SIZE - 20), currRow * (ORGANISM_SIZE - 20)));
                 
                 currCol++;
             }
@@ -55,12 +49,28 @@ public class SwarmMovement implements Commons{
         ArrayList<Point> customPosition = (ArrayList<Point>) positions.get(num - 1).clone();
         
         for (int i = 0; i < customPosition.size(); i++) {
-            customPosition.get(i).x += x;
-            customPosition.get(i).y += y;
-            
-            System.out.println(customPosition.get(i));
+            customPosition.get(i).x += x + generateRandomness(100);
+            customPosition.get(i).y += y + generateRandomness(100);
         }
         
         return customPosition;
+    }
+    
+    public static ArrayList<Point> getPositions(int x, int y, int num, int obj) {
+        SwarmMovement.init();
+        ArrayList<Point> customPosition = (ArrayList<Point>) positions.get(num - 1 + obj).clone();
+        
+        for (int i = 0; i < customPosition.size(); i++) {
+            customPosition.get(i).x += x + generateRandomness(100);
+            customPosition.get(i).y += y + generateRandomness(100);
+        }
+        
+        customPosition.remove(num/2);
+        
+        return customPosition;
+    }
+    
+    private static int generateRandomness(int random) {
+        return (int) (Math.random() * random - random * 2);
     }
 }
