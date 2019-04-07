@@ -5,18 +5,9 @@
  */
 package evolith;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Scanner;
 
 /**
  *
@@ -36,6 +27,13 @@ public class Game implements Runnable, Commons {
     private boolean running;
     
     private KeyManager keyManager;
+    private MouseManager mouseManager;
+    
+    private Background background;
+    private Camera camera;
+    
+    private Organisms organisms;
+    private Plants plants;
     
     /**
     * to create title, width and height and set the game is still not running
@@ -47,6 +45,10 @@ public class Game implements Runnable, Commons {
         this.title = title;
         this.width = width;
         this.height = height;
+        
+        keyManager = new KeyManager();
+        mouseManager = new MouseManager();
+        camera = new Camera(10, 10, width, height, this);
     }
     
      /**
@@ -85,13 +87,26 @@ public class Game implements Runnable, Commons {
         display = new Display(title, width, height);
         Assets.init();
         
+        background = new Background(Assets.background , 3200, 3200, width, height);
+        
+        organisms = new Organisms(this);
+        plants = new Plants(this);
+        
         display.getJframe().addKeyListener(keyManager);
+        display.getJframe().addMouseListener(mouseManager);
+        display.getJframe().addMouseMotionListener(mouseManager);
+        display.getCanvas().addMouseListener(mouseManager);
+        display.getCanvas().addMouseMotionListener(mouseManager);
     }
     
     /**
      * updates all objects on a frame
      */
     private void tick() {
+        keyManager.tick();
+        camera.tick();
+        organisms.tick();
+        plants.tick();
     }
     
     /**
@@ -107,6 +122,10 @@ public class Game implements Runnable, Commons {
         else {
             g = bs.getDrawGraphics();
             g.clearRect(0, 0, width, height);
+            g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
+            
+            plants.render(g);
+            organisms.render(g);
             
             bs.show();
             g.dispose();     
@@ -154,6 +173,30 @@ public class Game implements Runnable, Commons {
      */
     public KeyManager getKeyManager() {
         return keyManager;
+    }
+    
+    /**
+     * to get mouseManager
+     * @return mouseManager
+     */
+    public MouseManager getMouseManager() {
+        return mouseManager;
+    }
+    
+    /**
+     * to get camera
+     * @return camera
+     */
+    public Camera getCamera() {
+        return camera;
+    }
+    
+    /**
+     * to get the background
+     * @return background
+     */
+    public Background getBackground() {
+        return background;
     }
     
     /**

@@ -176,15 +176,27 @@ public class Game implements Runnable, Commons {
     public KeyManager getKeyManager() {
         return keyManager;
     }
-
+    
+    /**
+     * to get mouseManager
+     * @return mouseManager
+     */
     public MouseManager getMouseManager() {
         return mouseManager;
     }
-
+    
+    /**
+     * to get camera
+     * @return camera
+     */
     public Camera getCamera() {
         return camera;
     }
-
+    
+    /**
+     * to get the background
+     * @return background
+     */
     public Background getBackground() {
         return background;
     }
