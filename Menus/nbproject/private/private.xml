@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>src/menus/Camera.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>17</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/Users/victor/Documents/GitHub/evolith/Menus/src/menus/Assets.java</file>
+            <file>file:/Users/victor/Documents/GitHub/evolith/Menus/src/menus/Camera.java</file>
+            <file>file:/Users/victor/Documents/GitHub/evolith/Menus/src/menus/MouseManager.java</file>
+            <file>file:/Users/victor/Documents/GitHub/evolith/Menus/src/menus/Item.java</file>
+            <file>file:/Users/victor/Documents/GitHub/evolith/Menus/src/menus/SwarmMovement.java</file>
+            <file>file:/Users/victor/Documents/GitHub/evolith/Menus/src/menus/MainMenu.java</file>
+            <file>file:/Users/victor/Documents/GitHub/evolith/Menus/src/menus/Menus.java</file>
+            <file>file:/Users/victor/Documents/GitHub/evolith/Menus/src/menus/ImageLoader.java</file>
+            <file>file:/Users/victor/Documents/GitHub/evolith/Menus/src/menus/Animation.java</file>
+            <file>file:/Users/victor/Documents/GitHub/evolith/Menus/src/menus/Game.java</file>
+            <file>file:/Users/victor/Documents/GitHub/evolith/Menus/src/menus/Button.java</file>
+            <file>file:/Users/victor/Documents/GitHub/evolith/Menus/src/menus/SpriteSheet.java</file>
+            <file>file:/Users/victor/Documents/GitHub/evolith/Menus/src/menus/Player.java</file>
+            <file>file:/Users/victor/Documents/GitHub/evolith/Menus/src/menus/Menu.java</file>
+        </group>
+    </open-files>
+</project-private>

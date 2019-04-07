@@ -21,23 +21,15 @@ public class KeyManager implements KeyListener {
     /**
      * Keys to be used in the game
      */
-    public boolean p;
-    public boolean r;
-    public boolean g;
-    public boolean c;
-    public boolean space;
-    public boolean enter;
+    public boolean w;
+    public boolean a;
+    public boolean s;
+    public boolean d;
     
     private boolean keys[];
-    
-    private boolean prevp;
-    private boolean prevg;
-    private boolean prevc;
-    private boolean prevr;
-    
+
     public KeyManager() {
         keys = new boolean[256];
-        prevp = false;
     }
     
     /**
@@ -70,71 +62,9 @@ public class KeyManager implements KeyListener {
      * To update the object each frame
      */
     public void tick() {
-        left = keys[KeyEvent.VK_LEFT];
-        right = keys[KeyEvent.VK_RIGHT];
-        
-        space = keys[KeyEvent.VK_SPACE];
-        enter = keys[KeyEvent.VK_ENTER];
-        
-        r = keys[KeyEvent.VK_R];
-        
-        
-        /**
-         * The following set of if statements prevent the key being triggered multiple
-         * consecutive times without releasing the key
-         */
-        if (keys[KeyEvent.VK_P]) {
-            if (!prevp) {
-                p = true;
-                prevp = true;
-            } else {
-                p = false;
-            }
-        } else {
-            prevp = false;
-        }
-        
-        /**
-         * Same for this
-         */
-        if (keys[KeyEvent.VK_G]) {
-            if (!prevg) {
-                g = true;
-                prevg = true;
-            } else {
-                g = false;
-            }
-        } else {
-            prevg = false;
-        }
-        
-        /**
-         * Same for this
-         */
-        if (keys[KeyEvent.VK_C]) {
-            if (!prevc) {
-                c = true;
-                prevc = true;
-            } else {
-                c = false;
-            }
-        } else {
-            prevc = false;
-        }
-        
-        /**
-         * Same for this
-         */        
-        if (keys[KeyEvent.VK_R]) {
-            if (!prevr) {
-                r = true;
-                prevr = true;
-            } else {
-                r = false;
-            }
-        } else {
-            prevr = false;
-        }
-  
+        w = keys[KeyEvent.VK_W];
+        a = keys[KeyEvent.VK_A];
+        s = keys[KeyEvent.VK_S];
+        d = keys[KeyEvent.VK_D];
     }
 }

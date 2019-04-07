@@ -5,18 +5,11 @@
  */
 package menus;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Scanner;
+import java.util.ArrayList;
 
 /**
  *
@@ -36,6 +29,17 @@ public class Game implements Runnable, Commons {
     private boolean running;
     
     private KeyManager keyManager;
+    private MouseManager mouseManager;
+    
+    private Background background;
+    private Camera camera;
+    
+    private ArrayList<Player> playerSwarm;
+    
+    private enum States{MainMenu, Paused, GameOver, Play, Instructions}
+    private States state;
+    
+    private MainMenu mainMenu = new MainMenu(0,0,1000,700,this);
     
     /**
     * to create title, width and height and set the game is still not running
@@ -47,6 +51,11 @@ public class Game implements Runnable, Commons {
         this.title = title;
         this.width = width;
         this.height = height;
+        
+        keyManager = new KeyManager();
+        mouseManager = new MouseManager();
+        camera = new Camera(10, 10, width, height);
+        state = States.MainMenu;
     }
     
      /**
@@ -85,13 +94,97 @@ public class Game implements Runnable, Commons {
         display = new Display(title, width, height);
         Assets.init();
         
+        background = new Background(Assets.background , 3200, 3200, width, height);
+        
         display.getJframe().addKeyListener(keyManager);
+        display.getJframe().addMouseListener(mouseManager);
+        display.getJframe().addMouseMotionListener(mouseManager);
+        display.getCanvas().addMouseListener(mouseManager);
+        display.getCanvas().addMouseMotionListener(mouseManager);
+        
+        SwarmMovement.init();
+        
+        playerSwarm = new ArrayList<>();
+        
+        for (int i = 0; i < 3; i++) {
+            Player player = new Player(50 * i, 300, 100, 100, this);
+            playerSwarm.add(player);
+        }
     }
     
     /**
      * updates all objects on a frame
      */
     private void tick() {
+        mainMenu.tick();
+        ArrayList<Point> points = new ArrayList<>();
+        switch (state){
+            case MainMenu:
+                mainMenu.setActive(true);
+                if(mainMenu.isClickPlay()){
+                    mainMenu.setActive(false);
+                    state = States.Play;
+                }
+                break;
+            //case Instructions:
+               // break;
+            case Play:
+                keyManager.tick();
+
+                if (keyManager.w) {
+                    if(camera.getY() - 5 <= 10){
+                        camera.setY(10);
+                    }
+                    else{
+                        camera.setY(camera.getY() - 5);
+                    }
+                }
+                if (keyManager.a) {
+                    if(camera.getX() - 5 <= 10){
+                        camera.setX(10);
+                    }
+                    else{
+                        camera.setX(camera.getX() - 5);
+                    }
+                }
+                if (keyManager.s) {
+                    if(camera.getY() + 5 >= background.getHeight() - getHeight() - 10){
+                        camera.setY(background.getHeight() - getHeight() - 10);
+                    }
+                    else{
+                        camera.setY(camera.getY() + 5);
+                    }                                    
+                }
+                if (keyManager.d) {
+                    if(camera.getX() + 5 >= background.getWidth() - getWidth() - 10){
+                        camera.setX(background.getWidth() - getWidth() - 10);
+                    }
+                    else{
+                        camera.setX(camera.getX() + 5);
+                    }
+                }
+
+                if (mouseManager.isIzquierdo()) {
+                    points = SwarmMovement.getPositions(camera.getAbsX(mouseManager.getX()),
+                            camera.getAbsY(mouseManager.getY()), playerSwarm.size());
+                    for (int i = 0; i < playerSwarm.size(); i++) {
+                        playerSwarm.get(i).setPoint(points.get(i));
+                    }
+
+                    mouseManager.setIzquierdo(false);
+                }
+
+                for (int i = 0; i < playerSwarm.size(); i++) {
+                    playerSwarm.get(i).tick();
+                }
+                break;
+            /*case Paused:
+                break;
+            case GameOver:
+                break;
+                */
+        }
+            
     }
     
     /**
@@ -100,13 +193,18 @@ public class Game implements Runnable, Commons {
     private void render() {
         Toolkit.getDefaultToolkit().sync(); //Linux
         bs = display.getCanvas().getBufferStrategy();
-        
         if (bs == null) {
             display.getCanvas().createBufferStrategy(3);
         }
         else {
             g = bs.getDrawGraphics();
             g.clearRect(0, 0, width, height);
+            g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
+            mainMenu.render(g);
+
+            for (int i = 0; i < playerSwarm.size(); i++) {
+                playerSwarm.get(i).render(g);
+            }
             
             bs.show();
             g.dispose();     
@@ -154,6 +252,14 @@ public class Game implements Runnable, Commons {
      */
     public KeyManager getKeyManager() {
         return keyManager;
+    }
+
+    public MouseManager getMouseManager() {
+        return mouseManager;
+    }
+
+    public Camera getCamera() {
+        return camera;
     }
     
     /**
