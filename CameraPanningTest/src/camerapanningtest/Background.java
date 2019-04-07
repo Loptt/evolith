@@ -14,15 +14,26 @@ import java.awt.image.BufferedImage;
 public class Background {
     BufferedImage image;
     
+    int cameraWidth, cameraHeight;
     int width, height;
     
-    public Background(BufferedImage img, int width, int height) {
+    public Background(BufferedImage img, int width, int height, int cameraWidth, int cameraHeight) {
         image = img;
         this.width = width;
         this.height = height;
+        this.cameraWidth = cameraWidth;
+        this.cameraHeight = cameraHeight;
     }
     
     BufferedImage getBackground(int x, int y) {
-        return image.getSubimage(x, y, width, height);
+        return image.getSubimage(x, y, cameraWidth, cameraHeight);
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }

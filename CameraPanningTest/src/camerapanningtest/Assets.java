@@ -17,7 +17,7 @@ public class Assets {
     public static BufferedImage player; 
     
     public static void init() {
-        background = ImageLoader.loadImage("/images/grass_back.png");
+        background = ImageLoader.loadImage("/images/grass_rock.png");
         player = ImageLoader.loadImage("/images/waluigi.png");
 
     }

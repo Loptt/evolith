@@ -19,12 +19,20 @@ public class Camera {
         this.height = height;
     }
     
-    public int getTransX(int absX) {
+    public int getRelX(int absX) {
         return absX - x;
     }
     
-    public int getTransY(int absY) {
+    public int getRelY(int absY) {
         return absY - y;
+    }
+    
+    public int getAbsX(int relX) {
+        return relX + x;
+    }
+    
+    public int getAbsY(int relY) {
+        return relY + y;
     }
 
     public void setX(int x) {

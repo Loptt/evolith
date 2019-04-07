@@ -26,5 +26,10 @@ hs_err_pid*
 /CameraPanningTest/build/
 /Minimap/nbproject/private/
 /Minimap/build/
+<<<<<<< HEAD
 /Evolith/build/
 /Menus/build/
+=======
+/OrgMove/nbproject/private/
+/OrgMove/build/
+>>>>>>> b443e234825082fcf1cb7cc8d6b39ce18f4098a4
