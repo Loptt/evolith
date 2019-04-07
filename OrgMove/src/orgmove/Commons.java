@@ -17,4 +17,7 @@ public interface Commons {
      */
     
     public static final int ORGANISM_SIZE = 100;
+    public static final int INITIAL_POINT = 1000;
+    public static final int MAX_ORGANISM_AMOUNT = 256;
+    public static final int PLANT_SIZE = 150;
 }

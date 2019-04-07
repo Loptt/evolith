@@ -25,7 +25,7 @@ public class Player extends Item {
         super(x, y, width, height);
         this.game = game;
         point = new Point(500, 500);
-        maxVel = 7;
+        maxVel = 3;
         xVel = 0;
         yVel = 0;
         acc = 1;
@@ -46,10 +46,10 @@ public class Player extends Item {
                     maxVel = 1;
                 }
             } else {
-                maxVel = 3;
+                maxVel = 2;
             }
         } else {
-            maxVel = 7;
+            maxVel = 3;
         }
         
         

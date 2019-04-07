@@ -34,7 +34,8 @@ public class Game implements Runnable, Commons {
     private Background background;
     private Camera camera;
     
-    private ArrayList<Player> playerSwarm;
+    private Organisms organisms;
+    private Plants plants;
     
     /**
     * to create title, width and height and set the game is still not running
@@ -49,7 +50,7 @@ public class Game implements Runnable, Commons {
         
         keyManager = new KeyManager();
         mouseManager = new MouseManager();
-        camera = new Camera(10, 10, width, height);
+        camera = new Camera(10, 10, width, height, this);
     }
     
      /**
@@ -90,75 +91,24 @@ public class Game implements Runnable, Commons {
         
         background = new Background(Assets.background , 3200, 3200, width, height);
         
+        organisms = new Organisms(this);
+        plants = new Plants(this);
+        
         display.getJframe().addKeyListener(keyManager);
         display.getJframe().addMouseListener(mouseManager);
         display.getJframe().addMouseMotionListener(mouseManager);
         display.getCanvas().addMouseListener(mouseManager);
         display.getCanvas().addMouseMotionListener(mouseManager);
-        
-        SwarmMovement.init();
-        
-        playerSwarm = new ArrayList<>();
-        
-        for (int i = 0; i < 3; i++) {
-            Player player = new Player(50 * i, 300, 100, 100, this);
-            playerSwarm.add(player);
-        }
     }
     
     /**
      * updates all objects on a frame
      */
     private void tick() {
-        ArrayList<Point> points = new ArrayList<>();
         keyManager.tick();
-        
-        if (keyManager.w) {
-            if(camera.getY() - 5 <= 10){
-                camera.setY(10);
-            }
-            else{
-                camera.setY(camera.getY() - 5);
-            }
-        }
-        if (keyManager.a) {
-            if(camera.getX() - 5 <= 10){
-                camera.setX(10);
-            }
-            else{
-                camera.setX(camera.getX() - 5);
-            }
-        }
-        if (keyManager.s) {
-            if(camera.getY() + 5 >= background.getHeight() - getHeight() - 10){
-                camera.setY(background.getHeight() - getHeight() - 10);
-            }
-            else{
-                camera.setY(camera.getY() + 5);
-            }                                    
-        }
-        if (keyManager.d) {
-            if(camera.getX() + 5 >= background.getWidth() - getWidth() - 10){
-                camera.setX(background.getWidth() - getWidth() - 10);
-            }
-            else{
-                camera.setX(camera.getX() + 5);
-            }
-        }
-        
-        if (mouseManager.isIzquierdo()) {
-            points = SwarmMovement.getPositions(camera.getAbsX(mouseManager.getX()),
-                    camera.getAbsY(mouseManager.getY()), playerSwarm.size());
-            for (int i = 0; i < playerSwarm.size(); i++) {
-                playerSwarm.get(i).setPoint(points.get(i));
-            }
-            
-            mouseManager.setIzquierdo(false);
-        }
-        
-        for (int i = 0; i < playerSwarm.size(); i++) {
-            playerSwarm.get(i).tick();
-        }
+        camera.tick();
+        organisms.tick();
+        plants.tick();
     }
     
     /**
@@ -176,9 +126,8 @@ public class Game implements Runnable, Commons {
             g.clearRect(0, 0, width, height);
             g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
             
-            for (int i = 0; i < playerSwarm.size(); i++) {
-                playerSwarm.get(i).render(g);
-            }
+            plants.render(g);
+            organisms.render(g);
             
             bs.show();
             g.dispose();     
@@ -227,13 +176,29 @@ public class Game implements Runnable, Commons {
     public KeyManager getKeyManager() {
         return keyManager;
     }
-
+    
+    /**
+     * to get mouseManager
+     * @return mouseManager
+     */
     public MouseManager getMouseManager() {
         return mouseManager;
     }
-
+    
+    /**
+     * to get camera
+     * @return camera
+     */
     public Camera getCamera() {
         return camera;
+    }
+    
+    /**
+     * to get the background
+     * @return background
+     */
+    public Background getBackground() {
+        return background;
     }
     
     /**
