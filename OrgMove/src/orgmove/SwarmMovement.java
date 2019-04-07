@@ -51,11 +51,14 @@ public class SwarmMovement implements Commons{
     }
     
     public static ArrayList<Point> getPositions(int x, int y, int num) {
-        ArrayList<Point> customPosition = positions.get(num - 1);
+        SwarmMovement.init();
+        ArrayList<Point> customPosition = (ArrayList<Point>) positions.get(num - 1).clone();
         
         for (int i = 0; i < customPosition.size(); i++) {
             customPosition.get(i).x += x;
             customPosition.get(i).y += y;
+            
+            System.out.println(customPosition.get(i));
         }
         
         return customPosition;

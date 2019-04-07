@@ -151,8 +151,9 @@ public class Game implements Runnable, Commons {
                     camera.getAbsY(mouseManager.getY()), playerSwarm.size());
             for (int i = 0; i < playerSwarm.size(); i++) {
                 playerSwarm.get(i).setPoint(points.get(i));
-                System.out.println(points.get(i));
             }
+            
+            mouseManager.setIzquierdo(false);
         }
         
         for (int i = 0; i < playerSwarm.size(); i++) {
