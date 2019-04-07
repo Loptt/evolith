@@ -6,8 +6,10 @@
 package orgmove;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
 
 /**
  *
@@ -32,7 +34,7 @@ public class Game implements Runnable, Commons {
     private Background background;
     private Camera camera;
     
-    private Player player;
+    private ArrayList<Player> playerSwarm;
     
     /**
     * to create title, width and height and set the game is still not running
@@ -94,13 +96,21 @@ public class Game implements Runnable, Commons {
         display.getCanvas().addMouseListener(mouseManager);
         display.getCanvas().addMouseMotionListener(mouseManager);
         
-        player = new Player(300, 300, 100, 100, this);
+        SwarmMovement.init();
+        
+        playerSwarm = new ArrayList<>();
+        
+        for (int i = 0; i < 3; i++) {
+            Player player = new Player(50 * i, 300, 100, 100, this);
+            playerSwarm.add(player);
+        }
     }
     
     /**
      * updates all objects on a frame
      */
     private void tick() {
+        ArrayList<Point> points = new ArrayList<>();
         keyManager.tick();
         
         if (keyManager.w) {
@@ -136,7 +146,18 @@ public class Game implements Runnable, Commons {
             }
         }
         
-        player.tick();
+        if (mouseManager.isIzquierdo()) {
+            points = SwarmMovement.getPositions(camera.getAbsX(mouseManager.getX()),
+                    camera.getAbsY(mouseManager.getY()), playerSwarm.size());
+            for (int i = 0; i < playerSwarm.size(); i++) {
+                playerSwarm.get(i).setPoint(points.get(i));
+                System.out.println(points.get(i));
+            }
+        }
+        
+        for (int i = 0; i < playerSwarm.size(); i++) {
+            playerSwarm.get(i).tick();
+        }
     }
     
     /**
@@ -153,7 +174,10 @@ public class Game implements Runnable, Commons {
             g = bs.getDrawGraphics();
             g.clearRect(0, 0, width, height);
             g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
-            player.render(g);
+            
+            for (int i = 0; i < playerSwarm.size(); i++) {
+                playerSwarm.get(i).render(g);
+            }
             
             bs.show();
             g.dispose();     

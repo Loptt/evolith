@@ -33,10 +33,10 @@ public class Player extends Item {
 
     @Override
     public void tick() {
-        if (game.getMouseManager().isIzquierdo()) {
+        /*if (game.getMouseManager().isIzquierdo()) {
             point.setLocation(game.getCamera().getAbsX(game.getMouseManager().getX() - getWidth() / 2),
                     game.getCamera().getAbsY(game.getMouseManager().getY() - getHeight() / 2));
-        }
+        }*/
         
         if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 25) {
             if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 15) {
@@ -89,5 +89,12 @@ public class Player extends Item {
     public void render(Graphics g) {
         g.drawImage(Assets.player, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
     }
-    
+
+    public Point getPoint() {
+        return point;
+    }
+
+    public void setPoint(Point point) {
+        this.point = point;
+    }
 }
