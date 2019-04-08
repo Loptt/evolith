@@ -56,7 +56,6 @@ public class Game implements Runnable, Commons {
         mouseManager = new MouseManager();
         camera = new Camera(10, 10, width, height, this);
         mainMenu = new MainMenu(0,0,width,height,this);
-        buttonBar = new ButtonBar(10,10,505,99,this);
         state = States.MainMenu;
     }
     
@@ -95,6 +94,8 @@ public class Game implements Runnable, Commons {
     private void init() {
         display = new Display(title, width, height);
         Assets.init();
+        buttonBar = new ButtonBar(10,10,505,99,this);
+
         
         background = new Background(Assets.background , 3200, 3200, width, height);
         
