@@ -198,9 +198,9 @@ public class Organisms implements Commons {
             stealth = 1;
             survivability = 1;
             
-            hunger = 50;
-            thirst = 70;
-            maturity = 0;
+            hunger = (int) (Math.random() * (100 - 50)) + 50;;
+            thirst = (int) (Math.random() * (70 - 30)) + 30;;
+            maturity = (int) (Math.random() * (3 - 2)) + 2;;
             
         }
         
@@ -279,25 +279,6 @@ public class Organisms implements Commons {
         @Override
         public void render(Graphics g) {
             g.drawImage(Assets.player, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
-           /* 
-            if(getPerimetro().contains(game.getMouseManager().getX(), game.getMouseManager().getY()))
-            {
-                 g.setColor(Color.black);
-                 g.fillRect(game.getMouseManager().getX(), game.getMouseManager().getY(), 100 , 100);
-                 /*
-                 g.setColor(new Color(0, 32, 48));
-                 g.fillRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
-                 g.setColor(Color.white);
-                 g.drawRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
-                 Font small = new Font("Helvetica", Font.BOLD, 14);
-                 FontMetrics metr = display.getJframe().getFontMetrics(small);
-                 g.setColor(Color.white);
-                 g.setFont(small);
-                 g.drawString(message, (BOARD_WIDTH - metr.stringWidth(message)) / 2,
-                BOARD_WIDTH / 2);
-                 
-            }
-*/
         
         }
 

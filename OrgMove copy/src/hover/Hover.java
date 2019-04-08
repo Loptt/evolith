@@ -5,6 +5,7 @@
  */
 package hover;
 
+import static hover.Commons.MAX_HUNGER;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -14,7 +15,7 @@ import java.awt.Graphics;
  *
  * @author charles
  */
-public class Hover extends Item {
+public class Hover extends Item implements Commons {
     
     private Game game;
     int food, water, mat;
@@ -33,24 +34,52 @@ public class Hover extends Item {
     
     @Override
     public void render(Graphics g) {
-    String food = Integer.toString(this.food);
-    String thirst = Integer.toString(this.water);
-    String maturity = Integer.toString(this.mat);
-    g.setColor(Color.white);
+
+    
+    g.setColor(new Color(137, 44, 152));
     g.fillRect(x, y, 200 , 150);
-    g.setColor(new Color(3, 214, 210));
+    
+    
+    g.setColor(new Color(37, 198, 133));
     g.fillRect(x+10, y+10, 180 , 130);
+    
+    
     Font small = new Font("Helvetica", Font.BOLD, 14);
     
     FontMetrics metr = game.getDisplay().getJframe().getFontMetrics(small);
+    
     g.setColor(new Color(197, 56, 218));
     g.setFont(small);
-    g.drawString("Hunger:   " + food, x + 40, y + 40 );
-    g.drawString("Thirst:   " + thirst, x + 40, y + 70 );
-    g.drawString("Maturity:   " + maturity, x + 40, y + 100 );
-
-   
-
+    
+//Hunger    
+    g.drawString("Hunger:", x + 25, y + 30 );
+    
+    
+    g.setColor(Color.white);
+    g.drawRect(x + 25, y + 40 , 120 , 10);
+    
+    g.setColor(Color.green);
+    g.fillRect(x + 26, y + 41, (int) 118 * this.food/MAX_HUNGER , 8);
+    
+//Thirst
+    g.setColor(new Color(197, 56, 218));
+    g.drawString("Thirst:", x + 25, y + 70 );
+    
+    g.setColor(Color.white);
+    g.drawRect(x +25, y + 80 , 120 , 10);
+    
+    g.setColor(Color.blue);
+    g.fillRect(x + 26, y + 81, (int) 118 * this.water/MAX_THIRST , 8);
+//Maturity     
+    g.setColor(new Color(197, 56, 218));
+    g.drawString("Maturity:", x + 25, y + 110);
+    
+    
+    g.setColor(Color.white);
+    g.drawRect(x +25, y + 120, 120 , 10);
+    
+     g.setColor(Color.red);
+    g.fillRect(x + 26, y + 121, (int) 118 * this.mat/MAX_MATURITY , 8);
 }
 }
    
