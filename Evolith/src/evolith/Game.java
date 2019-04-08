@@ -35,6 +35,11 @@ public class Game implements Runnable, Commons {
     private Organisms organisms;
     private Plants plants;
     
+    private enum States{MainMenu, Paused, GameOver, Play, Instructions}
+    private States state;
+    
+    private MainMenu mainMenu;
+    
     /**
     * to create title, width and height and set the game is still not running
     * @param title to set the title of the window
@@ -49,6 +54,9 @@ public class Game implements Runnable, Commons {
         keyManager = new KeyManager();
         mouseManager = new MouseManager();
         camera = new Camera(10, 10, width, height, this);
+        mainMenu = new MainMenu(0,0,width,height,this);
+        
+        state = States.MainMenu;
     }
     
      /**
@@ -103,10 +111,23 @@ public class Game implements Runnable, Commons {
      * updates all objects on a frame
      */
     private void tick() {
-        keyManager.tick();
-        camera.tick();
-        organisms.tick();
-        plants.tick();
+        switch(state) {
+            case MainMenu:
+                mainMenu.tick();
+                mainMenu.setActive(true);
+                if(mainMenu.isClickPlay()){
+                    mainMenu.setActive(false);
+                    state = States.Play;
+                }
+                break;
+            case Play:
+                keyManager.tick();
+                camera.tick();
+                organisms.tick();
+                plants.tick();
+                break;
+        }
+        
     }
     
     /**
@@ -122,11 +143,17 @@ public class Game implements Runnable, Commons {
         else {
             g = bs.getDrawGraphics();
             g.clearRect(0, 0, width, height);
-            g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
             
-            plants.render(g);
-            organisms.render(g);
-            
+            switch(state) {
+                case MainMenu:
+                    mainMenu.render(g);
+                    break;
+                case Play:
+                    g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null); 
+                    plants.render(g);
+                    organisms.render(g);
+                    break;
+            }
             bs.show();
             g.dispose();     
         }
