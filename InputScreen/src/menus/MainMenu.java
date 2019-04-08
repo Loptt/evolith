@@ -77,10 +77,6 @@ public class MainMenu extends Menu{
         }
         else if(active&&buttons.get(0).isActive()){
             g.drawImage(Assets.startPlay, 0, 0, 1000, 700, null);
-            
-            if (buttons.get(0).isPressed()) {
-                g.drawImage(Assets.nameSpecies, 0, 0, 1000, 700, null);
-            }
         }
         else if(active&&buttons.get(1).isActive()){
             g.drawImage(Assets.startInstructions, 0, 0, 1000, 700, null);

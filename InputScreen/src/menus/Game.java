@@ -36,10 +36,11 @@ public class Game implements Runnable, Commons {
     
     private ArrayList<Player> playerSwarm;
     
-    private enum States{MainMenu, Paused, GameOver, Play, Instructions}
+    private enum States{MainMenu, Paused, GameOver, Play, Instructions, Setup}
     private States state;
     
     private MainMenu mainMenu = new MainMenu(0,0,1000,700,this);
+    private Setup setup = new Setup(0,0,1000,700,this);
     
     /**
     * to create title, width and height and set the game is still not running
@@ -117,14 +118,27 @@ public class Game implements Runnable, Commons {
      */
     private void tick() {
         mainMenu.tick();
+        
         ArrayList<Point> points = new ArrayList<>();
+        
         switch (state){
             case MainMenu:
                 mainMenu.setActive(true);
+                
                 if(mainMenu.isClickPlay()){
                     mainMenu.setActive(false);
+                    state = States.Setup;
+                }
+                break;
+            case Setup:
+                setup.tick();
+                setup.setActive(true);
+                
+                if (setup.isClickPlay()) {
+                    setup.setActive(false);
                     state = States.Play;
                 }
+                
                 break;
             //case Instructions:
                // break;
@@ -199,13 +213,25 @@ public class Game implements Runnable, Commons {
         else {
             g = bs.getDrawGraphics();
             g.clearRect(0, 0, width, height);
-            g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
+            
+            switch (state) {
+                case Play:
+                    g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
 
-            for (int i = 0; i < playerSwarm.size(); i++) {
-                playerSwarm.get(i).render(g);
+                    for (int i = 0; i < playerSwarm.size(); i++) {
+                        playerSwarm.get(i).render(g);
+                    }
+                    
+                    break;
+                case MainMenu:
+                    mainMenu.render(g);
+                    
+                    break;
+                case Setup:
+                    setup.render(g);
+                    
+                    break;
             }
-            mainMenu.render(g);
-
             
             bs.show();
             g.dispose();     
