@@ -8,6 +8,7 @@ package foodandwater;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  *
@@ -21,6 +22,7 @@ public class Button{
    private int height;
    private boolean pressed;
    private boolean active;
+   private boolean hover;
 
     public Button(int x, int y, int width, int height) {
         this.x = x;
@@ -46,6 +48,11 @@ public class Button{
     public boolean isActive(){
         return active;
     }
+
+    public boolean isHover() {
+        return hover;
+    }
+    
     
     public int getX() {
         return x;
@@ -86,12 +93,16 @@ public class Button{
     public void setActive(boolean active){
         this.active = active;
     }
+
+    public void setHover(boolean hover) {
+        this.hover = hover;
+    }
     
     public void tick(){
         
     }
     
-    public void render(Graphics g, BufferedImage img) {
-        g.drawImage(img, x, y, width, height, null);
+    public void render(Graphics g, ArrayList<ArrayList<BufferedImage>> imgs, int button, int state) {
+        g.drawImage(imgs.get(button).get(state), x, y, width, height, null);
     }
 }
