@@ -40,17 +40,19 @@ public class ButtonBar extends Menu{
 
     @Override
     public void tick() {
-        for(int i=1; i<buttons.size(); i++){
+        for(int i=1; i<4; i++){
             if(buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())){
                 //if the mouse is over the button
                 buttons.get(i).setHover(true); //set the button hover status as true
                 if(game.getMouseManager().isIzquierdo()){
                     //if left click
+                    System.out.println("IS PRESSED");
                     buttons.get(i).setPressed(true);
                     buttons.get(i).setActive(!buttons.get(i).isActive());
                     game.getMouseManager().setIzquierdo(false);
                 }
             }
+            
             else{
                 buttons.get(i).setHover(false);
             }
@@ -60,7 +62,7 @@ public class ButtonBar extends Menu{
     @Override
     public void render(Graphics g) {
         buttons.get(0).render(g, Assets.buttonBar, 0,0);
-        for(int i=1; i<buttons.size(); i++){
+        for(int i=1; i<4; i++){
             if(buttons.get(i).isActive()||buttons.get(i).isHover()){
                 buttons.get(i).render(g, Assets.buttonBar, i, 1);
             }

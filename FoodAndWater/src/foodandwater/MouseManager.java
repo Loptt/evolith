@@ -40,7 +40,7 @@ public class MouseManager implements MouseListener, MouseMotionListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {
-            izquierdo = false; 
+            izquierdo = true; 
         }
     }
 
