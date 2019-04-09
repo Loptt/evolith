@@ -68,11 +68,7 @@ public class Button extends Item {
     public void tick(){
         
     }
-/*    
-    public void render(Graphics g, ArrayList<ArrayList<BufferedImage>> imgs, int button, int state) {
-        g.drawImage(imgs.get(button).get(state), x, y, width, height, null);
-    }
-*/
+
     @Override
     public void render(Graphics g) {
     
