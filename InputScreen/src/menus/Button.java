@@ -5,6 +5,7 @@
  */
 package menus;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -33,11 +34,11 @@ public class Button extends Item {
         enlarge = false;
     }
     
-    public Button(int x, int y, int width, int height, BufferedImage on) {
+    public Button(int x, int y, int width, int height, BufferedImage off) {
         super(x,y,width,height);
         pressed = false;
         active = false;
-        imgOn = on;
+        imgOff = off;
         enlarge = true;
     }
     
@@ -83,15 +84,18 @@ public class Button extends Item {
 
     @Override
     public void render(Graphics g) {
-    System.out.println("ASDJASDOIJ");
-        if (hover || active) { 
-            g.drawImage(imgOn, x, y, width, height, null);
-        } else if (!enlarge) {
-            g.drawImage(imgOff, x, y, width, height, null);
-        } else if (imgOn != null){
-            g.drawImage(imgOn, x, y, width+30, height+30, null);
+        if (imgOff != null) {
+            if (active || hover) {
+                if (!enlarge) {
+                    g.drawImage(imgOn, x, y, width, height, null);
+                } else {
+                    g.drawImage(imgOff, x, y, width+30, height+30, null);
+                }
+            } else {
+                g.drawImage(imgOff, x, y, width, height, null);
+            }
         } else {
-            g.fillRect(x, y, width, height);
+            //no image to show
         }
     }
 }

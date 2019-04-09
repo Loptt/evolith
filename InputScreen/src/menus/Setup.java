@@ -28,10 +28,10 @@ public class Setup extends Menu{
 
         buttons = new ArrayList<Button>();
         buttons.add(new Button(340, 555, 350, 110)); // Play button
-        buttons.add(new Button(100, 210, 170, 185, Assets.redOption, Assets.redOption)); // Red option
-        buttons.add(new Button(300, 210, 170, 185, Assets.purpleOption, Assets.purpleOption)); // Purple option
-        buttons.add(new Button(500, 210, 170, 185, Assets.blueOption, Assets.blueOption)); // Blue option
-        buttons.add(new Button(700, 210, 170, 185, Assets.yellowOption, Assets.yellowOption)); // Yellow option
+        buttons.add(new Button(100, 210, 170, 185, Assets.redOption)); // Red option
+        buttons.add(new Button(300, 210, 170, 185, Assets.purpleOption)); // Purple option
+        buttons.add(new Button(500, 210, 170, 185, Assets.blueOption)); // Blue option
+        buttons.add(new Button(700, 210, 170, 185, Assets.yellowOption)); // Yellow option
         buttons.add(new Button(200, 450, 800, 100)); // Write text
     }
     
