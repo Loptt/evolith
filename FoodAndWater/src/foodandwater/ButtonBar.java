@@ -15,14 +15,17 @@ import java.util.ArrayList;
  */
 public class ButtonBar extends Menu{
     private ArrayList<Button> buttons;
+    private BufferedImage background;
     
     public ButtonBar(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
         buttons = new ArrayList<Button>();
-        buttons.add(new Button(x,y,width,height)); // Bar skeleton button in pos 0
-        buttons.add(new Button(34,35,141,49)); // Water button in pos 1
-        buttons.add(new Button(191,35,141,49)); // Food  button in pos 2
-        buttons.add(new Button(348,35,141,49)); // Fight  button in pos 3
+        
+        background = Assets.buttonBar.get(0).get(0);
+        
+        buttons.add(new Button(34,35,141,49, Assets.buttonBar.get(1).get(1), Assets.buttonBar.get(1).get(0))); // Water button in pos 1
+        buttons.add(new Button(191,35,141,49, Assets.buttonBar.get(2).get(1), Assets.buttonBar.get(2).get(0))); // Food  button in pos 2
+        buttons.add(new Button(348,35,141,49, Assets.buttonBar.get(3).get(1), Assets.buttonBar.get(3).get(0))); // Fight  button in pos 3
 
     }
     // organism's behaviour when Water button is active
@@ -40,9 +43,10 @@ public class ButtonBar extends Menu{
 
     @Override
     public void tick() {
-        for(int i=1; i<4; i++){
+        for(int i=0; i<buttons.size(); i++){
             if(buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())){
                 //if the mouse is over the button
+
                 buttons.get(i).setHover(true); //set the button hover status as true
                 if(game.getMouseManager().isIzquierdo()){
                     //if left click
@@ -61,14 +65,10 @@ public class ButtonBar extends Menu{
 
     @Override
     public void render(Graphics g) {
-        buttons.get(0).render(g, Assets.buttonBar, 0,0);
-        for(int i=1; i<4; i++){
-            if(buttons.get(i).isActive()||buttons.get(i).isHover()){
-                buttons.get(i).render(g, Assets.buttonBar, i, 1);
-            }
-            else{
-                buttons.get(i).render(g, Assets.buttonBar, i, 0);
-            }
+        g.drawImage(background, x, y, width, height, null);
+        
+        for(int i=0; i<buttons.size(); i++){
+            buttons.get(i).render(g);
         }
     }
     
