@@ -21,6 +21,9 @@ public class Organisms implements Commons {
     private Game game;
     private int counter;
     
+    private Hover h;
+    private boolean hover;
+    
     private int newX;
     private int newY;
     
@@ -69,12 +72,42 @@ public class Organisms implements Commons {
             }
             counter = 0;
         }
+        
+        checkHover();
+    }
+    
+    public void checkHover() {
+                
+         for (int i = 0; i < amount; i++) {
+              if(organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
+                      game.getCamera().getAbsY(game.getMouseManager().getY())))
+              {
+                h = new Hover(game.getMouseManager().getX(),game.getMouseManager().getY(),100,100,
+                        organisms.get(i).hunger, organisms.get(i).thirst, organisms.get(i).maturity, game);
+                setHover(true);
+                break;
+              }
+              else setHover(false);
+         }
+
     }
     
     public void render(Graphics g) {
         for (int i = 0; i < amount; i++) {
             organisms.get(i).render(g);
         }
+        
+        if (h != null && isHover()) {
+            h.render(g);
+        }
+    }
+
+    public void setHover(boolean hover) {
+        this.hover = hover;
+    }
+
+    public boolean isHover() {
+        return hover;
     }
     
     private class Organism extends Item {
