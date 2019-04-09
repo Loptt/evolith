@@ -12,18 +12,31 @@ import java.util.ArrayList;
  *
  * @author charles
  */
-public class SwarmMovement implements Commons{
+public class SwarmMovement implements Commons {
     
-    private static ArrayList<ArrayList<Point>> positions; //Array of arrays of points
+    private static ArrayList<Point> positions; //Array of arrays of points
     
     public static void init() {
+        positions = new ArrayList<>();
+    }
+    
+     public static void generateNewPoints(int n) {
+        positions = new ArrayList<>();
+        
+        int layer = 0;
+        
+        for (int i = 0; i < n; i++) {
+            
+        }
+    }
+    
+    public static void generatePoints() {
         positions = new ArrayList<>();
         int colLimit = 0;
         int currRow = 0;
         int currCol = 0;
 
         for (int i = 0; i < MAX_ORGANISM_AMOUNT; i++) {
-            
             positions.add(new ArrayList<>());
             colLimit = (int) Math.sqrt(i) + 1;
             currCol = 0;
@@ -43,7 +56,7 @@ public class SwarmMovement implements Commons{
     }
     
     public static ArrayList<Point> getPositions(int x, int y, int num) {
-        SwarmMovement.init();
+        SwarmMovement.generatePoints();
         ArrayList<Point> customPosition = (ArrayList<Point>) positions.get(num - 1).clone();
         
         for (int i = 0; i < customPosition.size(); i++) {
@@ -55,7 +68,7 @@ public class SwarmMovement implements Commons{
     }
     
     public static ArrayList<Point> getPositions(int x, int y, int num, int obj) {
-        SwarmMovement.init();
+        SwarmMovement.generatePoints();
         ArrayList<Point> customPosition = (ArrayList<Point>) positions.get(num - 1 + obj).clone();
         
         for (int i = 0; i < customPosition.size(); i++) {
