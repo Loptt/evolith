@@ -40,6 +40,8 @@ public class Game implements Runnable, Commons {
     
     private MainMenu mainMenu;
     
+    private Clock clock;
+    
     /**
     * to create title, width and height and set the game is still not running
     * @param title to set the title of the window
@@ -92,6 +94,8 @@ public class Game implements Runnable, Commons {
     * initializing the display window of the game
     */
     private void init() {
+        
+        clock = new Clock(0,0,100,100);
         display = new Display(title, width, height);
         Assets.init();
         
@@ -111,6 +115,7 @@ public class Game implements Runnable, Commons {
      * updates all objects on a frame
      */
     private void tick() {
+        clock.tick();
         switch(state) {
             case MainMenu:
                 mainMenu.tick();

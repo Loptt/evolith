@@ -117,6 +117,8 @@ public class Organisms implements Commons {
         private int xVel;
         private int yVel;
         
+        private Time time;
+        
         private int size;
         private int speed;
         private int strength;
@@ -144,10 +146,13 @@ public class Organisms implements Commons {
             hunger = 100;
             thirst = 100;
             maturity = 0;
+            
+            time = new Time();
         }
 
         @Override
         public void tick() {
+            time.tick();
             if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 25) {
                 if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 15) {
                     if (Math.abs((int) point.getX() - x) < 5 && Math.abs((int) point.getY() - y) < 5) {
