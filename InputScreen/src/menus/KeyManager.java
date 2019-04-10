@@ -49,6 +49,38 @@ public class KeyManager implements KeyListener {
     public boolean y;
     public boolean z;
     
+    public boolean delete;
+    
+    public boolean prevw;
+    public boolean preva;
+    public boolean prevs;
+    public boolean prevd;
+    
+    public boolean prevb;
+    public boolean prevc;
+    public boolean preve;
+    public boolean prevf;
+    public boolean prevg;
+    public boolean prevh;
+    public boolean previ;
+    public boolean prevj;
+    public boolean prevk;
+    public boolean prevl;
+    public boolean prevm;
+    public boolean prevn;
+    public boolean prevo;
+    public boolean prevp;
+    public boolean prevq;
+    public boolean prevr;
+    public boolean prevt;
+    public boolean prevu;
+    public boolean prevv;
+    public boolean prevx;
+    public boolean prevy;
+    public boolean prevz;
+    
+    public boolean prevdelete;
+    
     private boolean keys[];
 
     public KeyManager() {
@@ -84,33 +116,71 @@ public class KeyManager implements KeyListener {
     /**
      * To update the object each frame
      */
-    public void tick() {
-        w = keys[KeyEvent.VK_W];
-        a = keys[KeyEvent.VK_A];
-        s = keys[KeyEvent.VK_S];
-        d = keys[KeyEvent.VK_D];
+    public void tick() {        
+        if (keys[KeyEvent.VK_A]) {
+            if (!preva) {
+                a = true;
+                preva = true;
+            } else {
+                a = false;
+            }
+        } else {
+            preva = false;
+        }
         
-        b = keys[KeyEvent.VK_B];
-        c = keys[KeyEvent.VK_C];
-        e = keys[KeyEvent.VK_E];
-        f = keys[KeyEvent.VK_F];
-        g = keys[KeyEvent.VK_G];
-        h = keys[KeyEvent.VK_H];
-        i = keys[KeyEvent.VK_I];
-        j = keys[KeyEvent.VK_J];
-        k = keys[KeyEvent.VK_K];
-        l = keys[KeyEvent.VK_L];
-        m = keys[KeyEvent.VK_M];
-        n = keys[KeyEvent.VK_N];
-        o = keys[KeyEvent.VK_O];
-        p = keys[KeyEvent.VK_P];
-        q = keys[KeyEvent.VK_Q];
-        r = keys[KeyEvent.VK_R];
-        t = keys[KeyEvent.VK_T];
-        u = keys[KeyEvent.VK_U];
-        v = keys[KeyEvent.VK_V];
-        x = keys[KeyEvent.VK_X];
-        y = keys[KeyEvent.VK_Y];
-        z = keys[KeyEvent.VK_Z];
+        if (keys[KeyEvent.VK_B]) {
+            if (!prevb) {
+                b = true;
+                prevb = true;
+            } else {
+                b = false;
+            }
+        } else {
+            prevb = false;
+        }
+        
+        if (keys[KeyEvent.VK_C]) {
+            if (!prevc) {
+                c = true;
+                prevc = true;
+            } else {
+                c = false;
+            }
+        } else {
+            prevc = false;
+        }
+        
+        if (keys[KeyEvent.VK_D]) {
+            if (!prevd) {
+                d = true;
+                prevd = true;
+            } else {
+                d = false;
+            }
+        } else {
+            prevd = false;
+        }
+        
+        if (keys[KeyEvent.VK_E]) {
+            if (!preve) {
+                e = true;
+                preve = true;
+            } else {
+                e = false;
+            }
+        } else {
+            preve = false;
+        }
+        
+        if (keys[KeyEvent.VK_F]) {
+            if (!prevf) {
+                f = true;
+                prevf = true;
+            } else {
+                f = false;
+            }
+        } else {
+            prevf = false;
+        }
     }
 }
