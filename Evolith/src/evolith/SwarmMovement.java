@@ -14,45 +14,6 @@ import java.util.ArrayList;
  * @author charles
  */
 public class SwarmMovement implements Commons {
-        
-    public static void init() {
-    }
-    /*
-    public static void generateNewPoints(int n) {
-        positions = new ArrayList<>();
-        positions.add(new Point(0,0));
-        
-        ArrayList<Point> generatedHex = generateHexTangents(0,0);
-        
-        for (int i = 0; i < n; i++) {
-            positions.add(generatedHex.get(i));
-        }
-    }*/
-    /*
-    public static void generatePoints() {
-        positions = new ArrayList<>();
-        int colLimit = 0;
-        int currRow = 0;
-        int currCol = 0;
-
-        for (int i = 0; i < MAX_ORGANISM_AMOUNT; i++) {
-            positions.add(new ArrayList<>());
-            colLimit = (int) Math.sqrt(i) + 1;
-            currCol = 0;
-            currRow = 0;
-            
-            for (int j = 0; j < i + 1; j++) {
-                if (currCol >= colLimit) {
-                    currRow++;
-                    currCol = 0;
-                }
-                
-                positions.get(i).add(new Point(currCol * (ORGANISM_SIZE - 20), currRow * (ORGANISM_SIZE - 20)));
-                
-                currCol++;
-            }
-        }
-    }*/
     
     public static ArrayList<Point> generateHexPattern(int n) {
         if (n < 1) {
@@ -62,57 +23,42 @@ public class SwarmMovement implements Commons {
         ArrayList<Point> positions = new ArrayList<>();
         positions.add(new Point(0, 0));
         
-        int layerAmount = (n-2) / 6 + 1; // WRONG
+        Point left = new Point(0, 0);
+        Point right = new Point(0, 0);
         
-        ArrayList<Point> corners = new ArrayList<>();
+        Point top = new Point(0, 0);
+        Point bottom = new Point(0, 0);
         
-        for (int i = 0; i < 6; i++) {
-            corners.add(new Point(0, 0));
-        }
+        int layerAmount = (int) Math.ceil((3 + sqrt(9-12*(1-n))) / 6);
         
-        for (int i = 0; i < layerAmount; i++) {
+        for (int i = 0; i < layerAmount-1; i++) {
+            //Generate left and right
+            left = new Point(left.x - SWARM_SEPARATION, left.y);
+            right = new Point(right.x + SWARM_SEPARATION, right.y);
             
-            //Top left
-            System.out.print("Prev top left:  ");
-            System.out.println(corners.get(0));
-            corners.get(0).setLocation(corners.get(0).x - SWARM_SEPARATION / 2, corners.get(0).y + (int) (sqrt(3)/2 * SWARM_SEPARATION));
-            System.out.print("New top left:  ");
-            System.out.println(corners.get(0));
-            //Top right
-            corners.get(1).setLocation(corners.get(1).x + SWARM_SEPARATION / 2, corners.get(1).y + (int) (sqrt(3)/2 * SWARM_SEPARATION));
-            //Right
-            corners.get(2).setLocation(corners.get(2).x + SWARM_SEPARATION, corners.get(2).y);
-            //Bottom Right
-            corners.get(3).setLocation(corners.get(3).x + SWARM_SEPARATION / 2, corners.get(3).y - (int) (sqrt(3)/2 * SWARM_SEPARATION));
-            //Bottom Left
-            corners.get(4).setLocation(corners.get(4).x - SWARM_SEPARATION / 2, corners.get(4).y - (int) (sqrt(3)/2 * SWARM_SEPARATION));
-            //Left
-            corners.get(5).setLocation(corners.get(5).x - SWARM_SEPARATION, corners.get(5).y);
+            positions.add(left);
+            positions.add(right);
             
-            for (int j = 0; j < corners.size(); j++) {
-                positions.add((Point) corners.get(j).clone());
+            for (int j = 0; j < i+1; j++) {
+                //Add top left
+                positions.add(new Point(left.x + SWARM_SEPARATION/2 * (j+1), left.y + (int) (sqrt(3)/2 * SWARM_SEPARATION) * (j+1)));
+                //Add bottom left
+                positions.add(new Point(left.x + SWARM_SEPARATION/2 * (j+1), left.y - (int) (sqrt(3)/2 * SWARM_SEPARATION) * (j+1)));
+                //Add top right
+                positions.add(new Point(right.x - SWARM_SEPARATION/2 * (j+1), left.y + (int) (sqrt(3)/2 * SWARM_SEPARATION) * (j+1)));
+                //Add bottom right
+                positions.add(new Point(right.x - SWARM_SEPARATION/2 * (j+1), left.y - (int) (sqrt(3)/2 * SWARM_SEPARATION) * (j+1)));
+                
+                if (j == i) {
+                    top = positions.get(positions.size()-4);
+                    bottom = positions.get(positions.size()-3);
+                }
             }
             
-            for (int j = layerAmount - i - 1; j < layerAmount - 1 && i != 0; j++) {
-                //Top left
-                positions.add(new Point(corners.get(0).x + SWARM_SEPARATION * (j+1), corners.get(0).y));
-                //Top right
-                positions.add(new Point(corners.get(1).x + SWARM_SEPARATION/2 * (j+1), corners.get(1).y - (int) (sqrt(3)/2 * SWARM_SEPARATION) * (j+1)));
-                //Right
-                positions.add(new Point(corners.get(2).x - SWARM_SEPARATION/2 * (j+1), corners.get(2).y - (int) (sqrt(3)/2 * SWARM_SEPARATION) * (j+1)));
-                //Bottom right
-                positions.add(new Point(corners.get(3).x - SWARM_SEPARATION * (j+1), corners.get(3).y));
-                //BottomLeft
-                positions.add(new Point(corners.get(4).x - SWARM_SEPARATION/2 * (j+1), corners.get(4).y + (int) (sqrt(3)/2 * SWARM_SEPARATION) * (j+1)));
-                //Left
-                positions.add(new Point(corners.get(5).x + SWARM_SEPARATION/2 * (j+1), corners.get(5).y + (int) (sqrt(3)/2 * SWARM_SEPARATION) * (j+1)));
-                System.out.println("Adding medium..");
+            for (int j = 0; j < i; j++) {
+                positions.add(new Point(top.x + SWARM_SEPARATION * (j+1), top.y));
+                positions.add(new Point(bottom.x + SWARM_SEPARATION * (j+1), bottom.y));
             }
-        }
-        
-        System.out.println("Pre-Transformed:");
-        for (int i = 0; i < positions.size(); i++) {
-            System.out.println(positions.get(i));
         }
         
         return positions;
@@ -121,43 +67,37 @@ public class SwarmMovement implements Commons {
     public static ArrayList<Point> getPositions(int x, int y, int num) {
         ArrayList<Point> positions = generateHexPattern(num);
         
-            System.out.println("Transformed:");
         for (int i = 0; i < positions.size(); i++) {
-            positions.get(i).x += x + generateRandomness(0);
-            positions.get(i).y += y + generateRandomness(0);
-            
-            System.out.println(positions.get(i));
+            positions.get(i).x += x + generateRandomness(80);
+            positions.get(i).y += y + generateRandomness(80);
         }
         
         return positions;
     }
-    /*
+    
     public static ArrayList<Point> getPositions(int x, int y, int num, int obj) {
-        SwarmMovement.generateNewPoints(num);
+        ArrayList<Point> positions = generateHexPattern(num+obj);
         
-        for (int i = 0; i < customPosition.size(); i++) {
-            customPosition.get(i).x += x + generateRandomness(100);
-            customPosition.get(i).y += y + generateRandomness(100);
+        for (int i = 0; i < positions.size(); i++) {
+            
+            if (i > 6) {
+                positions.get(i).x += x + generateRandomness(80);
+                positions.get(i).y += y + generateRandomness(80);
+            } else {
+                positions.get(i).x += x + generateRandomness(0);
+                positions.get(i).y += y + generateRandomness(0);
+            }
+            
         }
         
-        customPosition.remove(num/2);
-        return customPosition;
-    }*/
-    /*
-    private static ArrayList<Point> generateHexTangents(int x, int y) {
-        ArrayList<Point> result = new ArrayList<>();
+        for (int i = 0; i < obj; i++) {
+            positions.remove(i);
+        }
         
-        result.add(new Point(x - SWARM_SEPARATION / 2, y + (int) (sqrt(3)/2 * SWARM_SEPARATION)));
-        result.add(new Point(x + SWARM_SEPARATION / 2, y + (int) (sqrt(3)/2 * SWARM_SEPARATION)));
-        result.add(new Point(x + SWARM_SEPARATION, y));
-        result.add(new Point(x + SWARM_SEPARATION / 2, y - (int) (sqrt(3)/2 * SWARM_SEPARATION)));
-        result.add(new Point(x - SWARM_SEPARATION / 2, y - (int) (sqrt(3)/2 * SWARM_SEPARATION)));
-        result.add(new Point(x - SWARM_SEPARATION, y));
-        
-        return result;
-    }*/
+        return positions;
+    }
     
     private static int generateRandomness(int random) {
-        return (int) (Math.random() * random - random * 2);
+        return (int) (Math.random() * random - random / 2);
     }
 }

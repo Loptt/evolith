@@ -30,7 +30,7 @@ public class Organisms implements Commons {
     public Organisms(Game game) {
         this.game = game;
         organisms = new ArrayList<>();
-        amount = 18;
+        amount = 20;
         
         for (int i = 0; i < amount; i++) {
             organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE, ORGANISM_SIZE));
@@ -46,11 +46,10 @@ public class Organisms implements Commons {
         if (game.getMouseManager().isIzquierdo()) {
             newX = game.getCamera().getAbsX(game.getMouseManager().getX());
             newY = game.getCamera().getAbsX(game.getMouseManager().getY());
-            points = SwarmMovement.getPositions(newX, newY, amount);
-            System.out.println("In organisms");
+            points = SwarmMovement.getPositions(newX - ORGANISM_SIZE /2, newY - ORGANISM_SIZE /2, amount, 1);
             for (int i = 0; i < amount; i++) {
                 organisms.get(i).setPoint(points.get(i));
-                System.out.println(points.get(i));
+                //System.out.println(points.get(i));
             }
             
             game.getMouseManager().setIzquierdo(false);
