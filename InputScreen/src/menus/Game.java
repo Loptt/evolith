@@ -133,6 +133,7 @@ public class Game implements Runnable, Commons {
             case Setup:
                 setup.tick();
                 setup.setActive(true);
+                keyManager.tick();
                 
                 if (setup.isClickPlay()) {
                     setup.setActive(false);

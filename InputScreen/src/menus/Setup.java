@@ -28,10 +28,11 @@ public class Setup extends Menu{
 
         buttons = new ArrayList<Button>();
         buttons.add(new Button(340, 555, 350, 110)); // Play button
-        buttons.add(new Button(100, 210, 170, 185)); // Red option
-        buttons.add(new Button(300, 210, 170, 185)); // Purple option
-        buttons.add(new Button(500, 210, 170, 185)); // Blue option
-        buttons.add(new Button(700, 210, 170, 185)); // Yellow option
+        buttons.add(new Button(100, 210, 170, 185, Assets.redOption, Assets.redOption)); // Red option
+        buttons.add(new Button(300, 210, 170, 185, Assets.purpleOption, Assets.purpleOption)); // Purple option
+        buttons.add(new Button(500, 210, 170, 185, Assets.blueOption, Assets.blueOption)); // Blue option
+        buttons.add(new Button(700, 210, 170, 185, Assets.yellowOption, Assets.yellowOption)); // Yellow option
+        buttons.add(new Button(200, 450, 800, 100)); // Write text
     }
     
     public boolean isActive(){
@@ -75,56 +76,12 @@ public class Setup extends Menu{
 
     @Override
     public void render(Graphics g) {
-        if(active && !buttons.get(0).isActive() && !buttons.get(1).isActive() 
-                && !buttons.get(2).isActive() && !buttons.get(3).isActive()
-                && !buttons.get(4).isActive()) { // Only in setup menu
-            g.drawImage(Assets.setupSpeciesBackground, 0, 0, 1000, 700, null);
-            g.drawImage(Assets.playOff, 340, 555, 350, 110, null);
-            g.drawImage(Assets.redOption, 100, 210, 170, 185, null);
-            g.drawImage(Assets.purpleOption, 300, 210, 170, 185, null);
-            g.drawImage(Assets.blueOption, 500, 210, 170, 185, null);
-            g.drawImage(Assets.yellowOption, 700, 210, 170, 185, null);
+        g.drawImage(Assets.setupSpeciesBackground, 0, 0, 1000, 700, null);
+
+        for (int i = 0; i < buttons.size(); i++) {
+            buttons.get(i).render(g);
         }
-        else if(active && buttons.get(0).isActive()) { // Setup menu hovering over play button
-            g.drawImage(Assets.setupSpeciesBackground, 0, 0, 1000, 700, null);
-            g.drawImage(Assets.playOn, 340, 555, 350, 110, null);
-            g.drawImage(Assets.redOption, 100, 210, 170, 185, null);
-            g.drawImage(Assets.purpleOption, 300, 210, 170, 185, null);
-            g.drawImage(Assets.blueOption, 500, 210, 170, 185, null);
-            g.drawImage(Assets.yellowOption, 700, 210, 170, 185, null);
-        }
-        else if(active && buttons.get(1).isActive()) { // Setup menu hovering over red option
-            g.drawImage(Assets.setupSpeciesBackground, 0, 0, 1000, 700, null);
-            g.drawImage(Assets.playOff, 340, 555, 350, 110, null);
-            g.drawImage(Assets.redOption, 100, 210, 200, 215, null);
-            g.drawImage(Assets.purpleOption, 300, 210, 170, 185, null);
-            g.drawImage(Assets.blueOption, 500, 210, 170, 185, null);
-            g.drawImage(Assets.yellowOption, 700, 210, 170, 185, null);
-        }
-        else if(active && buttons.get(2).isActive()) { // Setup menu hovering over purple option
-            g.drawImage(Assets.setupSpeciesBackground, 0, 0, 1000, 700, null);
-            g.drawImage(Assets.playOff, 340, 555, 350, 110, null);
-            g.drawImage(Assets.redOption, 100, 210, 170, 185, null);
-            g.drawImage(Assets.purpleOption, 300, 210, 200, 215, null);
-            g.drawImage(Assets.blueOption, 500, 210, 170, 185, null);
-            g.drawImage(Assets.yellowOption, 700, 210, 170, 185, null);
-        }
-        else if(active && buttons.get(3).isActive()) { // Setup menu hovering over blue option
-            g.drawImage(Assets.setupSpeciesBackground, 0, 0, 1000, 700, null);
-            g.drawImage(Assets.playOff, 340, 555, 350, 110, null);
-            g.drawImage(Assets.redOption, 100, 210, 170, 185, null);
-            g.drawImage(Assets.purpleOption, 300, 210, 170, 185, null);
-            g.drawImage(Assets.blueOption, 500, 210, 200, 215, null);
-            g.drawImage(Assets.yellowOption, 700, 210, 170, 185, null);
-        }
-        else if(active && buttons.get(4).isActive()) { // Setup menu hovering over yellow option
-            g.drawImage(Assets.setupSpeciesBackground, 0, 0, 1000, 700, null);
-            g.drawImage(Assets.playOff, 340, 555, 350, 110, null);
-            g.drawImage(Assets.redOption, 100, 210, 170, 185, null);
-            g.drawImage(Assets.purpleOption, 300, 210, 170, 185, null);
-            g.drawImage(Assets.blueOption, 500, 210, 170, 185, null);
-            g.drawImage(Assets.yellowOption, 700, 210, 200, 215, null);
-        }
+        
     }
 }
     
