@@ -1,32 +1,29 @@
 package evolith;
 
-
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
- * @author charles
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public abstract class Item {
-    
+
     protected int x; //x position
     protected int y; //y position
     protected int width;
-    protected int height; 
-    
+    protected int height;
+
     /**
      * To create a new item
+     *
      * @param x
      * @param y
      * @param width
-     * @param height 
+     * @param height
      */
     public Item(int x, int y, int width, int height) {
         this.width = width;
@@ -34,89 +31,107 @@ public abstract class Item {
         this.x = x;
         this.y = y;
     }
-    
+
     /**
      * To get a rectangle object with current position and size
-     * @return 
+     *
+     * @return
      */
     public Rectangle getPerimeter() {
         return new Rectangle(x, y, width, height);
     }
-    
+
     /**
      * To check if current item intersects with another item
+     *
      * @param item
-     * @return 
+     * @return
      */
     public boolean intersects(Item item) {
         return getPerimeter().intersects(item.getPerimeter());
     }
-    
+
     /**
      * To get x
-     * @return 
+     *
+     * @return
      */
     public int getX() {
         return x;
     }
-    
+
     /**
      * To get y
-     * @return 
+     *
+     * @return
      */
     public int getY() {
         return y;
     }
-    
+
     /**
      * To set x
-     * @param x 
+     *
+     * @param x
      */
     public void setX(int x) {
         this.x = x;
     }
-    
+
     /**
      * to set y
-     * @param y 
+     *
+     * @param y
      */
     public void setY(int y) {
         this.y = y;
     }
-    
+
     /**
      * to get width
-     * @return 
+     *
+     * @return
      */
     public int getWidth() {
         return width;
     }
-    
+
     /**
      * to set width
-     * @return 
+     *
+     * @return
      */
     public int getHeight() {
         return height;
     }
-    
+
     /**
      * to set height
-     * @param height 
+     *
+     * @param height
      */
     public void setHeight(int height) {
         this.height = height;
     }
-    
+
     /**
      * to set width
-     * @param width 
+     *
+     * @param width
      */
     public void setWidth(int width) {
         this.width = width;
     }
-    
+
+    /**
+     * To tick the item
+     */
     public abstract void tick();
+
+    /**
+     * To render the item
+     *
+     * @param g
+     */
     public abstract void render(Graphics g);
 }
-

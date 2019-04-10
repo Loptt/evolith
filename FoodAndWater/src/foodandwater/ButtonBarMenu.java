@@ -13,11 +13,11 @@ import java.util.ArrayList;
  *
  * @author victor
  */
-public class ButtonBar extends Menu{
+public class ButtonBarMenu extends Menu {
     private ArrayList<Button> buttons;
     private BufferedImage background;
     
-    public ButtonBar(int x, int y, int width, int height, Game game) {
+    public ButtonBarMenu(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
         buttons = new ArrayList<Button>();
         

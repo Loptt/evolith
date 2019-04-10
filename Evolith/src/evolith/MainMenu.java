@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package evolith;
 
 import java.awt.Graphics;
@@ -10,80 +5,122 @@ import java.util.ArrayList;
 
 /**
  *
- * @author victor
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
-public class MainMenu extends Menu{
+public class MainMenu extends Menu {
+
     private boolean active;
-    /* private Button play = new Button(300,350);
+
+    /* 
+    private Button play = new Button(300,350);
     private Button instructions = new Button(300,350);
-    */
+     */
     private ArrayList<Button> buttons;
     private boolean clickPlay;
 
-
+    /**
+     * Constructor of the main menu
+     *
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param game
+     */
     public MainMenu(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
         active = true;
         clickPlay = false;
 
         buttons = new ArrayList<Button>();
-        buttons.add(new Button(340,390,350,110)); // Play button
-        buttons.add(new Button(340,530,350,110)); // Instructions button
-  
+        buttons.add(new Button(340, 390, 350, 110)); // Play button
+        buttons.add(new Button(340, 530, 350, 110)); // Instructions button
+
     }
-    
-    public boolean isActive(){
+
+    /**
+     * To
+     *
+     * @return active
+     */
+    public boolean isActive() {
         return active;
     }
-    
-    public void setActive(boolean active){
+
+    /**
+     * To change the status of the active menu
+     *
+     * @param active
+     */
+    public void setActive(boolean active) {
         this.active = active;
     }
 
+    /**
+     * To get the status of the play button
+     *
+     * @return clickPlay
+     */
     public boolean isClickPlay() {
         return clickPlay;
     }
 
+    /**
+     * To set the status of the play button
+     *
+     * @param clickPlay
+     */
     public void setClickPlay(boolean clickPlay) {
         this.clickPlay = clickPlay;
     }
-    
+
+    /**
+     * To tick the buttons on the main menu
+     */
     @Override
     public void tick() {
-        if(active){
-        for(int i=0; i<buttons.size(); i++){
-            if(buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())){
-                //if the mouse is over the button
-                buttons.get(i).setActive(true);
-                if(game.getMouseManager().isIzquierdo()){
-                    buttons.get(i).setPressed(true);
-                    game.getMouseManager().setIzquierdo(false);
+
+        //active status of the main menu
+        if (active) {
+            for (int i = 0; i < buttons.size(); i++) {
+                if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
+                    //if the mouse is over the button
+                    buttons.get(i).setActive(true);
+                    //if left click change mouse status
+                    if (game.getMouseManager().isIzquierdo()) {
+                        buttons.get(i).setPressed(true);
+                        game.getMouseManager().setIzquierdo(false);
+                    }
+                } else {
+                    buttons.get(i).setActive(false);
+                }
+                if (buttons.get(0).isPressed()) {
+                    setClickPlay(true);
+                    setActive(false);
                 }
             }
-            else{
-                buttons.get(i).setActive(false);
-            }
-            if(buttons.get(0).isPressed()){
-                setClickPlay(true);
-                setActive(false);
-            }
-        }
         }
     }
 
+    /**
+     * To render the main menu
+     *
+     * @param g
+     */
+
     @Override
     public void render(Graphics g) {
-        if(active&&!buttons.get(0).isActive()&&!buttons.get(1).isActive()){
+        // if the main menu is active
+        if (active && !buttons.get(0).isActive() && !buttons.get(1).isActive()) {
             g.drawImage(Assets.start, 0, 0, 1000, 700, null);
-        }
-        else if(active&&buttons.get(0).isActive()){
+        } else if (active && buttons.get(0).isActive()) {
             g.drawImage(Assets.startPlay, 0, 0, 1000, 700, null);
-            
-        }
-        else if(active&&buttons.get(1).isActive()){
+        } else if (active && buttons.get(1).isActive()) {
             g.drawImage(Assets.startInstructions, 0, 0, 1000, 700, null);
         }
     }
-    
-    
+
 }

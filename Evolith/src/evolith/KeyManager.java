@@ -1,9 +1,3 @@
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package evolith;
 
 import java.awt.event.KeyEvent;
@@ -11,13 +5,16 @@ import java.awt.event.KeyListener;
 
 /**
  *
- * @author charles
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class KeyManager implements KeyListener {
-    
+
     public boolean left;
     public boolean right;
-    
+
     /**
      * Keys to be used in the game
      */
@@ -25,39 +22,42 @@ public class KeyManager implements KeyListener {
     public boolean a;
     public boolean s;
     public boolean d;
-    
+
     private boolean keys[];
 
     public KeyManager() {
         keys = new boolean[256];
     }
-    
+
     /**
      * Not used
-     * @param e 
+     *
+     * @param e
      */
     @Override
     public void keyTyped(KeyEvent e) {
     }
-    
+
     /**
      * Detect when a key has been pressed
-     * @param e 
+     *
+     * @param e
      */
     @Override
     public void keyPressed(KeyEvent e) {
         keys[e.getKeyCode()] = true;
     }
-    
+
     /**
      * Detect when a key has been released
-     * @param e 
+     *
+     * @param e
      */
     @Override
     public void keyReleased(KeyEvent e) {
         keys[e.getKeyCode()] = false;
     }
-    
+
     /**
      * To update the object each frame
      */
