@@ -1,26 +1,29 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package evolith;
 
 import java.awt.image.BufferedImage;
 
+
 /**
  *
- * @author charles
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class Assets {
     
     public static BufferedImage background; //background image
-    public static BufferedImage player; 
-    public static BufferedImage plant;
+    public static BufferedImage player; // player image
+    public static BufferedImage plant; //plant image
     
-    public static BufferedImage start;
-    public static BufferedImage startInstructions;
-    public static BufferedImage startPlay;
+    public static BufferedImage start; // start image
+    public static BufferedImage startInstructions; // start menu instruction image
+    public static BufferedImage startPlay; // start play button image
     
+    /**
+     * Initalizes the assets and links to the image folder
+     */
     public static void init() {
         background = ImageLoader.loadImage("/images/background2.png");
         player = ImageLoader.loadImage("/images/purple organism.png");
