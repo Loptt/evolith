@@ -1,10 +1,8 @@
 package evolith;
 
-
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-
 
 /**
  *
@@ -14,19 +12,20 @@ import java.util.ArrayList;
  * @author Moisés Fernández
  */
 public abstract class Menu {
-    
+
     protected int x; //x position
     protected int y; //y position
     protected int width;
-    protected int height; 
+    protected int height;
     protected Game game;
-    
+
     /**
      * To create a new menu
+     *
      * @param x
      * @param y
      * @param width
-     * @param height 
+     * @param height
      */
     public Menu(int x, int y, int width, int height, Game game) {
         this.width = width;
@@ -35,10 +34,11 @@ public abstract class Menu {
         this.y = y;
         this.game = game;
     }
-    
+
     /**
      * To get a rectangle object with current position and size
-     * @return 
+     *
+     * @return
      */
     public Rectangle getPerimeter() {
         return new Rectangle(x, y, width, height);
@@ -46,74 +46,85 @@ public abstract class Menu {
 
     /**
      * To get x
-     * @return 
+     *
+     * @return
      */
     public int getX() {
         return x;
     }
-    
+
     /**
      * To get y
-     * @return 
+     *
+     * @return
      */
     public int getY() {
         return y;
     }
-    
+
     /**
      * To set x
-     * @param x 
+     *
+     * @param x
      */
     public void setX(int x) {
         this.x = x;
     }
-    
+
     /**
      * to set y
-     * @param y 
+     *
+     * @param y
      */
     public void setY(int y) {
         this.y = y;
     }
-    
+
     /**
      * to get width
-     * @return 
+     *
+     * @return
      */
     public int getWidth() {
         return width;
     }
-    
+
     /**
      * to set width
-     * @return 
+     *
+     * @return
      */
     public int getHeight() {
         return height;
     }
-    
+
     /**
      * to set height
-     * @param height 
+     *
+     * @param height
      */
     public void setHeight(int height) {
         this.height = height;
     }
-    
+
     /**
      * to set width
-     * @param width 
+     *
+     * @param width
      */
     public void setWidth(int width) {
         this.width = width;
     }
 
     /**
-     *  to set buttons
-     * @param buttons
+     * To tick the menu
      */
-    
     public abstract void tick();
+
+    /**
+     * To render the menu
+     *
+     * @param g
+     */
     public abstract void render(Graphics g);
 }
-

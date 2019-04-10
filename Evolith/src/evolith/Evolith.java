@@ -1,6 +1,4 @@
-
 package evolith;
-
 
 /**
  *
@@ -18,5 +16,5 @@ public class Evolith {
         Game game = new Game("Evolith", 1000, 700);
         game.start();
     }
-    
+
 }

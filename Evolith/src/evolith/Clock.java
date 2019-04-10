@@ -1,4 +1,3 @@
-
 package evolith;
 
 import java.awt.Graphics;
@@ -10,9 +9,17 @@ import java.awt.Graphics;
  * @author Moisés Fernández
  */
 public class Clock extends Item implements Commons {
-    
-    private final Time time;
 
+    private final Time time; // time variable to determine the game time
+
+    /**
+     * Constructor of the clock with x,y, width and height
+     *
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     */
     public Clock(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.time = new Time();
@@ -21,16 +28,20 @@ public class Clock extends Item implements Commons {
     /**
      * To tick the ticker per number of frames
      */
-    public void tick()
-    {
+    public void tick() {
+        //ticks the time
         time.tick();
-        if( time.getTicker() % 60  == 0)
+
+        //displays the actual time in the terminal
+        if (time.getTicker() % 60 == 0) {
             System.out.println("Seconds Passed: " + time.getSeconds());
-        
+        }
     }
 
+    //to render the clock in the screen
     @Override
     public void render(Graphics g) {
-       }
-    
+
+    }
+
 }

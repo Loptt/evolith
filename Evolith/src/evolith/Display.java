@@ -13,13 +13,14 @@ import javax.swing.JFrame;
  * @author Moisés Fernández
  */
 public class Display {
+
     private JFrame jframe;
     private Canvas canvas;
-    
+
     private String title;
     private int width;
     private int height;
-    
+
     /**
      * initializes the values for the application game
      *
@@ -32,42 +33,42 @@ public class Display {
         this.width = width;
         this.height = height;
         createDisplay();
-    }	
-    
+    }
+
     /*
     * create the app and the canvas and add the canvas to the window app
-    */
+     */
     public void createDisplay() {
         jframe = new JFrame(title);
-        
+
         jframe.setSize(width, height);
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jframe.setResizable(false);
         jframe.setLocationRelativeTo(null);
         jframe.setVisible(true);
-        
+
         canvas = new Canvas();
         canvas.setPreferredSize(new Dimension(width, height));
         canvas.setMaximumSize(new Dimension(width, height));
         canvas.setFocusable(false);
-        
+
         jframe.add(canvas);
         jframe.pack();
-        
-        
+
     }
-    
+
     /*
     * to get the canvas of the game
     * @return the canvas
-    */
+     */
     public Canvas getCanvas() {
         return canvas;
     }
-    
+
     /**
      * To get jframe
-     * @return 
+     *
+     * @return
      */
     public JFrame getJframe() {
         return jframe;
