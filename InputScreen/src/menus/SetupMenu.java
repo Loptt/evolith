@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author moisesfernandez
  */
-public class Setup extends Menu{
+public class SetupMenu extends Menu{
     private boolean active;
     /* private Button play = new Button(300,350);
     private Button instructions = new Button(300,350);
@@ -21,13 +21,13 @@ public class Setup extends Menu{
     private boolean clickPlay;
 
 
-    public Setup(int x, int y, int width, int height, Game game) {
+    public SetupMenu(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
         active = true;
         clickPlay = false;
 
         buttons = new ArrayList<Button>();
-        buttons.add(new Button(340, 555, 350, 110)); // Play button
+        buttons.add(new Button(340, 555, 350, 110, Assets.playOn, Assets.playOff)); // Play button
         buttons.add(new Button(100, 210, 170, 185, Assets.redOption)); // Red option
         buttons.add(new Button(300, 210, 170, 185, Assets.purpleOption)); // Purple option
         buttons.add(new Button(500, 210, 170, 185, Assets.blueOption)); // Blue option
@@ -81,6 +81,7 @@ public class Setup extends Menu{
         for (int i = 0; i < buttons.size(); i++) {
             buttons.get(i).render(g);
         }
+        
         
     }
 }

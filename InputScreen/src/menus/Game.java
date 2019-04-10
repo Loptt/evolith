@@ -40,7 +40,7 @@ public class Game implements Runnable, Commons {
     private States state;
     
     private MainMenu mainMenu;
-    private Setup setup;
+    private SetupMenu setup;
     
     /**
     * to create title, width and height and set the game is still not running
@@ -96,7 +96,7 @@ public class Game implements Runnable, Commons {
         Assets.init();
         
         background = new Background(Assets.background , 3200, 3200, width, height);
-        setup = new Setup(0,0,1000,700,this);
+        setup = new SetupMenu(0,0,1000,700,this);
         mainMenu = new MainMenu(0,0,1000,700,this);
         
         display.getJframe().addKeyListener(keyManager);
