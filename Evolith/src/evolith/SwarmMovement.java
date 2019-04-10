@@ -1,10 +1,8 @@
-
 package evolith;
 
 import java.awt.Point;
 import static java.lang.Math.sqrt;
 import java.util.ArrayList;
-
 
 /**
  * @author Erick González
@@ -62,7 +60,15 @@ public class SwarmMovement implements Commons {
         
         return positions;
     }
-    
+
+    /**
+     * To get the positions of the array and update it randomly
+     *
+     * @param x
+     * @param y
+     * @param num
+     * @return customPosition
+     */
     public static ArrayList<Point> getPositions(int x, int y, int num) {
         ArrayList<Point> positions = generateHexPattern(num);
         
@@ -73,7 +79,16 @@ public class SwarmMovement implements Commons {
         
         return positions;
     }
-    
+
+    /**
+     * To simulate the swarm movement of the points given
+     *
+     * @param x
+     * @param y
+     * @param num
+     * @param obj
+     * @return
+     */
     public static ArrayList<Point> getPositions(int x, int y, int num, int obj) {
         ArrayList<Point> positions = generateHexPattern(num+obj);
         
@@ -95,7 +110,13 @@ public class SwarmMovement implements Commons {
         
         return positions;
     }
-    
+
+    /**
+     * To generate random number
+     *
+     * @param random
+     * @return
+     */
     private static int generateRandomness(int random) {
         return (int) (Math.random() * random - random / 2);
     }

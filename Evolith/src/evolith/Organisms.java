@@ -1,10 +1,8 @@
-
 package evolith;
 
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
-
 
 /**
  *
@@ -14,35 +12,40 @@ import java.util.ArrayList;
  * @author Moisés Fernández
  */
 public class Organisms implements Commons {
-    
-    private ArrayList<Organism> organisms;
-    private int amount;
-    
-    private Game game;
-    private int counter;
-    
-    private Hover h;
-    private boolean hover;
-    
-    private int newX;
-    private int newY;
-    
+
+    private ArrayList<Organism> organisms;  //array of all organisms
+    private int amount;         //max organism amount
+
+    private Game game;          // game instance
+    private int counter;        //frame counter
+
+    private Hover h;            // hover panel
+    private boolean hover;      // to know if hovering
+
+    private int newX;           // new x position of the organisms
+    private int newY;           // new y position of the organisms
+
+    /**
+     * Constructor of the organisms
+     *
+     * @param game
+     */
     public Organisms(Game game) {
         this.game = game;
         organisms = new ArrayList<>();
-        amount = 20;
-        
+        amount = 6;
+
         for (int i = 0; i < amount; i++) {
             organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE, ORGANISM_SIZE));
         }
-        
+
         newX = INITIAL_POINT;
         newY = INITIAL_POINT;
     }
-    
+
     public void tick() {
         ArrayList<Point> points;
-        
+        //if left clicked move the organisms to determined point
         if (game.getMouseManager().isIzquierdo()) {
             newX = game.getCamera().getAbsX(game.getMouseManager().getX());
             newY = game.getCamera().getAbsX(game.getMouseManager().getY());
@@ -51,112 +54,136 @@ public class Organisms implements Commons {
                 organisms.get(i).setPoint(points.get(i));
                 //System.out.println(points.get(i));
             }
-            
             game.getMouseManager().setIzquierdo(false);
         }
-        
-        /*points = SwarmMovement.getPositions(newX, newY, amount);
-        for (int i = 0; i < amount; i++) {
-            organisms.get(i).setPoint(points.get(i));
-        }*/
-        
+
         for (int i = 0; i < amount; i++) {
             organisms.get(i).tick();
         }
-        
-        counter++;
-        
-        if (counter >= 180) {
-            organisms.add(new Organism(organisms.get(0).getX()+50, organisms.get(0).getY(), ORGANISM_SIZE, ORGANISM_SIZE));
-            if (amount < 5) {
-                amount++;
-            }
-            counter = 0;
-        }
-        
+
+        //check the hover
         checkHover();
     }
-    
+
+    /**
+     * To check the hover panel over an organism
+     */
     public void checkHover() {
-                
-         for (int i = 0; i < amount; i++) {
-              if(organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
-                      game.getCamera().getAbsY(game.getMouseManager().getY())))
-              {
-                h = new Hover(game.getMouseManager().getX(),game.getMouseManager().getY(),100,100,
+
+        for (int i = 0; i < amount; i++) {
+            //if mouse is countained in a certain organism
+            if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
+                    game.getCamera().getAbsY(game.getMouseManager().getY()))) {
+                //sets new hover panel
+                h = new Hover(game.getMouseManager().getX(), game.getMouseManager().getY(), 100, 100,
                         organisms.get(i).hunger, organisms.get(i).thirst, organisms.get(i).maturity, game);
+                //activates the hover
                 setHover(true);
                 break;
-              }
-              else setHover(false);
-         }
+            } else {
+                setHover(false);
+            }
+        }
 
     }
-    
+
+    /**
+     * To render the organisms
+     *
+     * @param g
+     */
     public void render(Graphics g) {
+
         for (int i = 0; i < amount; i++) {
             organisms.get(i).render(g);
         }
-        
+        //render the hover panel of an organism
         if (h != null && isHover()) {
             h.render(g);
         }
     }
 
+    /**
+     * To set the hover status
+     *
+     * @param hover
+     */
     public void setHover(boolean hover) {
         this.hover = hover;
     }
 
+    /**
+     * To know if hover is active
+     *
+     * @return hover
+     */
     public boolean isHover() {
         return hover;
     }
-    
+
     private class Organism extends Item {
+
         private Point point;
         private int maxVel;
         private int acc;
         private int xVel;
         private int yVel;
-        
+
         private Time time;
-        
+
         private int size;
         private int speed;
         private int strength;
         private int stealth;
         private int survivability;
-        
-        private int hunger;
-        private int thirst;
-        private int maturity;
 
-        public Organism (int x, int y, int width, int height) {
+        private int hunger;         //hunger of the organism
+        private int thirst;         //thirst of the organism
+        private int maturity;       //maturity level of the organsim
+
+        /**
+         * Constructor of the organism
+         *
+         * @param x
+         * @param y
+         * @param width
+         * @param height
+         */
+        public Organism(int x, int y, int width, int height) {
             super(x, y, width, height);
             point = new Point(x, y);
             maxVel = 3;
             xVel = 0;
             yVel = 0;
             acc = 1;
-            
+
             size = 1;
             speed = 1;
             strength = 1;
             stealth = 1;
             survivability = 1;
-            
+
             hunger = 100;
             thirst = 100;
             maturity = 0;
-            
+
             time = new Time();
         }
 
+        /**
+         * To tick the organism
+         */
         @Override
         public void tick() {
+            //to determine the lifespan of the organism
             time.tick();
+            // if the organism is less than 25 units reduce velocity
             if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 25) {
+                // if the organism is less than 15 units reduce velocity
                 if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 15) {
+                    // if the organism is less than 5 units reduce velocity
                     if (Math.abs((int) point.getX() - x) < 5 && Math.abs((int) point.getY() - y) < 5) {
+
                         maxVel = 0;
                     } else {
                         maxVel = 1;
@@ -168,19 +195,19 @@ public class Organisms implements Commons {
                 maxVel = 3;
             }
 
-
+            //move in the x to the point
             if ((int) point.getX() > x) {
                 xVel += acc;
             } else {
-                xVel -= acc; 
+                xVel -= acc;
             }
-
+            //move in the y to the point
             if ((int) point.getY() > y) {
                 yVel += acc;
             } else {
-                yVel -= acc; 
+                yVel -= acc;
             }
-
+            //limits the x velocity
             if (xVel > maxVel) {
                 xVel = maxVel;
             }
@@ -188,7 +215,7 @@ public class Organisms implements Commons {
             if (xVel < maxVel * -1) {
                 xVel = maxVel * -1;
             }
-
+            //limits the y velocity
             if (yVel > maxVel) {
                 yVel = maxVel;
             }
@@ -196,20 +223,35 @@ public class Organisms implements Commons {
             if (yVel < maxVel * -1) {
                 yVel = maxVel * -1;
             }
-
+            //increments the velocity
             x += xVel;
             y += yVel;
         }
 
+        /**
+         * Renders the organisms relative to the camera
+         *
+         * @param g
+         */
         @Override
         public void render(Graphics g) {
             g.drawImage(Assets.player, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
         }
 
+        /**
+         * To get the point
+         *
+         * @return
+         */
         public Point getPoint() {
             return point;
         }
 
+        /**
+         * To set the point
+         *
+         * @param point
+         */
         public void setPoint(Point point) {
             this.point = point;
         }
