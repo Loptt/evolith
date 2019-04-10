@@ -23,7 +23,7 @@ public class Assets {
      * Initalizes the assets and links to the image folder
      */
     public static void init() {
-        background = ImageLoader.loadImage("/images/background_beta.png");
+        background = ImageLoader.loadImage("/images/background2.png");
         player = ImageLoader.loadImage("/images/purple organism.png");
         plant = ImageLoader.loadImage("/images/food.png");
 
