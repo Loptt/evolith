@@ -110,7 +110,7 @@ public class SwarmMovement implements Commons {
             }
         }
         
-            System.out.println("Pre-Transformed:");
+        System.out.println("Pre-Transformed:");
         for (int i = 0; i < positions.size(); i++) {
             System.out.println(positions.get(i));
         }

@@ -30,7 +30,7 @@ public class Organisms implements Commons {
     public Organisms(Game game) {
         this.game = game;
         organisms = new ArrayList<>();
-        amount = 20;
+        amount = 18;
         
         for (int i = 0; i < amount; i++) {
             organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE, ORGANISM_SIZE));

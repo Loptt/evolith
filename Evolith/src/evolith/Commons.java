@@ -20,5 +20,5 @@ public interface Commons {
     public static final int MAX_HUNGER = 100;
     public static final int MAX_MATURITY = 10;
     
-    public static final int SWARM_SEPARATION = ORGANISM_SIZE-20;
+    public static final int SWARM_SEPARATION = ORGANISM_SIZE-30;
 }
