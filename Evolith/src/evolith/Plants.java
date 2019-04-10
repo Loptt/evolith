@@ -1,17 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package evolith;
 
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+
 /**
  *
- * @author charles
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class Plants implements Commons {
     

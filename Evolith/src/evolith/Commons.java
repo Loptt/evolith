@@ -1,13 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package evolith;
+
 
 /**
  *
- * @author charles
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public interface Commons {
     
@@ -15,6 +15,7 @@ public interface Commons {
     public static final int INITIAL_POINT = 1000;
     public static final int MAX_ORGANISM_AMOUNT = 256;
     public static final int PLANT_SIZE = 150;
+    public static final int FRAME_RATE = 60;
     
     public static final int MAX_THIRST = 100;
     public static final int MAX_HUNGER = 100;

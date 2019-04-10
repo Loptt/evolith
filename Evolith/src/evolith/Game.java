@@ -1,17 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package evolith;
 
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 
+
 /**
  *
- * @author charles
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class Game implements Runnable, Commons {
     
@@ -39,6 +39,8 @@ public class Game implements Runnable, Commons {
     private States state;
     
     private MainMenu mainMenu;
+    
+    private Clock clock;
     
     /**
     * to create title, width and height and set the game is still not running
@@ -92,6 +94,8 @@ public class Game implements Runnable, Commons {
     * initializing the display window of the game
     */
     private void init() {
+        
+        clock = new Clock(0,0,100,100);
         display = new Display(title, width, height);
         Assets.init();
         
@@ -111,6 +115,7 @@ public class Game implements Runnable, Commons {
      * updates all objects on a frame
      */
     private void tick() {
+        clock.tick();
         switch(state) {
             case MainMenu:
                 mainMenu.tick();
