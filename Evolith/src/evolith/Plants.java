@@ -5,6 +5,7 @@
  */
 package evolith;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -58,7 +59,8 @@ public class Plants implements Commons {
 
         @Override
         public void render(Graphics g) {
-            g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+            g.setColor(new Color(173, 255, 250));
+            g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
             g.drawImage(Assets.plant, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
             g.drawString(Integer.toString(quantity) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
         }
