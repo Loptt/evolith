@@ -22,7 +22,7 @@ public class Assets {
     public static BufferedImage startPlay;
     
     public static void init() {
-        background = ImageLoader.loadImage("/images/background_beta.png");
+        background = ImageLoader.loadImage("/images/background2.png");
         player = ImageLoader.loadImage("/images/purple organism.png");
         plant = ImageLoader.loadImage("/images/food.png");
         
