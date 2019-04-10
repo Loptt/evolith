@@ -48,7 +48,7 @@ public class Organisms implements Commons {
         //if left clicked move the organisms to determined point
         if (game.getMouseManager().isIzquierdo()) {
             newX = game.getCamera().getAbsX(game.getMouseManager().getX());
-            newY = game.getCamera().getAbsX(game.getMouseManager().getY());
+            newY = game.getCamera().getAbsY(game.getMouseManager().getY());
             points = SwarmMovement.getPositions(newX - ORGANISM_SIZE /2, newY - ORGANISM_SIZE /2, amount, 1);
             for (int i = 0; i < amount; i++) {
                 organisms.get(i).setPoint(points.get(i));

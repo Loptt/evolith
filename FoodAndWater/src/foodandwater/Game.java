@@ -39,7 +39,7 @@ public class Game implements Runnable, Commons {
     private States state;
     
     private MainMenu mainMenu;
-    private ButtonBar buttonBar;
+    private ButtonBarMenu buttonBar;
     
     /**
     * to create title, width and height and set the game is still not running
@@ -94,7 +94,7 @@ public class Game implements Runnable, Commons {
     private void init() {
         display = new Display(title, width, height);
         Assets.init();
-        buttonBar = new ButtonBar(10,10,505,99,this);
+        buttonBar = new ButtonBarMenu(10,10,505,99,this);
 
         
         background = new Background(Assets.background , 3200, 3200, width, height);

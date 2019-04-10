@@ -38,7 +38,8 @@ public class Game implements Runnable, Commons {
     } // status of the flow of the game once running
     private States state;
 
-    private MainMenu mainMenu;                  // main menu 
+    private MainMenu mainMenu;                  // main menu
+    private ButtonBarMenu buttonBar;
 
     private Clock clock;                        // the time of the game
 
@@ -101,6 +102,7 @@ public class Game implements Runnable, Commons {
         Assets.init();
 
         background = new Background(Assets.background, 5000, 5000, width, height);
+        buttonBar = new ButtonBarMenu(10,10,505,99,this);
 
         organisms = new Organisms(this);
         plants = new Plants(this);
@@ -131,6 +133,7 @@ public class Game implements Runnable, Commons {
                 camera.tick();
                 organisms.tick();
                 plants.tick();
+                buttonBar.tick();
                 break;
         }
 
@@ -157,6 +160,7 @@ public class Game implements Runnable, Commons {
                     g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
                     plants.render(g);
                     organisms.render(g);
+                    buttonBar.render(g);
                     break;
             }
             bs.show();
