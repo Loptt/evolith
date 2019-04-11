@@ -130,33 +130,45 @@ public class Game implements Runnable, Commons {
         clock.tick();
         switch (state) {
             case MainMenu:
-                mainMenu.tick();
-                mainMenu.setActive(true);
-                if (mainMenu.isClickPlay()) {
-                    mainMenu.setActive(false);
-                    state = States.Setup;
-                }
+                mainMenuTick();
                 break;
             case Setup:
-                setup.tick();
-                setup.setActive(true);
-                keyManager.tick();
-                
-                if (setup.isClickPlay()) {
-                    setup.setActive(false);
-                    organisms.setSkin(setup.getOption());
-                    state = States.Play;
-                }
+                setupMenuTick();
                 break;
             case Play:
-                keyManager.tick();
-                camera.tick();
-                organisms.tick();
-                plants.tick();
-                buttonBar.tick();
+                playTick();
                 break;
         }
 
+    }
+    
+    private void mainMenuTick() {
+        mainMenu.tick();
+        mainMenu.setActive(true);
+        if (mainMenu.isClickPlay()) {
+            mainMenu.setActive(false);
+            state = States.Setup;
+        }
+    }
+    
+    private void setupMenuTick() {
+        setup.tick();
+        setup.setActive(true);
+        keyManager.tick();
+
+        if (setup.isClickPlay()) {
+            setup.setActive(false);
+            organisms.setSkin(setup.getOption());
+            state = States.Play;
+        }
+    }
+    
+    private void playTick() {
+        keyManager.tick();
+        camera.tick();
+        organisms.tick();
+        plants.tick();
+        buttonBar.tick();
     }
 
     /**
@@ -190,7 +202,7 @@ public class Game implements Runnable, Commons {
             g.dispose();
         }
     }
-
+    
     /**
      * Saves current game status into a text file Each important variable to
      * define the current status of the game is stored in the file in a specific
