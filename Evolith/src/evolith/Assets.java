@@ -21,9 +21,9 @@ public class Assets {
     public static BufferedImage startPlay; // start play button image
     public static BufferedImage setupSpeciesBackground; // start play button image
     
-    public static BufferedImage blueOption;
-    public static BufferedImage yellowOption;
-    public static BufferedImage redOption;
+    public static BufferedImage bluegreenOption;
+    public static BufferedImage orangeOption;
+    public static BufferedImage pinkOption;
     public static BufferedImage purpleOption;
     
     public static BufferedImage playOn;
@@ -48,10 +48,10 @@ public class Assets {
         startPlay = ImageLoader.loadImage("/images/start play.png");
         setupSpeciesBackground = ImageLoader.loadImage("/images/setup_species_background.png");
         
-        blueOption = ImageLoader.loadImage("/images/blueoption.png");
-        yellowOption = ImageLoader.loadImage("/images/yellowoption.png");
-        redOption = ImageLoader.loadImage("/images/redoption.png");
-        purpleOption = ImageLoader.loadImage("/images/purpleoption.png");
+        bluegreenOption = ImageLoader.loadImage("/images/blueone.png");
+        orangeOption = ImageLoader.loadImage("/images/orangeone.png");
+        pinkOption = ImageLoader.loadImage("/images/pinkone.png");
+        purpleOption = ImageLoader.loadImage("/images/purpleone.png");
         playOn = ImageLoader.loadImage("/images/playon.png");
         playOff = ImageLoader.loadImage("/images/playoff.png");
         hoverImage = ImageLoader.loadImage("/images/STATS BARV1.png");

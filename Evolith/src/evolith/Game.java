@@ -61,7 +61,7 @@ public class Game implements Runnable, Commons {
         camera = new Camera(INITIAL_POINT - width / 2, INITIAL_POINT - height / 2, width, height, this);
         mainMenu = new MainMenu(0, 0, width, height, this);
 
-        state = States.Play;
+        state = States.MainMenu;
     }
 
     /**

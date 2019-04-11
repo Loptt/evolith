@@ -32,10 +32,10 @@ public class SetupMenu extends Menu{
 
         buttons = new ArrayList<Button>();
         buttons.add(new Button(340, 555, 350, 110, Assets.playOn, Assets.playOff)); // Play button
-        buttons.add(new Button(100, 210, 170, 185, Assets.redOption)); // Red option
+        buttons.add(new Button(100, 210, 170, 185, Assets.pinkOption)); // Red option
         buttons.add(new Button(300, 210, 170, 185, Assets.purpleOption)); // Purple option
-        buttons.add(new Button(500, 210, 170, 185, Assets.blueOption)); // Blue option
-        buttons.add(new Button(700, 210, 170, 185, Assets.yellowOption)); // Yellow option
+        buttons.add(new Button(500, 210, 170, 185, Assets.bluegreenOption)); // Blue option
+        buttons.add(new Button(700, 210, 170, 185, Assets.orangeOption)); // Yellow option
         buttons.add(new Button(215, 480, 570, 65)); // Write text
         
         option = 1;
@@ -80,9 +80,6 @@ public class SetupMenu extends Menu{
                         if (i != 0) {   
                             option = i-1;
                         }
-                        
-                        System.out.println("PRESSED");
-                        System.out.println(option);
                         
                         for (int j = 0; j < buttons.size(); j++) {
                             if (i != j) {
