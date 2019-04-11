@@ -42,7 +42,7 @@ public class Organisms implements Commons {
     public Organisms(Game game) {
         this.game = game;
         organisms = new ArrayList<>();
-        amount = 25;
+        amount = 1;
 
         for (int i = 0; i < amount; i++) {
             organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE, ORGANISM_SIZE));
@@ -58,7 +58,7 @@ public class Organisms implements Commons {
         if (game.getMouseManager().isIzquierdo()) {
             newX = game.getCamera().getAbsX(game.getMouseManager().getX());
             newY = game.getCamera().getAbsY(game.getMouseManager().getY());
-            points = SwarmMovement.getPositions(newX - ORGANISM_SIZE /2, newY - ORGANISM_SIZE /2, amount, 1);
+            points = SwarmMovement.getPositions(newX - ORGANISM_SIZE /2, newY - ORGANISM_SIZE /2, amount);
             for (int i = 0; i < amount; i++) {
                 organisms.get(i).setPoint(points.get(i));
                 //System.out.println(points.get(i));
@@ -68,16 +68,19 @@ public class Organisms implements Commons {
 
         for (int i = 0; i < amount; i++) {
             organisms.get(i).tick();
+            reproduce(organisms.get(i));
         }
 
         //check the hover
         checkHover();
     }
+    
+   
 
     /**
      * To check the hover panel over an organism
      */
-    public void checkHover() {
+    private void checkHover() {
 
         for (int i = 0; i < amount; i++) {
             //if mouse is countained in a certain organism
@@ -94,6 +97,14 @@ public class Organisms implements Commons {
             }
         }
 
+    }
+    
+    private void reproduce(Organism org) {
+        if (org.isNeedOffspring()) {
+            org.setNeedOffspring(false);
+            amount++;
+            organisms.add(new Organism(org.getX()+ORGANISM_SIZE, org.getY(), ORGANISM_SIZE, ORGANISM_SIZE));
+        }
     }
 
     /**
@@ -162,6 +173,8 @@ public class Organisms implements Commons {
         private int prevHungerRed; //Time in seconds at which hunger was previously reduced
         private int prevThirstRed; //Time in seconds at which hunger was previously reduced
         private int prevMatInc; //Time in seconds at which maturity was previously increased
+        
+        private boolean needOffspring;
 
         /**
          * Constructor of the organism
@@ -193,10 +206,23 @@ public class Organisms implements Commons {
             prevHungerRed = 0;
             prevThirstRed = 0;
             prevMatInc = 0;
+            
+            needOffspring = false;
 
             time = new Time();
         }
         
+        /**
+         * To tick the organism
+         */
+        @Override
+        public void tick() {
+            //to determine the lifespan of the organism
+            time.tick();
+            checkMovement();
+            checkVitals();
+        }
+
         private void checkMovement() {
             // if the organism is less than 25 units reduce velocity
             if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 25) {
@@ -265,18 +291,14 @@ public class Organisms implements Commons {
                 maturity++;
                 prevMatInc = (int) time.getSeconds();
             }
+            
+            if (maturity >= MAX_MATURITY) {
+                needOffspring = true;
+                maturity = 0;
+            }
         }
 
-        /**
-         * To tick the organism
-         */
-        @Override
-        public void tick() {
-            //to determine the lifespan of the organism
-            time.tick();
-            checkMovement();
-            checkVitals();
-        }
+        
 
         /**
          * Renders the organisms relative to the camera
@@ -304,6 +326,14 @@ public class Organisms implements Commons {
          */
         public void setPoint(Point point) {
             this.point = point;
+        }
+
+        public boolean isNeedOffspring() {
+            return needOffspring;
+        }
+
+        public void setNeedOffspring(boolean needOffspring) {
+            this.needOffspring = needOffspring;
         }
     }
 }
