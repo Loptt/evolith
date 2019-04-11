@@ -159,7 +159,9 @@ public class Organisms implements Commons {
         private int thirst;         //thirst of the organism
         private int maturity;       //maturity level of the organsim
         
-        private int prevHungerRed;
+        private int prevHungerRed; //Time in seconds at which hunger was previously reduced
+        private int prevThirstRed; //Time in seconds at which hunger was previously reduced
+        private int prevMatInc; //Time in seconds at which maturity was previously increased
 
         /**
          * Constructor of the organism
@@ -184,29 +186,18 @@ public class Organisms implements Commons {
             survivability = 1;
             
             life = 100;
-            hunger = 50;
-            thirst = 75;
-            maturity = 3;
+            hunger = 100;
+            thirst = 100;
+            maturity = 0;
             
             prevHungerRed = 0;
+            prevThirstRed = 0;
+            prevMatInc = 0;
 
             time = new Time();
         }
-
-        /**
-         * To tick the organism
-         */
-        @Override
-        public void tick() {
-            //to determine the lifespan of the organism
-            time.tick();
-            
-            //Reduce hunger every x seconds defined in the commmons class
-            if (time.getSeconds() >= prevHungerRed + SECONDS_PER_HUNGER) {
-                hunger--;
-                prevHungerRed = (int) time.getSeconds();
-            }
-            
+        
+        private void checkMovement() {
             // if the organism is less than 25 units reduce velocity
             if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 25) {
                 // if the organism is less than 15 units reduce velocity
@@ -256,6 +247,35 @@ public class Organisms implements Commons {
             //increments the velocity
             x += xVel;
             y += yVel;
+        }
+        
+        private void checkVitals() {
+            //Reduce hunger every x seconds defined in the commmons class
+            if (time.getSeconds() >= prevHungerRed + SECONDS_PER_HUNGER) {
+                hunger--;
+                prevHungerRed = (int) time.getSeconds();
+            }
+            
+            if (time.getSeconds() >= prevThirstRed + SECONDS_PER_THIRST) {
+                thirst--;
+                prevThirstRed = (int) time.getSeconds();
+            }
+            
+            if (time.getSeconds() >= prevMatInc + SECONDS_PER_MATURITY) {
+                maturity++;
+                prevMatInc = (int) time.getSeconds();
+            }
+        }
+
+        /**
+         * To tick the organism
+         */
+        @Override
+        public void tick() {
+            //to determine the lifespan of the organism
+            time.tick();
+            checkMovement();
+            checkVitals();
         }
 
         /**

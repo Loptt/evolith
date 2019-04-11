@@ -13,6 +13,8 @@ import java.util.ArrayList;
  */
 public class SwarmMovement implements Commons {
     
+    private static final int randomness = 70;
+    
     public static ArrayList<Point> generateHexPattern(int n) {
         if (n < 1) {
             return null;
@@ -74,8 +76,8 @@ public class SwarmMovement implements Commons {
         ArrayList<Point> positions = generateHexPattern(num);
         
         for (int i = 0; i < positions.size(); i++) {
-            positions.get(i).x += x + generateRandomness(80);
-            positions.get(i).y += y + generateRandomness(80);
+            positions.get(i).x += x + generateRandomness(randomness);
+            positions.get(i).y += y + generateRandomness(randomness);
         }
         
         return positions;
@@ -96,8 +98,8 @@ public class SwarmMovement implements Commons {
         for (int i = 0; i < positions.size(); i++) {
             
             if (i > 6) {
-                positions.get(i).x += x + generateRandomness(80);
-                positions.get(i).y += y + generateRandomness(80);
+                positions.get(i).x += x + generateRandomness(randomness);
+                positions.get(i).y += y + generateRandomness(randomness);
             } else {
                 positions.get(i).x += x + generateRandomness(0);
                 positions.get(i).y += y + generateRandomness(0);

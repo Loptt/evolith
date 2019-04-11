@@ -79,7 +79,7 @@ public class Hover extends Item implements Commons {
         g.drawRect(x + 25, y + 40, 120, 10);*/
         //displays the hunger depending on the food given
         g.setColor(Color.green);
-        g.fillRect(x + 24, y + 58, (int) 118 * this.food / MAX_HUNGER, 12);
+        g.fillRect(x + 24, y + 58, (int) 121 * this.food / MAX_HUNGER, 12);
 
 //  Thirst information
         /*g.setColor(new Color(197, 56, 218));
@@ -89,7 +89,7 @@ public class Hover extends Item implements Commons {
         g.drawRect(x + 25, y + 80, 120, 10);*/
         //displays the thirst depending on the water given
         g.setColor(Color.blue);
-        g.fillRect(x + 24, y + 115, (int) 118 * this.water / MAX_THIRST, 12);
+        g.fillRect(x + 24, y + 115, (int) 121 * this.water / MAX_THIRST, 12);
 
 //  Maturity Information
         /*g.setColor(new Color(197, 56, 218));
@@ -99,7 +99,7 @@ public class Hover extends Item implements Commons {
         g.drawRect(x + 25, y + 120, 120, 10);*/
         //displays the maturity depending on the level
         g.setColor(Color.red);
-        g.fillRect(x + 24, y + 174, (int) 118 * this.mat / MAX_MATURITY, 12);
+        g.fillRect(x + 24, y + 174, (int) 121 * this.mat / MAX_MATURITY, 12);
         
         g.drawImage(Assets.hoverImage, x, y, width, height, null);
     }
