@@ -44,6 +44,10 @@ public abstract class Menu {
     public Rectangle getPerimeter() {
         return new Rectangle(x, y, width, height);
     }
+    
+    public boolean hasMouse(int x, int y) {
+        return getPerimeter().contains(x, y);
+    } 
 
     /**
      * To get x

@@ -169,6 +169,19 @@ public class Game implements Runnable, Commons {
         organisms.tick();
         plants.tick();
         buttonBar.tick();
+        
+        if (mouseManager.isIzquierdo()) {
+            int mouseX = mouseManager.getX();
+            int mouseY = mouseManager.getY();
+            
+            if (buttonBar.hasMouse(mouseX, mouseY)) {
+                buttonBar.applyMouse(mouseX, mouseY);
+            } else {    
+                organisms.applyMouse(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+            }
+            
+            mouseManager.setIzquierdo(false);
+        }
     }
 
     /**

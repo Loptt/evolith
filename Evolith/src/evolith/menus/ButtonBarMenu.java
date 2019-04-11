@@ -40,29 +40,21 @@ public class ButtonBarMenu extends Menu {
     }
     // organism's behaviour when Fight button is active
     public void activateFight(){
-        
     }
 
     @Override
     public void tick() {
-        for(int i=0; i<buttons.size(); i++){
-            if(buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())){
+        /**
+         * The hover effect on these buttons can confuse the user
+         */
+        /*for(int i = 0; i < buttons.size(); i++){
+            if(buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
                 //if the mouse is over the button
-
                 buttons.get(i).setHover(true); //set the button hover status as true
-                if(game.getMouseManager().isIzquierdo()){
-                    //if left click
-                    System.out.println("IS PRESSED");
-                    buttons.get(i).setPressed(true);
-                    buttons.get(i).setActive(!buttons.get(i).isActive());
-                    game.getMouseManager().setIzquierdo(false);
-                }
-            }
-            
-            else{
+            } else{
                 buttons.get(i).setHover(false);
             }
-        }
+        }*/
     }
 
     @Override
@@ -73,5 +65,16 @@ public class ButtonBarMenu extends Menu {
             buttons.get(i).render(g);
         }
     }
-    
+
+    public void applyMouse(int mouseX, int mouseY) {
+        for(int i = 0; i < buttons.size(); i++){
+            if(buttons.get(i).hasMouse(mouseX, mouseY)) {
+                if (!buttons.get(i).isActive()) {
+                    buttons.get(i).setActive(true);
+                } else {
+                    buttons.get(i).setActive(false);
+                }
+            }
+        }
+    }
 }

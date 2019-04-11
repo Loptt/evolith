@@ -50,6 +50,10 @@ public abstract class Item {
     public boolean intersects(Item item) {
         return getPerimeter().intersects(item.getPerimeter());
     }
+    
+    public boolean hasMouse(int x, int y) {
+        return getPerimeter().contains(x, y);
+    }
 
     /**
      * To get x

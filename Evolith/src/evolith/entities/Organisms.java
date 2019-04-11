@@ -53,19 +53,6 @@ public class Organisms implements Commons {
     }
 
     public void tick() {
-        ArrayList<Point> points;
-        //if left clicked move the organisms to determined point
-        if (game.getMouseManager().isIzquierdo()) {
-            newX = game.getCamera().getAbsX(game.getMouseManager().getX());
-            newY = game.getCamera().getAbsY(game.getMouseManager().getY());
-            points = SwarmMovement.getPositions(newX - ORGANISM_SIZE /2, newY - ORGANISM_SIZE /2, amount);
-            for (int i = 0; i < amount; i++) {
-                organisms.get(i).setPoint(points.get(i));
-                //System.out.println(points.get(i));
-            }
-            game.getMouseManager().setIzquierdo(false);
-        }
-
         for (int i = 0; i < amount; i++) {
             organisms.get(i).tick();
             reproduce(organisms.get(i));
@@ -75,7 +62,20 @@ public class Organisms implements Commons {
         checkHover();
     }
     
-   
+    public void applyMouse(int x, int y) {
+        ArrayList<Point> points;
+        //if left clicked move the organisms to determined point
+
+        newX = game.getCamera().getAbsX(game.getMouseManager().getX());
+        newY = game.getCamera().getAbsY(game.getMouseManager().getY());
+        points = SwarmMovement.getPositions(newX - ORGANISM_SIZE /2, newY - ORGANISM_SIZE /2, amount);
+        for (int i = 0; i < amount; i++) {
+            organisms.get(i).setPoint(points.get(i));
+        }
+        
+        game.getMouseManager().setIzquierdo(false);
+
+    }
 
     /**
      * To check the hover panel over an organism

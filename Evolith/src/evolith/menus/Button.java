@@ -45,10 +45,6 @@ public class Button extends Item {
         enlarge = false;
 
     }
-    
-    public boolean hasMouse(int x, int y) {
-        return getPerimeter().contains(x, y);
-    }
    
     public boolean isPressed(){
         return pressed;
