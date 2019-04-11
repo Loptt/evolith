@@ -19,6 +19,17 @@ public class Assets {
     public static BufferedImage start; // start image
     public static BufferedImage startInstructions; // start menu instruction image
     public static BufferedImage startPlay; // start play button image
+    public static BufferedImage setupSpeciesBackground; // start play button image
+    
+    public static BufferedImage blueOption;
+    public static BufferedImage yellowOption;
+    public static BufferedImage redOption;
+    public static BufferedImage purpleOption;
+    
+    public static BufferedImage playOn;
+    public static BufferedImage playOff;
+    
+    public static ArrayList<BufferedImage> orgColors;
     
     public static ArrayList<ArrayList<BufferedImage>> buttonBar = new ArrayList<ArrayList<BufferedImage>>();
 
@@ -34,6 +45,14 @@ public class Assets {
         start = ImageLoader.loadImage("/images/start.png");
         startInstructions = ImageLoader.loadImage("/images/start instructions.png");
         startPlay = ImageLoader.loadImage("/images/start play.png");
+        setupSpeciesBackground = ImageLoader.loadImage("/images/setup_species_background.png");
+        
+        blueOption = ImageLoader.loadImage("/images/blueoption.png");
+        yellowOption = ImageLoader.loadImage("/images/yellowoption.png");
+        redOption = ImageLoader.loadImage("/images/redoption.png");
+        purpleOption = ImageLoader.loadImage("/images/purpleoption.png");
+        playOn = ImageLoader.loadImage("/images/playon.png");
+        playOff = ImageLoader.loadImage("/images/playoff.png");
         
         //Top Bar in 0,0
         ArrayList<BufferedImage> a1 = new ArrayList<BufferedImage>();
@@ -54,6 +73,13 @@ public class Assets {
         a4.add(ImageLoader.loadImage("/images/fightoff.png"));
         a4.add(ImageLoader.loadImage("/images/fighton.png"));
         buttonBar.add(a4);
+        
+        orgColors = new ArrayList<>();
+        
+        orgColors.add(ImageLoader.loadImage("/images/pinkorganism.png"));
+        orgColors.add(ImageLoader.loadImage("/images/purpleorganism.png"));
+        orgColors.add(ImageLoader.loadImage("/images/bluegreenorganism.png"));
+        orgColors.add(ImageLoader.loadImage("/images/orangeorganism.png"));
 
     }
 }

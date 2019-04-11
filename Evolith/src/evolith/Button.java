@@ -86,8 +86,15 @@ public class Button extends Item {
                 } else {
                     g.drawImage(imgOff, x, y, width+30, height+30, null);
                 }
+            } else if (pressed) {
+                if (!enlarge) {
+                    g.drawImage(imgOn, x, y, width, height, null);
+                } else {
+                    g.drawImage(imgOff, x, y, width+30, height+30, null);
+                }
             } else {
                 g.drawImage(imgOff, x, y, width, height, null);
+
             }
         } else {
             //no image to show

@@ -8,7 +8,7 @@ package evolith;
  * @author Moisés Fernández
  */
 public interface Commons {
-    public static final int ORGANISM_SIZE = 60;            // organism size
+    public static final int ORGANISM_SIZE = 30;            // organism size
     public static final int INITIAL_POINT = 1000;           // inital point
     public static final int MAX_ORGANISM_AMOUNT = 256;      // maximum organism amount
     public static final int PLANT_SIZE = 100;               // plant quanitity per unit
@@ -18,5 +18,5 @@ public interface Commons {
     public static final int MAX_HUNGER = 100;               // maximum hunger level of organism
     public static final int MAX_MATURITY = 10;              // maximum maturity level of organism
     
-    public static final int SWARM_SEPARATION = ORGANISM_SIZE-20;
+    public static final int SWARM_SEPARATION = ORGANISM_SIZE+10;
 }

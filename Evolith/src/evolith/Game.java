@@ -34,12 +34,13 @@ public class Game implements Runnable, Commons {
     private Plants plants;                      // resources of plants in the game
 
     private enum States {
-        MainMenu, Paused, GameOver, Play, Instructions
+        MainMenu, Paused, GameOver, Play, Instructions, Setup
     } // status of the flow of the game once running
     private States state;
 
     private MainMenu mainMenu;                  // main menu
     private ButtonBarMenu buttonBar;
+    private SetupMenu setup;
 
     private Clock clock;                        // the time of the game
 
@@ -102,7 +103,8 @@ public class Game implements Runnable, Commons {
         Assets.init();
 
         background = new Background(Assets.background, 5000, 5000, width, height);
-        buttonBar = new ButtonBarMenu(10,10,505,99,this);
+        buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
+        setup = new SetupMenu(0, 0, width, height, this);
 
         organisms = new Organisms(this);
         plants = new Plants(this);
@@ -125,6 +127,17 @@ public class Game implements Runnable, Commons {
                 mainMenu.setActive(true);
                 if (mainMenu.isClickPlay()) {
                     mainMenu.setActive(false);
+                    state = States.Setup;
+                }
+                break;
+            case Setup:
+                setup.tick();
+                setup.setActive(true);
+                keyManager.tick();
+                
+                if (setup.isClickPlay()) {
+                    setup.setActive(false);
+                    organisms.setSkin(setup.getOption());
                     state = States.Play;
                 }
                 break;
@@ -155,6 +168,9 @@ public class Game implements Runnable, Commons {
             switch (state) {
                 case MainMenu:
                     mainMenu.render(g);
+                    break;
+                case Setup:
+                    setup.render(g);
                     break;
                 case Play:
                     g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);

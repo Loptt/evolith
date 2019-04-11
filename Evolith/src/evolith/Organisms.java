@@ -24,6 +24,8 @@ public class Organisms implements Commons {
 
     private int newX;           // new x position of the organisms
     private int newY;           // new y position of the organisms
+    
+    private int skin;
 
     /**
      * Constructor of the organisms
@@ -119,6 +121,14 @@ public class Organisms implements Commons {
      */
     public boolean isHover() {
         return hover;
+    }
+
+    public void setSkin(int skin) {
+        this.skin = skin;
+    }
+
+    public int getSkin() {
+        return skin;
     }
 
     private class Organism extends Item {
@@ -235,7 +245,7 @@ public class Organisms implements Commons {
          */
         @Override
         public void render(Graphics g) {
-            g.drawImage(Assets.player, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
+            g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
         }
 
         /**
