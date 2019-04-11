@@ -37,6 +37,8 @@ public class SetupMenu extends Menu{
         buttons.add(new Button(500, 210, 170, 185, Assets.blueOption)); // Blue option
         buttons.add(new Button(700, 210, 170, 185, Assets.yellowOption)); // Yellow option
         buttons.add(new Button(215, 480, 570, 65)); // Write text
+        
+        option = 1;
     }
     
     public boolean isActive(){

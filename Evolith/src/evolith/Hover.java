@@ -52,7 +52,7 @@ public class Hover extends Item implements Commons {
      */
     @Override
     public void render(Graphics g) {
-
+/*
         //Outer frame of the panel
         g.setColor(new Color(137, 44, 152));
         g.fillRect(x, y, 200, 150);
@@ -64,35 +64,39 @@ public class Hover extends Item implements Commons {
         // Font determined
         Font small = new Font("Helvetica", Font.BOLD, 14);
         g.setColor(new Color(197, 56, 218));
-        g.setFont(small);
+        g.setFont(small);*/
+
+        g.drawImage(Assets.hoverImage, x, y, width, height, null);
 
 //  Hunger information 
-        g.drawString("Hunger:", x + 25, y + 30);
+        /*g.drawString("Hunger:", x + 25, y + 30);
         //draws outer rectangle
         g.setColor(Color.white);
-        g.drawRect(x + 25, y + 40, 120, 10);
+        g.drawRect(x + 25, y + 40, 120, 10);*/
         //displays the hunger depending on the food given
         g.setColor(Color.green);
-        g.fillRect(x + 26, y + 41, (int) 118 * this.food / MAX_HUNGER, 8);
+        g.fillRect(x + 24, y + 58, (int) 118 * this.food / MAX_HUNGER, 12);
 
 //  Thirst information
-        g.setColor(new Color(197, 56, 218));
+        /*g.setColor(new Color(197, 56, 218));
         g.drawString("Thirst:", x + 25, y + 70);
         //draws outer rectangle
         g.setColor(Color.white);
-        g.drawRect(x + 25, y + 80, 120, 10);
+        g.drawRect(x + 25, y + 80, 120, 10);*/
         //displays the thirst depending on the water given
         g.setColor(Color.blue);
-        g.fillRect(x + 26, y + 81, (int) 118 * this.water / MAX_THIRST, 8);
+        g.fillRect(x + 24, y + 115, (int) 118 * this.water / MAX_THIRST, 12);
 
 //  Maturity Information
-        g.setColor(new Color(197, 56, 218));
+        /*g.setColor(new Color(197, 56, 218));
         g.drawString("Maturity:", x + 25, y + 110);
         //draws outer rectangle
         g.setColor(Color.white);
-        g.drawRect(x + 25, y + 120, 120, 10);
+        g.drawRect(x + 25, y + 120, 120, 10);*/
         //displays the maturity depending on the level
         g.setColor(Color.red);
-        g.fillRect(x + 26, y + 121, (int) 118 * this.mat / MAX_MATURITY, 8);
+        g.fillRect(x + 24, y + 174, (int) 118 * this.mat / MAX_MATURITY, 12);
+        
+        g.drawImage(Assets.hoverImage, x, y, width, height, null);
     }
 }

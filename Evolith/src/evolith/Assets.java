@@ -28,6 +28,7 @@ public class Assets {
     
     public static BufferedImage playOn;
     public static BufferedImage playOff;
+    public static BufferedImage hoverImage;
     
     public static ArrayList<BufferedImage> orgColors;
     
@@ -53,6 +54,7 @@ public class Assets {
         purpleOption = ImageLoader.loadImage("/images/purpleoption.png");
         playOn = ImageLoader.loadImage("/images/playon.png");
         playOff = ImageLoader.loadImage("/images/playoff.png");
+        hoverImage = ImageLoader.loadImage("/images/STATS BARV1.png");
         
         //Top Bar in 0,0
         ArrayList<BufferedImage> a1 = new ArrayList<BufferedImage>();

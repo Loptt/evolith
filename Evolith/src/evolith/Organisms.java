@@ -35,7 +35,7 @@ public class Organisms implements Commons {
     public Organisms(Game game) {
         this.game = game;
         organisms = new ArrayList<>();
-        amount = 6;
+        amount = 25;
 
         for (int i = 0; i < amount; i++) {
             organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE, ORGANISM_SIZE));
@@ -76,8 +76,8 @@ public class Organisms implements Commons {
             //if mouse is countained in a certain organism
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
-                //sets new hover panel
-                h = new Hover(game.getMouseManager().getX(), game.getMouseManager().getY(), 100, 100,
+                //sets new hover panel with that organism's location and information
+                h = new Hover(game.getMouseManager().getX(), game.getMouseManager().getY(), 170, 220,
                         organisms.get(i).hunger, organisms.get(i).thirst, organisms.get(i).maturity, game);
                 //activates the hover
                 setHover(true);
@@ -146,10 +146,13 @@ public class Organisms implements Commons {
         private int strength;
         private int stealth;
         private int survivability;
-
+        
+        private int life;
         private int hunger;         //hunger of the organism
         private int thirst;         //thirst of the organism
         private int maturity;       //maturity level of the organsim
+        
+        private int prevHungerRed;
 
         /**
          * Constructor of the organism
@@ -172,10 +175,13 @@ public class Organisms implements Commons {
             strength = 1;
             stealth = 1;
             survivability = 1;
-
-            hunger = 100;
-            thirst = 100;
-            maturity = 0;
+            
+            life = 100;
+            hunger = 50;
+            thirst = 75;
+            maturity = 3;
+            
+            prevHungerRed = 0;
 
             time = new Time();
         }
@@ -187,6 +193,13 @@ public class Organisms implements Commons {
         public void tick() {
             //to determine the lifespan of the organism
             time.tick();
+            
+            //Reduce hunger every x seconds defined in the commmons class
+            if (time.getSeconds() >= prevHungerRed + SECONDS_PER_HUNGER) {
+                hunger--;
+                prevHungerRed = (int) time.getSeconds();
+            }
+            
             // if the organism is less than 25 units reduce velocity
             if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 25) {
                 // if the organism is less than 15 units reduce velocity

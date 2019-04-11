@@ -58,10 +58,10 @@ public class Game implements Runnable, Commons {
 
         keyManager = new KeyManager();
         mouseManager = new MouseManager();
-        camera = new Camera(10, 10, width, height, this);
+        camera = new Camera(INITIAL_POINT - width / 2, INITIAL_POINT - height / 2, width, height, this);
         mainMenu = new MainMenu(0, 0, width, height, this);
 
-        state = States.MainMenu;
+        state = States.Play;
     }
 
     /**
