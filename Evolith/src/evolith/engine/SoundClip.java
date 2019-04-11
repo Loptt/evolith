@@ -1,4 +1,4 @@
-package evolith;
+package evolith.engine;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.sound.sampled.LineUnavailableException;

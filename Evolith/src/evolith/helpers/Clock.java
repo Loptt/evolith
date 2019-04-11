@@ -1,5 +1,7 @@
-package evolith;
+package evolith.helpers;
 
+import evolith.game.Item;
+import evolith.helpers.Commons;
 import java.awt.Graphics;
 
 /**

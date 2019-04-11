@@ -1,4 +1,4 @@
-package evolith;
+package evolith.game;
 
 import java.awt.image.BufferedImage;
 

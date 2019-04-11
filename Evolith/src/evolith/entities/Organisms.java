@@ -1,5 +1,12 @@
-package evolith;
+package evolith.entities;
 
+import evolith.game.Game;
+import evolith.menus.Hover;
+import evolith.game.Item;
+import evolith.helpers.SwarmMovement;
+import evolith.helpers.Time;
+import evolith.engine.Assets;
+import evolith.helpers.Commons;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;

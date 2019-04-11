@@ -1,5 +1,9 @@
-package evolith;
+package evolith.entities;
 
+import evolith.game.Game;
+import evolith.game.Item;
+import evolith.engine.Assets;
+import evolith.helpers.Commons;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;

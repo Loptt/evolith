@@ -1,5 +1,12 @@
-package evolith;
+package evolith.game;
 
+import evolith.menus.MainMenu;
+import evolith.menus.SetupMenu;
+import evolith.menus.ButtonBarMenu;
+import evolith.helpers.Clock;
+import evolith.helpers.Commons;
+import evolith.entities.*;
+import evolith.engine.*;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;

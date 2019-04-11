@@ -1,5 +1,7 @@
-package evolith;
+package evolith.menus;
 
+import evolith.game.Game;
+import evolith.engine.Assets;
 import java.awt.Graphics;
 import java.util.ArrayList;
 

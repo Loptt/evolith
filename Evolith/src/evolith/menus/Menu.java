@@ -1,7 +1,9 @@
-package evolith;
+package evolith.menus;
 
+import evolith.game.Game;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 /**
  *
@@ -10,26 +12,28 @@ import java.awt.Rectangle;
  * @author Víctor Villarreal
  * @author Moisés Fernández
  */
-public abstract class Item {
+public abstract class Menu {
 
     protected int x; //x position
     protected int y; //y position
     protected int width;
     protected int height;
+    protected Game game;
 
     /**
-     * To create a new item
+     * To create a new menu
      *
      * @param x
      * @param y
      * @param width
      * @param height
      */
-    public Item(int x, int y, int width, int height) {
+    public Menu(int x, int y, int width, int height, Game game) {
         this.width = width;
         this.height = height;
         this.x = x;
         this.y = y;
+        this.game = game;
     }
 
     /**
@@ -39,16 +43,6 @@ public abstract class Item {
      */
     public Rectangle getPerimeter() {
         return new Rectangle(x, y, width, height);
-    }
-
-    /**
-     * To check if current item intersects with another item
-     *
-     * @param item
-     * @return
-     */
-    public boolean intersects(Item item) {
-        return getPerimeter().intersects(item.getPerimeter());
     }
 
     /**
@@ -124,12 +118,12 @@ public abstract class Item {
     }
 
     /**
-     * To tick the item
+     * To tick the menu
      */
     public abstract void tick();
 
     /**
-     * To render the item
+     * To render the menu
      *
      * @param g
      */

@@ -1,5 +1,6 @@
-package evolith;
+package evolith.menus;
 
+import evolith.game.Item;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 

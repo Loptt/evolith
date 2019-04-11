@@ -1,4 +1,4 @@
-package evolith;
+package evolith.engine;
 
 import java.awt.Canvas;
 import java.awt.Color;

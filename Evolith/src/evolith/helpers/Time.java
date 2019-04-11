@@ -1,4 +1,6 @@
-package evolith;
+package evolith.helpers;
+
+import evolith.helpers.Commons;
 
 /**
  * @author Erick González

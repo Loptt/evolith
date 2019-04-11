@@ -1,5 +1,6 @@
-package evolith;
+package evolith.helpers;
 
+import evolith.helpers.Commons;
 import java.awt.Point;
 import static java.lang.Math.sqrt;
 import java.util.ArrayList;

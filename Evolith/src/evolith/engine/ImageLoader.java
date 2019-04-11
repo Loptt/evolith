@@ -1,4 +1,4 @@
-package evolith;
+package evolith.engine;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package evolith;
+package evolith.menus;
 
+import evolith.game.Game;
+import evolith.engine.Assets;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
