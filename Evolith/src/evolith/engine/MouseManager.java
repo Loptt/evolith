@@ -13,7 +13,7 @@ import java.awt.event.MouseMotionListener;
  */
 public class MouseManager implements MouseListener, MouseMotionListener {
 
-    private boolean izquierdo;
+    private boolean left;
     private boolean derecho;
     private int x;
     private int y;
@@ -42,7 +42,7 @@ public class MouseManager implements MouseListener, MouseMotionListener {
     public void mousePressed(MouseEvent e) {
         // if the right button of the mouse is pressed
         if (e.getButton() == MouseEvent.BUTTON1) {
-            izquierdo = true;
+            left = true;
             x = e.getX();
             y = e.getY();
         }
@@ -57,7 +57,7 @@ public class MouseManager implements MouseListener, MouseMotionListener {
     public void mouseReleased(MouseEvent e) {
         // if the right button of the mouse is released
         if (e.getButton() == MouseEvent.BUTTON1) {
-            izquierdo = false;
+            left = false;
         }
     }
 
@@ -77,7 +77,7 @@ public class MouseManager implements MouseListener, MouseMotionListener {
     @Override
     public void mouseDragged(MouseEvent e) {
         if (true) {
-            izquierdo = true;
+            left = true;
             x = e.getX();
             y = e.getY();
         }
@@ -119,8 +119,8 @@ public class MouseManager implements MouseListener, MouseMotionListener {
      *
      * @return izquierdo
      */
-    public boolean isIzquierdo() {
-        return izquierdo;
+    public boolean isLeft() {
+        return left;
     }
 
     /**
@@ -135,9 +135,9 @@ public class MouseManager implements MouseListener, MouseMotionListener {
     /**
      * To set the status of the left button
      *
-     * @param izquierdo
+     * @param left
      */
-    public void setIzquierdo(boolean izquierdo) {
-        this.izquierdo = izquierdo;
+    public void setLeft(boolean left) {
+        this.left = left;
     }
 }

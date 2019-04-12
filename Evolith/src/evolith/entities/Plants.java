@@ -7,6 +7,7 @@ import evolith.helpers.Commons;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.util.ArrayList;
 
 /**
@@ -36,6 +37,16 @@ public class Plants implements Commons {
         for (int i = 0; i < amount; i++) {
             plants.add(new Plant(400, 400, PLANT_SIZE, PLANT_SIZE));
         }
+    }
+    
+    public Point containsPlant(int x, int y) {
+        for (int i = 0; i < plants.size(); i++) {
+            if (plants.get(i).getPerimeter().contains(x, y)) {
+                return new Point(plants.get(i).getX() + PLANT_SIZE / 2, plants.get(i).getY() + PLANT_SIZE / 2);
+            }
+        }
+        
+        return new Point(-1,-1);
     }
 
     /**

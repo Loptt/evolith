@@ -92,9 +92,9 @@ public class MainMenu extends Menu {
                     //if the mouse is over the button
                     buttons.get(i).setActive(true);
                     //if left click change mouse status
-                    if (game.getMouseManager().isIzquierdo()) {
+                    if (game.getMouseManager().isLeft()) {
                         buttons.get(i).setPressed(true);
-                        game.getMouseManager().setIzquierdo(false);
+                        game.getMouseManager().setLeft(false);
                     }
                 } else {
                     buttons.get(i).setActive(false);

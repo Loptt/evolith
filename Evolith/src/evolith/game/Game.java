@@ -8,6 +8,7 @@ import evolith.helpers.Commons;
 import evolith.entities.*;
 import evolith.engine.*;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 
@@ -127,6 +128,8 @@ public class Game implements Runnable, Commons {
      * updates all objects on a frame
      */
     private void tick() {
+        //Every single case is separated in its own function
+        
         clock.tick();
         switch (state) {
             case MainMenu:
@@ -170,17 +173,44 @@ public class Game implements Runnable, Commons {
         plants.tick();
         buttonBar.tick();
         
-        if (mouseManager.isIzquierdo()) {
+        manageMouse();
+    }
+    
+    private void manageMouse() {
+        //Check for click
+        if (mouseManager.isLeft()) {
             int mouseX = mouseManager.getX();
             int mouseY = mouseManager.getY();
             
+            /**
+             * This set of if-else statements allows for processing the mouse in the screen only once per frame
+             * This prevents the mouse triggering multiple events where elements in the screen may overlap
+             * For example, it prevents the organisms to move when the player clicks on the button bar
+             */
+            //Check if the mouse is over the buttonbar
             if (buttonBar.hasMouse(mouseX, mouseY)) {
+                //Process the mouse in the button bar
                 buttonBar.applyMouse(mouseX, mouseY);
-            } else {    
-                organisms.applyMouse(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+            } else {
+                //If not in the buttonbar, check if a plant has been clicked
+                //TODO: When more entities have been added, check for those entities aswell. 
+                Point clickedPlant = plants.containsPlant(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+                
+                //If the x value is greater than 0, then a plant has been clicked
+                if (clickedPlant.x >= 0) {
+                    //In this case, move the swarm to the plant position, surrounding it
+                    organisms.moveSwarm(clickedPlant.x, clickedPlant.y, 1);
+                } else {
+                    //Else move the swarm to desired position
+                    organisms.moveSwarm(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+                    //organisms.applyMouse(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+                }
+                
             }
             
-            mouseManager.setIzquierdo(false);
+            mouseManager.setLeft(false);
+        } else {
+            //Check for hover
         }
     }
 

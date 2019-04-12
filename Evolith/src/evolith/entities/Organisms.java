@@ -33,6 +33,8 @@ public class Organisms implements Commons {
     private int newY;           // new y position of the organisms
     
     private int skin;
+    
+    private Point centralPoint;
 
     /**
      * Constructor of the organisms
@@ -50,6 +52,8 @@ public class Organisms implements Commons {
 
         newX = INITIAL_POINT;
         newY = INITIAL_POINT;
+        
+        centralPoint = new Point(INITIAL_POINT, INITIAL_POINT);
     }
 
     public void tick() {
@@ -63,18 +67,31 @@ public class Organisms implements Commons {
     }
     
     public void applyMouse(int x, int y) {
+        moveSwarm(x, y);
+    }
+    
+    public void moveSwarm(int x, int y) {
         ArrayList<Point> points;
         //if left clicked move the organisms to determined point
+        
+        centralPoint = new Point(x, y);
 
-        newX = game.getCamera().getAbsX(game.getMouseManager().getX());
-        newY = game.getCamera().getAbsY(game.getMouseManager().getY());
-        points = SwarmMovement.getPositions(newX - ORGANISM_SIZE /2, newY - ORGANISM_SIZE /2, amount);
+        points = SwarmMovement.getPositions(centralPoint.x - ORGANISM_SIZE /2, centralPoint.y - ORGANISM_SIZE /2, amount);
         for (int i = 0; i < amount; i++) {
             organisms.get(i).setPoint(points.get(i));
         }
+    }
+    
+    public void moveSwarm(int x, int y, int obj) {
+        ArrayList<Point> points;
+        //if left clicked move the organisms to determined point
         
-        game.getMouseManager().setIzquierdo(false);
+        centralPoint = new Point(x, y);
 
+        points = SwarmMovement.getPositions(centralPoint.x - ORGANISM_SIZE /2, centralPoint.y - ORGANISM_SIZE /2, amount, obj);
+        for (int i = 0; i < amount; i++) {
+            organisms.get(i).setPoint(points.get(i));
+        }
     }
 
     /**
@@ -147,6 +164,14 @@ public class Organisms implements Commons {
 
     public int getSkin() {
         return skin;
+    }
+
+    public void setCentralPoint(Point centralPoint) {
+        this.centralPoint = centralPoint;
+    }
+
+    public Point getCentralPoint() {
+        return centralPoint;
     }
 
     private class Organism extends Item {

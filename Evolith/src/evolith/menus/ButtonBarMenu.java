@@ -46,6 +46,7 @@ public class ButtonBarMenu extends Menu {
     public void tick() {
         /**
          * The hover effect on these buttons can confuse the user
+         * Maybe change the hover effect to be different from the active effect?
          */
         /*for(int i = 0; i < buttons.size(); i++){
             if(buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
