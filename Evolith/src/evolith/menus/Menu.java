@@ -19,6 +19,8 @@ public abstract class Menu {
     protected int width;
     protected int height;
     protected Game game;
+    
+    protected ArrayList<Button> buttons;
 
     /**
      * To create a new menu
@@ -34,6 +36,7 @@ public abstract class Menu {
         this.x = x;
         this.y = y;
         this.game = game;
+        buttons = new ArrayList<Button>();
     }
 
     /**
