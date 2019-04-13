@@ -10,7 +10,6 @@ import evolith.engine.Assets;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.util.ArrayList;
 
 /**
  *
@@ -21,7 +20,6 @@ public class SetupMenu extends Menu{
     /* private Button play = new Button(300,350);
     private Button instructions = new Button(300,350);
     */
-    private ArrayList<Button> buttons;
     private boolean clickPlay;
     private int option;
     
@@ -32,7 +30,6 @@ public class SetupMenu extends Menu{
         active = true;
         clickPlay = false;
 
-        buttons = new ArrayList<Button>();
         buttons.add(new Button(340, 555, 350, 110, Assets.playOn, Assets.playOff)); // Play button
         buttons.add(new Button(100, 210, 170, 185, Assets.pinkOption)); // Red option
         buttons.add(new Button(300, 210, 170, 185, Assets.purpleOption)); // Purple option

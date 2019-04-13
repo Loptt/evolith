@@ -3,7 +3,6 @@ package evolith.menus;
 import evolith.game.Game;
 import evolith.engine.Assets;
 import java.awt.Graphics;
-import java.util.ArrayList;
 
 /**
  *
@@ -15,12 +14,6 @@ import java.util.ArrayList;
 public class MainMenu extends Menu {
 
     private boolean active;
-
-    /* 
-    private Button play = new Button(300,350);
-    private Button instructions = new Button(300,350);
-     */
-    private ArrayList<Button> buttons;
     private boolean clickPlay;
 
     /**
@@ -37,7 +30,6 @@ public class MainMenu extends Menu {
         active = true;
         clickPlay = false;
 
-        buttons = new ArrayList<Button>();
         buttons.add(new Button(340, 390, 350, 110)); // Play button
         buttons.add(new Button(340, 530, 350, 110)); // Instructions button
 

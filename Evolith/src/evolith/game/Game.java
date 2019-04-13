@@ -1,3 +1,4 @@
+
 package evolith.game;
 
 import evolith.menus.MainMenu;
@@ -145,6 +146,9 @@ public class Game implements Runnable, Commons {
 
     }
     
+    /**
+     * Tick the main menu
+     */
     private void mainMenuTick() {
         mainMenu.tick();
         mainMenu.setActive(true);
@@ -154,6 +158,9 @@ public class Game implements Runnable, Commons {
         }
     }
     
+    /**
+     * Tick the setup menu
+     */
     private void setupMenuTick() {
         setup.tick();
         setup.setActive(true);
@@ -166,6 +173,9 @@ public class Game implements Runnable, Commons {
         }
     }
     
+    /**
+     * Tick the main game
+     */
     private void playTick() {
         keyManager.tick();
         camera.tick();
@@ -176,6 +186,9 @@ public class Game implements Runnable, Commons {
         manageMouse();
     }
     
+    /**
+     * Handle the mouse while in game
+     */
     private void manageMouse() {
         //Check for click
         if (mouseManager.isLeft()) {

@@ -13,32 +13,58 @@ import java.util.ArrayList;
  */
 public class SwarmMovement implements Commons {
     
-    private static final int randomness = 70;
+    private static final int randomness = 70; //The amount of randomness in the positions
     
+    /**
+     * To generate an hexagonal pattern to arrange all organisms in a swarm.
+     * 
+     * @param n the amount of organisms
+     * @return an <code>ArrayList<></code> with all the points generated
+     */
     public static ArrayList<Point> generateHexPattern(int n) {
+        //If n is 0 or less, it is not possible to generate pattern
         if (n < 1) {
             return null;
         }
         
+        //Create the array of the positions
         ArrayList<Point> positions = new ArrayList<>();
+        
+        //First position will always be on the origin
         positions.add(new Point(0, 0));
         
+        //Create two helper points, left and right which go respective to the origin point
         Point left = new Point(0, 0);
         Point right = new Point(0, 0);
         
+        //Create other two helper points, top and bottom which go respective to the origin point
         Point top = new Point(0, 0);
         Point bottom = new Point(0, 0);
         
+        /**
+         * The amount of layers means the amount of points there exists from the origin to the outer most point
+         * going perpendicular to the outer shell
+         * It is given by 3 + the square root of 9 - 12 * (1 - n) all divided by 6, and we ceil the result, where
+         * n is the amount of points to generate
+         * This formula was derived from the quadratic sequence of 1, 7, 19, 37 ....
+         */
         int layerAmount = (int) Math.ceil((3 + sqrt(9-12*(1-n))) / 6);
         
+        /**
+         * Iterate for one less than the layer amount since we already have the first layer which is (0, 0)
+         */
         for (int i = 0; i < layerAmount-1; i++) {
             //Generate left and right
             left = new Point(left.x - SWARM_SEPARATION, left.y);
             right = new Point(right.x + SWARM_SEPARATION, right.y);
             
+            //Add them to the array
             positions.add(left);
             positions.add(right);
             
+            /**
+             * Iterate for one more than the current i to build the layer up and bottom, taking  left and right as bases
+             */
             for (int j = 0; j < i+1; j++) {
                 //Add top left
                 positions.add(new Point(left.x + SWARM_SEPARATION/2 * (j+1), left.y + (int) (sqrt(3)/2 * SWARM_SEPARATION) * (j+1)));
@@ -55,6 +81,9 @@ public class SwarmMovement implements Commons {
                 }
             }
             
+            /**
+             * Iterate over the top and bottom to fill the spaces
+             */
             for (int j = 0; j < i; j++) {
                 positions.add(new Point(top.x + SWARM_SEPARATION * (j+1), top.y));
                 positions.add(new Point(bottom.x + SWARM_SEPARATION * (j+1), bottom.y));
@@ -76,6 +105,7 @@ public class SwarmMovement implements Commons {
         ArrayList<Point> positions = generateHexPattern(num);
         
         for (int i = 0; i < positions.size(); i++) {
+            //Add a randomness to give a more natura feel
             positions.get(i).x += x + generateRandomness(randomness);
             positions.get(i).y += y + generateRandomness(randomness);
         }
@@ -115,7 +145,7 @@ public class SwarmMovement implements Commons {
     }
 
     /**
-     * To generate random number
+     * To generate random number from -random/2 to +random/2
      *
      * @param random
      * @return

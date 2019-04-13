@@ -55,21 +55,35 @@ public class Organisms implements Commons {
         
         centralPoint = new Point(INITIAL_POINT, INITIAL_POINT);
     }
-
+    
+    /**
+     * updates all organisms
+     */
     public void tick() {
         for (int i = 0; i < amount; i++) {
             organisms.get(i).tick();
-            reproduce(organisms.get(i));
+            checkReproduce(organisms.get(i));
+            checkKill(organisms.get(i));
         }
 
         //check the hover
         checkHover();
     }
     
+    /**
+     * Perform action on mouse clicked
+     * @param x
+     * @param y 
+     */
     public void applyMouse(int x, int y) {
         moveSwarm(x, y);
     }
     
+    /**
+     * To move the entire swarm to the x and y given
+     * @param x
+     * @param y 
+     */
     public void moveSwarm(int x, int y) {
         ArrayList<Point> points;
         //if left clicked move the organisms to determined point
@@ -82,6 +96,12 @@ public class Organisms implements Commons {
         }
     }
     
+    /**
+     * to move the swarm to the specified coordinates given there is an object in the middle
+     * @param x
+     * @param y
+     * @param obj 
+     */
     public void moveSwarm(int x, int y, int obj) {
         ArrayList<Point> points;
         //if left clicked move the organisms to determined point
@@ -116,11 +136,26 @@ public class Organisms implements Commons {
 
     }
     
-    private void reproduce(Organism org) {
+    /**
+     * Check if individual organism needs reproduction
+     * @param org 
+     */
+    private void checkReproduce(Organism org) {
         if (org.isNeedOffspring()) {
             org.setNeedOffspring(false);
             amount++;
             organisms.add(new Organism(org.getX()+ORGANISM_SIZE, org.getY(), ORGANISM_SIZE, ORGANISM_SIZE));
+        }
+    }
+    
+    /**
+     * Check if an organism needs to be killed
+     * @param org 
+     */
+    private void checkKill(Organism org) {
+        if (org.isDead()) {
+            organisms.remove(org);
+            amount--;
         }
     }
 
@@ -157,23 +192,42 @@ public class Organisms implements Commons {
     public boolean isHover() {
         return hover;
     }
-
+    
+    /**
+     * Set the skin of the organisms
+     * @param skin 
+     */
     public void setSkin(int skin) {
         this.skin = skin;
     }
-
+    
+    /**
+     * Get the skin <code>int</code> used by the organisms
+     * @return 
+     */
     public int getSkin() {
         return skin;
     }
-
+    
+    /**
+     * to set the central point of the swarm
+     * @param centralPoint 
+     */
     public void setCentralPoint(Point centralPoint) {
         this.centralPoint = centralPoint;
     }
-
+    
+    /**
+     * to get the central point of the swarm
+     * @return 
+     */
     public Point getCentralPoint() {
         return centralPoint;
     }
-
+    
+    /**
+     * Single organism class
+     */
     private class Organism extends Item {
 
         private Point point;
@@ -183,14 +237,17 @@ public class Organisms implements Commons {
         private int yVel;
 
         private Time time;
-
+        
+        /**
+         * These are the five evolutionary traits
+         */
         private int size;
         private int speed;
         private int strength;
         private int stealth;
         private int survivability;
         
-        private int life;
+        private int life;           //Health points of the organism
         private int hunger;         //hunger of the organism
         private int thirst;         //thirst of the organism
         private int maturity;       //maturity level of the organsim
@@ -200,6 +257,7 @@ public class Organisms implements Commons {
         private int prevMatInc; //Time in seconds at which maturity was previously increased
         
         private boolean needOffspring;
+        private boolean dead;
 
         /**
          * Constructor of the organism
@@ -233,6 +291,7 @@ public class Organisms implements Commons {
             prevMatInc = 0;
             
             needOffspring = false;
+            dead = false;
 
             time = new Time();
         }
@@ -247,7 +306,10 @@ public class Organisms implements Commons {
             checkMovement();
             checkVitals();
         }
-
+        
+        /**
+         * Update the position of the organism accordingly
+         */
         private void checkMovement() {
             // if the organism is less than 25 units reduce velocity
             if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 25) {
@@ -300,6 +362,9 @@ public class Organisms implements Commons {
             y += yVel;
         }
         
+        /**
+         * To check the update and react to the vital stats of the organism
+         */
         private void checkVitals() {
             //Reduce hunger every x seconds defined in the commmons class
             if (time.getSeconds() >= prevHungerRed + SECONDS_PER_HUNGER) {
@@ -307,23 +372,39 @@ public class Organisms implements Commons {
                 prevHungerRed = (int) time.getSeconds();
             }
             
+            //Reduce thirst every x seconds defined in the commmons class
             if (time.getSeconds() >= prevThirstRed + SECONDS_PER_THIRST) {
                 thirst--;
                 prevThirstRed = (int) time.getSeconds();
             }
             
+            //Increase maturity every x seconds defined in the commmons class
             if (time.getSeconds() >= prevMatInc + SECONDS_PER_MATURITY) {
                 maturity++;
                 prevMatInc = (int) time.getSeconds();
+                
+                //Reproduction happen at these two points in maturity
+                if (maturity == 23) {
+                    needOffspring = true;
+                }
+                
+                if (maturity == 26) {
+                    needOffspring = true;
+                }
             }
             
+            //Once the organisms reaches max maturity, kill it
             if (maturity >= MAX_MATURITY) {
-                needOffspring = true;
-                maturity = 0;
+                kill();
             }
         }
-
         
+        /**
+         * Kill the organism
+         */
+        public void kill() {
+            dead = true;
+        }
 
         /**
          * Renders the organisms relative to the camera
@@ -352,13 +433,37 @@ public class Organisms implements Commons {
         public void setPoint(Point point) {
             this.point = point;
         }
-
+        
+        /**
+         * To get needOffspring
+         * @return needOffspring
+         */
         public boolean isNeedOffspring() {
             return needOffspring;
         }
-
+        
+        /**
+         * To set needOffspring
+         * @param needOffspring 
+         */
         public void setNeedOffspring(boolean needOffspring) {
             this.needOffspring = needOffspring;
+        }
+        
+        /**
+         * To check if the organism is dead
+         * @return dead
+         */
+        public boolean isDead() {
+            return dead;
+        }
+        
+        /**
+         * To set dead
+         * @param dead 
+         */
+        public void setDead(boolean dead) {
+            this.dead = dead;
         }
     }
 }
