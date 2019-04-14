@@ -1,6 +1,5 @@
 package evolith.helpers;
 
-import evolith.helpers.Commons;
 import java.awt.Point;
 import static java.lang.Math.sqrt;
 import java.util.ArrayList;
@@ -19,7 +18,8 @@ public class SwarmMovement implements Commons {
      * To generate an hexagonal pattern to arrange all organisms in a swarm.
      * 
      * @param n the amount of organisms
-     * @return an <code>ArrayList<></code> with all the points generated
+     * @return an <code>ArrayList
+     * </code> with all the points generated
      */
     public static ArrayList<Point> generateHexPattern(int n) {
         //If n is 0 or less, it is not possible to generate pattern
