@@ -26,6 +26,8 @@ public class Assets {
     public static BufferedImage playOn;
     public static BufferedImage playOff;
     
+    public static BufferedImage mario;
+    
     public static void init() {
         background = ImageLoader.loadImage("/images/background_beta.png");
         player = ImageLoader.loadImage("/images/purple organism.png");
@@ -39,5 +41,6 @@ public class Assets {
         purpleOption = ImageLoader.loadImage("/images/purpleoption.png");
         playOn = ImageLoader.loadImage("/images/playon.png");
         playOff = ImageLoader.loadImage("/images/playoff.png");
+        mario = ImageLoader.loadImage("/images/mario.png");
     }
 }

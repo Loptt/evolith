@@ -1,0 +1,78 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package evolith.menus;
+
+import evolith.game.Game;
+import evolith.engine.Assets;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
+/**
+ *
+ * @author victor
+ */
+public class ButtonBarMenu extends Menu {
+    private BufferedImage background;
+    
+    public ButtonBarMenu(int x, int y, int width, int height, Game game) {
+        super(x, y, width, height, game);
+        
+        background = Assets.buttonBar.get(0).get(0);
+        
+        buttons.add(new Button(34,35,141,49, Assets.buttonBar.get(1).get(1), Assets.buttonBar.get(1).get(0))); // Water button in pos 1
+        buttons.add(new Button(191,35,141,49, Assets.buttonBar.get(2).get(1), Assets.buttonBar.get(2).get(0))); // Food  button in pos 2
+        buttons.add(new Button(348,35,141,49, Assets.buttonBar.get(3).get(1), Assets.buttonBar.get(3).get(0))); // Fight  button in pos 3
+
+    }
+    // organism's behaviour when Water button is active
+    public void activateWater(){
+        
+    }
+    // organism's behaviour when Food button is active 
+    public void activateFood(){
+        
+    }
+    // organism's behaviour when Fight button is active
+    public void activateFight(){
+    }
+
+    @Override
+    public void tick() {
+        /**
+         * The hover effect on these buttons can confuse the user
+         * Maybe change the hover effect to be different from the active effect?
+         */
+        /*for(int i = 0; i < buttons.size(); i++){
+            if(buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
+                //if the mouse is over the button
+                buttons.get(i).setHover(true); //set the button hover status as true
+            } else{
+                buttons.get(i).setHover(false);
+            }
+        }*/
+    }
+
+    @Override
+    public void render(Graphics g) {
+        g.drawImage(background, x, y, width, height, null);
+        
+        for(int i=0; i<buttons.size(); i++){
+            buttons.get(i).render(g);
+        }
+    }
+
+    public void applyMouse(int mouseX, int mouseY) {
+        for(int i = 0; i < buttons.size(); i++){
+            if(buttons.get(i).hasMouse(mouseX, mouseY)) {
+                if (!buttons.get(i).isActive()) {
+                    buttons.get(i).setActive(true);
+                } else {
+                    buttons.get(i).setActive(false);
+                }
+            }
+        }
+    }
+}
