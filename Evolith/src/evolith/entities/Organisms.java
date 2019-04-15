@@ -58,7 +58,7 @@ public class Organisms implements Commons {
         
         centralPoint = new Point(INITIAL_POINT, INITIAL_POINT);
         targetPoint = new Point(INITIAL_POINT, INITIAL_POINT);
-        currentPoss = new ArrayList<>();
+        currentPoss = SwarmMovement.getPositions(500, 500, 50, 1);
     }
     
     /**
@@ -175,9 +175,10 @@ public class Organisms implements Commons {
     
     public void checkProximity(Plants plants) {
         for (int i = 0; i < amount; i++) {
-            if (plants.checkRadius(organisms.get(i).getRadius())) {
+            if (plants.checkRadius(organisms.get(i).getRadius()) && !organisms.get(i).isInPlant()) {
                 System.out.println("CLOSE");
                 organisms.get(i).setPoint(currentPoss.get(0));
+                organisms.get(i).setInPlant(true);
                 currentPoss.remove(0);
             }
         }
