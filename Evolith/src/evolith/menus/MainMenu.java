@@ -30,8 +30,8 @@ public class MainMenu extends Menu {
         active = true;
         clickPlay = false;
 
-        buttons.add(new Button(340, 390, 350, 110)); // Play button
-        buttons.add(new Button(340, 530, 350, 110)); // Instructions button
+        buttons.add(new Button(340, 390, 350, 74)); // Play button
+        buttons.add(new Button(340, 500, 350, 74)); // Instructions button
 
     }
 
