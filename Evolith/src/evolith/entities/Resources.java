@@ -108,11 +108,14 @@ public class Resources implements Commons {
     }
 
     /**
-     * To tick the plants
+     * To tick the resources
      */
     public void tick() {
-        for (int i = 0; i < plantsAmount + watersAmount; i++) {
+        for (int i = 0; i < plantsAmount; i++) {
             plants.get(i).tick();
+        }
+        
+        for (int i = 0; i <  watersAmount; i++) {
             waters.get(i).tick();
         }
     }
@@ -123,8 +126,11 @@ public class Resources implements Commons {
      * @param g
      */
     public void render(Graphics g) {
-        for (int i = 0; i < plantsAmount + watersAmount; i++) {
+        for (int i = 0; i < plantsAmount; i++) {
             plants.get(i).render(g);
+        }
+        
+        for (int i = 0; i <  watersAmount; i++) {
             waters.get(i).render(g);
         }
     }

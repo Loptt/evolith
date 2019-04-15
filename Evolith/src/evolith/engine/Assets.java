@@ -41,7 +41,7 @@ public class Assets {
     public static void init() {
         background = ImageLoader.loadImage("/images/backgrounds/bigbackground.png");
         plant = ImageLoader.loadImage("/images/playgraphics/food.png");
-        water = ImageLoader.loadImage("/iamges/playgraphics/water.png");
+        water = ImageLoader.loadImage("/images/playgraphics/water.png");
 
         start = ImageLoader.loadImage("/images/mainmenu/mainmenu.png");
         startInstructions = ImageLoader.loadImage("/images/mainmenu/maininstructions.png");
