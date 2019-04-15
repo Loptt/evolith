@@ -34,7 +34,7 @@ public class Camera {
      */
     public void tick() {
         //To move the camera up
-        if (game.getKeyManager().w) {
+        if (game.getInputKeyboar().w) {
             //Limits the camera to the top end
             if (getY() - 5 <= 10) {
                 setY(10);
@@ -43,7 +43,7 @@ public class Camera {
             }
         }
         //To move the camera to the left
-        if (game.getKeyManager().a) {
+        if (game.getInputKeyboar().a) {
             //Limits the camera to the left end
             if (getX() - 5 <= 10) {
                 setX(10);
@@ -52,7 +52,7 @@ public class Camera {
             }
         }
         //To move the camera down
-        if (game.getKeyManager().s) {
+        if (game.getInputKeyboar().s) {
             //Limits the camera to the bottom end
             if (getY() + 5 >= game.getBackground().getHeight() - game.getHeight() - 10) {
                 setY(game.getBackground().getHeight() - game.getHeight() - 10);
@@ -61,7 +61,7 @@ public class Camera {
             }
         }
         //To move the camera right
-        if (game.getKeyManager().d) {
+        if (game.getInputKeyboar().d) {
             //Limits the camera to the right end
             if (getX() + 5 >= game.getBackground().getWidth() - game.getWidth() - 10) {
                 setX(game.getBackground().getWidth() - game.getWidth() - 10);

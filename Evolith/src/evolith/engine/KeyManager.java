@@ -23,7 +23,7 @@ public class KeyManager implements KeyListener {
     public boolean s;
     public boolean d;
 
-    private boolean keys[];
+    protected boolean keys[];
 
     public KeyManager() {
         keys = new boolean[256];
