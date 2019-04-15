@@ -34,7 +34,7 @@ public abstract class Item {
         this.x = x;
         this.y = y;
         
-        radius = new Circle(x + width/2, y + height /2, width);
+        radius = new Circle(x + width/2, y + height /2, width/2);
     }
 
     /**
