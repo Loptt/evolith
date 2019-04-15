@@ -41,8 +41,8 @@ public class Plants implements Commons {
         for (int i = 0; i <amount; ++i) {
             System.out.println("amount " + amount);
             int xCoord, yCoord; 
-            xCoord = randomGen.nextInt(1000) + 1;
-            yCoord = randomGen.nextInt(1000) + 1;
+            xCoord = randomGen.nextInt(5000) + 1;
+            yCoord = randomGen.nextInt(5000) + 1;
             plants.add(new Plant(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE));
             
             Circle actualCircle = plants.get(i).getRadius();
