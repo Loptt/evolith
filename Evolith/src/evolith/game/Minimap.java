@@ -113,5 +113,6 @@ public class Minimap implements Commons {
         }
         
         g.drawRect(MINIMAP_X + game.getCamera().getX() / 30, MINIMAP_Y + game.getCamera().getY() / 30, game.getWidth() / 30 + 2, game.getHeight() / 30 + 2);
+        g.drawImage(Assets.minimapFrame, MINIMAP_X, MINIMAP_Y, null);
     }
 }
