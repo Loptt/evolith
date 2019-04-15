@@ -184,6 +184,7 @@ public class Game implements Runnable, Commons {
         buttonBar.tick();
         
         manageMouse();
+        checkEntitiesInteraction();
     }
     
     /**
@@ -212,7 +213,7 @@ public class Game implements Runnable, Commons {
                 //If the x value is greater than 0, then a plant has been clicked
                 if (clickedPlant.x >= 0) {
                     //In this case, move the swarm to the plant position, surrounding it
-                    organisms.moveSwarm(clickedPlant.x, clickedPlant.y, 1);
+                    organisms.moveSwarmToPoint(clickedPlant.x, clickedPlant.y, 1);
                 } else {
                     //Else move the swarm to desired position
                     organisms.moveSwarm(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
@@ -225,6 +226,12 @@ public class Game implements Runnable, Commons {
         } else {
             //Check for hover
         }
+    }
+    
+    public void checkEntitiesInteraction() {
+        //check organisms with plants
+        organisms.checkProximity(plants); 
+        //check organisms with water
     }
 
     /**

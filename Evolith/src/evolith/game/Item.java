@@ -1,5 +1,6 @@
 package evolith.game;
 
+import evolith.helpers.Circle;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -16,6 +17,8 @@ public abstract class Item {
     protected int y; //y position
     protected int width;
     protected int height;
+    
+    protected Circle radius;
 
     /**
      * To create a new item
@@ -30,6 +33,8 @@ public abstract class Item {
         this.height = height;
         this.x = x;
         this.y = y;
+        
+        radius = new Circle(x + width/2, y + height /2, width);
     }
 
     /**
@@ -125,6 +130,10 @@ public abstract class Item {
      */
     public void setWidth(int width) {
         this.width = width;
+    }
+
+    public Circle getRadius() {
+        return radius;
     }
 
     /**

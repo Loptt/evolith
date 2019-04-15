@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 /**
@@ -68,10 +69,21 @@ public class Plants implements Commons {
             plants.get(i).render(g);
         }
     }
+    
+    public boolean checkRadius(Rectangle r) {
+        for (int i = 0; i < amount; i++) {
+            if (plants.get(i).getRadius().intersects(r)) {
+                System.out.println("INTERSECTION.");
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
-    private class Plant extends Item {
+    public class Plant extends Item {
 
-        int quantity;   // maximum quanitity of food per plant
+        int quantity;   // maximum quanitity of food per plant;
 
         /**
          * Constructor of a new plant

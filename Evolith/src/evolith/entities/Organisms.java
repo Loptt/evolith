@@ -34,7 +34,10 @@ public class Organisms implements Commons {
     
     private int skin;
     
+    private ArrayList<Point> currentPoss;
+    
     private Point centralPoint;
+    private Point targetPoint;
 
     /**
      * Constructor of the organisms
@@ -54,6 +57,8 @@ public class Organisms implements Commons {
         newY = INITIAL_POINT;
         
         centralPoint = new Point(INITIAL_POINT, INITIAL_POINT);
+        targetPoint = new Point(INITIAL_POINT, INITIAL_POINT);
+        currentPoss = new ArrayList<>();
     }
     
     /**
@@ -99,7 +104,7 @@ public class Organisms implements Commons {
     /**
      * to move the swarm to the specified coordinates given there is an object in the middle
      * @param x
-     * @param y
+     * @param y 
      * @param obj 
      */
     public void moveSwarm(int x, int y, int obj) {
@@ -111,6 +116,15 @@ public class Organisms implements Commons {
         points = SwarmMovement.getPositions(centralPoint.x - ORGANISM_SIZE /2, centralPoint.y - ORGANISM_SIZE /2, amount, obj);
         for (int i = 0; i < amount; i++) {
             organisms.get(i).setPoint(points.get(i));
+        }
+    }
+    
+    public void moveSwarmToPoint(int x, int y, int obj) {
+        currentPoss = SwarmMovement.getPositions(x - ORGANISM_SIZE /2, y - ORGANISM_SIZE /2, amount, 1);
+        Point p = new Point(x, y);
+        
+        for (int i = 0; i < amount; i++) {
+            organisms.get(i).setPoint(p);
         }
     }
 
@@ -156,6 +170,16 @@ public class Organisms implements Commons {
         if (org.isDead()) {
             organisms.remove(org);
             amount--;
+        }
+    }
+    
+    public void checkProximity(Plants plants) {
+        for (int i = 0; i < amount; i++) {
+            if (plants.checkRadius(organisms.get(i).getPerimeter())) {
+                System.out.println("CLOSE");
+                organisms.get(i).setPoint(currentPoss.get(0));
+                currentPoss.remove(0);
+            }
         }
     }
 
@@ -224,11 +248,11 @@ public class Organisms implements Commons {
     public Point getCentralPoint() {
         return centralPoint;
     }
-    
+
     /**
      * Single organism class
      */
-    private class Organism extends Item {
+    public class Organism extends Item {
 
         private Point point;
         private int maxVel;
@@ -258,6 +282,7 @@ public class Organisms implements Commons {
         
         private boolean needOffspring;
         private boolean dead;
+        private boolean moving;
 
         /**
          * Constructor of the organism
@@ -317,15 +342,18 @@ public class Organisms implements Commons {
                 if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 15) {
                     // if the organism is less than 5 units reduce velocity
                     if (Math.abs((int) point.getX() - x) < 5 && Math.abs((int) point.getY() - y) < 5) {
-
+                        moving = false;
                         maxVel = 0;
                     } else {
+                        moving = true;
                         maxVel = 1;
                     }
                 } else {
+                    moving = true;
                     maxVel = 2;
                 }
             } else {
+                moving = true;
                 maxVel = 3;
             }
 
@@ -464,6 +492,14 @@ public class Organisms implements Commons {
          */
         public void setDead(boolean dead) {
             this.dead = dead;
+        }
+
+        public boolean isMoving() {
+            return moving;
+        }
+
+        public void setMoving(boolean moving) {
+            this.moving = moving;
         }
     }
 }
