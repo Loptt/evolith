@@ -301,7 +301,20 @@ public class Organisms implements Commons {
     }
     
     public void findNearestValidFood(Organism org, Resources resources) {
-        
+        Plant closestPlant = resources.getPlant(0); 
+        double closestDistanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX()-resources.getPlant(0).getX(),2) + Math.pow(org.getY()-resources.getPlant(0).getY(),2) );
+        for(int i = 1; i<resources.getPlantsAmount(); i++){
+            double distanceBetweenPlantAndOrganism = 7072;
+            if(!resources.getPlant(i).isFull()){
+                distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX()-resources.getPlant(i).getX(),2) + Math.pow(org.getY()-resources.getPlant(i).getY(),2) );
+            }
+            
+            if(distanceBetweenPlantAndOrganism<closestDistanceBetweenPlantAndOrganism){
+                closestDistanceBetweenPlantAndOrganism = distanceBetweenPlantAndOrganism;
+                closestPlant = resources.getPlant(i);
+            }
+        }
+        org.setTarget(closestPlant);
     }
 
     /**
