@@ -67,7 +67,7 @@ public class Circle {
     }
     
     public boolean intersects(Circle c) {
-        return (int) Math.sqrt((this.x - c.x) * (this.x - c.x) + (this.y - c.y) * (this.y - c.y)) < 2 * 100;
+        return (Math.sqrt((c.x - x) * (c.x - x) + (c.y - y) * (c.y - y)) < 2 * 100);
     }
     
     public Point getLocation() {

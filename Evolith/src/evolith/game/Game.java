@@ -214,11 +214,13 @@ public class Game implements Runnable, Commons {
                 //If not in the buttonbar, check if a plant has been clicked
                 //TODO: When more entities have been added, check for those entities aswell. 
                 //Point clickedPlant = plants.containsPlant(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
-                Point clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+                Item clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                 //If the x value is greater than 0, then a plant has been clicked
-                if (clickedResource.x >= 0) {
-                    //In this case, move the swarm to the plant position, surrounding it
-                    organisms.moveSwarmToPoint(clickedResource.x, clickedResource.y, 1);
+                if (clickedResource != null) {
+                    
+                    //In this case, move the selected swarm to the selected resource
+                    organisms.moveSwarmToPoint(clickedResource.getX(), clickedResource.getY(), 1);
+                    organisms.setResource(clickedResource);
                 } else {
                     //Else move the swarm to desired position
                     organisms.moveSwarm(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
@@ -234,9 +236,8 @@ public class Game implements Runnable, Commons {
     }
     
     public void checkEntitiesInteraction() {
-        //check organisms with plants
-        organisms.checkProximity(resources); 
-        //check organisms with water
+        organisms.checkOnResource(resources);
+        organisms.checkIfTargetValid(resources);
     }
 
     /**

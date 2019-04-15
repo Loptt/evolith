@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -23,7 +24,11 @@ import java.util.Random;
  * @author Víctor Villarreal
  * @author Moisés Fernández
  */
-public class Resources implements Commons { 
+
+
+
+public class Resources implements Commons {
+    private long numberOfIntersections = 0;
 
     private ArrayList<Plant> plants;    // arrays of the plants
     private ArrayList<Water> waters;
@@ -85,7 +90,6 @@ public class Resources implements Commons {
     }
     
     public boolean checkPlantsRadius(Circle c, int actualIndex) {
-        
         for (int i = 0; i <= plants.size()-1; i++) {
         System.out.println("checking" + i);
             if (plants.get(i).getRadius().intersects(c) && i != actualIndex) {
@@ -96,14 +100,22 @@ public class Resources implements Commons {
         
         return false;
     }
-    public Point containsResource(int x, int y) {
+    public Item containsResource(int x, int y) {
         for (int i = 0; i < plants.size()-1; i++) {
             if (plants.get(i).getPerimeter().contains(x, y)) {
-                return new Point(plants.get(i).getX() + PLANT_SIZE / 2, plants.get(i).getY() + PLANT_SIZE / 2);
+                return plants.get(i);
             }
         }
         
-        return new Point(-1,-1);
+        return null;
+    }
+    
+    public Plant getPlant(int i) {
+       return plants.get(i);
+    }
+    
+    public Water getWater(int i) {
+       return waters.get(i);
     }
 
     /**
@@ -139,8 +151,24 @@ public class Resources implements Commons {
         for (int i = 0; i <= plants.size()-1; i++) {
         //System.out.println("checking" + i);
             if (plants.get(i).getRadius().intersects(c) && i != actualIndex) {
-                System.out.println("INTERSECTION.");
+                System.out.println("INTERSECTION." + numberOfIntersections++);
                 return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public boolean assignOnResource(Rectangle r) {
+        for (int i = 0; i < plants.size(); i++) {
+            if (plants.get(i).intersects(r)) {
+                if (!plants.get(i).isFull()) {
+                    plants.get(i).setParasites(plants.get(i).getParasites()+1);
+                    if (plants.get(i).getParasites() >= 6) {
+                        plants.get(i).setFull(true);
+                    }
+                    return true;
+                }
             }
         }
         
@@ -208,7 +236,9 @@ public class Resources implements Commons {
     
     public class Plant extends Item {
 
-        int quantity;   // maximum quanitity of food per plant;
+        private int quantity;   // maximum quanitity of food per plant;
+        private boolean full;
+        private int parasites;
 
         /**
          * Constructor of a new plant
@@ -221,6 +251,8 @@ public class Resources implements Commons {
         public Plant(int x, int y, int width, int height) {
             super(x, y, width, height);
             quantity = 100;
+            full = false;
+            parasites = 0;
         }
 
         /**
@@ -241,6 +273,9 @@ public class Resources implements Commons {
             g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 
             g.drawImage(Assets.plant, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
+            g.setColor(Color.RED);
+            g.drawOval(game.getCamera().getRelX(radius.getX() - width / 2), game.getCamera().getRelY(radius.getY() - width / 2), radius.getRadius(), radius.getRadius());
+            
 
             //To display the actual quantity over the maximum
             g.drawString(Integer.toString(quantity) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
@@ -263,5 +298,23 @@ public class Resources implements Commons {
         public void setQuantity(int quantity) {
             this.quantity = quantity;
         }
+
+        public boolean isFull() {
+            return full;
+        }
+
+        public void setFull(boolean full) {
+            this.full = full;
+        }
+
+        public int getParasites() {
+            return parasites;
+        }
+
+        public void setParasites(int parasites) {
+            this.parasites = parasites;
+        }
+        
+        
     }
 }
