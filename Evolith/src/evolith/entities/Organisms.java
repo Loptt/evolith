@@ -210,6 +210,20 @@ public class Organisms implements Commons {
     }
     
     /**
+     * Get the positions <code>Point</code> of the organisms
+     * @return 
+     */
+    public ArrayList<Point> getOrganismsPositions() {
+        ArrayList<Point> positions = new ArrayList<>();
+        
+        for (int i = 0; i < organisms.size(); i++) {
+            positions.add(new Point(organisms.get(i).getX(), organisms.get(i).getY()));
+        }
+        
+        return positions;
+    }
+    
+    /**
      * to set the central point of the swarm
      * @param centralPoint 
      */

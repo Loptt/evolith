@@ -1,5 +1,7 @@
 package evolith.helpers;
 
+import java.awt.Color;
+
 /**
  *
  * @author Erick González
@@ -23,4 +25,18 @@ public interface Commons {
     public static final int SECONDS_PER_HUNGER = 3;
     public static final int SECONDS_PER_THIRST = 3;
     public static final int SECONDS_PER_MATURITY = 1;
+    
+    public static final int MINIMAP_X = 810;
+    public static final int MINIMAP_Y = 20;
+            
+    public static final int BACKGROUND_WIDTH = 5000;
+    public static final int BACKGROUND_HEIGHT = 5000;
+    
+    public static final int MINIMAP_WIDTH = BACKGROUND_WIDTH / 30; // 166~
+    public static final int MINIMAP_HEIGHT = BACKGROUND_HEIGHT / 30; // 166~
+    
+    public static final Color PURPLE_COLOR = new Color(235, 64, 255);
+    public static final Color BLUE_GREEN_COLOR = new Color(1, 196, 181);
+    public static final Color ORANGE_COLOR = new Color(239, 186, 1);
+    public static final Color PINK_COLOR = new Color(255, 111, 199);
 }
