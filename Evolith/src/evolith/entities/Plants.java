@@ -38,16 +38,27 @@ public class Plants implements Commons {
         amount = PLANTS_AMOUNT;
         Random randomGen = new Random();
 
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i <amount; ++i) {
+            System.out.println("amount " + amount);
             int xCoord, yCoord; 
             xCoord = randomGen.nextInt(1000) + 1;
             yCoord = randomGen.nextInt(1000) + 1;
             plants.add(new Plant(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE));
+            
+            Circle actualCircle = plants.get(i).getRadius();
+            System.out.println(i);
+            if(checkRadius(actualCircle, i) && i > 0){
+                System.out.println("deleting");
+                plants.remove(i);
+                i--;
+            }
+            System.out.println("voy en la planta # " + i );
+            System.out.println("x: " + xCoord + " y: " + yCoord);
         }
     }
     
     public Point containsPlant(int x, int y) {
-        for (int i = 0; i < plants.size(); i++) {
+        for (int i = 0; i < plants.size()-1; i++) {
             if (plants.get(i).getPerimeter().contains(x, y)) {
                 return new Point(plants.get(i).getX() + PLANT_SIZE / 2, plants.get(i).getY() + PLANT_SIZE / 2);
             }
@@ -76,9 +87,11 @@ public class Plants implements Commons {
         }
     }
     
-    public boolean checkRadius(Circle c) {
-        for (int i = 0; i < amount; i++) {
-            if (plants.get(i).getRadius().intersects(c)) {
+    public boolean checkRadius(Circle c, int actualIndex) {
+        
+        for (int i = 0; i <= plants.size()-1; i++) {
+        System.out.println("checking");
+            if (plants.get(i).getRadius().intersects(c) && i != actualIndex) {
                 System.out.println("INTERSECTION.");
                 return true;
             }
