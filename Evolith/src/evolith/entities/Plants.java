@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -35,9 +36,13 @@ public class Plants implements Commons {
         this.game = game;
         plants = new ArrayList<>();
         amount = PLANTS_AMOUNT;
+        Random randomGen = new Random();
 
         for (int i = 0; i < amount; i++) {
-            plants.add(new Plant(400, 400, PLANT_SIZE, PLANT_SIZE));
+            int xCoord, yCoord; 
+            xCoord = randomGen.nextInt(1000) + 1;
+            yCoord = randomGen.nextInt(1000) + 1;
+            plants.add(new Plant(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE));
         }
     }
     
