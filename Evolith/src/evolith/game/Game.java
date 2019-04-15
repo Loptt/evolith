@@ -306,7 +306,7 @@ public class Game implements Runnable, Commons {
      *
      * @return keyManager
      */
-    public KeyManager getInputKeyboar() {
+    public KeyManager getKeyManager() {
         return keyManager;
     }
 
