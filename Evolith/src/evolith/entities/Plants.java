@@ -90,7 +90,7 @@ public class Plants implements Commons {
     public boolean checkRadius(Circle c, int actualIndex) {
         
         for (int i = 0; i <= plants.size()-1; i++) {
-        System.out.println("checking");
+        System.out.println("checking" + i);
             if (plants.get(i).getRadius().intersects(c) && i != actualIndex) {
                 System.out.println("INTERSECTION.");
                 return true;
