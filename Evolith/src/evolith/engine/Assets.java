@@ -29,6 +29,10 @@ public class Assets {
     public static BufferedImage playOff;
     public static BufferedImage hoverImage;
     
+    
+    public static BufferedImage organismPanel_menu;
+    public static BufferedImage organismPanel_close;
+    
     public static ArrayList<BufferedImage> orgColors;
     
     public static ArrayList<ArrayList<BufferedImage>> buttonBar = new ArrayList<ArrayList<BufferedImage>>();
@@ -53,6 +57,9 @@ public class Assets {
         playOn = ImageLoader.loadImage("/images/mainmenu/playon.png");
         playOff = ImageLoader.loadImage("/images/mainmenu/playoff.png");
         hoverImage = ImageLoader.loadImage("/images/playgraphics/hover_bar.png");
+        
+        organismPanel_close = ImageLoader.loadImage("/images/panel/closedetails.png");
+        organismPanel_menu = ImageLoader.loadImage("/images/panel/detailsmenu.png");
         
         //Top Bar in 0,0
         ArrayList<BufferedImage> a1 = new ArrayList<BufferedImage>();
