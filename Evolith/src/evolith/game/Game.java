@@ -258,9 +258,9 @@ public class Game implements Runnable, Commons {
                     break;
                 case Play:
                     g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
-                    minimap.render(g);
                     plants.render(g);
                     organisms.render(g);
+                    minimap.render(g);
                     buttonBar.render(g);
                     break;
             }
