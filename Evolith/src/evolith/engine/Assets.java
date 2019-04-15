@@ -56,7 +56,7 @@ public class Assets {
         
         //Top Bar in 0,0
         ArrayList<BufferedImage> a1 = new ArrayList<BufferedImage>();
-        a1.add(ImageLoader.loadImage("/images/buttonbar/topbar.png"));
+        a1.add(ImageLoader.loadImage("/images/buttonbar/buttonbarnew.png"));
         buttonBar.add(a1);
         //Water buttons in 1,0 (off) and 1,1 (on)
         ArrayList<BufferedImage> a2 = new ArrayList<BufferedImage>();
