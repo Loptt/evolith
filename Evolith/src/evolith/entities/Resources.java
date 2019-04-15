@@ -146,6 +146,11 @@ public class Resources implements Commons {
         }
     }
     
+    
+    public int getPlantsAmount(){
+            return plantsAmount;
+    }
+    
     public boolean checkRadius(Circle c, int actualIndex) {
         
         for (int i = 0; i <= plants.size()-1; i++) {
@@ -314,6 +319,8 @@ public class Resources implements Commons {
         public void setParasites(int parasites) {
             this.parasites = parasites;
         }
+        
+
         
         
     }
