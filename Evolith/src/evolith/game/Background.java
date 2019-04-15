@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
  * @author Carlos Estrada
  * @author Víctor Villarreal
  * @author Moisés Fernández
- * @author Pablo C. Ruíz
  */
 public class Background {
 
