@@ -13,7 +13,7 @@ public interface Commons {
     public static final int MAX_ORGANISM_AMOUNT = 256;      // maximum organism amount
     public static final int PLANT_SIZE = 100;               // plant quanitity per unit
     public static final int FRAME_RATE = 60;                // frame rate
-    public static final int PLANTS_AMOUNT = 1;                // frame rate
+    public static final int PLANTS_AMOUNT = 1;              // number of plants
     public static final int MAX_THIRST = 100;               // maximum water level of organism
     public static final int MAX_HUNGER = 100;               // maximum hunger level of organism
     public static final int MAX_MATURITY = 30;              // maximum maturity level of organism
