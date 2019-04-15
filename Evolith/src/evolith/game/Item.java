@@ -56,6 +56,10 @@ public abstract class Item {
         return getPerimeter().intersects(item.getPerimeter());
     }
     
+    public boolean intersects(Rectangle r) {
+        return getPerimeter().intersects(r);
+    }
+    
     public boolean hasMouse(int x, int y) {
         return getPerimeter().contains(x, y);
     }

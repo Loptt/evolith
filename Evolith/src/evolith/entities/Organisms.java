@@ -6,7 +6,9 @@ import evolith.game.Item;
 import evolith.helpers.SwarmMovement;
 import evolith.helpers.Time;
 import evolith.engine.Assets;
+import evolith.entities.Resources.Plant;
 import evolith.helpers.Commons;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -120,7 +122,6 @@ public class Organisms implements Commons {
     }
     
     public void moveSwarmToPoint(int x, int y, int obj) {
-        currentPoss = SwarmMovement.getPositions(x - ORGANISM_SIZE /2, y - ORGANISM_SIZE /2, amount, 1);
         Point p = new Point(x, y);
         
         for (int i = 0; i < amount; i++) {
@@ -137,7 +138,7 @@ public class Organisms implements Commons {
             //if mouse is countained in a certain organism
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
-                //sets new hover panel with that organism's location and information
+                 //sets new hover panel with that organism's location and information
                 h = new Hover(game.getMouseManager().getX(), game.getMouseManager().getY(), 170, 220,
                         organisms.get(i).hunger, organisms.get(i).thirst, organisms.get(i).maturity, game);
                 //activates the hover
@@ -172,7 +173,7 @@ public class Organisms implements Commons {
             amount--;
         }
     }
-    
+    /*
     public void checkProximity(Plants plants) {
         for (int i = 0; i < amount; i++) {
             if (plants.checkRadius(organisms.get(i).getRadius(),i) && !organisms.get(i).isInPlant()) {
@@ -182,12 +183,11 @@ public class Organisms implements Commons {
                 currentPoss.remove(0);
             }
         }
-    }
+    }*/
     
-    public void checkProximity(Resources resources) {
+    public void checkOnResource(Resources resources) {
         for (int i = 0; i < amount; i++) {
-            if (resources.checkRadius(organisms.get(i).getRadius(),i) && !organisms.get(i).isInResource()) {
-                System.out.println("CLOSE");
+            if (resources.assignOnResource(organisms.get(i).getPerimeter())) {
                 organisms.get(i).setPoint(currentPoss.get(0));
                 organisms.get(i).setInResource(true);
                 currentPoss.remove(0);
@@ -195,6 +195,12 @@ public class Organisms implements Commons {
         }
     }
     
+    public void setResource(Item item) {
+        for (int i = 0; i < amount; i++) {
+            organisms.get(i).setTarget(item);
+        }
+    }
+    /*
     public void checkProximity(Waters waters) {
         for (int i = 0; i < amount; i++) {
             if (waters.checkRadius(organisms.get(i).getRadius(),i) && !organisms.get(i).isInWater()) {
@@ -204,7 +210,7 @@ public class Organisms implements Commons {
                 currentPoss.remove(0);
             }
         }
-    }
+    }*/
 
     /**
      * To render the organisms
@@ -271,6 +277,32 @@ public class Organisms implements Commons {
     public Point getCentralPoint() {
         return centralPoint;
     }
+    
+    public void setSearchFood(boolean val) {
+        for (int i = 0; i < amount; i++) {
+            organisms.get(i).setSearchFood(val);
+        }
+    }
+    
+    public void setSearchWater(boolean val) {
+        for (int i = 0; i < amount; i++) {
+            organisms.get(i).setSearchWater(val);
+        }
+    }
+    
+    public void checkIfTargetValid() {
+        for (int i = 0; i < amount; i++) {
+            if (((Plant)organisms.get(i).getTarget()).isFull()) {
+                if (organisms.get(i).isSearchFood()) {
+                    findNearestValidFood(organisms.get(i));
+                }
+            }
+        }
+    }
+    
+    public void findNearestValidFood(Organism org) {
+        
+    }
 
     /**
      * Single organism class
@@ -309,6 +341,11 @@ public class Organisms implements Commons {
         private boolean inPlant;
         private boolean inWater;
         private boolean inResource;
+        
+        private Item target;
+        
+        private boolean searchFood;
+        private boolean searchWater;
 
         /**
          * Constructor of the organism
@@ -346,6 +383,9 @@ public class Organisms implements Commons {
             inPlant = false;
             inWater = false;
             inResource = false;
+            
+            searchFood = false;
+            searchWater = false;
 
             time = new Time();
         }
@@ -359,6 +399,9 @@ public class Organisms implements Commons {
             time.tick();
             checkMovement();
             checkVitals();
+            
+            radius.setX(x);
+            radius.setY(y);
         }
         
         /**
@@ -471,6 +514,8 @@ public class Organisms implements Commons {
         @Override
         public void render(Graphics g) {
             g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
+            g.setColor(Color.RED);
+            g.drawOval(game.getCamera().getRelX(radius.getX() - width / 2), game.getCamera().getRelY(radius.getY() - width / 2), radius.getRadius(), radius.getRadius());
         }
 
         /**
@@ -553,6 +598,30 @@ public class Organisms implements Commons {
         
         public void setInResource(boolean inResource){
             this.inResource = inResource;
+        }
+
+        public Item getTarget() {
+            return target;
+        }
+
+        public void setTarget(Item target) {
+            this.target = target;
+        }
+
+        public boolean isSearchFood() {
+            return searchFood;
+        }
+
+        public boolean isSearchWater() {
+            return searchWater;
+        }
+
+        public void setSearchFood(boolean searchFood) {
+            this.searchFood = searchFood;
+        }
+
+        public void setSearchWater(boolean searchWater) {
+            this.searchWater = searchWater;
         }
     }
 }
