@@ -23,7 +23,7 @@ import java.util.Random;
  * @author Víctor Villarreal
  * @author Moisés Fernández
  */
-public class Resources implements Commons {
+public class Resources implements Commons { 
 
     private ArrayList<Plant> plants;    // arrays of the plants
     private ArrayList<Water> waters;
@@ -45,9 +45,8 @@ public class Resources implements Commons {
         plantsAmount = PLANTS_AMOUNT;
         Random randomGen = new Random();
 
-        
-        
-        for (int i = 0; i <plantsAmount; ++i) {
+       
+        for (int i = 0; i <plantsAmount; ++i){
             System.out.println("amount " + plantsAmount);
             int xCoord, yCoord; 
             xCoord = randomGen.nextInt(5000) + 1;
