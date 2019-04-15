@@ -3,6 +3,7 @@ package evolith.entities;
 import evolith.game.Game;
 import evolith.game.Item;
 import evolith.engine.Assets;
+import evolith.helpers.Circle;
 import evolith.helpers.Commons;
 import java.awt.Color;
 import java.awt.Font;
@@ -75,9 +76,9 @@ public class Plants implements Commons {
         }
     }
     
-    public boolean checkRadius(Rectangle r) {
+    public boolean checkRadius(Circle c) {
         for (int i = 0; i < amount; i++) {
-            if (plants.get(i).getRadius().intersects(r)) {
+            if (plants.get(i).getRadius().intersects(c)) {
                 System.out.println("INTERSECTION.");
                 return true;
             }

@@ -41,9 +41,9 @@ public class Assets {
         background = ImageLoader.loadImage("/images/backgrounds/bigbackground.png");
         plant = ImageLoader.loadImage("/images/playgraphics/food.png");
 
-        start = ImageLoader.loadImage("/images/mainmenu/start.png");
-        startInstructions = ImageLoader.loadImage("/images/mainmenu/start instructions.png");
-        startPlay = ImageLoader.loadImage("/images/mainmenu/start play.png");
+        start = ImageLoader.loadImage("/images/mainmenu/mainmenu.png");
+        startInstructions = ImageLoader.loadImage("/images/mainmenu/maininstructions.png");
+        startPlay = ImageLoader.loadImage("/images/mainmenu/mainplay.png");
         setupSpeciesBackground = ImageLoader.loadImage("/images/setupmenu/setup_species_background.png");
         
         bluegreenOption = ImageLoader.loadImage("/images/setupmenu/blueone.png");
