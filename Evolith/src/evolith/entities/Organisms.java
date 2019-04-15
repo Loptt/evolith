@@ -283,6 +283,7 @@ public class Organisms implements Commons {
         private boolean needOffspring;
         private boolean dead;
         private boolean moving;
+        private boolean inPlant;
 
         /**
          * Constructor of the organism
@@ -317,6 +318,7 @@ public class Organisms implements Commons {
             
             needOffspring = false;
             dead = false;
+            inPlant = false;
 
             time = new Time();
         }
@@ -500,6 +502,14 @@ public class Organisms implements Commons {
 
         public void setMoving(boolean moving) {
             this.moving = moving;
+        }
+
+        public boolean isInPlant() {
+            return inPlant;
+        }
+
+        public void setInPlant(boolean inPlant) {
+            this.inPlant = inPlant;
         }
     }
 }

@@ -50,8 +50,8 @@ public class Assets {
         orangeOption = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
         pinkOption = ImageLoader.loadImage("/images/setupmenu/pinkone.png");
         purpleOption = ImageLoader.loadImage("/images/setupmenu/purpleone.png");
-        playOn = ImageLoader.loadImage("/images/mainmenu/playon.png");
-        playOff = ImageLoader.loadImage("/images/mainmenu/playoff.png");
+        playOn = ImageLoader.loadImage("/images/mainmenu/onplay.png");
+        playOff = ImageLoader.loadImage("/images/mainmenu/offplay.png");
         hoverImage = ImageLoader.loadImage("/images/playgraphics/hover_bar.png");
         
         //Top Bar in 0,0
