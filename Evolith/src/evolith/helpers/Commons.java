@@ -20,6 +20,7 @@ public interface Commons {
     
     public static final int SWARM_SEPARATION = ORGANISM_SIZE+10;
     
+    
     public static final int SECONDS_PER_HUNGER = 3;
     public static final int SECONDS_PER_THIRST = 3;
     public static final int SECONDS_PER_MATURITY = 1;
