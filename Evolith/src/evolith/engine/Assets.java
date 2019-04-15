@@ -14,6 +14,7 @@ public class Assets {
 
     public static BufferedImage background; //background image
     public static BufferedImage plant; //plant image
+    public static BufferedImage water;
 
     public static BufferedImage start; // start image
     public static BufferedImage startInstructions; // start menu instruction image
@@ -40,6 +41,7 @@ public class Assets {
     public static void init() {
         background = ImageLoader.loadImage("/images/backgrounds/bigbackground.png");
         plant = ImageLoader.loadImage("/images/playgraphics/food.png");
+        water = ImageLoader.loadImage("/iamges/playgraphics/water.png");
 
         start = ImageLoader.loadImage("/images/mainmenu/mainmenu.png");
         startInstructions = ImageLoader.loadImage("/images/mainmenu/maininstructions.png");

@@ -6,7 +6,8 @@ import evolith.menus.SetupMenu;
 import evolith.menus.ButtonBarMenu;
 import evolith.helpers.Clock;
 import evolith.helpers.Commons;
-import evolith.entities.*;
+import evolith.entities.Resources;
+import evolith.entities.Organisms;
 import evolith.engine.*;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -40,7 +41,9 @@ public class Game implements Runnable, Commons {
     private Camera camera;                      // camera of the game engine
 
     private Organisms organisms;                //organisms in the game
-    private Plants plants;                      // resources of plants in the game
+    //private Plants plants;                      // resources of plants in the game
+    //private Waters waters;
+    private Resources resources;
 
     private enum States {
         MainMenu, Paused, GameOver, Play, Instructions, Setup
@@ -116,8 +119,9 @@ public class Game implements Runnable, Commons {
         setup = new SetupMenu(0, 0, width, height, this);
 
         organisms = new Organisms(this);
-        plants = new Plants(this);
-
+        //plants = new Plants(this);
+        //waters = new Waters(this);
+        resources = new Resources(this);
         display.getJframe().addKeyListener(keyManager);
         display.getJframe().addMouseListener(mouseManager);
         display.getJframe().addMouseMotionListener(mouseManager);
@@ -180,7 +184,8 @@ public class Game implements Runnable, Commons {
         keyManager.tick();
         camera.tick();
         organisms.tick();
-        plants.tick();
+        //plants.tick();
+        resources.tick();
         buttonBar.tick();
         
         manageMouse();
@@ -208,12 +213,12 @@ public class Game implements Runnable, Commons {
             } else {
                 //If not in the buttonbar, check if a plant has been clicked
                 //TODO: When more entities have been added, check for those entities aswell. 
-                Point clickedPlant = plants.containsPlant(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
-                
+                //Point clickedPlant = plants.containsPlant(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+                Point clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                 //If the x value is greater than 0, then a plant has been clicked
-                if (clickedPlant.x >= 0) {
+                if (clickedResource.x >= 0) {
                     //In this case, move the swarm to the plant position, surrounding it
-                    organisms.moveSwarmToPoint(clickedPlant.x, clickedPlant.y, 1);
+                    organisms.moveSwarmToPoint(clickedResource.x, clickedResource.y, 1);
                 } else {
                     //Else move the swarm to desired position
                     organisms.moveSwarm(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
@@ -230,7 +235,7 @@ public class Game implements Runnable, Commons {
     
     public void checkEntitiesInteraction() {
         //check organisms with plants
-        organisms.checkProximity(plants); 
+        organisms.checkProximity(resources); 
         //check organisms with water
     }
 
@@ -256,7 +261,8 @@ public class Game implements Runnable, Commons {
                     break;
                 case Play:
                     g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
-                    plants.render(g);
+                    //plants.render(g);
+                    resources.render(g);
                     organisms.render(g);
                     buttonBar.render(g);
                     break;

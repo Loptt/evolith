@@ -5,6 +5,8 @@ import evolith.game.Item;
 import evolith.engine.Assets;
 import evolith.helpers.Circle;
 import evolith.helpers.Commons;
+import static evolith.helpers.Commons.WATERS_AMOUNT;
+import static evolith.helpers.Commons.WATER_SIZE;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -20,22 +22,22 @@ import java.util.Random;
  * @author Víctor Villarreal
  * @author Moisés Fernández
  */
-public class Plants implements Commons {
+public class Waters implements Commons {
 
-    private ArrayList<Plant> plants;    // arrays of the plants 
+    private ArrayList<Water> waters;    // arrays of the waters 
     private Game game;                  //game instance
 
     private int amount;                 //max amount of the plant
 
     /**
-     * Constructor of the plants in the game
+     * Constructor of the waters in the game
      *
      * @param game
      */
-    public Plants(Game game) {
+    public Waters(Game game) {
         this.game = game;
-        plants = new ArrayList<>();
-        amount = PLANTS_AMOUNT;
+        waters = new ArrayList<>();
+        amount = WATERS_AMOUNT;
         Random randomGen = new Random();
 
         for (int i = 0; i <amount; ++i) {
@@ -43,25 +45,25 @@ public class Plants implements Commons {
             int xCoord, yCoord; 
             xCoord = randomGen.nextInt(5000) + 1;
             yCoord = randomGen.nextInt(5000) + 1;
-            plants.add(new Plant(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE));
+            waters.add(new Water(xCoord, yCoord, WATER_SIZE, WATER_SIZE));
             
-            Circle actualCircle = plants.get(i).getRadius();
+            Circle actualCircle = waters.get(i).getRadius();
             System.out.println(i);
-            if(checkPlantsRadius(actualCircle, i) && i > 0){
+            if(checkwatersRadius(actualCircle, i) && i > 0){
                 System.out.println("deleting");
-                plants.remove(i);
+                waters.remove(i);
                 i--;
             }
-            System.out.println("voy en la planta # " + i );
+            System.out.println("voy en el agua # " + i );
             System.out.println("x: " + xCoord + " y: " + yCoord);
         }
     }
     
-    public boolean checkPlantsRadius(Circle c, int actualIndex) {
+    public boolean checkwatersRadius(Circle c, int actualIndex) {
         
-        for (int i = 0; i <= plants.size()-1; i++) {
+        for (int i = 0; i <= waters.size()-1; i++) {
         System.out.println("checking" + i);
-            if (plants.get(i).getRadius().intersects(c) && i != actualIndex) {
+            if (waters.get(i).getRadius().intersects(c) && i != actualIndex) {
                 System.out.println("INTERSECTION.");
                 return true;
             }
@@ -70,9 +72,9 @@ public class Plants implements Commons {
         return false;
     }
     public Point containsPlant(int x, int y) {
-        for (int i = 0; i < plants.size()-1; i++) {
-            if (plants.get(i).getPerimeter().contains(x, y)) {
-                return new Point(plants.get(i).getX() + PLANT_SIZE / 2, plants.get(i).getY() + PLANT_SIZE / 2);
+        for (int i = 0; i < waters.size()-1; i++) {
+            if (waters.get(i).getPerimeter().contains(x, y)) {
+                return new Point(waters.get(i).getX() + WATER_SIZE / 2, waters.get(i).getY() + WATER_SIZE / 2);
             }
         }
         
@@ -80,30 +82,30 @@ public class Plants implements Commons {
     }
 
     /**
-     * To tick the plants
+     * To tick the waters
      */
     public void tick() {
         for (int i = 0; i < amount; i++) {
-            plants.get(i).tick();
+            waters.get(i).tick();
         }
     }
 
     /**
-     * To render the plants
+     * To render the waters
      *
      * @param g
      */
     public void render(Graphics g) {
         for (int i = 0; i < amount; i++) {
-            plants.get(i).render(g);
+            waters.get(i).render(g);
         }
     }
     
     public boolean checkRadius(Circle c, int actualIndex) {
         
-        for (int i = 0; i <= plants.size()-1; i++) {
+        for (int i = 0; i <= waters.size()-1; i++) {
         //System.out.println("checking" + i);
-            if (plants.get(i).getRadius().intersects(c) && i != actualIndex) {
+            if (waters.get(i).getRadius().intersects(c) && i != actualIndex) {
                 System.out.println("INTERSECTION.");
                 return true;
             }
@@ -112,7 +114,7 @@ public class Plants implements Commons {
         return false;
     }
 
-    public class Plant extends Item {
+    public class Water extends Item {
 
         int quantity;   // maximum quanitity of food per plant;
 
@@ -124,7 +126,7 @@ public class Plants implements Commons {
          * @param width
          * @param height
          */
-        public Plant(int x, int y, int width, int height) {
+        public Water(int x, int y, int width, int height) {
             super(x, y, width, height);
             quantity = 100;
         }

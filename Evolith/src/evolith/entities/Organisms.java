@@ -183,6 +183,28 @@ public class Organisms implements Commons {
             }
         }
     }
+    
+    public void checkProximity(Resources resources) {
+        for (int i = 0; i < amount; i++) {
+            if (resources.checkRadius(organisms.get(i).getRadius(),i) && !organisms.get(i).isInResource()) {
+                System.out.println("CLOSE");
+                organisms.get(i).setPoint(currentPoss.get(0));
+                organisms.get(i).setInResource(true);
+                currentPoss.remove(0);
+            }
+        }
+    }
+    
+    public void checkProximity(Waters waters) {
+        for (int i = 0; i < amount; i++) {
+            if (waters.checkRadius(organisms.get(i).getRadius(),i) && !organisms.get(i).isInWater()) {
+                System.out.println("CLOSE");
+                organisms.get(i).setPoint(currentPoss.get(0));
+                organisms.get(i).setInWater(true);
+                currentPoss.remove(0);
+            }
+        }
+    }
 
     /**
      * To render the organisms
@@ -285,6 +307,8 @@ public class Organisms implements Commons {
         private boolean dead;
         private boolean moving;
         private boolean inPlant;
+        private boolean inWater;
+        private boolean inResource;
 
         /**
          * Constructor of the organism
@@ -320,6 +344,8 @@ public class Organisms implements Commons {
             needOffspring = false;
             dead = false;
             inPlant = false;
+            inWater = false;
+            inResource = false;
 
             time = new Time();
         }
@@ -511,6 +537,22 @@ public class Organisms implements Commons {
 
         public void setInPlant(boolean inPlant) {
             this.inPlant = inPlant;
+        }
+        
+        public boolean isInWater(){
+            return inWater;
+        }
+        
+        public void setInWater(boolean inWater){
+            this.inWater = inWater;
+        }
+        
+        public boolean isInResource(){
+            return inResource;
+        }
+        
+        public void setInResource(boolean inResource){
+            this.inResource = inResource;
         }
     }
 }
