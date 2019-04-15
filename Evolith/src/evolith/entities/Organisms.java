@@ -175,7 +175,7 @@ public class Organisms implements Commons {
     
     public void checkProximity(Plants plants) {
         for (int i = 0; i < amount; i++) {
-            if (plants.checkRadius(organisms.get(i).getRadius()) && !organisms.get(i).isInPlant()) {
+            if (plants.checkRadius(organisms.get(i).getRadius(), 1) && !organisms.get(i).isInPlant()) {
                 System.out.println("CLOSE");
                 organisms.get(i).setPoint(currentPoss.get(0));
                 organisms.get(i).setInPlant(true);

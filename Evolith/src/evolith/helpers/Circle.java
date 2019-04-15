@@ -13,6 +13,7 @@ import java.awt.Rectangle;
  * @author charles
  */
 public class Circle {
+    
     private int x;
     private int y;
     private int radius;
