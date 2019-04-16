@@ -134,26 +134,15 @@ public class Organism extends Item implements Commons {
     public void tick() {
         //to determine the lifespan of the organism
         time.tick();
+        handleTarget();
         checkMovement();
         checkVitals();
 
-        /*
-            if (target != null && !eating) {
-                point.x = target.getX();
-                point.y = target.getY();
-            }
-            
-            if (target != null && target.ge() == 0) {
-                target = null;
-                eating = false;
-            }
-            
-            if (target == null) {
-                System.out.println("Eating false");
-            }*/
         radius.setX(x);
         radius.setY(y);
     }
+    
+    
 
     public int getSize() {
         return size;
@@ -300,6 +289,16 @@ public class Organism extends Item implements Commons {
         if (maturity >= MAX_MATURITY) {
             kill();
         }
+    }
+    
+    public void handleTarget() {
+        //If no target, do nothing
+        if (target == null) {
+            return;
+        }
+        
+        point.x = target.getX();
+        point.y = target.getY();
     }
 
     /**

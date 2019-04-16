@@ -67,4 +67,6 @@ public interface Commons {
     public static final Color BLUE_GREEN_COLOR = new Color(1, 196, 181);
     public static final Color ORANGE_COLOR = new Color(239, 186, 1);
     public static final Color PINK_COLOR = new Color(255, 111, 199);
+    
+    public static final int CONSUMING_RATE = 2;
 }

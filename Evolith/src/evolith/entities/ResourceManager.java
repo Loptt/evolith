@@ -43,7 +43,7 @@ public class ResourceManager implements Commons {
         watersAmount = WATERS_AMOUNT;
         plantsAmount = PLANTS_AMOUNT;
         
-        generateResources();
+        generateResources(true);
     }
     
     
@@ -53,8 +53,8 @@ public class ResourceManager implements Commons {
         int newWidthWaters = (int) Math.floor( 5000/Math.sqrt(WATERS_AMOUNT) );
         int newHeightWaters = (int) Math.floor( 5000/Math.sqrt(WATERS_AMOUNT) );
         
-        for(int i=0; i<5000; i+=newWidthWaters){
-            for(int j=0; j<5000; j+=newHeightWaters){
+        for(int i=newWidthWaters; i<5000; i+=newWidthWaters){
+            for(int j=newHeightWaters; j<5000; j+=newHeightWaters){
                 int xCoord, yCoord; 
                 xCoord = randomGen.nextInt(j) + j-newWidthWaters;
                 yCoord = randomGen.nextInt(i) + i-newWidthWaters;
@@ -65,8 +65,8 @@ public class ResourceManager implements Commons {
         int newWidthPlants = (int) Math.floor( 5000/Math.sqrt(PLANTS_AMOUNT) );
         int newHeightPlants = (int) Math.floor( 5000/Math.sqrt(PLANTS_AMOUNT) );
         
-        for(int i=0; i<5000; i+=newWidthPlants){
-            for(int j=0; j<5000; j+=newHeightPlants){
+        for(int i=newWidthPlants; i<5000; i+=newWidthPlants){
+            for(int j=newHeightPlants; j<5000; j+=newHeightPlants){
                 int xCoord, yCoord; 
                 xCoord = randomGen.nextInt(j) + j-newWidthPlants;
                 yCoord = randomGen.nextInt(i) + i-newHeightPlants;
@@ -74,7 +74,7 @@ public class ResourceManager implements Commons {
             }
         }
     }
-    
+    /*
     public void generateResources() {
         Random randomGen = new Random();
 
@@ -114,7 +114,7 @@ public class ResourceManager implements Commons {
                 }
             }
         }
-    }
+    }*/
     
     public Resource containsResource(int x, int y) {
         for (int i = 0; i < plants.size()-1; i++) {
@@ -130,6 +130,22 @@ public class ResourceManager implements Commons {
         }
         
         return null;
+    }
+    
+    public int getPlantAmount() {
+        return plants.size();
+    }
+    
+    public int getWaterAmount() {
+        return waters.size();
+    }
+    
+    public Resource getPlant(int i) {
+        return plants.get(i);
+    }
+    
+    public Resource getWater(int i) {
+        return plants.get(i);
     }
     
     public void tick() {

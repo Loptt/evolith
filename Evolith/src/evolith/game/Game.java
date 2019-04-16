@@ -231,10 +231,17 @@ public class Game implements Runnable, Commons {
                     //In this case, move the selected swarm to the selected resource
                     //organisms.moveSwarmToPoint(clickedResource.getX(), clickedResource.getY(), 1);
                     organisms.setResource(clickedResource);
+                    if (clickedResource.getType() == Resource.ResourceType.Plant) {
+                        organisms.setSearchFood(true);
+                    } else {
+                        organisms.setSearchWater(true);
+                    }
                 } else {
                     //Else move the swarm to desired position
                     organisms.moveSwarm(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                     organisms.setResource(null);
+                    organisms.setSearchFood(false);
+                    organisms.setSearchWater(false);
                     //organisms.applyMouse(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                 }
                 
@@ -247,8 +254,9 @@ public class Game implements Runnable, Commons {
     }
     
     public void checkEntitiesInteraction() {
-        //organisms.checkOnResource(resources);
-        //organisms.checkIfTargetValid(resources);
+        organisms.checkArrivalOnResource();
+        organisms.checkOrganismResourceStatus();
+        organisms.autoLookNewTarget();
     }
 
     /**
@@ -391,6 +399,10 @@ public class Game implements Runnable, Commons {
      */
     public OrganismManager getOrganisms() {
         return organisms;
+    }
+
+    public ResourceManager getResources() {
+        return resources;
     }
     
     /**

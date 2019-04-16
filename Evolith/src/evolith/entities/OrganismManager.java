@@ -238,22 +238,80 @@ public class OrganismManager implements Commons {
                 //Check if the current target is already full and target does not have organism
                 if ((target.isFull() && !target.hasParasite(org)) || target.isOver()) {
                     org.setTarget(null);
+                    org.setEating(false);
                 }
+            } else {
+                org.setEating(false);
+                org.setDrinking(false);
             }
         }
     }
     
-    public void autoLookTarget() {
+    public void autoLookNewTarget() {
+        for (int i = 0; i < organisms.size(); i++) {
+            Organism org = organisms.get(i);
+            //Priority to food?
+            if (org.isSearchFood()) {
+                findNearestValidFood(org);
+            } else if (org.isSearchWater()) {
+                findNearestValidWater(org);
+            }
+        }
+    }
+    
+    public void findNearestValidFood(Organism org) {
+        Resource closestPlant = null; 
+        double closestDistanceBetweenPlantAndOrganism = 1000000;
         
+        for(int i = 1; i < game.getResources().getPlantAmount(); i++){
+            double distanceBetweenPlantAndOrganism = 7072;
+            if(!game.getResources().getPlant(i).isFull()){
+                distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX()-game.getResources().getPlant(i).getX(),2)
+                        + Math.pow(org.getY()-game.getResources().getPlant(i).getY(),2) );
+            }
+            
+            if(distanceBetweenPlantAndOrganism<closestDistanceBetweenPlantAndOrganism){
+                closestDistanceBetweenPlantAndOrganism = distanceBetweenPlantAndOrganism;
+                closestPlant = game.getResources().getPlant(i);
+            }
+        }
+        
+        org.setTarget(closestPlant);
+    }
+    
+    public void findNearestValidWater(Organism org) {
+        Resource closestWater = null; 
+        double closestDistanceBetweenWaterAndOrganism = 1000000;
+        
+        for(int i = 1; i < game.getResources().getWaterAmount(); i++){
+            double distanceBetweenPlantAndOrganism = 7072;
+            if(!game.getResources().getWater(i).isFull()){
+                distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX()-game.getResources().getWater(i).getX(),2)
+                        + Math.pow(org.getY()-game.getResources().getWater(i).getY(),2) );
+            }
+            
+            if(distanceBetweenPlantAndOrganism<closestDistanceBetweenWaterAndOrganism){
+                closestDistanceBetweenWaterAndOrganism = distanceBetweenPlantAndOrganism;
+                closestWater = game.getResources().getWater(i);
+            }
+        }
+        
+        org.setTarget(closestWater);
     }
 
     public void checkArrivalOnResource() {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             Organism org = organisms.get(i);
             Resource target = organisms.get(i).getTarget();
             if (target != null) {
                 if (target.intersects(org) && !target.isFull()) {
                     target.addParasite(org);
+                    //Check the resource type
+                    if (target.getType() == Resource.ResourceType.Plant) {
+                        org.setEating(true);
+                    } else {
+                        org.setDrinking(true);
+                    }
                 }
                 
             }
@@ -419,8 +477,8 @@ public class OrganismManager implements Commons {
     }
     
     public void findNearestValidFood(Organism org, ResourceManager resources) {
-        Plant closestPlant = resources.getPlant(0); 
-        double closestDistanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX()-resources.getPlant(0).getX(),2) + Math.pow(org.getY()-resources.getPlant(0).getY(),2) );
+        Plant closestWater = resources.getPlant(0); 
+        double closestDistanceBetweenWaterAndOrganism = Math.sqrt(Math.pow(org.getX()-resources.getPlant(0).getX(),2) + Math.pow(org.getY()-resources.getPlant(0).getY(),2) );
         for(int i = 1; i<resources.getPlantsAmount(); i++){
             double distanceBetweenPlantAndOrganism = 7072;
             if(!resources.getPlant(i).isFull()){
@@ -428,12 +486,12 @@ public class OrganismManager implements Commons {
             }
             
             if(distanceBetweenPlantAndOrganism<closestDistanceBetweenPlantAndOrganism){
-                closestDistanceBetweenPlantAndOrganism = distanceBetweenPlantAndOrganism;
-                closestPlant = resources.getPlant(i);
+                closestDistanceBetweenWaterAndOrganism = distanceBetweenPlantAndOrganism;
+                closestWater = resources.getPlant(i);
             }
         }
         
-        org.setTarget(closestPlant);
+        org.setTarget(closestWater);
     }
 */
     /**
