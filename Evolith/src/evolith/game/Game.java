@@ -194,7 +194,6 @@ public class Game implements Runnable, Commons {
         keyManager.tick();
         camera.tick();
         organisms.tick();
-        //plants.tick();
         resources.tick();
         buttonBar.tick();
         
@@ -221,10 +220,10 @@ public class Game implements Runnable, Commons {
                 //Process the mouse in the button bar
                 buttonBar.applyMouse(mouseX, mouseY);
             } else {
-                //If not in the buttonbar, check if a plant has been clicked
-                //TODO: When more entities have been added, check for those entities aswell. 
-                //Point clickedPlant = plants.containsPlant(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+                //System.out.println("Removing targets in game");
+                organisms.emptyTargets();
                 Resource clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+                
                 //If the x value is greater than 0, then a plant has been clicked
                 if (clickedResource != null) {
                     
@@ -256,7 +255,6 @@ public class Game implements Runnable, Commons {
     public void checkEntitiesInteraction() {
         organisms.checkArrivalOnResource();
         organisms.checkOrganismResourceStatus();
-        organisms.autoLookNewTarget();
     }
 
     /**

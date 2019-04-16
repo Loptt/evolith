@@ -60,6 +60,8 @@ public class Resource extends Item implements Commons{
                 if (!map.containsValue(i)) {
                     map.put(org, i);
                     org.setPoint(positions.get(i));
+                    System.out.println(positions.get(i));
+                    System.out.println("TO ID:   " + org.getId());
                     parasiteAmount++;
                     if (parasiteAmount >= 6) {
                         full = true;
@@ -77,6 +79,9 @@ public class Resource extends Item implements Commons{
         if (map.containsKey(org)) {
             map.remove(org);
             parasiteAmount--;
+            if (parasiteAmount < 6) {
+                full = false;
+            }
         } else {
             System.out.println("ERROR, ORGANISM NOT IN RESOURCE");
         }
@@ -141,10 +146,7 @@ public class Resource extends Item implements Commons{
                 g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 
                 g.drawImage(Assets.plant, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
-                g.setColor(Color.RED);
-                g.drawOval(game.getCamera().getRelX(radius.getX() - width / 2), game.getCamera().getRelY(radius.getY() - width / 2), radius.getRadius(), radius.getRadius());
-
-
+               
                 //To display the actual quantity over the maximum
                 g.drawString(Integer.toString(quantity) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
                 break;

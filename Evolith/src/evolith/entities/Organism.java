@@ -28,6 +28,8 @@ public class Organism extends Item implements Commons {
     private Game game;
 
     private Time time;
+    
+    private int id;
 
     /**
      * These are the five evolutionary traits
@@ -77,10 +79,11 @@ public class Organism extends Item implements Commons {
      * @param game
      * @param skin
      */
-    public Organism(int x, int y, int width, int height, Game game, int skin) {
+    public Organism(int x, int y, int width, int height, Game game, int skin, int id) {
         super(x, y, width, height);
         this.game = game;
         this.skin = skin;
+        this.id = id;
         point = new Point(x, y);
         maxVel = 3;
         xVel = 0;
@@ -297,8 +300,10 @@ public class Organism extends Item implements Commons {
             return;
         }
         
-        point.x = target.getX();
-        point.y = target.getY();
+        if (!isConsuming()) {
+            point.x = target.getX();
+            point.y = target.getY();
+        }
     }
 
     /**
@@ -306,6 +311,8 @@ public class Organism extends Item implements Commons {
      */
     public void kill() {
         dead = true;
+        if (target != null && isConsuming())
+        target.removeParasite(this);
     }
 
     /**
@@ -316,8 +323,6 @@ public class Organism extends Item implements Commons {
     @Override
     public void render(Graphics g) {
         g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
-        g.setColor(Color.RED);
-        g.drawOval(game.getCamera().getRelX(radius.getX() - width / 2), game.getCamera().getRelY(radius.getY() - width / 2), radius.getRadius(), radius.getRadius());
     }
 
     /**
@@ -456,5 +461,9 @@ public class Organism extends Item implements Commons {
 
     public void setSkin(int skin) {
         this.skin = skin;
+    }
+
+    public int getId() {
+        return id;
     }
 }

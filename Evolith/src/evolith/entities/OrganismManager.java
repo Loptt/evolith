@@ -44,6 +44,8 @@ public class OrganismManager implements Commons {
 
     private Point centralPoint;
     private Point targetPoint;
+    
+    private int idCounter;
 
     /**
      * Constructor of the organisms
@@ -54,9 +56,10 @@ public class OrganismManager implements Commons {
         this.game = game;
         organisms = new ArrayList<>();
         amount = 1;
+        idCounter = 1;
 
         for (int i = 0; i < amount; i++) {
-            organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE, ORGANISM_SIZE, game, 0));
+            organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE, ORGANISM_SIZE, game, 0, idCounter++));
         }
         newX = INITIAL_POINT;
         newY = INITIAL_POINT;
@@ -207,7 +210,9 @@ public class OrganismManager implements Commons {
         if (org.isNeedOffspring()) {
             org.setNeedOffspring(false);
             amount++;
-            organisms.add(new Organism(org.getX() + ORGANISM_SIZE, org.getY(), ORGANISM_SIZE, ORGANISM_SIZE, game, org.getSkin()));
+            organisms.add(new Organism(org.getX() + ORGANISM_SIZE, org.getY(), ORGANISM_SIZE, ORGANISM_SIZE, game, org.getSkin(), idCounter++));
+            organisms.get(organisms.size()-1).setSearchFood(org.isSearchFood());
+            organisms.get(organisms.size()-1).setSearchWater(org.isSearchWater());
         }
     }
 
@@ -237,20 +242,21 @@ public class OrganismManager implements Commons {
             if (target != null) {
                 //Check if the current target is already full and target does not have organism
                 if ((target.isFull() && !target.hasParasite(org)) || target.isOver()) {
+                    System.out.println("HEHE CHANGE RESOURCE");
                     org.setTarget(null);
                     org.setEating(false);
+                    autoLookNewTarget(org);
                 }
             } else {
                 org.setEating(false);
                 org.setDrinking(false);
+                autoLookNewTarget(org);
             }
         }
     }
     
-    public void autoLookNewTarget() {
-        for (int i = 0; i < organisms.size(); i++) {
-            Organism org = organisms.get(i);
-            //Priority to food?
+    public void autoLookNewTarget(Organism org) {
+        if (!org.isConsuming()) {
             if (org.isSearchFood()) {
                 findNearestValidFood(org);
             } else if (org.isSearchWater()) {
@@ -304,7 +310,7 @@ public class OrganismManager implements Commons {
             Organism org = organisms.get(i);
             Resource target = organisms.get(i).getTarget();
             if (target != null) {
-                if (target.intersects(org) && !target.isFull()) {
+                if (target.intersects(org) && !target.isFull() && !target.hasParasite(org)) {
                     target.addParasite(org);
                     //Check the resource type
                     if (target.getType() == Resource.ResourceType.Plant) {
@@ -317,6 +323,19 @@ public class OrganismManager implements Commons {
             }
         }
     }
+    
+    public void emptyTargets() {
+        for (int i = 0; i < organisms.size(); i++) {
+            Organism org = organisms.get(i);
+            Resource target = organisms.get(i).getTarget();
+            if (target != null) {
+                System.out.println("Removing targets in org manager");
+                target.removeParasite(org);
+                org.setTarget(null);
+            }
+        }
+    }
+    
     /*
     public void checkProximity(Plants plants) {
         for (int i = 0; i < amount; i++) {
