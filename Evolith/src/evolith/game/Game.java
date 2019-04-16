@@ -60,6 +60,8 @@ public class Game implements Runnable, Commons {
     
     private InputReader inputReader;
 
+    private Minimap minimap;
+    
     /**
      * to create title, width and height and set the game is still not running
      *
@@ -77,6 +79,7 @@ public class Game implements Runnable, Commons {
         camera = new Camera(INITIAL_POINT - width / 2, INITIAL_POINT - height / 2, width, height, this);
         mainMenu = new MainMenu(0, 0, width, height, this);
         inputKeyboard = new InputKeyboard();
+        minimap = new Minimap(this);
 
         state = States.MainMenu;
     }
@@ -272,6 +275,7 @@ public class Game implements Runnable, Commons {
                     //plants.render(g);
                     resources.render(g);
                     organisms.render(g);
+                    minimap.render(g);
                     buttonBar.render(g);
                     break;
             }
@@ -369,7 +373,25 @@ public class Game implements Runnable, Commons {
     public InputReader getInputReader() {
         return inputReader;
     }
-
+    
+    /**
+     * to get the skin of the organism
+     *
+     * @return organismsSkin
+     */
+    public int getOrganismsSkin() {
+        return organisms.getSkin();
+    }
+    
+    /**
+     * to get the organisms
+     *
+     * @return organisms
+     */
+    public Organisms getOrganisms() {
+        return organisms;
+    }
+    
     /**
      * start game
      */

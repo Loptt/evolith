@@ -30,6 +30,8 @@ public class Assets {
     public static BufferedImage playOff;
     public static BufferedImage hoverImage;
     
+    public static BufferedImage minimapFrame;
+    
     public static ArrayList<BufferedImage> orgColors;
     
     public static ArrayList<ArrayList<BufferedImage>> buttonBar = new ArrayList<ArrayList<BufferedImage>>();
@@ -83,5 +85,6 @@ public class Assets {
         orgColors.add(ImageLoader.loadImage("/images/organisms/bluegreenorganism.png"));
         orgColors.add(ImageLoader.loadImage("/images/organisms/orangeorganism.png"));
 
+        minimapFrame = ImageLoader.loadImage("/images/playgraphics/minimap_frame.png");
     }
 }
