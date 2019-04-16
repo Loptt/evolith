@@ -21,7 +21,7 @@ import java.util.HashMap;
  *
  * @author charles
  */
-public abstract class Resource extends Item {
+public class Resource extends Item {
 
     private int quantity;
     private Game game;
