@@ -53,8 +53,8 @@ public class ResourceManager implements Commons {
         int newWidthWaters = (int) Math.floor( 5000/Math.sqrt(WATERS_AMOUNT) );
         int newHeightWaters = (int) Math.floor( 5000/Math.sqrt(WATERS_AMOUNT) );
         
-        for(int i=0; i<5000; i+=newWidthWaters){
-            for(int j=0; j<5000; j+=newHeightWaters){
+        for(int i=newWidthWaters; i<5000; i+=newWidthWaters){
+            for(int j=newHeightWaters; j<5000; j+=newHeightWaters){
                 int xCoord, yCoord; 
                 int boundWidth = 0;
                 int boundHeigth = 0;
@@ -73,8 +73,8 @@ public class ResourceManager implements Commons {
         int newWidthPlants = (int) Math.floor( 5000/Math.sqrt(PLANTS_AMOUNT) );
         int newHeightPlants = (int) Math.floor( 5000/Math.sqrt(PLANTS_AMOUNT) );
         
-        for(int i=0; i<5000; i+=newWidthPlants){
-            for(int j=0; j<5000; j+=newHeightPlants){
+        for(int i=newWidthPlants; i<5000; i+=newWidthPlants){
+            for(int j=newHeightPlants; j<5000; j+=newHeightPlants){
                 int xCoord, yCoord; 
                 int boundWidth = 0;
                 int boundHeigth = 0;
