@@ -83,6 +83,7 @@ public class Game implements Runnable, Commons {
         minimap = new Minimap(this);
 
         state = States.MainMenu;
+        
     }
 
     /**
@@ -91,7 +92,7 @@ public class Game implements Runnable, Commons {
     @Override
     public void run() {
         init();
-
+        
         int fps = 60; //Current game requirements demand 60 fps
         double timeTick = 1000000000 / fps;
         double delta = 0;
@@ -197,6 +198,7 @@ public class Game implements Runnable, Commons {
         //plants.tick();
         resources.tick();
         buttonBar.tick();
+        inputKeyboard.tick();
         
         manageMouse();
         checkEntitiesInteraction();

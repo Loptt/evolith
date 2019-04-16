@@ -6,8 +6,10 @@
 package evolith.menus;
 
 import evolith.engine.Assets;
+import evolith.entities.Organism;
 import evolith.game.Game;
 import evolith.helpers.Commons;
+import evolith.helpers.InputReader;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -31,13 +33,15 @@ public class OrganismPanel extends Menu implements Commons {
     private int stealth;
     private int generation;
     private double duration;
+    
     private String fontPath;
     private String name;
     private Font fontEvolve;
     private InputStream is;
+    
+    private InputReader inputReader;
 
     private boolean active;
-    private boolean clickClose;
     private boolean clickEdit;
     
     public OrganismPanel(int x, int y, int width,int height,Game game) {
@@ -47,101 +51,57 @@ public class OrganismPanel extends Menu implements Commons {
         this.is = OrganismPanel.class.getResourceAsStream(fontPath);
         try {
             fontEvolve = Font.createFont(Font.TRUETYPE_FONT, is);
+            fontEvolve = fontEvolve.deriveFont(20f);
         } catch (FontFormatException ex) {
             Logger.getLogger(OrganismPanel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(OrganismPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        inputReader = new InputReader(game);
     }
 
-    public OrganismPanel(int x, int y, int width, int height,int speed, int size, int strength, int survivability, int stealth, int maturity, int generation, double duration, String name, Game game) {
+    public OrganismPanel(int x, int y, int width, int height, Game game, Organism org)
+    {
         super(x, y, width, height, game);
-        active = true;
-        clickClose = false;
-        clickEdit = false;
-        this.speed = speed;
-        this.size = size;
-        this.strength = strength;
-        this.survivability = survivability;
-        this.stealth = stealth;
-        this.maturity = maturity;
-        this.generation = generation;
-        this.duration = duration;
-        this.name = name;
-
+        this.speed = org.getSpeed();
+        this.size = org.getSize();
+        this.strength = org.getStrength();
+        this.survivability = org.getSurvivability();
+        this.stealth = org.getStealth();
+        this.maturity = org.getMaturity();
+        this.generation = org.getGeneration();
+        this.duration = org.getTime().getSeconds();
+        this.name = org.getName();
+        
+        this.active = true;
+        
         buttons.add(new Button(this.x + this.width - 20, this.y - 20, 40, 40)); // Exit
-        buttons.add(new Button(this.x + (this.width / 2) - 25, this.y + 250, 50, 30)); // Edit
+        buttons.add(new Button(this.x + 32, this.y + 28, 190, 35)); // Edit
+        inputReader = new InputReader(game);
+    }
+    public void update(Organism org)
+    {
+        this.speed = org.getSpeed();
+        this.size = org.getSize();
+        this.strength = org.getStrength();
+        this.survivability = org.getSurvivability();
+        this.stealth = org.getStealth();
+        this.maturity = org.getMaturity();
+        this.generation = org.getGeneration();
+        this.duration = org.getTime().getSeconds();
+        this.name = org.getName();
     }
 
-    public int getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public int getStrength() {
-        return strength;
-    }
-
-    public void setStrength(int strength) {
-        this.strength = strength;
-    }
-
-    public int getSurvivability() {
-        return survivability;
-    }
-
-    public void setSurvivability(int survivability) {
-        this.survivability = survivability;
-    }
-
-    public int getStealth() {
-        return stealth;
-    }
-
-    public void setStealth(int stealth) {
-        this.stealth = stealth;
-    }
-
-    
-
-    public int getMaturity() {
-        return maturity;
-    }
-
-    public void setMaturity(int maturity) {
-        this.maturity = maturity;
-    }
-
-    public int getGeneration() {
-        return generation;
-    }
-
-    public void setGeneration(int generation) {
-        this.generation = generation;
-    }
-
-    public double getDuration() {
-        return duration;
-    }
-
-    public void setDuration(double duration) {
-        this.duration = duration;
+    public String getName() {
+        return name;
     }
     
     @Override
     public void tick() {
+        
+        inputReader.readInput();
         if (active) {
+            
             for (int i = 0; i < buttons.size(); i++) {
                 if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
                     System.out.println("button is here");
@@ -156,11 +116,13 @@ public class OrganismPanel extends Menu implements Commons {
                     buttons.get(i).setActive(false);
                 }
                 if (buttons.get(0).isPressed()) {
-                    setClickEdit(true);
                     active = false;     
                 }
+                  
             }
+            name = inputReader.getSpeciesName();
         }
+        
     }
 
     public boolean isActive() {
@@ -206,14 +168,17 @@ public class OrganismPanel extends Menu implements Commons {
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(x + 145, y + 226, (int) 70 * strength / MAX_STRENGTH, 20);
         
-        g.setColor(Color.RED);
-        g.drawRect(x + 32, y + 28, 190, 35);
-        
         // Edit
         g.setColor(Color.WHITE);
         g.setFont(fontEvolve);
         g.drawString(Integer.toString(generation), x + 160, y + 277);
         g.drawString(Double.toString(duration), x + 130, y + 305);
+        
+        g.setColor(Color.WHITE);
+        g.setFont(fontEvolve);
+
+        g.drawString(name, x + 40, y + 57);
     }
+        
     }
 };

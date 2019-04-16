@@ -33,6 +33,8 @@ public class InputReader {
     }
     
     public void readInput() {
+        if(speciesName.length() <= 20)
+        {
             if (game.getInputKeyboard().a) {
                 speciesName += 'a';
             }
@@ -60,8 +62,7 @@ public class InputReader {
             if (game.getInputKeyboard().g) {
                 speciesName += 'g';
             }
-            
-            
+ 
             if (game.getInputKeyboard().h) {
                 speciesName += 'h';
             }
@@ -70,12 +71,10 @@ public class InputReader {
                 speciesName += 'i';
             }
             
-            
             if (game.getInputKeyboard().j) {
                 speciesName += 'j';
             }
-            
-            
+
             if (game.getInputKeyboard().k) {
                 speciesName += 'k';
             }
@@ -152,11 +151,12 @@ public class InputReader {
             if (game.getInputKeyboard().z) {
                 speciesName += 'z';
             }
+        }
             
-            if (game.getInputKeyboard().delete) {
+            if (game.getInputKeyboard().delete && speciesName.length() != 0 && speciesName != null) {
                 if (speciesName.length() > 0) {
                     speciesName = speciesName.substring(0, speciesName.length() - 1);
-                    System.out.println("HEEEHEEE");
+                    System.out.println("Input is deleted");
                 }
             }
     }

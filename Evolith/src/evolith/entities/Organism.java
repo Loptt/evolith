@@ -287,7 +287,7 @@ public class Organism extends Item implements Commons {
             prevMatInc = (int) time.getSeconds();
 
             //Reproduction happen at these two points in maturity
-            if (maturity == 23) {
+            if (maturity == 10) {
                 needOffspring = true;
             }
 
@@ -316,7 +316,7 @@ public class Organism extends Item implements Commons {
      */
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
+        g.drawImage(Assets.orgColors.get(0), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
         g.setColor(Color.RED);
         g.drawOval(game.getCamera().getRelX(radius.getX() - width / 2), game.getCamera().getRelY(radius.getY() - width / 2), radius.getRadius(), radius.getRadius());
     }
