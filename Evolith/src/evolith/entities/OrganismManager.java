@@ -235,18 +235,26 @@ public class OrganismManager implements Commons {
             Resource target = organisms.get(i).getTarget();
                 //Check if target exists
             if (target != null) {
-                //Check if the current target is already full and 
-                if (target.isFull() && target.hasParasite(org)) {
-                    
+                //Check if the current target is already full and target does not have organism
+                if ((target.isFull() && !target.hasParasite(org)) || target.isOver()) {
+                    org.setTarget(null);
                 }
             }
         }
+    }
+    
+    public void autoLookTarget() {
+        
     }
 
     public void checkArrivalOnResource() {
         for (int i = 0; i < amount; i++) {
             Organism org = organisms.get(i);
-            if (org.getTarget() != null && org.getTarget().intersects(org)) {
+            Resource target = organisms.get(i).getTarget();
+            if (target != null) {
+                if (target.intersects(org) && !target.isFull()) {
+                    target.addParasite(org);
+                }
                 
             }
         }

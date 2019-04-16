@@ -25,6 +25,7 @@ public class Resource extends Item {
     private int quantity;
     private Game game;
     private boolean full;
+    private boolean over;
     private int parasiteAmount;
     private ArrayList<Point> positions;
     private HashMap<Organism, Integer> map;
@@ -37,6 +38,7 @@ public class Resource extends Item {
         this.game = game;
         quantity = 100;
         full = false;
+        over = false;
         parasiteAmount = 0;
         map = new HashMap<>();
         positions = SwarmMovement.getPositions(x, y, 6, 1);
@@ -98,10 +100,23 @@ public class Resource extends Item {
     public void setType(ResourceType type) {
         this.type = type;
     }
+
+    public boolean isOver() {
+        return over;
+    }
+
+    public void setOver(boolean over) {
+        this.over = over;
+    }
     
     @Override
     public void tick() {
         quantity -= parasiteAmount;
+        
+        if (quantity <= 0) {
+            quantity = 0;
+            over = true;
+        }
     }
 
     @Override
