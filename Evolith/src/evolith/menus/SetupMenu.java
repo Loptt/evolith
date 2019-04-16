@@ -10,7 +10,12 @@ import evolith.engine.Assets;
 import evolith.helpers.InputReader;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,6 +30,11 @@ public class SetupMenu extends Menu {
     private int option;
     
     private InputReader inputReader;
+    
+    private String fontPath;
+    private String name;
+    private Font fontEvolve;
+    private InputStream is;
 
     public SetupMenu(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
@@ -41,6 +51,17 @@ public class SetupMenu extends Menu {
         option = 1;
         
         inputReader = new InputReader(game);
+        
+        
+        fontPath = "/Fonts/MADE-Evolve-Sans-Regular.ttf";
+        this.is = OrganismPanel.class.getResourceAsStream(fontPath);
+        try {
+            fontEvolve = Font.createFont(Font.TRUETYPE_FONT, is);
+        } catch (FontFormatException ex) {
+            Logger.getLogger(OrganismPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(OrganismPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public boolean isActive(){
@@ -117,7 +138,8 @@ public class SetupMenu extends Menu {
         for (int i = 0; i < buttons.size(); i++) {
             buttons.get(i).render(g);
         }
-        
+        g.setColor(Color.WHITE);
+        g.setFont(fontEvolve.deriveFont(20f));
         if (inputReader.getSpeciesName() != null && inputReader.getSpeciesName().length() > 0) {
             g.drawString(inputReader.getSpeciesName().toUpperCase(), 215, 525);
         }

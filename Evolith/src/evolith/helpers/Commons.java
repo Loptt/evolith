@@ -39,7 +39,7 @@ public interface Commons {
     public static final int BUTTON_PLAY_Y = 390;
       
     public static final int PANEL_X = 700;
-    public static final int PANEL_Y = 100;
+    public static final int PANEL_Y = 250;
     public static final int PANEL_WIDTH = 245;
     public static final int PANEL_HEIGHT = 350;
     public static final int BUTTON_CLOSE_DIMENSION = 40;

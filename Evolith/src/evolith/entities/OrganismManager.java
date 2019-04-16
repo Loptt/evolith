@@ -45,6 +45,7 @@ public class OrganismManager implements Commons {
     private Point centralPoint;
     private Point targetPoint;
     
+    private int panelNum;
     private int idCounter;
 
     /**
@@ -53,6 +54,7 @@ public class OrganismManager implements Commons {
      * @param game
      */
     public OrganismManager(Game game) {
+        panelNum = 0;
         this.game = game;
         organisms = new ArrayList<>();
         amount = 1;
@@ -120,8 +122,8 @@ public class OrganismManager implements Commons {
      * in the middle
      *
      * @param x
-     * @param y 
-     * @param obj 
+     * @param y
+     * @param obj
      */
     public void moveSwarm(int x, int y, int obj) {
         ArrayList<Point> points;
@@ -134,10 +136,10 @@ public class OrganismManager implements Commons {
             organisms.get(i).setPoint(points.get(i));
         }
     }
-    
+
     public void moveSwarmToPoint(int x, int y, int obj) {
         Point p = new Point(x, y);
-        
+
         for (int i = 0; i < amount; i++) {
             organisms.get(i).setPoint(p);
         }
@@ -152,7 +154,7 @@ public class OrganismManager implements Commons {
             //if mouse is countained in a certain organism
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
-                 //sets new hover panel with that organism's location and information
+                //sets new hover panel with that organism's location and information
                 h = new Hover(game.getMouseManager().getX(), game.getMouseManager().getY(), 170, 220,
                         organisms.get(i).getHunger(), organisms.get(i).getThirst(), organisms.get(i).getLife(), game);
                 //activates the hover
@@ -165,39 +167,23 @@ public class OrganismManager implements Commons {
     }
 
     private void checkPanel() {
-
+       
         for (int i = 0; i < amount; i++) {
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
-
                 if (game.getMouseManager().isLeft()) {
-                    int speed = organisms.get(i).getSpeed();
-                    int size = organisms.get(i).getSize();
-                    int strength = organisms.get(i).getStrength();
-                    int stealth = organisms.get(i).getStealth();
-                    int survivability = organisms.get(i).getSurvivability();
-                    int maturity = organisms.get(i).getMaturity();
-                    int generation = organisms.get(i).getGeneration();
-                    double duration = organisms.get(i).getTime().getSeconds();
-                    String name = organisms.get(i).getName();
-                    
-                    panel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, speed, size, strength, survivability, stealth, maturity, generation, duration, name, game);
+                    panelNum = i;
+                    panel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, game, organisms.get(panelNum));
                     game.getMouseManager().setLeft(false);
                 }
             }
-            if (panel.isActive()) {
-                panel.setSpeed(organisms.get(i).getSpeed());
-                panel.setSize(organisms.get(i).getSize());
-                panel.setStrength(organisms.get(i).getStrength());
-                panel.setStealth(organisms.get(i).getStealth());
-                panel.setSurvivability(organisms.get(i).getSurvivability());
-                panel.setMaturity(organisms.get(i).getMaturity());
-                panel.setGeneration(organisms.get(i).getGeneration());
-                panel.setDuration(organisms.get(i).getTime().getSeconds());
-
-            }
-
         }
+        if(panel.isActive())
+            {
+                panel.update(organisms.get(panelNum));
+                organisms.get(panelNum).setName(panel.getName());
+                System.out.println("The name is " + organisms.get(panelNum).getName());
+            }
         panel.tick();
     }
 
@@ -227,18 +213,18 @@ public class OrganismManager implements Commons {
             amount--;
         }
     }
-    
+
     public void setResource(Resource resource) {
         for (int i = 0; i < amount; i++) {
             organisms.get(i).setTarget(resource);
         }
     }
-    
+
     public void checkOrganismResourceStatus() {
         for (int i = 0; i < amount; i++) {
             Organism org = organisms.get(i);
             Resource target = organisms.get(i).getTarget();
-                //Check if target exists
+            //Check if target exists
             if (target != null) {
                 //Check if the current target is already full and target does not have organism
                 if ((target.isFull() && !target.hasParasite(org)) || target.isOver()) {
@@ -264,6 +250,8 @@ public class OrganismManager implements Commons {
             }
         }
     }
+
+    public void autoLookTarget() {
     
     public void findNearestValidFood(Organism org) {
         Resource closestPlant = null; 
@@ -319,10 +307,11 @@ public class OrganismManager implements Commons {
                         org.setDrinking(true);
                     }
                 }
-                
+
             }
         }
     }
+
     
     public void emptyTargets() {
         for (int i = 0; i < organisms.size(); i++) {
@@ -335,7 +324,7 @@ public class OrganismManager implements Commons {
             }
         }
     }
-    
+   
     /*
     public void checkProximity(Plants plants) {
         for (int i = 0; i < amount; i++) {
@@ -347,7 +336,7 @@ public class OrganismManager implements Commons {
             }
         }
     }*/
-    /*
+ /*
     public void checkOnResource(ResourceManager resources) {
         for (int i = 0; i < amount; i++) {
             Item target = organisms.get(i).getTarget();
@@ -366,8 +355,8 @@ public class OrganismManager implements Commons {
             organisms.get(i).setTarget(item);
         }
     }*/
-    
-    /*
+
+ /*
     public void checkProximity(Waters waters) {
         for (int i = 0; i < amount; i++) {
             if (waters.checkRadius(organisms.get(i).getRadius(),i) && !organisms.get(i).isInWater()) {
@@ -378,7 +367,6 @@ public class OrganismManager implements Commons {
             }
         }
     }*/
-
     /**
      * To render the organisms
      *
@@ -422,7 +410,7 @@ public class OrganismManager implements Commons {
      */
     public void setSkin(int skin) {
         this.skin = skin;
-        
+
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setSkin(skin);
         }
@@ -439,18 +427,19 @@ public class OrganismManager implements Commons {
 
     /**
      * Get the positions <code>Point</code> of the organisms
-     * @return 
+     *
+     * @return
      */
     public ArrayList<Point> getOrganismsPositions() {
         ArrayList<Point> positions = new ArrayList<>();
-        
+
         for (int i = 0; i < organisms.size(); i++) {
             positions.add(new Point(organisms.get(i).getX(), organisms.get(i).getY()));
         }
-        
+
         return positions;
     }
-    
+
     /**
      * to set the central point of the swarm
      *
@@ -468,13 +457,13 @@ public class OrganismManager implements Commons {
     public Point getCentralPoint() {
         return centralPoint;
     }
-    
+
     public void setSearchFood(boolean val) {
         for (int i = 0; i < amount; i++) {
             organisms.get(i).setSearchFood(val);
         }
     }
-    
+
     public void setSearchWater(boolean val) {
         for (int i = 0; i < amount; i++) {
             organisms.get(i).setSearchWater(val);
@@ -512,7 +501,7 @@ public class OrganismManager implements Commons {
         
         org.setTarget(closestWater);
     }
-*/
+     */
     /**
      * Single organism class
      */
