@@ -56,8 +56,8 @@ public class ResourceManager implements Commons {
         for(int i=0; i<5000; i+=newWidthWaters){
             for(int j=0; j<5000; j+=newHeightWaters){
                 int xCoord, yCoord; 
-                int boundWidth = 0;
-                int boundHeigth = 0;
+                int boundWidth = 1;
+                int boundHeigth = 1;
                 if(j>newWidthWaters){
                     boundWidth = j-newWidthWaters;
                 }
@@ -76,8 +76,8 @@ public class ResourceManager implements Commons {
         for(int i=newWidthPlants; i<5000; i+=newWidthPlants){
             for(int j=newHeightPlants; j<5000; j+=newHeightPlants){
                 int xCoord, yCoord; 
-                int boundWidth = 0;
-                int boundHeigth = 0;
+                int boundWidth = 1;
+                int boundHeigth = 1;
                 if(j>newWidthPlants){
                     boundWidth = j-newWidthPlants;
                 }
