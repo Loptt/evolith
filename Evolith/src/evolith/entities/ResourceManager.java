@@ -23,10 +23,9 @@ import java.util.Random;
 
 
 public class ResourceManager implements Commons {
-    private long numberOfIntersections = 0;
 
-    private ArrayList<Plant> plants;    // arrays of the plants
-    private ArrayList<Water> waters;
+    private ArrayList<Resource> plants;    // arrays of the plants
+    private ArrayList<Resource> waters;
     private Game game;                  //game instance
 
     private int watersAmount;                 //max amount of waters
@@ -43,47 +42,52 @@ public class ResourceManager implements Commons {
         waters = new ArrayList<>();
         watersAmount = WATERS_AMOUNT;
         plantsAmount = PLANTS_AMOUNT;
+        
+        generateResources();
+    }
+    
+    public void generateResources() {
         Random randomGen = new Random();
 
-       
-        for (int i = 0; i <plantsAmount; ++i){
+        for (int i = 0; i < plantsAmount; ++i) {
             System.out.println("amount " + plantsAmount);
             int xCoord, yCoord; 
             xCoord = randomGen.nextInt(5000) + 1;
             yCoord = randomGen.nextInt(5000) + 1;
-            plants.add(new Plant(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE));
+            plants.add(new Resource(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE, game, Resource.ResourceType.Plant));
             
-            Circle actualCircle = plants.get(i).getRadius();
+            //Circle actualCircle = plants.get(i).getRadius();
             System.out.println(i);
-            if(checkPlantsRadius(actualCircle, i) && i > 0){
-                System.out.println("deleting");
-                plants.remove(i);
-                i--;
+            
+            for (int j = 0; j < plants.size() - 1; j++) {
+                if (plants.get(i).intersects(plants.get(j))) {
+                    plants.remove(i);
+                    i--;
+                }
             }
-            System.out.println("voy en la planta # " + i );
-            System.out.println("x: " + xCoord + " y: " + yCoord);
         }
         
         
-        for (int i = 0; i <watersAmount; ++i) {
+        for (int i = 0; i < watersAmount; ++i) {
             System.out.println("amount " + watersAmount);
             int xCoord, yCoord; 
             xCoord = randomGen.nextInt(5000) + 1;
             yCoord = randomGen.nextInt(5000) + 1;
-            waters.add(new Water(xCoord, yCoord, WATER_SIZE, WATER_SIZE));
+            waters.add(new Resource(xCoord, yCoord, WATER_SIZE, WATER_SIZE, game, Resource.ResourceType.Water));
             
-            Circle actualCircle = waters.get(i).getRadius();
+            //Circle actualCircle = waters.get(i).getRadius();
             System.out.println(i);
-            if(checkPlantsRadius(actualCircle, i) && i > 0){
-                System.out.println("deleting");
-                waters.remove(i);
-                i--;
+            
+            for (int j = 0; j < waters.size() - 1; j++) {
+                if (waters.get(i).intersects(waters.get(j))) {
+                    waters.remove(i);
+                    i--;
+                }
             }
-            System.out.println("voy en el agua # " + i );
-            System.out.println("x: " + xCoord + " y: " + yCoord);
         }
     }
     
+    /*
     public boolean checkPlantsRadius(Circle c, int actualIndex) {
         for (int i = 0; i <= plants.size()-1; i++) {
         System.out.println("checking" + i);
@@ -112,11 +116,11 @@ public class ResourceManager implements Commons {
     public Water getWater(int i) {
        return waters.get(i);
     }
-
+*/
     /**
      * To tick the resources
      */
-    public void tick() {
+    /*public void tick() {
         for (int i = 0; i < plantsAmount; i++) {
             plants.get(i).tick();
         }
@@ -124,14 +128,14 @@ public class ResourceManager implements Commons {
         for (int i = 0; i <  watersAmount; i++) {
             waters.get(i).tick();
         }
-    }
-
+    }*/
+/*
     /**
      * To render the plants
      *
      * @param g
      */
-    public void render(Graphics g) {
+    /*public void render(Graphics g) {
         for (int i = 0; i < plantsAmount; i++) {
             plants.get(i).render(g);
         }
@@ -141,7 +145,7 @@ public class ResourceManager implements Commons {
         }
     }
     
-    
+    /*
     public int getPlantsAmount(){
             return plantsAmount;
     }
@@ -174,126 +178,5 @@ public class ResourceManager implements Commons {
         }
         
         return null;
-    }
-    
-    public class Water extends Item {
-
-        /**
-         * Constructor of a new plant
-         *
-         * @param x
-         * @param y
-         * @param width
-         * @param height
-         */
-        public Water(int x, int y, int width, int height) {
-            super(x, y, width, height);
-        }
-
-        /**
-         * To tick the plant
-         */
-        @Override
-        public void tick() {
-        }
-
-        /**
-         * Renders the plant
-         *
-         * @param g
-         */
-        @Override
-        public void render(Graphics g) {
-            g.setColor(new Color(173, 255, 250));
-            g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
-
-            g.drawImage(Assets.water, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
-
-            //To display the actual quantity over the maximum
-            g.drawString(Integer.toString(qty) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
-        }
-    }
-    
-    public class Plant extends Item {
-
-        private boolean full;
-        private int parasitesAm;
-        private ArrayList<Point> positions;
-        private ArrayList<Organism> parasites;
-
-        /**
-         * Constructor of a new plant
-         *
-         * @param x
-         * @param y
-         * @param width
-         * @param height
-         */
-        public Plant(int x, int y, int width, int height) {
-            super(x, y, width, height);
-            full = false;
-            positions = SwarmMovement.getPositions(x, y, 6, 1);
-            System.out.println("PLAN CREATED");
-            parasitesAm = 0;
-        }
-
-        /**
-         * To tick the plant
-         */
-        @Override
-        public void tick() {
-        }
-
-        /**
-         * Renders the plant
-         *
-         * @param g
-         */
-        @Override
-        public void render(Graphics g) {
-            g.setColor(new Color(173, 255, 250));
-            g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
-
-            g.drawImage(Assets.plant, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
-            g.setColor(Color.RED);
-            g.drawOval(game.getCamera().getRelX(radius.getX() - width / 2), game.getCamera().getRelY(radius.getY() - width / 2), radius.getRadius(), radius.getRadius());
-            
-
-            //To display the actual quantity over the maximum
-            g.drawString(Integer.toString(qty) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
-        }
-
-
-        public boolean isFull() {
-            return full;
-        }
-
-        public void setFull(boolean full) {
-            this.full = full;
-        }
-
-        public int getParasitesAm() {
-            return parasitesAm;
-        }
-
-        public void setParasitesAm(int parasitesAm) {
-            this.parasitesAm = parasitesAm;
-        }
-        
-        public void addParasite(Organism org) {
-            parasites.add(org);
-            //org.setPoint();
-        }
-        
-        public void removeParasite(Organism org) {
-            parasites.remove(org);
-        }
-        
-        public Point getNextAvailablePosition() {
-            System.out.println(positions.size());
-            Point p = positions.get(0);
-            positions.remove(0);
-            return p;
-        }
-    }
+    }*/
 }
