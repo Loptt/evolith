@@ -28,6 +28,8 @@ public class Organism extends Item implements Commons {
     private Game game;
 
     private Time time;
+    
+    private int id;
 
     /**
      * These are the five evolutionary traits
@@ -77,10 +79,11 @@ public class Organism extends Item implements Commons {
      * @param game
      * @param skin
      */
-    public Organism(int x, int y, int width, int height, Game game, int skin) {
+    public Organism(int x, int y, int width, int height, Game game, int skin, int id) {
         super(x, y, width, height);
         this.game = game;
         this.skin = skin;
+        this.id = id;
         point = new Point(x, y);
         maxVel = 3;
         xVel = 0;
@@ -134,26 +137,15 @@ public class Organism extends Item implements Commons {
     public void tick() {
         //to determine the lifespan of the organism
         time.tick();
+        handleTarget();
         checkMovement();
         checkVitals();
 
-        /*
-            if (target != null && !eating) {
-                point.x = target.getX();
-                point.y = target.getY();
-            }
-            
-            if (target != null && target.ge() == 0) {
-                target = null;
-                eating = false;
-            }
-            
-            if (target == null) {
-                System.out.println("Eating false");
-            }*/
         radius.setX(x);
         radius.setY(y);
     }
+    
+    
 
     public int getSize() {
         return size;
@@ -301,12 +293,26 @@ public class Organism extends Item implements Commons {
             kill();
         }
     }
+    
+    public void handleTarget() {
+        //If no target, do nothing
+        if (target == null) {
+            return;
+        }
+        
+        if (!isConsuming()) {
+            point.x = target.getX();
+            point.y = target.getY();
+        }
+    }
 
     /**
      * Kill the organism
      */
     public void kill() {
         dead = true;
+        if (target != null && isConsuming())
+        target.removeParasite(this);
     }
 
     /**
@@ -457,5 +463,9 @@ public class Organism extends Item implements Commons {
 
     public void setSkin(int skin) {
         this.skin = skin;
+    }
+
+    public int getId() {
+        return id;
     }
 }

@@ -195,7 +195,6 @@ public class Game implements Runnable, Commons {
         keyManager.tick();
         camera.tick();
         organisms.tick();
-        //plants.tick();
         resources.tick();
         buttonBar.tick();
         inputKeyboard.tick();
@@ -223,20 +222,27 @@ public class Game implements Runnable, Commons {
                 //Process the mouse in the button bar
                 buttonBar.applyMouse(mouseX, mouseY);
             } else {
-                //If not in the buttonbar, check if a plant has been clicked
-                //TODO: When more entities have been added, check for those entities aswell. 
-                //Point clickedPlant = plants.containsPlant(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+                //System.out.println("Removing targets in game");
+                organisms.emptyTargets();
                 Resource clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+                
                 //If the x value is greater than 0, then a plant has been clicked
                 if (clickedResource != null) {
                     
                     //In this case, move the selected swarm to the selected resource
                     //organisms.moveSwarmToPoint(clickedResource.getX(), clickedResource.getY(), 1);
                     organisms.setResource(clickedResource);
+                    if (clickedResource.getType() == Resource.ResourceType.Plant) {
+                        organisms.setSearchFood(true);
+                    } else {
+                        organisms.setSearchWater(true);
+                    }
                 } else {
                     //Else move the swarm to desired position
                     organisms.moveSwarm(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                     organisms.setResource(null);
+                    organisms.setSearchFood(false);
+                    organisms.setSearchWater(false);
                     //organisms.applyMouse(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                 }
                 
@@ -249,8 +255,8 @@ public class Game implements Runnable, Commons {
     }
     
     public void checkEntitiesInteraction() {
-        //organisms.checkOnResource(resources);
-        //organisms.checkIfTargetValid(resources);
+        organisms.checkArrivalOnResource();
+        organisms.checkOrganismResourceStatus();
     }
 
     /**
@@ -393,6 +399,10 @@ public class Game implements Runnable, Commons {
      */
     public OrganismManager getOrganisms() {
         return organisms;
+    }
+
+    public ResourceManager getResources() {
+        return resources;
     }
     
     /**

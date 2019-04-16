@@ -43,7 +43,7 @@ public class ResourceManager implements Commons {
         watersAmount = WATERS_AMOUNT;
         plantsAmount = PLANTS_AMOUNT;
         
-        generateResources();
+        generateResources(true);
     }
     
     
@@ -74,7 +74,7 @@ public class ResourceManager implements Commons {
             }
         }
     }
-    
+    /*
     public void generateResources() {
         Random randomGen = new Random();
 
@@ -114,7 +114,7 @@ public class ResourceManager implements Commons {
                 }
             }
         }
-    }
+    }*/
     
     public Resource containsResource(int x, int y) {
         for (int i = 0; i < plants.size()-1; i++) {
@@ -130,6 +130,22 @@ public class ResourceManager implements Commons {
         }
         
         return null;
+    }
+    
+    public int getPlantAmount() {
+        return plants.size();
+    }
+    
+    public int getWaterAmount() {
+        return waters.size();
+    }
+    
+    public Resource getPlant(int i) {
+        return plants.get(i);
+    }
+    
+    public Resource getWater(int i) {
+        return plants.get(i);
     }
     
     public void tick() {

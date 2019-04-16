@@ -8,7 +8,9 @@ package evolith.entities;
 import evolith.engine.Assets;
 import evolith.game.Game;
 import evolith.game.Item;
+import evolith.helpers.Commons;
 import evolith.helpers.SwarmMovement;
+import evolith.helpers.Time;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -20,7 +22,7 @@ import java.util.HashMap;
  *
  * @author charles
  */
-public class Resource extends Item {
+public class Resource extends Item implements Commons{
 
     private int quantity;
     private Game game;
@@ -29,9 +31,12 @@ public class Resource extends Item {
     private int parasiteAmount;
     private ArrayList<Point> positions;
     private HashMap<Organism, Integer> map;
+    private Time time;
 
     public enum ResourceType {Plant, Water};
     private ResourceType type;
+    
+    private int prevSecUpdate;
     
     public Resource(int x, int y, int width, int height, Game game, ResourceType type) {
         super(x, y, width, height);
@@ -43,6 +48,9 @@ public class Resource extends Item {
         map = new HashMap<>();
         positions = SwarmMovement.getPositions(x, y, 6, 1);
         
+        time = new Time();
+        prevSecUpdate = 0;
+        
         this.type = type;
     }
     
@@ -51,6 +59,9 @@ public class Resource extends Item {
             for (int i = 0; i < 6; i++) {
                 if (!map.containsValue(i)) {
                     map.put(org, i);
+                    org.setPoint(positions.get(i));
+                    System.out.println(positions.get(i));
+                    System.out.println("TO ID:   " + org.getId());
                     parasiteAmount++;
                     if (parasiteAmount >= 6) {
                         full = true;
@@ -68,6 +79,9 @@ public class Resource extends Item {
         if (map.containsKey(org)) {
             map.remove(org);
             parasiteAmount--;
+            if (parasiteAmount < 6) {
+                full = false;
+            }
         } else {
             System.out.println("ERROR, ORGANISM NOT IN RESOURCE");
         }
@@ -111,7 +125,12 @@ public class Resource extends Item {
     
     @Override
     public void tick() {
-        quantity -= parasiteAmount;
+        time.tick();
+        
+        if (time.getSeconds() > prevSecUpdate + CONSUMING_RATE) {
+            quantity -= parasiteAmount;
+            prevSecUpdate = (int) time.getSeconds();
+        }
         
         if (quantity <= 0) {
             quantity = 0;
@@ -127,10 +146,7 @@ public class Resource extends Item {
                 g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 
                 g.drawImage(Assets.plant, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
-                g.setColor(Color.RED);
-                g.drawOval(game.getCamera().getRelX(radius.getX() - width / 2), game.getCamera().getRelY(radius.getY() - width / 2), radius.getRadius(), radius.getRadius());
-
-
+               
                 //To display the actual quantity over the maximum
                 g.drawString(Integer.toString(quantity) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
                 break;
