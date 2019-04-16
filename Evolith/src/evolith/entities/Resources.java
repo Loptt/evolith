@@ -3,8 +3,8 @@ package evolith.entities;
 import evolith.game.Game;
 import evolith.game.Item;
 import evolith.engine.Assets;
-import evolith.helpers.Circle;
-import evolith.helpers.Commons;
+import evolith.entities.Organisms.Organism;
+import evolith.helpers.*;
 import static evolith.helpers.Commons.PLANTS_AMOUNT;
 import static evolith.helpers.Commons.PLANT_SIZE;
 import static evolith.helpers.Commons.WATERS_AMOUNT;
@@ -164,25 +164,24 @@ public class Resources implements Commons {
         return false;
     }
     
-    public boolean assignOnResource(Rectangle r) {
+    public Item assignOnResource(Rectangle r) {
         for (int i = 0; i < plants.size(); i++) {
             if (plants.get(i).intersects(r)) {
                 if (!plants.get(i).isFull()) {
-                    plants.get(i).setParasites(plants.get(i).getParasites()+1);
-                    if (plants.get(i).getParasites() >= 6) {
+                    plants.get(i).setParasitesAm(plants.get(i).getParasitesAm()+1);
+                    if (plants.get(i).getParasitesAm() >= 6) {
+                        System.out.println("FULL");
                         plants.get(i).setFull(true);
                     }
-                    return true;
+                    return plants.get(i);
                 }
             }
         }
         
-        return false;
+        return null;
     }
     
     public class Water extends Item {
-
-        int quantity;   // maximum quanitity of food per plant;
 
         /**
          * Constructor of a new plant
@@ -194,7 +193,6 @@ public class Resources implements Commons {
          */
         public Water(int x, int y, int width, int height) {
             super(x, y, width, height);
-            quantity = 100;
         }
 
         /**
@@ -217,33 +215,16 @@ public class Resources implements Commons {
             g.drawImage(Assets.water, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
 
             //To display the actual quantity over the maximum
-            g.drawString(Integer.toString(quantity) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
-        }
-
-        /**
-         * To get the quantity of the plant
-         *
-         * @return quantity
-         */
-        public int getQuantity() {
-            return quantity;
-        }
-
-        /**
-         * To set the quantity of the plant
-         *
-         * @param quantity
-         */
-        public void setQuantity(int quantity) {
-            this.quantity = quantity;
+            g.drawString(Integer.toString(qty) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
         }
     }
     
     public class Plant extends Item {
 
-        private int quantity;   // maximum quanitity of food per plant;
         private boolean full;
-        private int parasites;
+        private int parasitesAm;
+        private ArrayList<Point> positions;
+        private ArrayList<Organism> parasites;
 
         /**
          * Constructor of a new plant
@@ -255,9 +236,10 @@ public class Resources implements Commons {
          */
         public Plant(int x, int y, int width, int height) {
             super(x, y, width, height);
-            quantity = 100;
             full = false;
-            parasites = 0;
+            positions = SwarmMovement.getPositions(x, y, 6, 1);
+            System.out.println("PLAN CREATED");
+            parasitesAm = 0;
         }
 
         /**
@@ -283,26 +265,9 @@ public class Resources implements Commons {
             
 
             //To display the actual quantity over the maximum
-            g.drawString(Integer.toString(quantity) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
+            g.drawString(Integer.toString(qty) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
         }
 
-        /**
-         * To get the quantity of the plant
-         *
-         * @return quantity
-         */
-        public int getQuantity() {
-            return quantity;
-        }
-
-        /**
-         * To set the quantity of the plant
-         *
-         * @param quantity
-         */
-        public void setQuantity(int quantity) {
-            this.quantity = quantity;
-        }
 
         public boolean isFull() {
             return full;
@@ -312,16 +277,28 @@ public class Resources implements Commons {
             this.full = full;
         }
 
-        public int getParasites() {
-            return parasites;
+        public int getParasitesAm() {
+            return parasitesAm;
         }
 
-        public void setParasites(int parasites) {
-            this.parasites = parasites;
+        public void setParasitesAm(int parasitesAm) {
+            this.parasitesAm = parasitesAm;
         }
         
-
+        public void addParasite(Organism org) {
+            parasites.add(org);
+            //org.setPoint();
+        }
         
+        public void removeParasite(Organism org) {
+            parasites.remove(org);
+        }
         
+        public Point getNextAvailablePosition() {
+            System.out.println(positions.size());
+            Point p = positions.get(0);
+            positions.remove(0);
+            return p;
+        }
     }
 }

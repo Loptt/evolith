@@ -219,11 +219,12 @@ public class Game implements Runnable, Commons {
                 if (clickedResource != null) {
                     
                     //In this case, move the selected swarm to the selected resource
-                    organisms.moveSwarmToPoint(clickedResource.getX(), clickedResource.getY(), 1);
+                    //organisms.moveSwarmToPoint(clickedResource.getX(), clickedResource.getY(), 1);
                     organisms.setResource(clickedResource);
                 } else {
                     //Else move the swarm to desired position
                     organisms.moveSwarm(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+                    organisms.setResource(null);
                     //organisms.applyMouse(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                 }
                 

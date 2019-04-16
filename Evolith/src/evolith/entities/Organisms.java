@@ -187,10 +187,13 @@ public class Organisms implements Commons {
     
     public void checkOnResource(Resources resources) {
         for (int i = 0; i < amount; i++) {
-            if (resources.assignOnResource(organisms.get(i).getPerimeter())) {
-                organisms.get(i).setPoint(currentPoss.get(0));
-                organisms.get(i).setInResource(true);
-                currentPoss.remove(0);
+            Item target = organisms.get(i).getTarget();
+            Organism org = organisms.get(i);
+            if (target != null) {
+                if (target.intersects(org.getPerimeter()) && !org.isEating()) {
+                    ((Plant) target).addParasite(org);
+                    org.setEating(true);
+                }
             }
         }
     }
@@ -292,7 +295,11 @@ public class Organisms implements Commons {
     
     public void checkIfTargetValid(Resources resources) {
         for (int i = 0; i < amount; i++) {
-            if (((Plant)organisms.get(i).getTarget()).isFull()) {
+            if (organisms.get(i).getTarget() != null && ((Plant)organisms.get(i).getTarget()).isFull()) {
+                if (organisms.get(i).isSearchFood()) {
+                    findNearestValidFood(organisms.get(i), resources);
+                }
+            } else if (organisms.get(i).getTarget() == null) {
                 if (organisms.get(i).isSearchFood()) {
                     findNearestValidFood(organisms.get(i), resources);
                 }
@@ -314,6 +321,7 @@ public class Organisms implements Commons {
                 closestPlant = resources.getPlant(i);
             }
         }
+        
         org.setTarget(closestPlant);
     }
 
@@ -359,6 +367,9 @@ public class Organisms implements Commons {
         
         private boolean searchFood;
         private boolean searchWater;
+        
+        private boolean eating;
+        private boolean drinking;
 
         /**
          * Constructor of the organism
@@ -399,6 +410,9 @@ public class Organisms implements Commons {
             
             searchFood = false;
             searchWater = false;
+            
+            eating = false;
+            drinking = false;
 
             time = new Time();
         }
@@ -412,6 +426,20 @@ public class Organisms implements Commons {
             time.tick();
             checkMovement();
             checkVitals();
+            
+            if (target != null && !eating) {
+                point.x = target.getX();
+                point.y = target.getY();
+            }
+            
+            if (target != null && target.getQty() == 0) {
+                target = null;
+                eating = false;
+            }
+            
+            if (target == null) {
+                System.out.println("Eating false");
+            }
             
             radius.setX(x);
             radius.setY(y);
@@ -635,6 +663,22 @@ public class Organisms implements Commons {
 
         public void setSearchWater(boolean searchWater) {
             this.searchWater = searchWater;
+        }
+
+        public boolean isEating() {
+            return eating;
+        }
+
+        public boolean isDrinking() {
+            return drinking;
+        }
+
+        public void setEating(boolean eating) {
+            this.eating = eating;
+        }
+
+        public void setDrinking(boolean drinking) {
+            this.drinking = drinking;
         }
     }
 }

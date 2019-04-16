@@ -17,6 +17,7 @@ public abstract class Item {
     protected int y; //y position
     protected int width;
     protected int height;
+    protected int qty;
     
     protected Circle radius;
 
@@ -33,6 +34,7 @@ public abstract class Item {
         this.height = height;
         this.x = x;
         this.y = y;
+        this.qty = 100;
         
         radius = new Circle(x + width/2, y + height /2, width/2);
     }
@@ -138,6 +140,14 @@ public abstract class Item {
 
     public Circle getRadius() {
         return radius;
+    }
+
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
     }
 
     /**
