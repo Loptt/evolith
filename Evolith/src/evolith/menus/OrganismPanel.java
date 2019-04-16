@@ -33,6 +33,7 @@ public class OrganismPanel extends Menu implements Commons {
     private int stealth;
     private int generation;
     private double duration;
+    private Organism organism;
     
     private String fontPath;
     private String name;
@@ -63,6 +64,8 @@ public class OrganismPanel extends Menu implements Commons {
     public OrganismPanel(int x, int y, int width, int height, Game game, Organism org)
     {
         super(x, y, width, height, game);
+        this.organism = org;
+        
         this.speed = org.getSpeed();
         this.size = org.getSize();
         this.strength = org.getStrength();
@@ -77,19 +80,8 @@ public class OrganismPanel extends Menu implements Commons {
         
         buttons.add(new Button(this.x + this.width - 20, this.y - 20, 40, 40)); // Exit
         buttons.add(new Button(this.x + 32, this.y + 28, 190, 35)); // Edit
+        
         inputReader = new InputReader(game);
-    }
-    public void update(Organism org)
-    {
-        this.speed = org.getSpeed();
-        this.size = org.getSize();
-        this.strength = org.getStrength();
-        this.survivability = org.getSurvivability();
-        this.stealth = org.getStealth();
-        this.maturity = org.getMaturity();
-        this.generation = org.getGeneration();
-        this.duration = org.getTime().getSeconds();
-        this.name = org.getName();
     }
 
     public String getName() {
@@ -120,9 +112,17 @@ public class OrganismPanel extends Menu implements Commons {
                 }
                   
             }
-            name = inputReader.getSpeciesName();
         }
-        
+        speed = organism.getSpeed();
+        size = organism.getSize();
+        strength = organism.getStrength();
+        survivability = organism.getSurvivability();
+        stealth = organism.getStealth();
+        maturity = organism.getMaturity();
+        generation = organism.getGeneration();
+        duration = organism.getTime().getSeconds();
+        organism.setName(inputReader.getSpeciesName());
+        name = organism.getName();
     }
 
     public boolean isActive() {
