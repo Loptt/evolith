@@ -6,7 +6,7 @@ import evolith.menus.SetupMenu;
 import evolith.menus.ButtonBarMenu;
 import evolith.helpers.Clock;
 import evolith.helpers.Commons;
-import evolith.entities.Resources;
+import evolith.entities.ResourceManager;
 import evolith.entities.Organisms;
 import evolith.engine.*;
 import evolith.helpers.InputReader;
@@ -45,7 +45,7 @@ public class Game implements Runnable, Commons {
     private Organisms organisms;                //organisms in the game
     //private Plants plants;                      // resources of plants in the game
     //private Waters waters;
-    private Resources resources;
+    private ResourceManager resources;
 
     private enum States {
         MainMenu, Paused, GameOver, Play, Instructions, SetupMenu
@@ -129,7 +129,7 @@ public class Game implements Runnable, Commons {
         organisms = new Organisms(this);
         //plants = new Plants(this);
         //waters = new Waters(this);
-        resources = new Resources(this);
+        resources = new ResourceManager(this);
         display.getJframe().addKeyListener(keyManager);
         display.getJframe().addKeyListener(inputKeyboard);
         display.getJframe().addMouseListener(mouseManager);

@@ -6,7 +6,7 @@ import evolith.game.Item;
 import evolith.helpers.SwarmMovement;
 import evolith.helpers.Time;
 import evolith.engine.Assets;
-import evolith.entities.Resources.Plant;
+import evolith.entities.ResourceManager.Plant;
 import evolith.helpers.Commons;
 
 import evolith.menus.OrganismPanel;
@@ -235,7 +235,7 @@ public class Organisms implements Commons {
         }
     }*/
     
-    public void checkOnResource(Resources resources) {
+    public void checkOnResource(ResourceManager resources) {
         for (int i = 0; i < amount; i++) {
             Item target = organisms.get(i).getTarget();
             Organism org = organisms.get(i);
@@ -363,7 +363,7 @@ public class Organisms implements Commons {
         }
     }
     
-    public void checkIfTargetValid(Resources resources) {
+    public void checkIfTargetValid(ResourceManager resources) {
         for (int i = 0; i < amount; i++) {
             if (organisms.get(i).getTarget() != null && ((Plant)organisms.get(i).getTarget()).isFull()) {
                 if (organisms.get(i).isSearchFood()) {
@@ -377,7 +377,7 @@ public class Organisms implements Commons {
         }
     }
     
-    public void findNearestValidFood(Organism org, Resources resources) {
+    public void findNearestValidFood(Organism org, ResourceManager resources) {
         Plant closestPlant = resources.getPlant(0); 
         double closestDistanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX()-resources.getPlant(0).getX(),2) + Math.pow(org.getY()-resources.getPlant(0).getY(),2) );
         for(int i = 1; i<resources.getPlantsAmount(); i++){

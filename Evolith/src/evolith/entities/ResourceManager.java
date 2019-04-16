@@ -1,14 +1,9 @@
 package evolith.entities;
 
-import evolith.game.Game;
-import evolith.game.Item;
-import evolith.engine.Assets;
-import evolith.entities.Organisms.Organism;
+import evolith.game.*;
+import evolith.engine.*;
+import evolith.entities.*;
 import evolith.helpers.*;
-import static evolith.helpers.Commons.PLANTS_AMOUNT;
-import static evolith.helpers.Commons.PLANT_SIZE;
-import static evolith.helpers.Commons.WATERS_AMOUNT;
-import static evolith.helpers.Commons.WATER_SIZE;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -27,7 +22,7 @@ import java.util.Random;
 
 
 
-public class Resources implements Commons {
+public class ResourceManager implements Commons {
     private long numberOfIntersections = 0;
 
     private ArrayList<Plant> plants;    // arrays of the plants
@@ -42,7 +37,7 @@ public class Resources implements Commons {
      *
      * @param game
      */
-    public Resources(Game game) {
+    public ResourceManager(Game game) {
         this.game = game;
         plants = new ArrayList<>();
         waters = new ArrayList<>();
