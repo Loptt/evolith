@@ -231,17 +231,17 @@ public class OrganismManager implements Commons {
                     System.out.println("HEHE CHANGE RESOURCE");
                     org.setTarget(null);
                     org.setEating(false);
-                    autoLookNewTarget(org);
+                    autoLookTarget(org);
                 }
             } else {
                 org.setEating(false);
                 org.setDrinking(false);
-                autoLookNewTarget(org);
+                autoLookTarget(org);
             }
         }
     }
     
-    public void autoLookNewTarget(Organism org) {
+    public void autoLookTarget(Organism org) {
         if (!org.isConsuming()) {
             if (org.isSearchFood()) {
                 findNearestValidFood(org);
@@ -250,8 +250,6 @@ public class OrganismManager implements Commons {
             }
         }
     }
-
-    public void autoLookTarget() {
     
     public void findNearestValidFood(Organism org) {
         Resource closestPlant = null; 
