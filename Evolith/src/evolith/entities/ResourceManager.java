@@ -53,16 +53,16 @@ public class ResourceManager implements Commons {
         int newWidthWaters = (int) Math.floor( 5000/Math.sqrt(WATERS_AMOUNT) );
         int newHeightWaters = (int) Math.floor( 5000/Math.sqrt(WATERS_AMOUNT) );
         
-        for(int i=0; i<5000; i+=newWidthWaters){
-            for(int j=0; j<5000; j+=newHeightWaters){
+        for(int i=1; i<5000-newWidthWaters; i+=newWidthWaters){
+            for(int j=1; j<5000-newHeightWaters; j+=newHeightWaters){
                 int xCoord, yCoord; 
                 int boundWidth = 1;
                 int boundHeigth = 1;
                 if(j>newWidthWaters){
-                    boundWidth = j-newWidthWaters;
+                    boundWidth = j-3*newWidthWaters;
                 }
                 if(i>newHeightWaters){
-                    boundHeigth = i-newHeightWaters;
+                    boundHeigth = i-3*newHeightWaters;
                 }
                 xCoord = randomGen.nextInt(j) + boundWidth;
                 yCoord = randomGen.nextInt(i) + boundHeigth;
@@ -73,16 +73,16 @@ public class ResourceManager implements Commons {
         int newWidthPlants = (int) Math.floor( 5000/Math.sqrt(PLANTS_AMOUNT) );
         int newHeightPlants = (int) Math.floor( 5000/Math.sqrt(PLANTS_AMOUNT) );
         
-        for(int i=newWidthPlants; i<5000; i+=newWidthPlants){
-            for(int j=newHeightPlants; j<5000; j+=newHeightPlants){
+        for(int i=1; i<5000-newWidthPlants; i+=newWidthPlants){
+            for(int j=1; j<5000-newHeightPlants; j+=newHeightPlants){
                 int xCoord, yCoord; 
                 int boundWidth = 1;
                 int boundHeigth = 1;
                 if(j>newWidthPlants){
-                    boundWidth = j-newWidthPlants;
+                    boundWidth = j-3*newWidthPlants;
                 }
                 if(i>newHeightPlants){
-                    boundHeigth = i-newHeightPlants;
+                    boundHeigth = i-3*newHeightPlants;
                 }
                 xCoord = randomGen.nextInt(j) + boundWidth;
                 yCoord = randomGen.nextInt(i) + boundHeigth;
