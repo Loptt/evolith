@@ -7,6 +7,7 @@ package evolith.menus;
 
 import evolith.game.Game;
 import evolith.engine.Assets;
+import evolith.helpers.InputReader;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -23,7 +24,7 @@ public class SetupMenu extends Menu {
     private boolean clickPlay;
     private int option;
     
-    private String speciesName = "";
+    private InputReader inputReader;
 
     public SetupMenu(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
@@ -38,6 +39,8 @@ public class SetupMenu extends Menu {
         buttons.add(new Button(215, 480, 570, 65)); // Write text
         
         option = 1;
+        
+        inputReader = new InputReader(game);
     }
     
     public boolean isActive(){
@@ -66,6 +69,8 @@ public class SetupMenu extends Menu {
     
     @Override
     public void tick() {
+        inputReader.readInput();
+        
         if(active){
             for(int i=0; i<buttons.size(); i++){
                 if(buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())){
@@ -111,6 +116,10 @@ public class SetupMenu extends Menu {
 
         for (int i = 0; i < buttons.size(); i++) {
             buttons.get(i).render(g);
+        }
+        
+        if (inputReader.getSpeciesName() != null && inputReader.getSpeciesName().length() > 0) {
+            g.drawString(inputReader.getSpeciesName().toUpperCase(), 215, 525);
         }
     }
 }

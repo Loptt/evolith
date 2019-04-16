@@ -43,6 +43,10 @@ public class Game implements Runnable, Commons {
     
     private MainMenu mainMenu;
     private ButtonBar buttonBar;
+<<<<<<< HEAD:Evolith/src/evolith/Game.java
+
+=======
+>>>>>>> af825855eb78d81bc6698d4af5d46f7ea4419521:Time/src/time/Game.java
     
     /**
     * to create title, width and height and set the game is still not running
@@ -100,7 +104,10 @@ public class Game implements Runnable, Commons {
         Assets.init();
         buttonBar = new ButtonBar(10,10,505,99,this);
 
+<<<<<<< HEAD:Evolith/src/evolith/Game.java
+=======
         
+>>>>>>> af825855eb78d81bc6698d4af5d46f7ea4419521:Time/src/time/Game.java
         background = new Background(Assets.background , 3200, 3200, width, height);
         
         organisms = new Organisms(this);

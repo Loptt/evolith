@@ -1,5 +1,6 @@
 package evolith.game;
 
+import evolith.helpers.Circle;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -16,6 +17,9 @@ public abstract class Item {
     protected int y; //y position
     protected int width;
     protected int height;
+    protected int qty;
+    
+    protected Circle radius;
 
     /**
      * To create a new item
@@ -30,6 +34,9 @@ public abstract class Item {
         this.height = height;
         this.x = x;
         this.y = y;
+        this.qty = 100;
+        
+        radius = new Circle(x + width/2, y + height /2, width/2);
     }
 
     /**
@@ -49,6 +56,10 @@ public abstract class Item {
      */
     public boolean intersects(Item item) {
         return getPerimeter().intersects(item.getPerimeter());
+    }
+    
+    public boolean intersects(Rectangle r) {
+        return getPerimeter().intersects(r);
     }
     
     public boolean hasMouse(int x, int y) {
@@ -125,6 +136,18 @@ public abstract class Item {
      */
     public void setWidth(int width) {
         this.width = width;
+    }
+
+    public Circle getRadius() {
+        return radius;
+    }
+
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
     }
 
     /**

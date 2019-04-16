@@ -14,6 +14,7 @@ public class Assets {
 
     public static BufferedImage background; //background image
     public static BufferedImage plant; //plant image
+    public static BufferedImage water;
 
     public static BufferedImage start; // start image
     public static BufferedImage startInstructions; // start menu instruction image
@@ -28,10 +29,11 @@ public class Assets {
     public static BufferedImage playOn;
     public static BufferedImage playOff;
     public static BufferedImage hoverImage;
-    
-    
+
     public static BufferedImage organismPanel_menu;
     public static BufferedImage organismPanel_close;
+
+    public static BufferedImage minimapFrame;
     
     public static ArrayList<BufferedImage> orgColors;
     
@@ -44,18 +46,19 @@ public class Assets {
     public static void init() {
         background = ImageLoader.loadImage("/images/backgrounds/bigbackground.png");
         plant = ImageLoader.loadImage("/images/playgraphics/food.png");
+        water = ImageLoader.loadImage("/images/playgraphics/water.png");
 
-        start = ImageLoader.loadImage("/images/mainmenu/start.png");
-        startInstructions = ImageLoader.loadImage("/images/mainmenu/start instructions.png");
-        startPlay = ImageLoader.loadImage("/images/mainmenu/start play.png");
+        start = ImageLoader.loadImage("/images/mainmenu/mainmenu.png");
+        startInstructions = ImageLoader.loadImage("/images/mainmenu/maininstructions.png");
+        startPlay = ImageLoader.loadImage("/images/mainmenu/mainplay.png");
         setupSpeciesBackground = ImageLoader.loadImage("/images/setupmenu/setup_species_background.png");
         
         bluegreenOption = ImageLoader.loadImage("/images/setupmenu/blueone.png");
         orangeOption = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
         pinkOption = ImageLoader.loadImage("/images/setupmenu/pinkone.png");
         purpleOption = ImageLoader.loadImage("/images/setupmenu/purpleone.png");
-        playOn = ImageLoader.loadImage("/images/mainmenu/playon.png");
-        playOff = ImageLoader.loadImage("/images/mainmenu/playoff.png");
+        playOn = ImageLoader.loadImage("/images/mainmenu/onplay.png");
+        playOff = ImageLoader.loadImage("/images/mainmenu/offplay.png");
         hoverImage = ImageLoader.loadImage("/images/playgraphics/hover_bar.png");
         
         organismPanel_close = ImageLoader.loadImage("/images/panel/closedetails.png");
@@ -63,7 +66,7 @@ public class Assets {
         
         //Top Bar in 0,0
         ArrayList<BufferedImage> a1 = new ArrayList<BufferedImage>();
-        a1.add(ImageLoader.loadImage("/images/buttonbar/topbar.png"));
+        a1.add(ImageLoader.loadImage("/images/buttonbar/buttonbarnew.png"));
         buttonBar.add(a1);
         //Water buttons in 1,0 (off) and 1,1 (on)
         ArrayList<BufferedImage> a2 = new ArrayList<BufferedImage>();
@@ -88,5 +91,6 @@ public class Assets {
         orgColors.add(ImageLoader.loadImage("/images/organisms/bluegreenorganism.png"));
         orgColors.add(ImageLoader.loadImage("/images/organisms/orangeorganism.png"));
 
+        minimapFrame = ImageLoader.loadImage("/images/playgraphics/minimap_frame.png");
     }
 }

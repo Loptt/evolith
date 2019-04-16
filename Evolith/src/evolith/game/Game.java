@@ -6,8 +6,10 @@ import evolith.menus.SetupMenu;
 import evolith.menus.ButtonBarMenu;
 import evolith.helpers.Clock;
 import evolith.helpers.Commons;
-import evolith.entities.*;
+import evolith.entities.Resources;
+import evolith.entities.Organisms;
 import evolith.engine.*;
+import evolith.helpers.InputReader;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -35,24 +37,31 @@ public class Game implements Runnable, Commons {
 
     private KeyManager keyManager;              // manages the keyboard 
     private MouseManager mouseManager;          // manages the mouse
+    private InputKeyboard inputKeyboard;        // manages the input of the keyboard of the setup menu
 
     private Background background;              // background of the game engine
     private Camera camera;                      // camera of the game engine
 
     private Organisms organisms;                //organisms in the game
-    private Plants plants;                      // resources of plants in the game
+    //private Plants plants;                      // resources of plants in the game
+    //private Waters waters;
+    private Resources resources;
 
     private enum States {
-        MainMenu, Paused, GameOver, Play, Instructions, Setup
+        MainMenu, Paused, GameOver, Play, Instructions, SetupMenu
     } // status of the flow of the game once running
     private States state;
 
     private MainMenu mainMenu;                  // main menu
     private ButtonBarMenu buttonBar;
-    private SetupMenu setup;
+    private SetupMenu setupMenu;
 
     private Clock clock;                        // the time of the game
+    
+    private InputReader inputReader;
 
+    private Minimap minimap;
+    
     /**
      * to create title, width and height and set the game is still not running
      *
@@ -69,6 +78,8 @@ public class Game implements Runnable, Commons {
         mouseManager = new MouseManager();
         camera = new Camera(INITIAL_POINT - width / 2, INITIAL_POINT - height / 2, width, height, this);
         mainMenu = new MainMenu(0, 0, width, height, this);
+        inputKeyboard = new InputKeyboard();
+        minimap = new Minimap(this);
 
         state = States.MainMenu;
     }
@@ -113,12 +124,14 @@ public class Game implements Runnable, Commons {
 
         background = new Background(Assets.background, 5000, 5000, width, height);
         buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
-        setup = new SetupMenu(0, 0, width, height, this);
+        setupMenu = new SetupMenu(0, 0, width, height, this);
 
         organisms = new Organisms(this);
-        plants = new Plants(this);
-
+        //plants = new Plants(this);
+        //waters = new Waters(this);
+        resources = new Resources(this);
         display.getJframe().addKeyListener(keyManager);
+        display.getJframe().addKeyListener(inputKeyboard);
         display.getJframe().addMouseListener(mouseManager);
         display.getJframe().addMouseMotionListener(mouseManager);
         display.getCanvas().addMouseListener(mouseManager);
@@ -136,7 +149,7 @@ public class Game implements Runnable, Commons {
             case MainMenu:
                 mainMenuTick();
                 break;
-            case Setup:
+            case SetupMenu:
                 setupMenuTick();
                 break;
             case Play:
@@ -154,7 +167,7 @@ public class Game implements Runnable, Commons {
         mainMenu.setActive(true);
         if (mainMenu.isClickPlay()) {
             mainMenu.setActive(false);
-            state = States.Setup;
+            state = States.SetupMenu;
         }
     }
     
@@ -162,13 +175,13 @@ public class Game implements Runnable, Commons {
      * Tick the setup menu
      */
     private void setupMenuTick() {
-        setup.tick();
-        setup.setActive(true);
-        keyManager.tick();
+        setupMenu.tick();
+        setupMenu.setActive(true);
+        inputKeyboard.tick();
 
-        if (setup.isClickPlay()) {
-            setup.setActive(false);
-            organisms.setSkin(setup.getOption());
+        if (setupMenu.isClickPlay()) {
+            setupMenu.setActive(false);
+            organisms.setSkin(setupMenu.getOption());
             state = States.Play;
         }
     }
@@ -180,10 +193,12 @@ public class Game implements Runnable, Commons {
         keyManager.tick();
         camera.tick();
         organisms.tick();
-        plants.tick();
+        //plants.tick();
+        resources.tick();
         buttonBar.tick();
         
         manageMouse();
+        checkEntitiesInteraction();
     }
     
     /**
@@ -207,15 +222,18 @@ public class Game implements Runnable, Commons {
             } else {
                 //If not in the buttonbar, check if a plant has been clicked
                 //TODO: When more entities have been added, check for those entities aswell. 
-                Point clickedPlant = plants.containsPlant(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
-                
+                //Point clickedPlant = plants.containsPlant(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+                Item clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                 //If the x value is greater than 0, then a plant has been clicked
-                if (clickedPlant.x >= 0) {
-                    //In this case, move the swarm to the plant position, surrounding it
-                    organisms.moveSwarm(clickedPlant.x, clickedPlant.y, 1);
+                if (clickedResource != null) {
+                    
+                    //In this case, move the selected swarm to the selected resource
+                    //organisms.moveSwarmToPoint(clickedResource.getX(), clickedResource.getY(), 1);
+                    organisms.setResource(clickedResource);
                 } else {
                     //Else move the swarm to desired position
                     organisms.moveSwarm(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+                    organisms.setResource(null);
                     //organisms.applyMouse(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                 }
                 
@@ -225,6 +243,11 @@ public class Game implements Runnable, Commons {
         } else {
             //Check for hover
         }
+    }
+    
+    public void checkEntitiesInteraction() {
+        organisms.checkOnResource(resources);
+        organisms.checkIfTargetValid(resources);
     }
 
     /**
@@ -244,13 +267,15 @@ public class Game implements Runnable, Commons {
                 case MainMenu:
                     mainMenu.render(g);
                     break;
-                case Setup:
-                    setup.render(g);
+                case SetupMenu:
+                    setupMenu.render(g);
                     break;
                 case Play:
                     g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
-                    plants.render(g);
+                    //plants.render(g);
+                    resources.render(g);
                     organisms.render(g);
+                    minimap.render(g);
                     buttonBar.render(g);
                     break;
             }
@@ -331,6 +356,42 @@ public class Game implements Runnable, Commons {
         return background;
     }
 
+    /**
+     * to get input keyboard
+     *
+     * @return keyManager
+     */
+    public InputKeyboard getInputKeyboard() {
+        return inputKeyboard;
+    } 
+
+    /**
+     * to get input of the keyboard in the setup menu
+     *
+     * @return keyManager
+     */
+    public InputReader getInputReader() {
+        return inputReader;
+    }
+    
+    /**
+     * to get the skin of the organism
+     *
+     * @return organismsSkin
+     */
+    public int getOrganismsSkin() {
+        return organisms.getSkin();
+    }
+    
+    /**
+     * to get the organisms
+     *
+     * @return organisms
+     */
+    public Organisms getOrganisms() {
+        return organisms;
+    }
+    
     /**
      * start game
      */

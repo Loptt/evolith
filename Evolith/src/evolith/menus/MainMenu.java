@@ -33,7 +33,6 @@ public class MainMenu extends Menu implements Commons {
 
         buttons.add(new Button(BUTTON_PLAY_X, BUTTON_PLAY_Y, BUTTON_PLAY_WIDTH, BUTTON_PLAY_HEIGHT)); // Play button
         buttons.add(new Button(BUTTON_INSTRUCTIONS_X, BUTTON_INSTRUCTIONS_Y, BUTTON_INSTRUCTIONS_WIDTH, BUTTON_INSTRUCTIONS_HEIGHT)); // Instructions button
-
     }
 
     /**

@@ -22,9 +22,9 @@ public class ButtonBarMenu extends Menu {
         
         background = Assets.buttonBar.get(0).get(0);
         
-        buttons.add(new Button(34,35,141,49, Assets.buttonBar.get(1).get(1), Assets.buttonBar.get(1).get(0))); // Water button in pos 1
-        buttons.add(new Button(191,35,141,49, Assets.buttonBar.get(2).get(1), Assets.buttonBar.get(2).get(0))); // Food  button in pos 2
-        buttons.add(new Button(348,35,141,49, Assets.buttonBar.get(3).get(1), Assets.buttonBar.get(3).get(0))); // Fight  button in pos 3
+        buttons.add(new Button(34,31,141,55, Assets.buttonBar.get(1).get(1), Assets.buttonBar.get(1).get(0))); // Water button in pos 1
+        buttons.add(new Button(191,31,141,55, Assets.buttonBar.get(2).get(1), Assets.buttonBar.get(2).get(0))); // Food  button in pos 2
+        buttons.add(new Button(348,31,141,55, Assets.buttonBar.get(3).get(1), Assets.buttonBar.get(3).get(0))); // Fight  button in pos 3
 
     }
     // organism's behaviour when Water button is active
