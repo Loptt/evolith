@@ -113,16 +113,7 @@ public class OrganismPanel extends Menu implements Commons {
                   
             }
         }
-        speed = organism.getSpeed();
-        size = organism.getSize();
-        strength = organism.getStrength();
-        survivability = organism.getSurvivability();
-        stealth = organism.getStealth();
-        maturity = organism.getMaturity();
-        generation = organism.getGeneration();
-        duration = organism.getTime().getSeconds();
-        organism.setName(inputReader.getSpeciesName());
-        name = organism.getName();
+        
     }
 
     public boolean isActive() {
