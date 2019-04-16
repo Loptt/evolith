@@ -7,8 +7,9 @@ import evolith.menus.ButtonBarMenu;
 import evolith.helpers.Clock;
 import evolith.helpers.Commons;
 import evolith.entities.ResourceManager;
-import evolith.entities.Organisms;
+import evolith.entities.OrganismManager;
 import evolith.engine.*;
+import evolith.entities.Resource;
 import evolith.helpers.InputReader;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -42,7 +43,7 @@ public class Game implements Runnable, Commons {
     private Background background;              // background of the game engine
     private Camera camera;                      // camera of the game engine
 
-    private Organisms organisms;                //organisms in the game
+    private OrganismManager organisms;                //organisms in the game
     //private Plants plants;                      // resources of plants in the game
     //private Waters waters;
     private ResourceManager resources;
@@ -126,7 +127,7 @@ public class Game implements Runnable, Commons {
         buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
         setupMenu = new SetupMenu(0, 0, width, height, this);
 
-        organisms = new Organisms(this);
+        organisms = new OrganismManager(this);
         //plants = new Plants(this);
         //waters = new Waters(this);
         resources = new ResourceManager(this);
@@ -223,7 +224,7 @@ public class Game implements Runnable, Commons {
                 //If not in the buttonbar, check if a plant has been clicked
                 //TODO: When more entities have been added, check for those entities aswell. 
                 //Point clickedPlant = plants.containsPlant(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
-                Item clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+                Resource clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                 //If the x value is greater than 0, then a plant has been clicked
                 if (clickedResource != null) {
                     
@@ -246,8 +247,8 @@ public class Game implements Runnable, Commons {
     }
     
     public void checkEntitiesInteraction() {
-        organisms.checkOnResource(resources);
-        organisms.checkIfTargetValid(resources);
+        //organisms.checkOnResource(resources);
+        //organisms.checkIfTargetValid(resources);
     }
 
     /**
@@ -388,7 +389,7 @@ public class Game implements Runnable, Commons {
      *
      * @return organisms
      */
-    public Organisms getOrganisms() {
+    public OrganismManager getOrganisms() {
         return organisms;
     }
     

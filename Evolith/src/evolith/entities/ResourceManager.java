@@ -87,6 +87,42 @@ public class ResourceManager implements Commons {
         }
     }
     
+    public Resource containsResource(int x, int y) {
+        for (int i = 0; i < plants.size()-1; i++) {
+            if (plants.get(i).getPerimeter().contains(x, y)) {
+                return plants.get(i);
+            }
+        }
+        
+        for (int i = 0; i < waters.size()-1; i++) {
+            if (waters.get(i).getPerimeter().contains(x, y)) {
+                return waters.get(i);
+            }
+        }
+        
+        return null;
+    }
+    
+    public void tick() {
+        for (int i = 0; i < plants.size(); i++) {
+            plants.get(i).tick();
+        }
+        
+        for (int i = 0; i < waters.size(); i++) {
+            waters.get(i).tick();
+        }
+    }
+        
+    public void render(Graphics g) {
+        for (int i = 0; i < plants.size(); i++) {
+            plants.get(i).render(g);
+        }
+        
+        for (int i = 0; i < waters.size(); i++) {
+            waters.get(i).render(g);
+        }
+    }
+    
     /*
     public boolean checkPlantsRadius(Circle c, int actualIndex) {
         for (int i = 0; i <= plants.size()-1; i++) {
@@ -99,6 +135,7 @@ public class ResourceManager implements Commons {
         
         return false;
     }
+    
     public Item containsResource(int x, int y) {
         for (int i = 0; i < plants.size()-1; i++) {
             if (plants.get(i).getPerimeter().contains(x, y)) {

@@ -6,7 +6,6 @@
 package evolith.entities;
 
 import evolith.engine.Assets;
-import evolith.entities.Organisms.Organism;
 import evolith.game.Game;
 import evolith.game.Item;
 import evolith.helpers.SwarmMovement;
@@ -29,6 +28,7 @@ public class Resource extends Item {
     private int parasiteAmount;
     private ArrayList<Point> positions;
     private HashMap<Organism, Integer> map;
+
     public enum ResourceType {Plant, Water};
     private ResourceType type;
     
@@ -69,6 +69,10 @@ public class Resource extends Item {
         } else {
             System.out.println("ERROR, ORGANISM NOT IN RESOURCE");
         }
+    }
+    
+    boolean hasParasite(Organism org) {
+        return map.containsKey(org);
     }
 
     public int getQuantity() {
