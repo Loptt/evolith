@@ -56,8 +56,16 @@ public class ResourceManager implements Commons {
         for(int i=0; i<5000; i+=newWidthWaters){
             for(int j=0; j<5000; j+=newHeightWaters){
                 int xCoord, yCoord; 
+                int boundWidth = 0;
+                int boundHeigth = 0;
+                if(j>newWidthWaters){
+                    boundWidth = j-newWidthWaters;
+                }
+                if(i>newHeightWaters){
+                    boundHeigth = i-newHeightWaters;
+                }
                 xCoord = randomGen.nextInt(j) + j-newWidthWaters;
-                yCoord = randomGen.nextInt(i) + i-newWidthWaters;
+                yCoord = randomGen.nextInt(i) + i-newHeightWaters;
                 waters.add(new Resource(xCoord, yCoord, WATER_SIZE, WATER_SIZE, game, Resource.ResourceType.Water));
             }
         }
@@ -68,6 +76,14 @@ public class ResourceManager implements Commons {
         for(int i=0; i<5000; i+=newWidthPlants){
             for(int j=0; j<5000; j+=newHeightPlants){
                 int xCoord, yCoord; 
+                int boundWidth = 0;
+                int boundHeigth = 0;
+                if(j>newWidthPlants){
+                    boundWidth = j-newWidthPlants;
+                }
+                if(i>newHeightPlants){
+                    boundHeigth = i-newHeightPlants;
+                }
                 xCoord = randomGen.nextInt(j) + j-newWidthPlants;
                 yCoord = randomGen.nextInt(i) + i-newHeightPlants;
                 plants.add(new Resource(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE, game, Resource.ResourceType.Plant));
