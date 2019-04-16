@@ -153,11 +153,9 @@ public class InputReader {
             }
         }
             
-            if (game.getInputKeyboard().delete && speciesName.length() != 0 && speciesName != null) {
-                if (speciesName.length() > 0) {
+            if (game.getInputKeyboard().delete && speciesName.length() > 0 && speciesName != null) {
                     speciesName = speciesName.substring(0, speciesName.length() - 1);
                     System.out.println("Input is deleted");
-                }
             }
     }
 }

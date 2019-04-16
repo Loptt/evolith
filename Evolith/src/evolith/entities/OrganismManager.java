@@ -2,15 +2,11 @@ package evolith.entities;
 
 import evolith.game.Game;
 import evolith.menus.Hover;
-import evolith.game.Item;
 import evolith.helpers.SwarmMovement;
-import evolith.helpers.Time;
-import evolith.engine.Assets;
 import evolith.helpers.Commons;
 
 import evolith.menus.OrganismPanel;
 
-import java.awt.Color;
 
 import java.awt.Graphics;
 import java.awt.Point;
@@ -45,7 +41,6 @@ public class OrganismManager implements Commons {
     private Point centralPoint;
     private Point targetPoint;
     
-    private int panelNum;
     private int idCounter;
 
     /**
@@ -54,7 +49,6 @@ public class OrganismManager implements Commons {
      * @param game
      */
     public OrganismManager(Game game) {
-        panelNum = 0;
         this.game = game;
         organisms = new ArrayList<>();
         amount = 1;
@@ -73,7 +67,7 @@ public class OrganismManager implements Commons {
         targetPoint = new Point(INITIAL_POINT, INITIAL_POINT);
         currentPoss = SwarmMovement.getPositions(500, 500, 50, 1);
     }
-
+    
     /**
      * updates all organisms
      */
@@ -89,6 +83,10 @@ public class OrganismManager implements Commons {
         checkPanel();
     }
 
+    public OrganismPanel getPanel() {
+        return panel;
+    }
+    
     /**
      * Perform action on mouse clicked
      *
@@ -172,8 +170,7 @@ public class OrganismManager implements Commons {
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
                 if (game.getMouseManager().isLeft()) {
-                    panelNum = i;
-                    panel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, game, organisms.get(panelNum));
+                    panel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, game, organisms.get(i));
                     game.getMouseManager().setLeft(false);
                 }
             }

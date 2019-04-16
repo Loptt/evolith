@@ -33,7 +33,7 @@ public class OrganismPanel extends Menu implements Commons {
     private int stealth;
     private int generation;
     private double duration;
-    private Organism organism;
+    private Organism org;
     
     private String fontPath;
     private String name;
@@ -64,8 +64,7 @@ public class OrganismPanel extends Menu implements Commons {
     public OrganismPanel(int x, int y, int width, int height, Game game, Organism org)
     {
         super(x, y, width, height, game);
-        this.organism = org;
-        
+        this.org = org;
         this.speed = org.getSpeed();
         this.size = org.getSize();
         this.strength = org.getStrength();
@@ -90,10 +89,8 @@ public class OrganismPanel extends Menu implements Commons {
     
     @Override
     public void tick() {
-        
-        inputReader.readInput();
+        inputReader.readInput();        
         if (active) {
-            
             for (int i = 0; i < buttons.size(); i++) {
                 if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
                     System.out.println("button is here");
@@ -110,8 +107,21 @@ public class OrganismPanel extends Menu implements Commons {
                 if (buttons.get(0).isPressed()) {
                     active = false;     
                 }
-                  
+                if (buttons.get(1).isPressed()) {
+                    clickEdit = true;   
+                }
+                    
             }
+        this.speed = org.getSpeed();
+        this.size = org.getSize();
+        this.strength = org.getStrength();
+        this.survivability = org.getSurvivability();
+        this.stealth = org.getStealth();
+        this.maturity = org.getMaturity();
+        this.generation = org.getGeneration();
+        this.duration = org.getTime().getSeconds();
+       // this.org.setName(inputReader.getSpeciesName());
+        this.name = org.getName();
         }
         
     }

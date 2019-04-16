@@ -192,12 +192,14 @@ public class Game implements Runnable, Commons {
      * Tick the main game
      */
     private void playTick() {
-        keyManager.tick();
         camera.tick();
         organisms.tick();
         resources.tick();
         buttonBar.tick();
-        inputKeyboard.tick();
+        
+        if(organisms.getPanel().isActive())
+            inputKeyboard.tick();
+        else keyManager.tick();
         
         manageMouse();
         checkEntitiesInteraction();
