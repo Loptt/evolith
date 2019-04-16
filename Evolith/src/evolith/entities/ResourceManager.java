@@ -46,6 +46,35 @@ public class ResourceManager implements Commons {
         generateResources();
     }
     
+    
+    public void generateResources(boolean a){//firma momentanea en lo que borro la otra
+        Random randomGen = new Random();
+        
+        int newWidthWaters = (int) Math.floor( 5000/Math.sqrt(WATERS_AMOUNT) );
+        int newHeightWaters = (int) Math.floor( 5000/Math.sqrt(WATERS_AMOUNT) );
+        
+        for(int i=0; i<5000; i+=newWidthWaters){
+            for(int j=0; j<5000; j+=newHeightWaters){
+                int xCoord, yCoord; 
+                xCoord = randomGen.nextInt(j) + j-newWidthWaters;
+                yCoord = randomGen.nextInt(i) + i-newWidthWaters;
+                waters.add(new Resource(xCoord, yCoord, WATER_SIZE, WATER_SIZE, game, Resource.ResourceType.Water));
+            }
+        }
+        
+        int newWidthPlants = (int) Math.floor( 5000/Math.sqrt(PLANTS_AMOUNT) );
+        int newHeightPlants = (int) Math.floor( 5000/Math.sqrt(PLANTS_AMOUNT) );
+        
+        for(int i=0; i<5000; i+=newWidthPlants){
+            for(int j=0; j<5000; j+=newHeightPlants){
+                int xCoord, yCoord; 
+                xCoord = randomGen.nextInt(j) + j-newWidthPlants;
+                yCoord = randomGen.nextInt(i) + i-newHeightPlants;
+                plants.add(new Resource(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE, game, Resource.ResourceType.Plant));
+            }
+        }
+    }
+    
     public void generateResources() {
         Random randomGen = new Random();
 
