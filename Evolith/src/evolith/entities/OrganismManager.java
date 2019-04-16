@@ -178,12 +178,14 @@ public class OrganismManager implements Commons {
                 }
             }
         }
+        /*
         if(panel.isActive())
             {
                 panel.update(organisms.get(panelNum));
                 organisms.get(panelNum).setName(panel.getName());
                 System.out.println("The name is " + organisms.get(panelNum).getName());
             }
+        */
         panel.tick();
     }
 
