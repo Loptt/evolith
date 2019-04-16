@@ -93,7 +93,7 @@ public class Game implements Runnable, Commons {
     public void run() {
         init();
         
-        int fps = 60; //Current game requirements demand 60 fps
+        int fps = 60;//Current game requirements demand 60 fps
         double timeTick = 1000000000 / fps;
         double delta = 0;
         long now;
