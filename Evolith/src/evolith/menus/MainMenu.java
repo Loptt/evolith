@@ -2,6 +2,7 @@ package evolith.menus;
 
 import evolith.game.Game;
 import evolith.engine.Assets;
+import evolith.helpers.Commons;
 import java.awt.Graphics;
 
 /**
@@ -11,7 +12,7 @@ import java.awt.Graphics;
  * @author Víctor Villarreal
  * @author Moisés Fernández
  */
-public class MainMenu extends Menu {
+public class MainMenu extends Menu implements Commons {
 
     private boolean active;
     private boolean clickPlay;
@@ -30,9 +31,8 @@ public class MainMenu extends Menu {
         active = true;
         clickPlay = false;
 
-        buttons.add(new Button(340, 390, 350, 74)); // Play button
-        buttons.add(new Button(340, 500, 350, 74)); // Instructions button
-
+        buttons.add(new Button(BUTTON_PLAY_X, BUTTON_PLAY_Y, BUTTON_PLAY_WIDTH, BUTTON_PLAY_HEIGHT)); // Play button
+        buttons.add(new Button(BUTTON_INSTRUCTIONS_X, BUTTON_INSTRUCTIONS_Y, BUTTON_INSTRUCTIONS_WIDTH, BUTTON_INSTRUCTIONS_HEIGHT)); // Instructions button
     }
 
     /**

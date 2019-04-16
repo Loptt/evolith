@@ -15,10 +15,17 @@ public interface Commons {
     public static final int MAX_ORGANISM_AMOUNT = 256;      // maximum organism amount
     public static final int PLANT_SIZE = 100;               // plant quanitity per unit
     public static final int FRAME_RATE = 60;                // frame rate
-    public static final int PLANTS_AMOUNT = 150;              // number of plants
+
     public static final int MAX_THIRST = 100;               // maximum water level of organism
     public static final int MAX_HUNGER = 100;               // maximum hunger level of organism
     public static final int MAX_MATURITY = 30;              // maximum maturity level of organism
+    public static final int MAX_SPEED = 100;              // maximum maturity level of organism
+    public static final int MAX_SIZE = 100;              // maximum maturity level of organism
+    public static final int MAX_STRENGTH = 100;              // maximum maturity level of organism
+    public static final int MAX_SURVIVABILITY = 100;              // maximum maturity level of organism
+    public static final int MAX_STEALTH = 100;              // maximum maturity level of organism
+    
+    public static final int PLANTS_AMOUNT = 150;              // number of plants
     public static final int WATERS_AMOUNT = 150;
     public static final int WATER_SIZE = 100;
     public static final int SWARM_SEPARATION = ORGANISM_SIZE+10;
@@ -28,6 +35,25 @@ public interface Commons {
     public static final int SECONDS_PER_THIRST = 3;
     public static final int SECONDS_PER_MATURITY = 1;
     
+    public static final int BUTTON_PLAY_X = 340;
+    public static final int BUTTON_PLAY_Y = 390;
+      
+    public static final int PANEL_X = 700;
+    public static final int PANEL_Y = 100;
+    public static final int PANEL_WIDTH = 245;
+    public static final int PANEL_HEIGHT = 350;
+    public static final int BUTTON_CLOSE_DIMENSION = 40;
+    
+    
+    public static final int BUTTON_INSTRUCTIONS_Y = 530;
+    public static final int BUTTON_INSTRUCTIONS_X = 340;
+    
+    public static final int BUTTON_PLAY_WIDTH = 350;
+    public static final int BUTTON_PLAY_HEIGHT = 110;
+    
+    public static final int BUTTON_INSTRUCTIONS_WIDTH = 350;
+    public static final int BUTTON_INSTRUCTIONS_HEIGHT = 110;
+
     public static final int MINIMAP_X = 810;
     public static final int MINIMAP_Y = 20;
             
