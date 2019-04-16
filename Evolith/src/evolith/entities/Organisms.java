@@ -11,7 +11,6 @@ import evolith.menus.OrganismPanel;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 /**
  *
@@ -148,22 +147,21 @@ public class Organisms implements Commons {
     private void checkPanel() {
 
         for (int i = 0; i < amount; i++) {
-
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
 
                 if (game.getMouseManager().isLeft()) {
-
                     int speed = organisms.get(i).getSpeed();
                     int size = organisms.get(i).getSize();
                     int strength = organisms.get(i).getStrength();
-                    int hunger = organisms.get(i).getHunger();
-                    int thirst = organisms.get(i).getThirst();
+                    int stealth = organisms.get(i).getStealth();
+                    int survivability = organisms.get(i).getSurvivability();
                     int maturity = organisms.get(i).getMaturity();
                     int generation = organisms.get(i).getGeneration();
                     double duration = organisms.get(i).getTime().getSeconds();
-
-                    panel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, speed, size, strength, hunger, thirst, maturity, generation, duration, game);
+                    String name = organisms.get(i).getName();
+                    
+                    panel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, speed, size, strength, survivability, stealth, maturity, generation, duration, name, game);
                     game.getMouseManager().setLeft(false);
                 }
             }
@@ -171,8 +169,8 @@ public class Organisms implements Commons {
                 panel.setSpeed(organisms.get(i).getSpeed());
                 panel.setSize(organisms.get(i).getSize());
                 panel.setStrength(organisms.get(i).getStrength());
-                panel.setHunger(organisms.get(i).getHunger());
-                panel.setThirst(organisms.get(i).getThirst());
+                panel.setStealth(organisms.get(i).getStealth());
+                panel.setSurvivability(organisms.get(i).getSurvivability());
                 panel.setMaturity(organisms.get(i).getMaturity());
                 panel.setGeneration(organisms.get(i).getGeneration());
                 panel.setDuration(organisms.get(i).getTime().getSeconds());
@@ -314,6 +312,8 @@ public class Organisms implements Commons {
 
         private boolean needOffspring;
         private boolean dead;
+        
+        private String name;
 
         /**
          * Constructor of the organism
@@ -334,8 +334,8 @@ public class Organisms implements Commons {
             size = 100;
             speed = 20;
             strength = 20;
-            stealth = 1;
-            survivability = 1;
+            stealth = 10;
+            survivability = 10;
 
             life = 100;
             hunger = 100;
@@ -351,8 +351,17 @@ public class Organisms implements Commons {
             dead = false;
 
             time = new Time();
+            name = "";
         }
 
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+        
         /**
          * To tick the organism
          */

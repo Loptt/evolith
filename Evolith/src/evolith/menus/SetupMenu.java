@@ -15,7 +15,7 @@ import java.awt.Graphics;
  *
  * @author moisesfernandez
  */
-public class SetupMenu extends Menu{
+public class SetupMenu extends Menu {
     private boolean active;
     /* private Button play = new Button(300,350);
     private Button instructions = new Button(300,350);

@@ -21,6 +21,8 @@ public interface Commons {
     public static final int MAX_SPEED = 100;              // maximum maturity level of organism
     public static final int MAX_SIZE = 100;              // maximum maturity level of organism
     public static final int MAX_STRENGTH = 100;              // maximum maturity level of organism
+    public static final int MAX_SURVIVABILITY = 100;              // maximum maturity level of organism
+    public static final int MAX_STEALTH = 100;              // maximum maturity level of organism
     
     
     public static final int SWARM_SEPARATION = ORGANISM_SIZE+10;
@@ -32,9 +34,7 @@ public interface Commons {
     
     public static final int BUTTON_PLAY_X = 340;
     public static final int BUTTON_PLAY_Y = 390;
-    
-    
-    
+      
     public static final int PANEL_X = 700;
     public static final int PANEL_Y = 100;
     public static final int PANEL_WIDTH = 245;
