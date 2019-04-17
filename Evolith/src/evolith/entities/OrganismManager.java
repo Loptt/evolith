@@ -165,23 +165,29 @@ public class OrganismManager implements Commons {
             }
         }
     }
+    
+    private int realMod(int a, int b){
+        return ((((a%b)+b)%b)+b)%b;
+    }
 
     private void checkPanel() {
         panel.tick();
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
                 if (game.getMouseManager().isLeft()) {
                     panel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, game, organisms.get(i));
+                    
                     panel.setIndex(panelIndex);
+                    
                     game.getMouseManager().setLeft(false);
                 }
             }    
         }
         if(panel.isSearchNext() || panel.isSearchPrev())
         {            
-            for (int i = 0; i < amount; i++){
+            for (int i = 0; i < organisms.size(); i++){
                if(panel.getOrganism() == organisms.get(i))
                {
                    panel.setIndex(i);
@@ -192,22 +198,26 @@ public class OrganismManager implements Commons {
             {    
             if(panel.isSearchNext())
              {
-                 panel.setIndex(Math.abs(panel.getIndex()+1 % amount));
+                 int auxIndex = panel.getIndex();
+                 panel.setIndex(++auxIndex % organisms.size());
+                 //panel.setIndex((panel.getIndex()+1) % organisms.size());
              }
             
             if(panel.isSearchPrev())
              {
-                 panel.setIndex(Math.abs(panel.getIndex()-1 % amount));
+                 int auxIndex = panel.getIndex();
+                 panel.setIndex(realMod(--auxIndex, organisms.size()));
              }
              
-             if(panelIndex == Math.abs(panel.getIndex() % amount) || organisms.get(Math.abs(panel.getIndex() % amount)).isNeedOffspring())
+             if(panelIndex == panel.getIndex() || organisms.get(panel.getIndex()).isNeedOffspring())
              {
-                 panel.setIndex(panel.getIndex() % amount);  
+                 
                  panelIndex = panel.getIndex();
                  panel.setOrganism(organisms.get(panelIndex));
                  panel.setSearchNext(false);
                  panel.setSearchPrev(false);
              }
+           
          }
         }
 
