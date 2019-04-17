@@ -21,10 +21,14 @@ public class Assets {
     public static BufferedImage startPlay; // start play button image
     public static BufferedImage setupSpeciesBackground; // start play button image
     
-    public static BufferedImage bluegreenOption;
-    public static BufferedImage orangeOption;
-    public static BufferedImage pinkOption;
-    public static BufferedImage purpleOption;
+    public static BufferedImage bluegreenOptionOn;
+    public static BufferedImage bluegreenOptionOff;
+    public static BufferedImage yellowOptionOn;
+    public static BufferedImage yellowOptionOff;
+    public static BufferedImage pinkOptionOn;
+    public static BufferedImage pinkOptionOff;
+    public static BufferedImage purpleOptionOn;
+    public static BufferedImage purpleOptionOff;
     
     public static BufferedImage playOn;
     public static BufferedImage playOff;
@@ -51,12 +55,20 @@ public class Assets {
         start = ImageLoader.loadImage("/images/mainmenu/mainmenu.png");
         startInstructions = ImageLoader.loadImage("/images/mainmenu/maininstructions.png");
         startPlay = ImageLoader.loadImage("/images/mainmenu/mainplay.png");
-        setupSpeciesBackground = ImageLoader.loadImage("/images/setupmenu/setup_species_background.png");
+        setupSpeciesBackground = ImageLoader.loadImage("/images/setupmenu/choosemenu.png");
         
-        bluegreenOption = ImageLoader.loadImage("/images/setupmenu/blueone.png");
-        orangeOption = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
-        pinkOption = ImageLoader.loadImage("/images/setupmenu/pinkone.png");
-        purpleOption = ImageLoader.loadImage("/images/setupmenu/purpleone.png");
+        bluegreenOptionOff = ImageLoader.loadImage("/images/setupmenu/bluecolor.png");
+        yellowOptionOff = ImageLoader.loadImage("/images/setupmenu/yellowcolor.png");
+        pinkOptionOff = ImageLoader.loadImage("/images/setupmenu/pinkcolor.png");
+        purpleOptionOff = ImageLoader.loadImage("/images/setupmenu/purplecolor.png");
+        
+        bluegreenOptionOn = ImageLoader.loadImage("/images/setupmenu/bigbluecolor.png");
+        yellowOptionOn = ImageLoader.loadImage("/images/setupmenu/bigyellowcolor.png");
+        pinkOptionOn = ImageLoader.loadImage("/images/setupmenu/bigpinkcolor.png");
+        purpleOptionOn = ImageLoader.loadImage("/images/setupmenu/bigpurplecolor.png");
+        
+        
+        
         playOn = ImageLoader.loadImage("/images/mainmenu/onplay.png");
         playOff = ImageLoader.loadImage("/images/mainmenu/offplay.png");
         hoverImage = ImageLoader.loadImage("/images/playgraphics/hover_bar.png");
