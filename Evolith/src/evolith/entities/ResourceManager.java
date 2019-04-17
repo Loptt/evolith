@@ -30,6 +30,8 @@ public class ResourceManager implements Commons {
 
     private int watersAmount;                 //max amount of waters
     private int plantsAmount;
+    private int deadWaters; 
+    private int deadPlants;
 
     /**
      * Constructor of the plants in the game
@@ -42,12 +44,67 @@ public class ResourceManager implements Commons {
         waters = new ArrayList<>();
         watersAmount = WATERS_AMOUNT;
         plantsAmount = PLANTS_AMOUNT;
-        
+        deleteResources();
+        respawnResources();
         generateResources();
     }
     
+    public void respawnResources(){
+        Random randomGen = new Random();
+        for (int i = 0; i < deadPlants; ++i) {
+            int xCoord, yCoord; 
+            xCoord = randomGen.nextInt(5000) + 1;
+            yCoord = randomGen.nextInt(5000) + 1;
+            plants.add(new Resource(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE, game, Resource.ResourceType.Plant));
+            
+            System.out.println("plants size: " + plants.size());
+            
+            for (int j = 0; j < plants.size() - 1; j++) {
+                if (plants.get(i).intersects(plants.get(j)) && i != j) {
+                    plants.remove(i);
+                    i--;
+                }
+            }
+        }
+        
+        
+        for (int i = 0; i < deadWaters; ++i) {
+            int xCoord, yCoord; 
+            xCoord = randomGen.nextInt(5000) + 1;
+            yCoord = randomGen.nextInt(5000) + 1;
+            waters.add(new Resource(xCoord, yCoord, WATER_SIZE, WATER_SIZE, game, Resource.ResourceType.Water));
+
+            System.out.println("waters size: " + waters.size());
+            
+            for (int j = 0; j < waters.size() - 1; j++) {
+                if (waters.get(i).intersects(waters.get(j)) && i != j) {
+                    waters.remove(i);
+                    i--;
+                }
+            }
+        }
+  
     
-    public void generateResources(){//firma momentanea en lo que borro la otra
+    }
+    
+    public void deleteResources(){
+        deadWaters = 0;
+        deadPlants = 0;
+        for(int i=0; i<waters.size(); i++){
+            if(waters.get(i).isOver()){
+                deadWaters++;
+                waters.remove(i);
+            }
+        }
+        for(int i=0; i<plants.size(); i++){
+            if(plants.get(i).isOver()){
+                deadPlants++;
+                plants.remove(i);
+            }
+        }
+        
+    }
+    public void generateResources(){
         Random randomGen = new Random();
         
         int newWidthWaters = (int) Math.ceil( 5000/Math.sqrt(WATERS_AMOUNT) );
@@ -125,6 +182,8 @@ public class ResourceManager implements Commons {
         for (int i = 0; i < waters.size(); i++) {
             waters.get(i).tick();
         }
+        deleteResources();
+        respawnResources();
     }
         
     public void render(Graphics g) {
