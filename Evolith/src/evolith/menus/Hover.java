@@ -19,7 +19,7 @@ public class Hover extends Item implements Commons {
     private Game game;      // runnable game
     private int food;       // food of the organism
     private int water;      //  water of the organism
-    private int life;        //maturity level of the organism
+    private double life;        //maturity level of the organism
 
     /**
      * Contructor of the hover panel of the organism
@@ -33,7 +33,7 @@ public class Hover extends Item implements Commons {
      * @param mat
      * @param game
      */
-    public Hover(int x, int y, int width, int height, int food, int water, int life, Game game) {
+    public Hover(int x, int y, int width, int height, int food, int water, double life, Game game) {
         super(x, y, width, height);
         this.game = game;
         this.food = food;
@@ -101,7 +101,7 @@ public class Hover extends Item implements Commons {
         //g.setColor(Color.red);
         //g.fillRect(x + 24, y + 174, (int) 121 * this.mat / MAX_MATURITY, 12);
         g.setColor(Color.red);
-        g.fillRect(x + 42, y + 167, (int) 87 * this.life / MAX_HEALTH, 20);
+        g.fillRect(x + 42, y + 167, (int) (87 * this.life / MAX_HEALTH), 20);
 
         
     }

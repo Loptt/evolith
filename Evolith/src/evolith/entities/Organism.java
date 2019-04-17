@@ -40,7 +40,7 @@ public class Organism extends Item implements Commons {
     private int stealth;
     private int survivability;
 
-    private int life;           //Health points of the organism
+    private double life;           //Health points of the organism
     private int hunger;         //hunger of the organism
     private int thirst;         //thirst of the organism
     private int maturity;       //maturity level of the organsim
@@ -167,11 +167,11 @@ public class Organism extends Item implements Commons {
         return survivability;
     }
 
-    public int getLife() {
+    public double getLife() {
         return life;
     }
 
-    public void setLife(int life){
+    public void setLife(double life){
         this.life = life;
     }
     
