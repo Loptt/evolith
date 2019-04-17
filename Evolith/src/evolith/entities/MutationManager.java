@@ -39,9 +39,17 @@ public class MutationManager implements Commons{
         
         mutations.get(4).add(new Mutation("Ears",0,0,0,20,true,1,0,0,0,0,game));
         mutations.get(4).add(new Mutation("Stripes",0,0,0,40,true,2,0,0,0,0,game));
-        
-        
-    };
+
+    }
+
+    public ArrayList<ArrayList<Mutation>> getMutations() {
+        return mutations;
+    }
+
+    public void setMutations(ArrayList<ArrayList<Mutation>> mutations) {
+        this.mutations = mutations;
+    }
+    
 
     };
     

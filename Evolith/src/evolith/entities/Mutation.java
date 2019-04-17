@@ -46,7 +46,7 @@ public class Mutation extends Item implements Commons {
     
     @Override
     public void tick() {
-    
+        
     }
 
     @Override

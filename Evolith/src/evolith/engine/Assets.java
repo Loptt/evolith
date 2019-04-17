@@ -36,6 +36,7 @@ public class Assets {
     public static BufferedImage minimapFrame;
     
     public static ArrayList<BufferedImage> orgColors;
+    public static ArrayList<BufferedImage> mutations;
     
     public static ArrayList<ArrayList<BufferedImage>> buttonBar = new ArrayList<ArrayList<BufferedImage>>();
 
@@ -92,5 +93,9 @@ public class Assets {
         orgColors.add(ImageLoader.loadImage("/images/organisms/orangeorganism.png"));
 
         minimapFrame = ImageLoader.loadImage("/images/playgraphics/minimap_frame.png");
+        
+        
+        
+        
     }
 }
