@@ -124,7 +124,7 @@ public class Organism extends Item implements Commons {
 
         time = new Time();
         name = "";
-        orgMutations = new MutationManager(this);
+        orgMutations = new MutationManager(this, game);
     }
 
     public String getName() {
@@ -362,6 +362,8 @@ public class Organism extends Item implements Commons {
             g.setColor(Color.BLACK);
             g.fillOval(game.getCamera().getRelX(radius.getX() - width / 2), game.getCamera().getRelY(radius.getY() - width / 2), radius.getRadius(), radius.getRadius());
         }
+        
+        orgMutations.render(g);
         
     }
 

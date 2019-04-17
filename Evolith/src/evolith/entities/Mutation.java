@@ -22,6 +22,7 @@ public class Mutation extends Item implements Commons {
     private int strength;
     private int stealth;
     private String name;
+    private Game game;
     
     private boolean active;
     
@@ -33,7 +34,7 @@ public class Mutation extends Item implements Commons {
         super(x, y, width, height);
     }
 
-    public Mutation(String name, int strength,int speed,int health, int stealth, boolean active, int tier, int x, int y, int width, int height) {
+    public Mutation(String name, int strength,int speed,int health, int stealth, boolean active, int tier, int x, int y, int width, int height, Game game) {
         super(x, y, width, height);
         this.maxHealth = health;
         this.speed = speed;
@@ -42,6 +43,7 @@ public class Mutation extends Item implements Commons {
         this.active = active;
         this.tier = tier;
         this.name = name;
+        this.game = game;
     }
     
     @Override
@@ -116,7 +118,9 @@ public class Mutation extends Item implements Commons {
     
     @Override
     public void render(Graphics g) {
-        g.drawImage(sprite, x, y, width, height, null);
+        if(active){
+            g.drawImage(sprite, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
+        }
     }
     
 }

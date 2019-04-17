@@ -18,37 +18,38 @@ import java.util.ArrayList;
  */
 public class MutationManager implements Commons{
 
-    private ArrayList<ArrayList<Mutation>> mutations = new ArrayList<ArrayList<Mutation>>();
+    private ArrayList<ArrayList<Mutation>> mutations;
     private Organism org;
+    private Game game;
     
 
-    public MutationManager(Organism org) {
-        
+    public MutationManager(Organism org, Game game) {
+        mutations = new ArrayList<ArrayList<Mutation>>();
         this.org = org;
         
         ArrayList<Mutation> m1 = new ArrayList<Mutation>();
-        m1.add(new Mutation("Spine",20,0,0,0,false,1,org.getX(),org.getY(),org.getWidth(),org.getHeight()));
-        m1.add(new Mutation("Sting",40,-20,0,20,false,2,org.getX(),org.getY(),org.getWidth(),org.getHeight()));
-        m1.add(new Mutation("Claws",60,-20,0,0,false,3,org.getX(),org.getY(),org.getWidth(),org.getHeight()));
-        m1.add(new Mutation("Horns",80,-20,0,-40,false,4,org.getX(),org.getY(),org.getWidth(),org.getHeight()));
+        m1.add(new Mutation("Spine",20,0,0,0,true,1,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game));
+        m1.add(new Mutation("Sting",40,-20,0,20,false,2,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game));
+        m1.add(new Mutation("Claws",60,-20,0,0,false,3,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game));
+        m1.add(new Mutation("Horns",80,-20,0,-40,false,4,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game));
         mutations.add(m1);
     
         ArrayList<Mutation> m2 = new ArrayList<Mutation>();
-        m2.add(new Mutation("2 legs",0,20,0,0,false,1,org.getX(),org.getY(),org.getWidth(),org.getHeight()));
-        m2.add(new Mutation("4 legs",0,40,0,0,false,2,org.getX(),org.getY(),org.getWidth(),org.getHeight()));
-        m2.add(new Mutation("6 legs",0,60,-20,0,false,3,org.getX(),org.getY(),org.getWidth(),org.getHeight()));
-        m2.add(new Mutation("Wings",-20,80,-40,20,false,4,org.getX(),org.getY(),org.getWidth(),org.getHeight()));
+        m2.add(new Mutation("2 legs",0,20,0,0,false,1,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game));
+        m2.add(new Mutation("4 legs",0,40,0,0,false,2,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game));
+        m2.add(new Mutation("6 legs",0,60,-20,0,false,3,org.getX(),org.getY(),org.getWidth(),org.getHeight(),game));
+        m2.add(new Mutation("Wings",-20,80,-40,20,false,4,org.getX(),org.getY(),org.getWidth(),org.getHeight(),game));
         mutations.add(m2);
         
         ArrayList<Mutation> m3 = new ArrayList<Mutation>();
-        m3.add(new Mutation("Medium Size",0,0,20,0,false,1,org.getX(),org.getY(),org.getWidth(),org.getHeight()));
-        m3.add(new Mutation("Big Size",20,-20,40,-20,false,2,org.getX(),org.getY(),org.getWidth(),org.getHeight()));
-        m3.add(new Mutation("Shell",-20 ,-40,80,0,false,3,org.getX(),org.getY(),org.getWidth(),org.getHeight()));
+        m3.add(new Mutation("Medium Size",0,0,20,0,false,1,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game));
+        m3.add(new Mutation("Big Size",20,-20,40,-20,false,2,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game));
+        m3.add(new Mutation("Shell",-20 ,-40,80,0,false,3,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game));
         mutations.add(m3);
         
         ArrayList<Mutation> m4 = new ArrayList<Mutation>();
-        m4.add(new Mutation("Ears",0,0,0,20,false,1,org.getX(),org.getY(),org.getWidth(),org.getHeight()));
-        m4.add(new Mutation("Stripes",0,0,0,40,false,2,org.getX(),org.getY(),org.getWidth(),org.getHeight()));
+        m4.add(new Mutation("Ears",0,0,0,20,false,1,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game));
+        m4.add(new Mutation("Stripes",0,0,0,40,false,2,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game));
         mutations.add(m4);
         
         for(int i=0; i<4; i++){
@@ -80,7 +81,11 @@ public class MutationManager implements Commons{
     */
     
     public void render(Graphics g){
-   
+        for(int i=0; i<4; i++){
+            for(int j=0; j<mutations.get(i).size(); j++){
+                mutations.get(i).get(j).render(g);
+            }
+        }
     }
 
     }
