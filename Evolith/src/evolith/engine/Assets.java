@@ -36,7 +36,6 @@ public class Assets {
     public static BufferedImage minimapFrame;
     
     public static ArrayList<BufferedImage> orgColors;
-    public static ArrayList<BufferedImage> mutations;
     
     public static ArrayList<ArrayList<BufferedImage>> mutations = new ArrayList<ArrayList<BufferedImage>>();
     
