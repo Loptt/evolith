@@ -23,7 +23,7 @@ public class Mutation extends Item implements Commons {
     private int stealth;
     private String name;
     
-    private boolean bMutated;
+    private boolean active;
     
     private int tier;
     
@@ -35,14 +35,14 @@ public class Mutation extends Item implements Commons {
         super(x, y, width, height);
     }
 
-    public Mutation(String name, int strength,int speed,int health, int stealth, boolean bMutated, int tier, int x, int y, int width, int height, Game game) {
+    public Mutation(String name, int strength,int speed,int health, int stealth, boolean active, int tier, int x, int y, int width, int height, Game game) {
         super(x, y, width, height);
         this.game = game;
         this.health = health;
         this.speed = speed;
         this.strength = strength;
         this.stealth = stealth;
-        this.bMutated = bMutated;
+        this.active = active;
         this.tier = tier;
         this.name = name;
     }
@@ -81,12 +81,12 @@ public class Mutation extends Item implements Commons {
         return sprite;
     }
 
-    public boolean isbMutated() {
-        return bMutated;
+    public boolean isActive() {
+        return active;
     }
     
-    public void setbMutated(boolean bMutated) {
-        this.bMutated = bMutated;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public void setStrength(int strength) {

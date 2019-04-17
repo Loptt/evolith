@@ -325,6 +325,12 @@ public class Organism extends Item implements Commons {
         g.drawImage(Assets.orgColors.get(0), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
         g.setColor(Color.RED);
         g.drawOval(game.getCamera().getRelX(radius.getX() - width / 2), game.getCamera().getRelY(radius.getY() - width / 2), radius.getRadius(), radius.getRadius());
+        
+        //Warning that the organism can reproduce
+        if(isNeedOffspring()){
+            g.setColor(Color.BLACK);
+            g.fillOval(game.getCamera().getRelX(radius.getX() - width / 2), game.getCamera().getRelY(radius.getY() - width / 2), radius.getRadius(), radius.getRadius());
+        }
     }
 
     /**
