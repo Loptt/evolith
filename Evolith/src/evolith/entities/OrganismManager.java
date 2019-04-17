@@ -259,12 +259,6 @@ public class OrganismManager implements Commons {
         organisms.get(organisms.size() - 1).setSearchFood(org.isSearchFood());
         organisms.get(organisms.size() - 1).setSearchWater(org.isSearchWater());
         org.setNeedOffspring(false);
-<<<<<<< HEAD
-        
-        
-
-=======
->>>>>>> 01eb6c5a9854e5877947eb26ec35a9888cb91eae
     }
 
     /**
