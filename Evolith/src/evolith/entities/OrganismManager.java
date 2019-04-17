@@ -255,6 +255,7 @@ public class OrganismManager implements Commons {
             Resource water = findNearestValidWater(org);
             if (org.isSearchFood() && org.isSearchWater()) {
                 //Find closest of both
+                System.out.println("FINDING BOTH");
                 double distPlant = Math.sqrt(Math.pow(org.getX() - plant.getX(), 2)
                         + Math.pow(org.getY()-plant.getY(), 2));
                 double distWater = Math.sqrt(Math.pow(org.getX() - water.getX(), 2)
@@ -266,10 +267,13 @@ public class OrganismManager implements Commons {
                     org.setTarget(water);
                 }
             } else if (org.isSearchFood()) {
+                System.out.println("FINDING FOOD ONLY");
                 org.setTarget(plant);
             } else if (org.isSearchWater()) {
+                System.out.println("FINDING WATER ONLY");
                 org.setTarget(water);
             } else {
+                System.out.println("FINDING NEITHER");
                 //Not looking for anything, idle
                 org.setTarget(null);
             }
