@@ -229,6 +229,8 @@ public class Game implements Runnable, Commons {
                 organisms.emptyTargets();
                 resources.emptyParasites();
                 
+                System.out.println("TARGETS AND PARASITES CLEANED");
+                
                 Resource clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                 
                 //if clicked is not null, a resource has been clicked
@@ -294,6 +296,8 @@ public class Game implements Runnable, Commons {
                     buttonBar.render(g);
                     break;
             }
+            g.drawString(Integer.toString(camera.getAbsX(mouseManager.getX())), 30, 650);
+            g.drawString(Integer.toString(camera.getAbsY(mouseManager.getY())), 80, 650);
             bs.show();
             g.dispose();
         }

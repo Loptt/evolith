@@ -81,7 +81,7 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < amount; i++) {
             organisms.get(i).tick();
             //checkReproduce(organisms.get(i));
-            //checkKill(organisms.get(i));
+            checkKill(organisms.get(i));
         }
 
         //check the hover
@@ -231,8 +231,14 @@ public class OrganismManager implements Commons {
                 //Check if the current target is already full and target does not have organism
                 if ((target.isFull() && !target.hasParasite(org)) || target.isOver()) {
                     //System.out.println("HEHE CHANGE RESOURCE");
+                    
+                    if (target.hasParasite(org)) {
+                        target.removeParasite(org, i + 1000);
+                    }
+                    
                     org.setTarget(null);
                     org.setEating(false);
+                    org.setDrinking(false);
                     autoLookTarget(org);
                 }
             } else {
@@ -245,21 +251,40 @@ public class OrganismManager implements Commons {
     
     public void autoLookTarget(Organism org) {
         if (!org.isConsuming()) {
-            if (org.isSearchFood()) {
-                findNearestValidFood(org);
+            Resource plant = findNearestValidFood(org);
+            Resource water = findNearestValidWater(org);
+            if (org.isSearchFood() && org.isSearchWater()) {
+                //Find closest of both
+                double distPlant = Math.sqrt(Math.pow(org.getX() - plant.getX(), 2)
+                        + Math.pow(org.getY()-plant.getY(), 2));
+                double distWater = Math.sqrt(Math.pow(org.getX() - water.getX(), 2)
+                        + Math.pow(org.getY()-water.getY(), 2));
+                
+                if (distPlant < distWater) {
+                    org.setTarget(plant);
+                } else {
+                    org.setTarget(water);
+                }
+            } else if (org.isSearchFood()) {
+                org.setTarget(plant);
             } else if (org.isSearchWater()) {
-                findNearestValidWater(org);
+                org.setTarget(water);
+            } else {
+                //Not looking for anything, idle
+                org.setTarget(null);
             }
+        } else {
+            //System.out.println("AUTOLOOK WHEN CONSUMING");
         }
     }
     
-    public void findNearestValidFood(Organism org) {
+    public Resource findNearestValidFood(Organism org) {
         Resource closestPlant = null; 
         double closestDistanceBetweenPlantAndOrganism = 1000000;
         
         for(int i = 1; i < game.getResources().getPlantAmount(); i++){
             double distanceBetweenPlantAndOrganism = 7072;
-            if(!game.getResources().getPlant(i).isFull()){
+            if(!game.getResources().getPlant(i).isFull() && !game.getResources().getPlant(i).isOver()){
                 distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX()-game.getResources().getPlant(i).getX(),2)
                         + Math.pow(org.getY()-game.getResources().getPlant(i).getY(),2) );
             }
@@ -270,16 +295,16 @@ public class OrganismManager implements Commons {
             }
         }
         
-        org.setTarget(closestPlant);
+        return closestPlant;
     }
     
-    public void findNearestValidWater(Organism org) {
+    public Resource findNearestValidWater(Organism org) {
         Resource closestWater = null; 
         double closestDistanceBetweenWaterAndOrganism = 1000000;
         
         for(int i = 1; i < game.getResources().getWaterAmount(); i++){
             double distanceBetweenPlantAndOrganism = 7072;
-            if(!game.getResources().getWater(i).isFull()){
+            if(!game.getResources().getWater(i).isFull() && !game.getResources().getWater(i).isOver()){
                 distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX()-game.getResources().getWater(i).getX(),2)
                         + Math.pow(org.getY()-game.getResources().getWater(i).getY(),2) );
             }
@@ -290,7 +315,7 @@ public class OrganismManager implements Commons {
             }
         }
         
-        org.setTarget(closestWater);
+        return closestWater;
     }
 
     public void checkArrivalOnResource() {
@@ -298,16 +323,25 @@ public class OrganismManager implements Commons {
             Organism org = organisms.get(i);
             Resource target = organisms.get(i).getTarget();
             if (target != null) {
-                if (target.intersects(org) && !target.isFull() && !target.hasParasite(org)) {
-                    target.addParasite(org);
-                    //Check the resource type
-                    if (target.getType() == Resource.ResourceType.Plant) {
-                        org.setEating(true);
+                if (target.intersects(org)) {
+                    if (!target.isFull()) {
+                        if (!target.hasParasite(org)) {
+                            target.addParasite(org);
+                            //Check the resource type
+                            if (target.getType() == Resource.ResourceType.Plant) {
+                                org.setEating(true);
+                            } else {
+                                org.setDrinking(true);
+                            }
+                        } else {
+                            //System.out.println("ORG ALREADY IN TARGET");
+                            autoLookTarget(org);
+                        }
                     } else {
-                        org.setDrinking(true);
+                        //System.out.println("TARGET FULL");
+                        autoLookTarget(org);
                     }
                 }
-
             }
         }
     }
@@ -318,55 +352,19 @@ public class OrganismManager implements Commons {
             Organism org = organisms.get(i);
             Resource target = organisms.get(i).getTarget();
             if (target != null) {
-                System.out.println("Removing targets in org manager");
-                target.removeParasite(org);
+                //System.out.println("REMOVING TARGET ORGMANAGER");
+                
+                if (org.isConsuming()) {
+                    target.removeParasite(org, org.getId() + 5000);
+                    org.setEating(false);
+                    org.setDrinking(false);
+                    //System.out.println("DONE REMOVING TARGET ORGMANAGER");
+                }
                 org.setTarget(null);
             }
         }
     }
-   
-    /*
-    public void checkProximity(Plants plants) {
-        for (int i = 0; i < amount; i++) {
-            if (plants.checkRadius(organisms.get(i).getRadius(),i) && !organisms.get(i).isInPlant()) {
-                System.out.println("CLOSE");
-                organisms.get(i).setPoint(currentPoss.get(0));
-                organisms.get(i).setInPlant(true);
-                currentPoss.remove(0);
-            }
-        }
-    }*/
- /*
-    public void checkOnResource(ResourceManager resources) {
-        for (int i = 0; i < amount; i++) {
-            Item target = organisms.get(i).getTarget();
-            Organism org = organisms.get(i);
-            if (target != null) {
-                if (target.intersects(org.getPerimeter()) && !org.isEating()) {
-                    ((Plant) target).addParasite(org);
-                    org.setEating(true);
-                }
-            }
-        }
-    }
-    
-    public void setResource(Item item) {
-        for (int i = 0; i < amount; i++) {
-            organisms.get(i).setTarget(item);
-        }
-    }*/
 
- /*
-    public void checkProximity(Waters waters) {
-        for (int i = 0; i < amount; i++) {
-            if (waters.checkRadius(organisms.get(i).getRadius(),i) && !organisms.get(i).isInWater()) {
-                System.out.println("CLOSE");
-                organisms.get(i).setPoint(currentPoss.get(0));
-                organisms.get(i).setInWater(true);
-                currentPoss.remove(0);
-            }
-        }
-    }*/
     /**
      * To render the organisms
      *
@@ -469,39 +467,7 @@ public class OrganismManager implements Commons {
             organisms.get(i).setSearchWater(val);
         }
     }
-    /*
-    public void checkIfTargetValid(ResourceManager resources) {
-        for (int i = 0; i < amount; i++) {
-            if (organisms.get(i).getTarget() != null && ((Plant)organisms.get(i).getTarget()).isFull()) {
-                if (organisms.get(i).isSearchFood()) {
-                    findNearestValidFood(organisms.get(i), resources);
-                }
-            } else if (organisms.get(i).getTarget() == null) {
-                if (organisms.get(i).isSearchFood()) {
-                    findNearestValidFood(organisms.get(i), resources);
-                }
-            }
-        }
-    }
-    
-    public void findNearestValidFood(Organism org, ResourceManager resources) {
-        Plant closestWater = resources.getPlant(0); 
-        double closestDistanceBetweenWaterAndOrganism = Math.sqrt(Math.pow(org.getX()-resources.getPlant(0).getX(),2) + Math.pow(org.getY()-resources.getPlant(0).getY(),2) );
-        for(int i = 1; i<resources.getPlantsAmount(); i++){
-            double distanceBetweenPlantAndOrganism = 7072;
-            if(!resources.getPlant(i).isFull()){
-                distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX()-resources.getPlant(i).getX(),2) + Math.pow(org.getY()-resources.getPlant(i).getY(),2) );
-            }
-            
-            if(distanceBetweenPlantAndOrganism<closestDistanceBetweenPlantAndOrganism){
-                closestDistanceBetweenWaterAndOrganism = distanceBetweenPlantAndOrganism;
-                closestWater = resources.getPlant(i);
-            }
-        }
-        
-        org.setTarget(closestWater);
-    }
-     */
+
     /**
      * Single organism class
      */

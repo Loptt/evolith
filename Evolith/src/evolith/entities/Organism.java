@@ -142,8 +142,6 @@ public class Organism extends Item implements Commons {
         checkMovement();
         checkVitals();
 
-        radius.setX(x);
-        radius.setY(y);
     }
     
     
@@ -291,7 +289,7 @@ public class Organism extends Item implements Commons {
 
         //Once the organisms reaches max maturity, kill it
         if (maturity >= MAX_MATURITY) {
-            kill();
+            //kill();
         }
     }
     
@@ -312,8 +310,9 @@ public class Organism extends Item implements Commons {
      */
     public void kill() {
         dead = true;
-        if (target != null && isConsuming())
-        target.removeParasite(this);
+        if (target != null && isConsuming()) {
+            target.removeParasite(this, id);
+        }
     }
 
     /**
