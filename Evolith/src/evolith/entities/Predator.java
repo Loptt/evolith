@@ -63,6 +63,7 @@ public class Predator extends Item implements Commons {
     private boolean moving;
     private boolean inPlant;
     private boolean inWater;
+    private boolean inOrganism;
     private boolean inResource;
 
     private Organism target;
@@ -399,7 +400,15 @@ public class Predator extends Item implements Commons {
     public void setInPlant(boolean inPlant) {
         this.inPlant = inPlant;
     }
+    
+    public void setInOrganism(boolean inOrganism){
+        this.inOrganism = inOrganism;
+    }
 
+    public boolean isInOrganism(){
+        return inOrganism;
+    }
+    
     public boolean isInWater() {
         return inWater;
     }

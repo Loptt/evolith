@@ -101,7 +101,7 @@ public class Hover extends Item implements Commons {
         //g.setColor(Color.red);
         //g.fillRect(x + 24, y + 174, (int) 121 * this.mat / MAX_MATURITY, 12);
         g.setColor(Color.red);
-        g.fillRect(x + 42, y + 167, (int) 87 * this.water / MAX_THIRST, 20);
+        g.fillRect(x + 42, y + 167, (int) 87 * this.life / MAX_HEALTH, 20);
 
         
     }

@@ -86,9 +86,17 @@ public class PredatorManager implements Commons {
      * updates all organisms
      */
     public void tick() {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < amount; i++) { 
             predators.get(i).tick();
             autoLookTarget(predators.get(i));
+            for(int j=0; j<game.getOrganisms().getOrganismsAmount(); j++){
+                if(predators.get(i).intersects(game.getOrganisms().getOrganism(j))){
+                    int acutalLife = game.getOrganisms().getOrganism(j).getLife();
+                    game.getOrganisms().getOrganism(j).setLife(acutalLife-1);
+                    System.out.println("quitando vida " + "id: "+  game.getOrganisms().getOrganism(j).getId() + " vida actual: " + game.getOrganisms().getOrganism(j).getLife());
+                }           
+            }
+
             //checkReproduce(organisms.get(i));
             //checkKill(predators.get(i));
         }
@@ -136,7 +144,7 @@ public class PredatorManager implements Commons {
         Resource res = findNearestValidWater(pred);
         Organism org = findNearestOrganism(pred);
         
-        if( distanceBetweenTwoPoints(pred.getX(), pred.getY(), org.getX(), org.getY()) > 100){
+        if( distanceBetweenTwoPoints(pred.getX(), pred.getY(), org.getX(), org.getY()) > MAX_SIGHT_DISTANCE){
             pred.setTargetResource(res);
             pred.setTarget(null);
         }else{

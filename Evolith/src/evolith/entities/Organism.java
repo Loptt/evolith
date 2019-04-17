@@ -171,6 +171,10 @@ public class Organism extends Item implements Commons {
         return life;
     }
 
+    public void setLife(int life){
+        this.life = life;
+    }
+    
     public int getHunger() {
         return hunger;
     }
@@ -475,6 +479,6 @@ public class Organism extends Item implements Commons {
     public void setThirst(int thirst){
         this.thirst = thirst;
     }
-        
+     
         
 }
