@@ -471,6 +471,13 @@ public class OrganismManager implements Commons {
             organisms.get(i).setSearchWater(val);
         }
     }
+    
+    public int getOrganismsAmount() {
+        return organisms.size();
+    }
+    public Organism getOrganism(int i){
+        return organisms.get(i);
+    }
 
     /**
      * Single organism class

@@ -15,7 +15,8 @@ public class Assets {
     public static BufferedImage background; //background image
     public static BufferedImage plant; //plant image
     public static BufferedImage water;
-
+    public static BufferedImage predator;
+    
     public static BufferedImage start; // start image
     public static BufferedImage startInstructions; // start menu instruction image
     public static BufferedImage startPlay; // start play button image
@@ -47,7 +48,8 @@ public class Assets {
         background = ImageLoader.loadImage("/images/backgrounds/bigbackground.png");
         plant = ImageLoader.loadImage("/images/playgraphics/food.png");
         water = ImageLoader.loadImage("/images/playgraphics/water.png");
-
+        predator = ImageLoader.loadImage("/images/playgraphics/alien_enemy.png");
+        
         start = ImageLoader.loadImage("/images/mainmenu/mainmenu.png");
         startInstructions = ImageLoader.loadImage("/images/mainmenu/maininstructions.png");
         startPlay = ImageLoader.loadImage("/images/mainmenu/mainplay.png");

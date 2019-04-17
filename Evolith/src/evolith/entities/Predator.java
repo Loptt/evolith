@@ -26,9 +26,9 @@ public class Predator extends Item implements Commons {
 
     private Point point;
     private int maxVel;
-    private int acc;
-    private int xVel;
-    private int yVel;
+    private double acc;
+    private double xVel;
+    private double yVel;
     private Game game;
 
     private Time time;
@@ -65,8 +65,8 @@ public class Predator extends Item implements Commons {
     private boolean inWater;
     private boolean inResource;
 
-    private Resource target;
-
+    private Organism target;
+    private Resource targetResource;
     private boolean searchFood;
     private boolean searchWater;
 
@@ -93,10 +93,10 @@ public class Predator extends Item implements Commons {
         maxVel = 3;
         xVel = 0;
         yVel = 0;
-        acc = 1;
+        acc = 0.1;
 
         size = 100;
-        speed = 20;
+        speed = 10;
         strength = 20;
         stealth = 10;
         survivability = 10;
@@ -145,8 +145,6 @@ public class Predator extends Item implements Commons {
         handleTarget();
         checkMovement();
         checkVitals();  
-        
-
     }
     
     
@@ -300,15 +298,20 @@ public class Predator extends Item implements Commons {
     
     public void handleTarget() {
         //If no target, do nothing
-        if (target == null) {
-            return;
-        }
-        
-        if (!isConsuming()) {
+        if (target == null && targetResource != null) {
+            point.x = targetResource.getX();
+            point.y = targetResource.getY(); 
+        } else if(target != null && targetResource == null){
             point.x = target.getX();
             point.y = target.getY();
+        }else{
+            return; 
         }
     }
+    
+    
+
+
 
     /**
      * Kill the organism
@@ -324,7 +327,7 @@ public class Predator extends Item implements Commons {
      */
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
+        g.drawImage(Assets.predator, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
     }
 
     /**
@@ -413,11 +416,19 @@ public class Predator extends Item implements Commons {
         this.inResource = inResource;
     }
 
-    public Resource getTarget() {
+    public Organism getTarget() {
         return target;
     }
+    
+    public Resource getTargetResource(){
+        return targetResource;
+    }
+    
+    public void setTargetResource(Resource target){
+        this.targetResource = target;
+    }
 
-    public void setTarget(Resource target) {
+    public void setTarget(Organism target) {
         this.target = target;
     }
 
@@ -476,6 +487,9 @@ public class Predator extends Item implements Commons {
     public void setThirst(int thirst){
         this.thirst = thirst;
     }
+
+
+
         
         
 }
