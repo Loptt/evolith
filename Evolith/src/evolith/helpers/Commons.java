@@ -18,7 +18,7 @@ public interface Commons {
 
     public static final int MAX_THIRST = 100;               // maximum water level of organism
     public static final int MAX_HUNGER = 100;               // maximum hunger level of organism
-    public static final int MAX_MATURITY = 30;              // maximum maturity level of organism
+    public static final int MAX_MATURITY = 100;              // maximum maturity level of organism
     public static final int MAX_SPEED = 100;              // maximum maturity level of organism
     public static final int MAX_SIZE = 100;              // maximum maturity level of organism
     public static final int MAX_STRENGTH = 100;              // maximum maturity level of organism

@@ -41,6 +41,9 @@ public class Assets {
     
     public static ArrayList<ArrayList<BufferedImage>> buttonBar = new ArrayList<ArrayList<BufferedImage>>();
 
+    public static BufferedImage organismPanel_prevArrow;
+    public static BufferedImage organismPanel_nextArrow;
+    public static BufferedImage organismPanel_reproduceButton;
 
     /**
      * Initalizes the assets and links to the image folder
@@ -65,6 +68,9 @@ public class Assets {
         
         organismPanel_close = ImageLoader.loadImage("/images/panel/closedetails.png");
         organismPanel_menu = ImageLoader.loadImage("/images/panel/detailsmenu2.png");
+        organismPanel_prevArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
+        organismPanel_nextArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
+        organismPanel_reproduceButton = ImageLoader.loadImage("/images/mainmenu/onplay.png");
         
         //Top Bar in 0,0
         ArrayList<BufferedImage> a1 = new ArrayList<BufferedImage>();
