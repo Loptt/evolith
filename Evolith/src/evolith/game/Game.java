@@ -281,9 +281,9 @@ public class Game implements Runnable, Commons {
                     g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
                     //plants.render(g);
                     resources.render(g);
-                    organisms.render(g);
                     minimap.render(g);
                     buttonBar.render(g);
+                    organisms.render(g);
                     break;
             }
             bs.show();

@@ -118,5 +118,9 @@ public class Assets {
         mutations.add(m4);
 
         minimapFrame = ImageLoader.loadImage("/images/playgraphics/minimap_frame.png");
+        
+        
+        
+        
     }
 }

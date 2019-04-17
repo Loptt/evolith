@@ -386,7 +386,6 @@ public class OrganismManager implements Commons {
         //render the hover panel of an organism
         if (h != null && isHover()) {
             h.render(g);
-
         }
         panel.render(g);
     }
