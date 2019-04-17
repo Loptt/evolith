@@ -8,6 +8,7 @@ import evolith.helpers.Clock;
 import evolith.helpers.Commons;
 import evolith.entities.ResourceManager;
 import evolith.entities.OrganismManager;
+import evolith.entities.PredatorManager;
 import evolith.engine.*;
 import evolith.entities.Resource;
 import evolith.helpers.InputReader;
@@ -47,6 +48,8 @@ public class Game implements Runnable, Commons {
     //private Plants plants;                      // resources of plants in the game
     //private Waters waters;
     private ResourceManager resources;
+    
+    private PredatorManager predators;
 
     private enum States {
         MainMenu, Paused, GameOver, Play, Instructions, SetupMenu
@@ -129,6 +132,7 @@ public class Game implements Runnable, Commons {
         setupMenu = new SetupMenu(0, 0, width, height, this);
         //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
         organisms = new OrganismManager(this);
+        predators = new PredatorManager(this);
         //plants = new Plants(this);
         //waters = new Waters(this);
         resources = new ResourceManager(this);
@@ -197,6 +201,7 @@ public class Game implements Runnable, Commons {
         camera.tick();
         organisms.tick();
         resources.tick();
+        predators.tick();
         buttonBar.tick();
         inputKeyboard.tick();
         
@@ -297,6 +302,7 @@ public class Game implements Runnable, Commons {
                     g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
                     resources.render(g);
                     organisms.render(g);
+                    predators.render(g);
                     minimap.render(g);
                     buttonBar.render(g);
                     break;
@@ -412,6 +418,12 @@ public class Game implements Runnable, Commons {
      *
      * @return organisms
      */
+    
+    public PredatorManager getPredators(){
+        return predators;
+    }
+    
+    
     public OrganismManager getOrganisms() {
         return organisms;
     }
