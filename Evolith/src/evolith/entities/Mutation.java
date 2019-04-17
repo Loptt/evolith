@@ -9,6 +9,7 @@ import evolith.game.Game;
 import evolith.game.Item;
 import evolith.helpers.Commons;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 /**
  *
@@ -25,6 +26,8 @@ public class Mutation extends Item implements Commons {
     private boolean bMutated;
     
     private int tier;
+    
+    private BufferedImage sprite;
     
     private Game game;
     
@@ -49,6 +52,71 @@ public class Mutation extends Item implements Commons {
     
     }
 
+    public int getHealth() {
+        return health;
+    }
+
+    public String getName() {
+        return name;
+    }
+    
+    
+    public int getSpeed(){
+        return speed;
+    }
+    
+    public int getStrength(){
+        return strength;
+    }
+    
+    public int getStealth(){
+        return stealth;
+    }
+    
+    public int getTier(){
+        return tier;
+    }
+    
+    public BufferedImage getSprite(){
+        return sprite;
+    }
+
+    public boolean isbMutated() {
+        return bMutated;
+    }
+    
+    public void setbMutated(boolean bMutated) {
+        this.bMutated = bMutated;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
+    public void setTier(int tier) {
+        this.tier = tier;
+    }
+
+    public void setStealth(int stealth) {
+        this.stealth = stealth;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+    
+    public void setSprite(BufferedImage sprite){
+        this.sprite = sprite;
+    }
+    
     @Override
     public void render(Graphics g) {
     

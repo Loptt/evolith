@@ -37,6 +37,8 @@ public class Assets {
     
     public static ArrayList<BufferedImage> orgColors;
     
+    public static ArrayList<ArrayList<BufferedImage>> mutations = new ArrayList<ArrayList<BufferedImage>>();
+    
     public static ArrayList<ArrayList<BufferedImage>> buttonBar = new ArrayList<ArrayList<BufferedImage>>();
 
 
@@ -90,6 +92,30 @@ public class Assets {
         orgColors.add(ImageLoader.loadImage("/images/organisms/purpleorganism.png"));
         orgColors.add(ImageLoader.loadImage("/images/organisms/bluegreenorganism.png"));
         orgColors.add(ImageLoader.loadImage("/images/organisms/orangeorganism.png"));
+        
+        //Strength
+        ArrayList<BufferedImage> m1 = new ArrayList<BufferedImage>();
+        m1.add(ImageLoader.loadImage("/images/Traits/spines.png"));
+        m1.add(ImageLoader.loadImage("/images/Traits/sting.png"));
+        m1.add(ImageLoader.loadImage("/images/Traits/claws.png"));
+        m1.add(ImageLoader.loadImage("/images/Traits/horns.png"));
+        mutations.add(m1);
+        //Speed
+        ArrayList<BufferedImage> m2 = new ArrayList<BufferedImage>();
+        m2.add(ImageLoader.loadImage("/images/Traits/legs1.png"));
+        m2.add(ImageLoader.loadImage("/images/Traits/legs2.png"));
+        m2.add(ImageLoader.loadImage("/images/Traits/legs3.png"));
+        m2.add(ImageLoader.loadImage("/images/Traits/wings.png"));
+        mutations.add(m2);
+        //Health
+        ArrayList<BufferedImage> m3 = new ArrayList<BufferedImage>();
+        m3.add(ImageLoader.loadImage("/images/Traits/shell.png"));
+        mutations.add(m3);
+        //Stealth
+        ArrayList<BufferedImage> m4 = new ArrayList<BufferedImage>();
+        m4.add(ImageLoader.loadImage("/images/Traits/ears.png"));
+        m4.add(ImageLoader.loadImage("/images/Traits/stripes.png"));
+        mutations.add(m4);
 
         minimapFrame = ImageLoader.loadImage("/images/playgraphics/minimap_frame.png");
     }
