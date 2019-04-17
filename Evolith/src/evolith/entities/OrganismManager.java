@@ -11,6 +11,7 @@ import evolith.menus.OrganismPanel;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  *
@@ -172,6 +173,10 @@ public class OrganismManager implements Commons {
                 if (game.getMouseManager().isLeft()) {
                     panel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, game, organisms.get(i));
                     game.getMouseManager().setLeft(false);
+                    
+                    if (game.getInputReader().getSpeciesName() != null) {
+                        organisms.get(i).setName(game.getInputReader().getSpeciesName());
+                    }
                 }
             }
         }
@@ -379,7 +384,6 @@ public class OrganismManager implements Commons {
         //render the hover panel of an organism
         if (h != null && isHover()) {
             h.render(g);
-
         }
         panel.render(g);
     }

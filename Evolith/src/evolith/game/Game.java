@@ -198,9 +198,12 @@ public class Game implements Runnable, Commons {
         resources.tick();
         buttonBar.tick();
         
-        if(organisms.getPanel().isActive())
+        if(organisms.getPanel().isActive()) {
             inputKeyboard.tick();
-        else keyManager.tick();
+        }
+        else {
+            keyManager.tick();
+        }
         
         manageMouse();
         checkEntitiesInteraction();
