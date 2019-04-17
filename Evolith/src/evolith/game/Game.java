@@ -80,7 +80,7 @@ public class Game implements Runnable, Commons {
         camera = new Camera(INITIAL_POINT - width / 2, INITIAL_POINT - height / 2, width, height, this);
         mainMenu = new MainMenu(0, 0, width, height, this);
         inputKeyboard = new InputKeyboard();
-        minimap = new Minimap(this);
+        minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
 
         state = States.MainMenu;
         
@@ -127,7 +127,7 @@ public class Game implements Runnable, Commons {
         background = new Background(Assets.background, 5000, 5000, width, height);
         buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
         setupMenu = new SetupMenu(0, 0, width, height, this);
-
+        //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
         organisms = new OrganismManager(this);
         //plants = new Plants(this);
         //waters = new Waters(this);
@@ -221,7 +221,9 @@ public class Game implements Runnable, Commons {
             if (buttonBar.hasMouse(mouseX, mouseY)) {
                 //Process the mouse in the button bar
                 buttonBar.applyMouse(mouseX, mouseY);
-            } else {
+            } else if(minimap.hasMouse(mouseX,mouseY)){
+                minimap.applyMouse(mouseX, mouseY, camera);
+            }else{
                 //System.out.println("Removing targets in game");
                 organisms.emptyTargets();
                 Resource clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
