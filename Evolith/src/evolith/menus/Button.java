@@ -17,9 +17,19 @@ public class Button extends Item {
     private boolean active;
     private boolean hover;
     private boolean enlarge;
+    private final int enlargement = 40;
 
     private BufferedImage imgOn;
     private BufferedImage imgOff;
+    
+    public Button(int x, int y, int width, int height, BufferedImage on, BufferedImage off, boolean enlarge) {
+        super(x,y,width,height);
+        pressed = false;
+        active = false;
+        imgOn = on;
+        imgOff = off;
+        this.enlarge = enlarge;
+    }
 
     public Button(int x, int y, int width, int height, BufferedImage on, BufferedImage off) {
         super(x,y,width,height);
@@ -80,14 +90,18 @@ public class Button extends Item {
             if (active || hover) {
                 if (!enlarge) {
                     g.drawImage(imgOn, x, y, width, height, null);
+                } else if (imgOn != null) {
+                    g.drawImage(imgOn, x-enlargement/2, y-enlargement/2, width+enlargement, height+enlargement, null);
                 } else {
-                    g.drawImage(imgOff, x-15, y-15, width+30, height+30, null);
+                    g.drawImage(imgOff, x-enlargement/2, y-enlargement/2, width+enlargement, height+enlargement, null);
                 }
             } else if (pressed) {
                 if (!enlarge) {
                     g.drawImage(imgOn, x, y, width, height, null);
+                } else if (imgOn != null) {
+                    g.drawImage(imgOn, x-enlargement/2, y-enlargement/2, width+enlargement, height+enlargement, null);
                 } else {
-                    g.drawImage(imgOff, x-15, y-15, width+30, height+30, null);
+                    g.drawImage(imgOff, x-enlargement/2, y-enlargement/2, width+enlargement, height+enlargement, null);
                 }
             } else {
                 g.drawImage(imgOff, x, y, width, height, null);
