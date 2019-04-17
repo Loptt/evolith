@@ -80,7 +80,7 @@ public class Game implements Runnable, Commons {
         camera = new Camera(INITIAL_POINT - width / 2, INITIAL_POINT - height / 2, width, height, this);
         mainMenu = new MainMenu(0, 0, width, height, this);
         inputKeyboard = new InputKeyboard();
-        minimap = new Minimap(this);
+        minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
 
         state = States.MainMenu;
         
@@ -93,7 +93,7 @@ public class Game implements Runnable, Commons {
     public void run() {
         init();
         
-        int fps = 60; //Current game requirements demand 60 fps
+        int fps = 60;//Current game requirements demand 60 fps
         double timeTick = 1000000000 / fps;
         double delta = 0;
         long now;
@@ -127,7 +127,7 @@ public class Game implements Runnable, Commons {
         background = new Background(Assets.background, 5000, 5000, width, height);
         buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
         setupMenu = new SetupMenu(0, 0, width, height, this);
-
+        //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
         organisms = new OrganismManager(this);
         //plants = new Plants(this);
         //waters = new Waters(this);
@@ -184,6 +184,7 @@ public class Game implements Runnable, Commons {
         if (setupMenu.isClickPlay()) {
             setupMenu.setActive(false);
             organisms.setSkin(setupMenu.getOption());
+            System.out.println(setupMenu.getOption());
             state = States.Play;
         }
     }
@@ -223,21 +224,35 @@ public class Game implements Runnable, Commons {
             if (buttonBar.hasMouse(mouseX, mouseY)) {
                 //Process the mouse in the button bar
                 buttonBar.applyMouse(mouseX, mouseY);
-            } else {
+                organisms.setSearchFood(buttonBar.isFoodActive());
+                organisms.setSearchWater(buttonBar.isWaterActive());
+
+            } else if(minimap.hasMouse(mouseX,mouseY)){
+                minimap.applyMouse(mouseX, mouseY, camera);
+                
+
                 //System.out.println("Removing targets in game");
+
+
+            } else {
+                //If the mouse is clicked reset all
+
                 organisms.emptyTargets();
+                resources.emptyParasites();
+                                
                 Resource clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                 
-                //If the x value is greater than 0, then a plant has been clicked
+                //if clicked is not null, a resource has been clicked
                 if (clickedResource != null) {
                     
-                    //In this case, move the selected swarm to the selected resource
-                    //organisms.moveSwarmToPoint(clickedResource.getX(), clickedResource.getY(), 1);
+                    //Set the resource to the selected organisms
                     organisms.setResource(clickedResource);
                     if (clickedResource.getType() == Resource.ResourceType.Plant) {
                         organisms.setSearchFood(true);
+                        organisms.setSearchWater(false);
                     } else {
                         organisms.setSearchWater(true);
+                        organisms.setSearchFood(false);
                     }
                 } else {
                     //Else move the swarm to desired position
@@ -245,7 +260,6 @@ public class Game implements Runnable, Commons {
                     organisms.setResource(null);
                     organisms.setSearchFood(false);
                     organisms.setSearchWater(false);
-                    //organisms.applyMouse(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                 }
                 
             }
@@ -283,13 +297,14 @@ public class Game implements Runnable, Commons {
                     break;
                 case Play:
                     g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
-                    //plants.render(g);
                     resources.render(g);
                     organisms.render(g);
                     minimap.render(g);
                     buttonBar.render(g);
                     break;
             }
+            g.drawString(Integer.toString(camera.getAbsX(mouseManager.getX())), 30, 650);
+            g.drawString(Integer.toString(camera.getAbsY(mouseManager.getY())), 80, 650);
             bs.show();
             g.dispose();
         }

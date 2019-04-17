@@ -17,6 +17,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.*;
 
 /**
  *
@@ -29,7 +30,7 @@ public class Resource extends Item implements Commons{
     private boolean full;
     private boolean over;
     private int parasiteAmount;
-    private ArrayList<Point> positions;
+    private final ArrayList<Point> positions;
     private HashMap<Organism, Integer> map;
     private Time time;
 
@@ -46,7 +47,7 @@ public class Resource extends Item implements Commons{
         over = false;
         parasiteAmount = 0;
         map = new HashMap<>();
-        positions = SwarmMovement.getPositions(x, y, 6, 1);
+        positions = SwarmMovement.getPositions(x + PLANT_SIZE / 2, y + PLANT_SIZE / 2, 6, 1);
         
         time = new Time();
         prevSecUpdate = 0;
@@ -59,9 +60,9 @@ public class Resource extends Item implements Commons{
             for (int i = 0; i < 6; i++) {
                 if (!map.containsValue(i)) {
                     map.put(org, i);
-                    org.setPoint(positions.get(i));
-                    System.out.println(positions.get(i));
-                    System.out.println("TO ID:   " + org.getId());
+                    org.setPoint((Point) positions.get(i).clone());
+                    //System.out.println(positions.get(i));
+                    //System.out.println("TO ID:   " + org.getId());
                     parasiteAmount++;
                     if (parasiteAmount >= 6) {
                         full = true;
@@ -75,16 +76,24 @@ public class Resource extends Item implements Commons{
         }
     }
     
-    public void removeParasite(Organism org) {
+    public void removeParasite(Organism org, int i) {
         if (map.containsKey(org)) {
+            //System.out.println("AMOUNT  :" + map.size());
             map.remove(org);
             parasiteAmount--;
             if (parasiteAmount < 6) {
                 full = false;
             }
+            //System.out.println("PARASITE REMOVED  ID:  " + i);
         } else {
-            System.out.println("ERROR, ORGANISM NOT IN RESOURCE");
+            System.out.println("ERROR, ORGANISM NOT IN RESOURCE  ID:  " + i);
         }
+        
+        //System.out.println("END OF REMOVEPAR FUNCTION:  ID:   " + i);
+    }
+    
+    public void removeParasites() {
+        map.clear();
     }
     
     boolean hasParasite(Organism org) {
@@ -130,12 +139,26 @@ public class Resource extends Item implements Commons{
         if (time.getSeconds() > prevSecUpdate + CONSUMING_RATE) {
             quantity -= parasiteAmount;
             prevSecUpdate = (int) time.getSeconds();
+            Iterator it = map.entrySet().iterator();
+            while(it.hasNext()){
+                Map.Entry element = (Map.Entry) it.next();
+                Organism org = (Organism) element.getKey();
+                if(org.isEating()){
+                    int actualHunger = org.getHunger();
+                    org.setHunger(actualHunger+=2);
+                }
+                if(org.isDrinking()){
+                    int actualThirst = org.getThirst();
+                    org.setThirst(actualThirst+=2);
+                }
+            }
         }
         
         if (quantity <= 0) {
             quantity = 0;
             over = true;
         }
+
     }
 
     @Override
@@ -160,5 +183,4 @@ public class Resource extends Item implements Commons{
                 g.drawString(Integer.toString(quantity) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
         }
     }
-    
 }
