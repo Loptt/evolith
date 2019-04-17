@@ -167,27 +167,39 @@ public class OrganismManager implements Commons {
     }
 
     private void checkPanel() {
-
+        panel.tick();
         for (int i = 0; i < amount; i++) {
             
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
                 if (game.getMouseManager().isLeft()) {
-                    panelIndex = i;
                     panel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, game, organisms.get(i));
                     panel.setIndex(panelIndex);
                     game.getMouseManager().setLeft(false);
                 }
-            }
+            }    
         }
-        
-         while(panel.isSearchNext() || panel.isSearchPrev())
-         { 
-             if(panel.isSearchNext())
-                 panel.setIndex(panel.getIndex()+1);
-                 
-             if(panel.isSearchPrev())
-                 panel.setIndex(panel.getIndex()-1);
+        if(panel.isSearchNext() || panel.isSearchPrev())
+        {            
+            for (int i = 0; i < amount; i++){
+               if(panel.getOrganism() == organisms.get(i))
+               {
+                   panel.setIndex(i);
+                   panelIndex = i;
+               }
+            }
+            while(panel.isSearchNext() || panel.isSearchPrev())
+            {
+            
+            if(panel.isSearchNext())
+             {
+                 panel.setIndex(Math.abs(panel.getIndex()+1 % amount));
+             }
+            
+            if(panel.isSearchPrev())
+             {
+                 panel.setIndex(Math.abs(panel.getIndex()-1 % amount));
+             }
              
              if(panelIndex == Math.abs(panel.getIndex() % amount) || organisms.get(Math.abs(panel.getIndex() % amount)).isNeedOffspring())
              {
@@ -197,10 +209,16 @@ public class OrganismManager implements Commons {
                  panel.setSearchNext(false);
                  panel.setSearchPrev(false);
              }
-    
+         }
+        }
+
+         if(panel.isReproduce())
+         {
+            reproduce(panel.getOrganism());
+            panel.setReproduce(false);
          }
 
-        panel.tick();
+        
     }
 
     /**
@@ -210,7 +228,7 @@ public class OrganismManager implements Commons {
      */
     private void checkReproduce(Organism org) {
         if (org.isNeedOffspring()) {
-
+            
         }
     }
 
@@ -220,7 +238,6 @@ public class OrganismManager implements Commons {
         organisms.get(organisms.size() - 1).setSearchFood(org.isSearchFood());
         organisms.get(organisms.size() - 1).setSearchWater(org.isSearchWater());
         org.setNeedOffspring(false);
-
     }
 
     /**

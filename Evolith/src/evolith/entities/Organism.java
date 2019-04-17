@@ -310,13 +310,14 @@ public class Organism extends Item implements Commons {
             prevMatInc = (int) time.getSeconds();
 
             //Reproduction happen at these two points in maturity
-            if (maturity == 10) {
+            if (maturity == 3) {
                 needOffspring = true;
             }
 
-            if (maturity == 26) {
+            if (maturity == 10) {
                 needOffspring = true;
             }
+            
         }
 
         //Once the organisms reaches max maturity, kill it

@@ -90,7 +90,7 @@ public class OrganismPanel extends Menu implements Commons {
         
         buttons.add(new Button(this.x+PANEL_WIDTH+50,this.y+PANEL_HEIGHT/2,50,50, Assets.organismPanel_nextArrow)); // Arrow next
         buttons.add(new Button(this.x-100,this.y+PANEL_HEIGHT/2,50,50,Assets.organismPanel_prevArrow)); // Arrow prev   
-        buttons.add(new Button(this.x+PANEL_WIDTH/2,this.y+400,300,75, Assets.organismPanel_reproduceButton)); // Reproduce button 
+        buttons.add(new Button(this.x+PANEL_WIDTH/2-150,this.y+400,300,75, Assets.organismPanel_reproduceButton)); // Reproduce button 
         inputReader = new InputReader(game);
     }
 
@@ -112,6 +112,7 @@ public class OrganismPanel extends Menu implements Commons {
 
     public void setOrganism(Organism organism) {
         this.organism = organism;
+        
     }
     
     @Override
@@ -135,15 +136,28 @@ public class OrganismPanel extends Menu implements Commons {
                 if (buttons.get(0).isPressed()) {
                     active = false;
                 }
+                //next
                 if (buttons.get(2).isPressed()) {
-                    searchNext = true;
+                    
+                    if(searchNext)
+                      buttons.get(2).setPressed(false);
+                    else searchNext = true;
                 }
+                //prev
                 if (buttons.get(3).isPressed()) {
-                    searchPrev = true;
+                    if(searchPrev)
+                       buttons.get(3).setPressed(false);
+                    else searchPrev = true;
                 }
-                if (buttons.get(4).isPressed()) {
-                    reproduce = true;
+                //reproduce
+                if (buttons.get(4).isPressed() && organism.isNeedOffspring()) {
+                    
+                    if(reproduce)
+                        buttons.get(4).setPressed(false);
+                    
+                    else reproduce = true;
                 }
+                
 
             }
         }
@@ -164,6 +178,7 @@ public class OrganismPanel extends Menu implements Commons {
 
     public void setReproduce(boolean reproduce) {
         this.reproduce = reproduce;
+        
     }
     
     public boolean isSearchNext() {
@@ -241,8 +256,12 @@ public class OrganismPanel extends Menu implements Commons {
            g.drawRect(x+PANEL_WIDTH/2,y+400,300,75);
             
         for (int i = 0; i < buttons.size(); i++) {
-            buttons.get(i).render(g);
+            
+            if(i != 4 || organism.isNeedOffspring())
+                buttons.get(i).render(g);
+            
         }
+        
         }
 
     }
