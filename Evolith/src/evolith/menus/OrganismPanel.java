@@ -72,7 +72,7 @@ public class OrganismPanel extends Menu implements Commons {
         this.speed = org.getSpeed();
         this.size = org.getSize();
         this.strength = org.getStrength();
-        this.survivability = org.getSurvivability();
+        this.survivability = org.getMaxHealth();
         this.stealth = org.getStealth();
         this.maturity = org.getMaturity();
         this.generation = org.getGeneration();

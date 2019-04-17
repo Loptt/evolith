@@ -116,6 +116,8 @@ public class Assets {
         //Health
         ArrayList<BufferedImage> m3 = new ArrayList<BufferedImage>();
         m3.add(ImageLoader.loadImage("/images/Traits/shell.png"));
+        m3.add(ImageLoader.loadImage("/images/Traits/shell.png"));
+        m3.add(ImageLoader.loadImage("/images/Traits/shell.png"));
         mutations.add(m3);
         //Stealth
         ArrayList<BufferedImage> m4 = new ArrayList<BufferedImage>();
