@@ -57,7 +57,7 @@ public class OrganismManager implements Commons {
         panelNum = 0;
         this.game = game;
         organisms = new ArrayList<>();
-        amount = 1;
+        amount = 10;
         idCounter = 1;
 
         for (int i = 0; i < amount; i++) {
@@ -80,8 +80,8 @@ public class OrganismManager implements Commons {
     public void tick() {
         for (int i = 0; i < amount; i++) {
             organisms.get(i).tick();
-            checkReproduce(organisms.get(i));
-            checkKill(organisms.get(i));
+            //checkReproduce(organisms.get(i));
+            //checkKill(organisms.get(i));
         }
 
         //check the hover
@@ -230,7 +230,7 @@ public class OrganismManager implements Commons {
             if (target != null) {
                 //Check if the current target is already full and target does not have organism
                 if ((target.isFull() && !target.hasParasite(org)) || target.isOver()) {
-                    System.out.println("HEHE CHANGE RESOURCE");
+                    //System.out.println("HEHE CHANGE RESOURCE");
                     org.setTarget(null);
                     org.setEating(false);
                     autoLookTarget(org);

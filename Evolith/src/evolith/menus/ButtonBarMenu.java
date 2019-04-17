@@ -16,6 +16,9 @@ import java.awt.image.BufferedImage;
  */
 public class ButtonBarMenu extends Menu {
     private BufferedImage background;
+    private boolean foodActive;
+    private boolean waterActive;
+    private boolean fightActive;
     
     public ButtonBarMenu(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
@@ -25,6 +28,10 @@ public class ButtonBarMenu extends Menu {
         buttons.add(new Button(34,31,141,55, Assets.buttonBar.get(1).get(1), Assets.buttonBar.get(1).get(0))); // Water button in pos 1
         buttons.add(new Button(191,31,141,55, Assets.buttonBar.get(2).get(1), Assets.buttonBar.get(2).get(0))); // Food  button in pos 2
         buttons.add(new Button(348,31,141,55, Assets.buttonBar.get(3).get(1), Assets.buttonBar.get(3).get(0))); // Fight  button in pos 3
+        
+        foodActive = false;
+        waterActive = false;
+        fightActive = false;
 
     }
     // organism's behaviour when Water button is active
@@ -41,18 +48,6 @@ public class ButtonBarMenu extends Menu {
 
     @Override
     public void tick() {
-        /**
-         * The hover effect on these buttons can confuse the user
-         * Maybe change the hover effect to be different from the active effect?
-         */
-        /*for(int i = 0; i < buttons.size(); i++){
-            if(buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
-                //if the mouse is over the button
-                buttons.get(i).setHover(true); //set the button hover status as true
-            } else{
-                buttons.get(i).setHover(false);
-            }
-        }*/
     }
 
     @Override
@@ -67,12 +62,24 @@ public class ButtonBarMenu extends Menu {
     public void applyMouse(int mouseX, int mouseY) {
         for(int i = 0; i < buttons.size(); i++){
             if(buttons.get(i).hasMouse(mouseX, mouseY)) {
-                if (!buttons.get(i).isActive()) {
-                    buttons.get(i).setActive(true);
-                } else {
-                    buttons.get(i).setActive(false);
-                }
+                buttons.get(i).setActive(!buttons.get(i).isActive());
             }
         }
+        
+        foodActive = buttons.get(1).isActive();
+        waterActive = buttons.get(0).isActive();
+        fightActive = buttons.get(2).isActive();
+    }
+
+    public boolean isFoodActive() {
+        return foodActive;
+    }
+
+    public boolean isWaterActive() {
+        return waterActive;
+    }
+
+    public boolean isFightActive() {
+        return fightActive;
     }
 }

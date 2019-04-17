@@ -46,7 +46,7 @@ public class Resource extends Item implements Commons{
         over = false;
         parasiteAmount = 0;
         map = new HashMap<>();
-        positions = SwarmMovement.getPositions(x, y, 6, 1);
+        positions = SwarmMovement.getPositions(x + PLANT_SIZE / 2, y + PLANT_SIZE / 2, 6, 1);
         
         time = new Time();
         prevSecUpdate = 0;
@@ -60,8 +60,8 @@ public class Resource extends Item implements Commons{
                 if (!map.containsValue(i)) {
                     map.put(org, i);
                     org.setPoint(positions.get(i));
-                    System.out.println(positions.get(i));
-                    System.out.println("TO ID:   " + org.getId());
+                    //System.out.println(positions.get(i));
+                    //System.out.println("TO ID:   " + org.getId());
                     parasiteAmount++;
                     if (parasiteAmount >= 6) {
                         full = true;
@@ -85,6 +85,10 @@ public class Resource extends Item implements Commons{
         } else {
             System.out.println("ERROR, ORGANISM NOT IN RESOURCE");
         }
+    }
+    
+    public void removeParasites() {
+        map.clear();
     }
     
     boolean hasParasite(Organism org) {

@@ -78,6 +78,7 @@ public class Organism extends Item implements Commons {
      * @param height
      * @param game
      * @param skin
+     * @param id
      */
     public Organism(int x, int y, int width, int height, Game game, int skin, int id) {
         super(x, y, width, height);
@@ -322,9 +323,7 @@ public class Organism extends Item implements Commons {
      */
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.orgColors.get(0), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
-        g.setColor(Color.RED);
-        g.drawOval(game.getCamera().getRelX(radius.getX() - width / 2), game.getCamera().getRelY(radius.getY() - width / 2), radius.getRadius(), radius.getRadius());
+        g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
     }
 
     /**

@@ -184,6 +184,7 @@ public class Game implements Runnable, Commons {
         if (setupMenu.isClickPlay()) {
             setupMenu.setActive(false);
             organisms.setSkin(setupMenu.getOption());
+            System.out.println(setupMenu.getOption());
             state = States.Play;
         }
     }
@@ -221,21 +222,26 @@ public class Game implements Runnable, Commons {
             if (buttonBar.hasMouse(mouseX, mouseY)) {
                 //Process the mouse in the button bar
                 buttonBar.applyMouse(mouseX, mouseY);
+                organisms.setSearchFood(buttonBar.isFoodActive());
+                organisms.setSearchWater(buttonBar.isWaterActive());
             } else {
-                //System.out.println("Removing targets in game");
+                //If the mouse is clicked reset all
                 organisms.emptyTargets();
+                resources.emptyParasites();
+                
                 Resource clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                 
-                //If the x value is greater than 0, then a plant has been clicked
+                //if clicked is not null, a resource has been clicked
                 if (clickedResource != null) {
                     
-                    //In this case, move the selected swarm to the selected resource
-                    //organisms.moveSwarmToPoint(clickedResource.getX(), clickedResource.getY(), 1);
+                    //Set the resource to the selected organisms
                     organisms.setResource(clickedResource);
                     if (clickedResource.getType() == Resource.ResourceType.Plant) {
                         organisms.setSearchFood(true);
+                        organisms.setSearchWater(false);
                     } else {
                         organisms.setSearchWater(true);
+                        organisms.setSearchFood(false);
                     }
                 } else {
                     //Else move the swarm to desired position
