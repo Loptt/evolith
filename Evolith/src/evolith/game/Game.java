@@ -172,7 +172,6 @@ public class Game implements Runnable, Commons {
             state = States.SetupMenu;
         }
     }
-    
     /**
      * Tick the setup menu
      */
@@ -187,7 +186,6 @@ public class Game implements Runnable, Commons {
             state = States.Play;
         }
     }
-    
     /**
      * Tick the main game
      */
