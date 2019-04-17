@@ -138,10 +138,11 @@ public class OrganismPanel extends Menu implements Commons {
                 }
                 //next
                 if (buttons.get(2).isPressed()) {
-                    
-                    if(searchNext)
+                    if(searchNext){
                       buttons.get(2).setPressed(false);
-                    else searchNext = true;
+                    }else{
+                        searchNext = true;
+                    }
                 }
                 //prev
                 if (buttons.get(3).isPressed()) {
@@ -152,10 +153,13 @@ public class OrganismPanel extends Menu implements Commons {
                 //reproduce
                 if (buttons.get(4).isPressed() && organism.isNeedOffspring()) {
                     
-                    if(reproduce)
-                        buttons.get(4).setPressed(false);
-                    
-                    else reproduce = true;
+                    if(reproduce){
+                      buttons.get(4).setPressed(false);
+                      reproduce = false;
+                    }else{
+                        reproduce = true;
+                        buttons.get(4).setPressed(true);
+                    }
                 }
                 
 

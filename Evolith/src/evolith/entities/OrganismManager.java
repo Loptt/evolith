@@ -189,8 +189,7 @@ public class OrganismManager implements Commons {
                }
             }
             while(panel.isSearchNext() || panel.isSearchPrev())
-            {
-            
+            {    
             if(panel.isSearchNext())
              {
                  panel.setIndex(Math.abs(panel.getIndex()+1 % amount));
