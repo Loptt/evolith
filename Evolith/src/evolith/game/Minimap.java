@@ -47,24 +47,33 @@ public class Minimap extends Menu implements Commons{
         relativeY = mouseY - MINIMAP_Y + MINIMAP_HEIGHT;
         System.out.println("relativeX: " + relativeX + " relativeY: " + relativeY);
 
+        int XOutputStart = 0;
+        int XOutputEnd = 4000; 
+        int XInputStart = 170 + 500/30;
+        int XInputEnd = 330 - 500/30;
         
         if(relativeX > (int)(330 - 500/30)){
             camera.setX(4000);
         }else if(relativeX < (int)(170 + 500/30)){
             camera.setX(0);
         }else{
-            camera.setX(2000);
+            //camera.setX(2000);
+            //output = output_start + ((output_end - output_start) / (input_end - input_start)) * (input - input_start)
+            camera.setX(XOutputStart + ((XOutputEnd - XOutputStart) / (XInputEnd - XInputStart)) * (relativeX - XInputStart));
         }
         
         
-
+        int YOutputStart = 0;
+        int YOutputEnd = 4300; 
+        int YInputStart = (170 + 350/30);
+        int YInputEnd = (330 - 350/30);
         
         if(relativeY > (int)(330 - 350/30)){
             camera.setY(4300);
-        }else if(relativeY < (int)(330 + 350/30)){
+        }else if(relativeY < (int)(170 + 350/30)){
             camera.setY(0);
         }else{
-            camera.setY(2150);
+            camera.setY(YOutputStart + ((YOutputEnd - YOutputStart) / (YInputEnd - YInputStart)) * (relativeY - YInputStart));
         }
 
         //limites en x de 0 a 4000

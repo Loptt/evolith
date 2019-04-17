@@ -222,17 +222,19 @@ public class Game implements Runnable, Commons {
             if (buttonBar.hasMouse(mouseX, mouseY)) {
                 //Process the mouse in the button bar
                 buttonBar.applyMouse(mouseX, mouseY);
-<<<<<<< HEAD
-            } else if(minimap.hasMouse(mouseX,mouseY)){
-                minimap.applyMouse(mouseX, mouseY, camera);
-            }else{
-                //System.out.println("Removing targets in game");
-=======
                 organisms.setSearchFood(buttonBar.isFoodActive());
                 organisms.setSearchWater(buttonBar.isWaterActive());
+
+            } else if(minimap.hasMouse(mouseX,mouseY)){
+                minimap.applyMouse(mouseX, mouseY, camera);
+                
+
+                //System.out.println("Removing targets in game");
+
+
             } else {
                 //If the mouse is clicked reset all
->>>>>>> 7d6269bdf5df7ffe6bfe114b81a57bdb8a24f5fa
+
                 organisms.emptyTargets();
                 resources.emptyParasites();
                 
