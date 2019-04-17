@@ -141,23 +141,23 @@ public class OrganismPanel extends Menu implements Commons {
         g.drawImage(Assets.organismPanel_close, x + width - 20, y - 20, BUTTON_CLOSE_DIMENSION, BUTTON_CLOSE_DIMENSION, null);        
         //Stealth
         g.setColor(Color.ORANGE);
-        g.fillRect(x + 31, y + 114, (int) 70 * stealth / MAX_STEALTH, 20);
-        //survivability
+        g.fillRect(x + 470, y + 114, (int) 70 * stealth / MAX_STEALTH, 20);
+        //Max Health
         g.setColor(Color.CYAN);
-        g.fillRect(x + 31, y + 169, (int) 70 * survivability / MAX_SURVIVABILITY, 20);
+        g.fillRect(x + 470, y + 169, (int) 70 * survivability / MAX_SURVIVABILITY, 20);
         //maturity
         g.setColor(Color.YELLOW);
-        g.fillRect(x + 30, y + 226, (int) 70 * maturity / MAX_MATURITY, 20);
+        g.fillRect(x + 470, y + 226, (int) 70 * maturity / MAX_MATURITY, 20);
         
         //speed
         g.setColor(Color.MAGENTA);
-        g.fillRect(x + 144, y + 114, (int) 70 * speed / MAX_SPEED, 20);
+        g.fillRect(x + 368, y + 114, (int) 70 * speed / MAX_SPEED, 20);
         //size
         g.setColor(Color.WHITE);
-        g.fillRect(x + 145, y + 169, (int) 70 * size / MAX_SIZE, 20);
+        g.fillRect(x + 368, y + 169, (int) 70 * size / MAX_SIZE, 20);
         //strength
         g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(x + 145, y + 226, (int) 70 * strength / MAX_STRENGTH, 20);
+        g.fillRect(x + 368, y + 226, (int) 70 * strength / MAX_STRENGTH, 20);
         
         // Edit
         g.setColor(Color.WHITE);
