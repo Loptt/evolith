@@ -17,7 +17,7 @@ import java.awt.image.BufferedImage;
  */
 public class Mutation extends Item implements Commons {
     
-    private int health;
+    private int maxHealth;
     private int speed;
     private int strength;
     private int stealth;
@@ -28,17 +28,14 @@ public class Mutation extends Item implements Commons {
     private int tier;
     
     private BufferedImage sprite;
-    
-    private Game game;
-    
+        
     public Mutation(int x, int y, int width, int height) {
         super(x, y, width, height);
     }
 
-    public Mutation(String name, int strength,int speed,int health, int stealth, boolean active, int tier, int x, int y, int width, int height, Game game) {
+    public Mutation(String name, int strength,int speed,int health, int stealth, boolean active, int tier, int x, int y, int width, int height) {
         super(x, y, width, height);
-        this.game = game;
-        this.health = health;
+        this.maxHealth = health;
         this.speed = speed;
         this.strength = strength;
         this.stealth = stealth;
@@ -52,8 +49,8 @@ public class Mutation extends Item implements Commons {
     
     }
 
-    public int getHealth() {
-        return health;
+    public int getMaxHealth() {
+        return maxHealth;
     }
 
     public String getName() {
@@ -109,8 +106,8 @@ public class Mutation extends Item implements Commons {
         this.name = name;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
     }
     
     public void setSprite(BufferedImage sprite){
@@ -119,7 +116,7 @@ public class Mutation extends Item implements Commons {
     
     @Override
     public void render(Graphics g) {
-    
+        g.drawImage(sprite, x, y, width, height, null);
     }
     
 }

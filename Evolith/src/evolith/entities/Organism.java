@@ -13,6 +13,7 @@ import evolith.helpers.Time;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.ArrayList;
 
 /**
  *
@@ -38,7 +39,7 @@ public class Organism extends Item implements Commons {
     private int speed;
     private int strength;
     private int stealth;
-    private int survivability;
+    private int maxHealth;
 
     private int life;           //Health points of the organism
     private int hunger;         //hunger of the organism
@@ -68,7 +69,10 @@ public class Organism extends Item implements Commons {
 
     private boolean eating;
     private boolean drinking;
-
+    
+    private MutationManager orgMutations; 
+    
+    
     /**
      * Constructor of the organism
      *
@@ -94,7 +98,7 @@ public class Organism extends Item implements Commons {
         speed = 20;
         strength = 20;
         stealth = 10;
-        survivability = 10;
+        maxHealth = 10;
 
         life = 100;
         hunger = 100;
@@ -120,6 +124,7 @@ public class Organism extends Item implements Commons {
 
         time = new Time();
         name = "";
+        orgMutations = new MutationManager(this);
     }
 
     public String getName() {
@@ -163,8 +168,8 @@ public class Organism extends Item implements Commons {
         return stealth;
     }
 
-    public int getSurvivability() {
-        return survivability;
+    public int getMaxHealth() {
+        return maxHealth;
     }
 
     public int getLife() {
@@ -198,6 +203,32 @@ public class Organism extends Item implements Commons {
     public void setGeneration(int generation) {
         this.generation = generation;
     }
+    
+    public void setSpeed(int speed){
+        this.speed = speed;
+    }
+    
+    public void setStealth(int stealth){
+        this.stealth = stealth;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
+    
+    
 
     /**
      * Update the position of the organism accordingly
@@ -331,6 +362,7 @@ public class Organism extends Item implements Commons {
             g.setColor(Color.BLACK);
             g.fillOval(game.getCamera().getRelX(radius.getX() - width / 2), game.getCamera().getRelY(radius.getY() - width / 2), radius.getRadius(), radius.getRadius());
         }
+        
     }
 
     /**
