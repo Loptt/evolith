@@ -29,21 +29,22 @@ public class Mutation extends Item implements Commons {
     private int tier;
     
     private BufferedImage sprite;
+    
+    private Organism org;
         
-    public Mutation(int x, int y, int width, int height) {
-        super(x, y, width, height);
-    }
+    
 
-    public Mutation(String name, int strength,int speed,int health, int stealth, boolean active, int tier, int x, int y, int width, int height, Game game) {
+    public Mutation(String name, int strength,int speed,int health, int stealth, boolean active, int tier, int x, int y, int width, int height, Game game, Organism org) {
         super(x, y, width, height);
         this.maxHealth = health;
         this.speed = speed;
-        this.strength = strength;
+        this.strength = strength; 
         this.stealth = stealth;
         this.active = active;
         this.tier = tier;
         this.name = name;
         this.game = game;
+        this.org  = org;
     }
     
     @Override
@@ -119,7 +120,7 @@ public class Mutation extends Item implements Commons {
     @Override
     public void render(Graphics g) {
         if(active){
-            g.drawImage(sprite, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
+            g.drawImage(sprite, game.getCamera().getRelX(org.getX()), game.getCamera().getRelY(org.getY()), width, height, null);
         }
     }
     
