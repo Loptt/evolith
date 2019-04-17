@@ -17,6 +17,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.*;
 
 /**
  *
@@ -138,6 +139,19 @@ public class Resource extends Item implements Commons{
         if (time.getSeconds() > prevSecUpdate + CONSUMING_RATE) {
             quantity -= parasiteAmount;
             prevSecUpdate = (int) time.getSeconds();
+            Iterator it = map.entrySet().iterator();
+            while(it.hasNext()){
+                Map.Entry element = (Map.Entry) it.next();
+                Organism org = (Organism) element.getKey();
+                if(org.isEating()){
+                    int actualHunger = org.getHunger();
+                    org.setHunger(actualHunger+=2);
+                }
+                if(org.isDrinking()){
+                    int actualThirst = org.getThirst();
+                    org.setThirst(actualThirst+=2);
+                }
+            }
         }
         
         if (quantity <= 0) {

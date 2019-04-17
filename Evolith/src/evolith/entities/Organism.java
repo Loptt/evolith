@@ -140,7 +140,8 @@ public class Organism extends Item implements Commons {
         time.tick();
         handleTarget();
         checkMovement();
-        checkVitals();
+        checkVitals();  
+        
 
     }
     
@@ -466,4 +467,14 @@ public class Organism extends Item implements Commons {
     public int getId() {
         return id;
     }
+    
+    public void setHunger(int hunger){
+        this.hunger = hunger;
+    }
+    
+    public void setThirst(int thirst){
+        this.thirst = thirst;
+    }
+        
+        
 }
