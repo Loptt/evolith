@@ -171,7 +171,8 @@ public class Resource extends Item implements Commons{
                 g.drawImage(Assets.plant, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
                
                 //To display the actual quantity over the maximum
-                g.drawString(Integer.toString(quantity) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
+                //g.drawString(Integer.toString(quantity) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
+                g.setColor(Color.GREEN);
                 break;
             case Water:
                 g.setColor(new Color(173, 255, 250));
@@ -180,7 +181,11 @@ public class Resource extends Item implements Commons{
                 g.drawImage(Assets.water, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
 
                 //To display the actual quantity over the maximum
-                g.drawString(Integer.toString(quantity) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
+                //g.drawString(Integer.toString(quantity) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
+                g.setColor(Color.BLUE);
         }
+        g.fillRect(game.getCamera().getRelX(x) + 10, game.getCamera().getRelY(y) + 85, (int) 87 * this.quantity / 100, 7);
+        g.setColor(Color.white);
+        g.drawRect(game.getCamera().getRelX(x) + 9, game.getCamera().getRelY(y) + 85, 87, 8);
     }
 }
