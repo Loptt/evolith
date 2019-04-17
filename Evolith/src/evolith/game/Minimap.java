@@ -57,8 +57,6 @@ public class Minimap extends Menu implements Commons{
         }else if(relativeX < (int)(170 + 500/30)){
             camera.setX(0);
         }else{
-            //camera.setX(2000);
-            //output = output_start + ((output_end - output_start) / (input_end - input_start)) * (input - input_start)
             camera.setX(XOutputStart + ((XOutputEnd - XOutputStart) / (XInputEnd - XInputStart)) * (relativeX - XInputStart));
         }
         
