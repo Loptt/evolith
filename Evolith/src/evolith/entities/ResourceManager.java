@@ -171,7 +171,7 @@ public class ResourceManager implements Commons {
     }
     
     public Resource getWater(int i) {
-        return plants.get(i);
+        return waters.get(i);
     }
     
     public void tick() {
