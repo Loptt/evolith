@@ -508,4 +508,28 @@ public class Organism extends Item implements Commons {
     public int getId() {
         return id;
     }
+
+    public void setMaxVel(int maxVel) {
+        this.maxVel = maxVel;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    
+    
+    public Organism cloneOrg(){
+        Organism org = new Organism(x,y,width, height, game, skin, id);
+        org.setPoint((Point) point.clone());
+        org.setMaxVel(maxVel);
+        org.setSize(size);
+        org.setSpeed(speed);
+        org.setStrength(strength);
+        org.setMaxHealth(maxHealth);
+        org.setLife(maxHealth*2+60);
+        org.setGeneration(generation+1);
+        
+        return org;
+    }
 }

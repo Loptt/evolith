@@ -210,16 +210,30 @@ public class OrganismManager implements Commons {
      */
     private void checkReproduce(Organism org) {
         if (org.isNeedOffspring()) {
-
+            
         }
     }
 
     private void reproduce(Organism org) {
         amount++;
-        organisms.add(new Organism(org.getX() + ORGANISM_SIZE, org.getY(), ORGANISM_SIZE, ORGANISM_SIZE, game, org.getSkin(), idCounter++));
+        Organism offspring = new Organism(org.getX() + ORGANISM_SIZE, org.getY(), ORGANISM_SIZE, ORGANISM_SIZE, game, org.getSkin(), idCounter++);
+        //generate an int for a chance of mutation
+        int mutationChance = (int) (Math.random() * (2 - 0)); 
+        //if it should not mutate
+        if(mutationChance<1){
+            offspring = org.cloneOrg();
+        }
+        else{
+            //if mutation
+            
+        }
+        organisms.add(offspring);
+
         organisms.get(organisms.size() - 1).setSearchFood(org.isSearchFood());
         organisms.get(organisms.size() - 1).setSearchWater(org.isSearchWater());
         org.setNeedOffspring(false);
+        
+        
 
     }
 
