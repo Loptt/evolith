@@ -165,42 +165,69 @@ public class OrganismManager implements Commons {
             }
         }
     }
+    
+    private int realMod(int a, int b){
+        return ((((a%b)+b)%b)+b)%b;
+    }
 
     private void checkPanel() {
-
-        for (int i = 0; i < amount; i++) {
+        panel.tick();
+        for (int i = 0; i < organisms.size(); i++) {
             
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
                 if (game.getMouseManager().isLeft()) {
-                    panelIndex = i;
                     panel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, game, organisms.get(i));
+                    
                     panel.setIndex(panelIndex);
+                    
                     game.getMouseManager().setLeft(false);
                 }
-            }
+            }    
         }
-        
-         while(panel.isSearchNext() || panel.isSearchPrev())
-         { 
-             if(panel.isSearchNext())
-                 panel.setIndex(panel.getIndex()+1);
-                 
-             if(panel.isSearchPrev())
-                 panel.setIndex(panel.getIndex()-1);
-             
-             if(panelIndex == Math.abs(panel.getIndex() % amount) || organisms.get(Math.abs(panel.getIndex() % amount)).isNeedOffspring())
+        if(panel.isSearchNext() || panel.isSearchPrev())
+        {            
+            for (int i = 0; i < organisms.size(); i++){
+               if(panel.getOrganism() == organisms.get(i))
+               {
+                   panel.setIndex(i);
+                   panelIndex = i;
+               }
+            }
+            while(panel.isSearchNext() || panel.isSearchPrev())
+            {    
+            if(panel.isSearchNext())
              {
-                 panel.setIndex(panel.getIndex() % amount);  
+                 int auxIndex = panel.getIndex();
+                 panel.setIndex(++auxIndex % organisms.size());
+                 //panel.setIndex((panel.getIndex()+1) % organisms.size());
+             }
+            
+            if(panel.isSearchPrev())
+             {
+                 int auxIndex = panel.getIndex();
+                 panel.setIndex(realMod(--auxIndex, organisms.size()));
+             }
+             
+             if(panelIndex == panel.getIndex() || organisms.get(panel.getIndex()).isNeedOffspring())
+             {
+                 
                  panelIndex = panel.getIndex();
                  panel.setOrganism(organisms.get(panelIndex));
                  panel.setSearchNext(false);
                  panel.setSearchPrev(false);
              }
-    
+           
+         }
+        }
+
+         if(panel.isReproduce())
+         {
+            reproduce(panel.getOrganism());
+            panel.setReproduce(false);
          }
 
-        panel.tick();
+        
     }
 
     /**
@@ -232,9 +259,12 @@ public class OrganismManager implements Commons {
         organisms.get(organisms.size() - 1).setSearchFood(org.isSearchFood());
         organisms.get(organisms.size() - 1).setSearchWater(org.isSearchWater());
         org.setNeedOffspring(false);
+<<<<<<< HEAD
         
         
 
+=======
+>>>>>>> 01eb6c5a9854e5877947eb26ec35a9888cb91eae
     }
 
     /**
