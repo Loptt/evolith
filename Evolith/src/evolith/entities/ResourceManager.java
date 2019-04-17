@@ -132,6 +132,16 @@ public class ResourceManager implements Commons {
         return null;
     }
     
+    public void emptyParasites() {
+        for (int i = 0; i < plants.size()-1; i++) {
+            plants.get(i).removeParasites();
+        }
+        
+        for (int i = 0; i < waters.size()-1; i++) {
+            waters.get(i).removeParasites();
+        } 
+    }
+    
     public int getPlantAmount() {
         return plants.size();
     }
