@@ -70,6 +70,8 @@ public class Organism extends Item implements Commons {
     private boolean eating;
     private boolean drinking;
     private boolean selected;
+    
+    private double angle;
 
     /**
      * Constructor of the organism
@@ -124,6 +126,7 @@ public class Organism extends Item implements Commons {
 
         time = new Time();
         name = "";
+        angle = 0.0;
     }
 
     public String getName() {
@@ -144,11 +147,7 @@ public class Organism extends Item implements Commons {
         handleTarget();
         checkMovement();
         checkVitals();  
-        
-
     }
-    
-    
 
     public int getSize() {
         return size;
@@ -312,6 +311,22 @@ public class Organism extends Item implements Commons {
             point.y = target.getY();
         }
     }
+    
+    private void calculateAngle() {
+        
+        if (point.y == y) {
+            if (point.x > x) {
+                angle = 180.0;
+            } else {
+                angle = 0.0;
+            }
+        } else {
+            //angle = (double) Math.atan((double)(x - point.x) / (double) (point.y - y));
+        }
+        /*System.out.println(point);
+        System.out.println("x: " + x + "  y: " + y);
+        System.out.println("ANGLE IN ORG:  " +  angle);*/
+    }
 
     /**
      * Kill the organism
@@ -330,6 +345,7 @@ public class Organism extends Item implements Commons {
      */
     @Override
     public void render(Graphics g) {
+        System.out.println("ORG ID: " + id);
         g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
         if (selected) {
             g.setColor(Color.RED);
@@ -493,6 +509,7 @@ public class Organism extends Item implements Commons {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
      
     public boolean isBeingChased(){
         return beingChased;

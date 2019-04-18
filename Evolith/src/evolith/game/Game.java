@@ -337,6 +337,8 @@ public class Game implements Runnable, Commons {
             switch (state) {
                 case MainMenu:
                     mainMenu.render(g);
+                    g.drawImage(Assets.rotatedPlant, 0,0, 200, 200, null);
+                    g.drawImage(Assets.plant, 300,0, 200, 200, null);
                     break;
                 case SetupMenu:
                     setupMenu.render(g);
