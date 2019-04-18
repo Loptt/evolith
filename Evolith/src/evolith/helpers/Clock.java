@@ -45,5 +45,9 @@ public class Clock extends Item implements Commons {
     public void render(Graphics g) {
 
     }
+    
+    public int getSeconds() {
+        return (int) time.getSeconds();
+    }
 
 }

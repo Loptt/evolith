@@ -73,4 +73,6 @@ public interface Commons {
     public static final Color PINK_COLOR = new Color(255, 111, 199);
     
     public static final int CONSUMING_RATE = 2;
+    
+    public static final int DAY_CYCLE_DURATION_SECONDS = 60;
 }

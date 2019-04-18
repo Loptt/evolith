@@ -77,4 +77,10 @@ public class Background {
             return imageNight;
         }
     }
+
+    public void setNight(boolean night) {
+        this.night = night;
+    }
+    
+    
 }

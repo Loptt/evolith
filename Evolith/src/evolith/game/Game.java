@@ -67,6 +67,7 @@ public class Game implements Runnable, Commons {
     private Selection selection;
     
     private boolean night;
+    private int prevSecDayCycleChange;
     
     /**
      * to create title, width and height and set the game is still not running
@@ -91,7 +92,7 @@ public class Game implements Runnable, Commons {
         selection = new Selection(this);
         
         night = false;
-        
+        prevSecDayCycleChange = 0;
     }
 
     /**
@@ -154,8 +155,7 @@ public class Game implements Runnable, Commons {
      */
     private void tick() {
         //Every single case is separated in its own function
-        
-        clock.tick();
+
         switch (state) {
             case MainMenu:
                 mainMenuTick();
@@ -202,6 +202,7 @@ public class Game implements Runnable, Commons {
      * Tick the main game
      */
     private void playTick() {
+        clock.tick();
         keyManager.tick();
         camera.tick();
         organisms.tick();
@@ -213,6 +214,12 @@ public class Game implements Runnable, Commons {
         
         manageMouse();
         checkEntitiesInteraction();
+        
+        if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
+            night = !night;
+            background.setNight(night);
+            prevSecDayCycleChange = clock.getSeconds();
+        }
     }
     
     /**
