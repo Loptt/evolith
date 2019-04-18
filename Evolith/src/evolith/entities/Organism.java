@@ -53,7 +53,7 @@ public class Organism extends Item implements Commons {
 
     private boolean needOffspring;
     private boolean dead;
-
+    private boolean beingChased;
     private String name;
 
     private boolean moving;
@@ -480,5 +480,12 @@ public class Organism extends Item implements Commons {
         this.thirst = thirst;
     }
      
+    public boolean isBeingChased(){
+        return beingChased;
+    }
+    
+    public void isBeingChased(boolean a){
+        this.beingChased = a;
+    }
         
 }

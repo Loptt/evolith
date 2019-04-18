@@ -92,6 +92,9 @@ public class PredatorManager implements Commons {
                     double acutalLife = game.getOrganisms().getOrganism(j).getLife();
                     game.getOrganisms().getOrganism(j).setLife(acutalLife-0.1);
                     System.out.println("quitando vida " + "id: "+  game.getOrganisms().getOrganism(j).getId() + " vida actual: " + game.getOrganisms().getOrganism(j).getLife());
+                    if(game.getOrganisms().getOrganism(j).isBeingChased()){
+                        System.out.println("organism #" + game.getOrganisms().getOrganism(j).getId()+ " is being chased");
+                    }
                     if(acutalLife < 1){
                         game.getOrganisms().getOrganism(j).setDead(true);
                     }
@@ -149,8 +152,10 @@ public class PredatorManager implements Commons {
         if( distanceBetweenTwoPoints(pred.getX(), pred.getY(), org.getX(), org.getY()) > MAX_SIGHT_DISTANCE){
             pred.setTargetResource(res);
             pred.setTarget(null);
+            org.isBeingChased(false);
         }else{
             pred.setTarget(org);
+            org.isBeingChased(true);
             pred.setTargetResource(null);
         }
         
