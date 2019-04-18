@@ -67,8 +67,6 @@ public class PredatorManager implements Commons {
         idCounter = 1;
 
         for (int i = 0; i < amount; i++) {
-            // public Organism(int x, int y, int width, int height, Game game, int skin, int id) {
-            // public Predator(int x, int y, int width, int height, Game game, int skin, int id) {
             predators.add(new Predator(INITIAL_POINT + i*100, INITIAL_POINT + i*100, PREDATOR_SIZE, PREDATOR_SIZE, game, 0, idCounter++));
         }
         newX = INITIAL_POINT;
@@ -86,14 +84,20 @@ public class PredatorManager implements Commons {
      * updates all organisms
      */
     public void tick() {
-        for (int i = 0; i < amount; i++) { 
+        for (int i = 0; i < predators.size(); i++) { 
             predators.get(i).tick();
             autoLookTarget(predators.get(i));
             for(int j=0; j<game.getOrganisms().getOrganismsAmount(); j++){
                 if(predators.get(i).intersects(game.getOrganisms().getOrganism(j))){
-                    int acutalLife = game.getOrganisms().getOrganism(j).getLife();
-                    game.getOrganisms().getOrganism(j).setLife(acutalLife-1);
-                    //System.out.println("quitando vida " + "id: "+  game.getOrganisms().getOrganism(j).getId() + " vida actual: " + game.getOrganisms().getOrganism(j).getLife());
+                    double acutalLife = game.getOrganisms().getOrganism(j).getLife();
+                    game.getOrganisms().getOrganism(j).setLife(acutalLife-0.1);
+                    System.out.println("quitando vida " + "id: "+  game.getOrganisms().getOrganism(j).getId() + " vida actual: " + game.getOrganisms().getOrganism(j).getLife());
+                    if(game.getOrganisms().getOrganism(j).isBeingChased()){
+                        System.out.println("organism #" + game.getOrganisms().getOrganism(j).getId()+ " is being chased");
+                    }
+                    if(acutalLife < 1){
+                        game.getOrganisms().getOrganism(j).setDead(true);
+                    }
                 }           
             }
 
@@ -140,19 +144,34 @@ public class PredatorManager implements Commons {
         return Math.sqrt(Math.pow(x1-x2,2) + Math.pow(y1-y2,2));
     }
     
+    public Point generateEscapePoint(Predator pred, Organism org){
+        
+        Point generatedPoint = new Point(org.getX(),org.getY());
+        
+        generatedPoint.x = org.getX()+(org.getX()-pred.getX());
+        generatedPoint.y = org.getY()+(org.getY()-pred.getY());
+       System.out.println("generating point: (" + generatedPoint.x + "," + generatedPoint.y+")");
+        
+        return generatedPoint;
+    }
+    
     public void autoLookTarget(Predator pred) {
         Resource res = findNearestValidWater(pred);
         Organism org = findNearestOrganism(pred);
-        
+        if(res == null) return; 
+        if(org == null) return;
         if( distanceBetweenTwoPoints(pred.getX(), pred.getY(), org.getX(), org.getY()) > MAX_SIGHT_DISTANCE){
             pred.setTargetResource(res);
             pred.setTarget(null);
+            org.isBeingChased(false);
+            Point toEscape = generateEscapePoint(pred, org);
+            org.setEscapePoint(toEscape);
         }else{
             pred.setTarget(org);
+            Point toEscape = generateEscapePoint(pred, org);
+            org.setEscapePoint(toEscape);
             pred.setTargetResource(null);
         }
-        
-
     }
         
     /**

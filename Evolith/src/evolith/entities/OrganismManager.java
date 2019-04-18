@@ -79,7 +79,7 @@ public class OrganismManager implements Commons {
      * updates all organisms
      */
     public void tick() {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).tick();
             //checkReproduce(organisms.get(i));
             checkKill(organisms.get(i));
@@ -109,10 +109,11 @@ public class OrganismManager implements Commons {
         //if left clicked move the organisms to determined point
 
         centralPoint = new Point(x, y);
-
-        points = SwarmMovement.getPositions(centralPoint.x - ORGANISM_SIZE / 2, centralPoint.y - ORGANISM_SIZE / 2, amount);
-        for (int i = 0; i < amount; i++) {
-            organisms.get(i).setPoint(points.get(i));
+        if(organisms.size()>0){
+            points = SwarmMovement.getPositions(centralPoint.x - ORGANISM_SIZE / 2, centralPoint.y - ORGANISM_SIZE / 2, organisms.size());
+            for (int i = 0; i < organisms.size(); i++) {
+                organisms.get(i).setPoint(points.get(i));
+            }
         }
     }
 
@@ -131,7 +132,7 @@ public class OrganismManager implements Commons {
         centralPoint = new Point(x, y);
 
         points = SwarmMovement.getPositions(centralPoint.x - ORGANISM_SIZE / 2, centralPoint.y - ORGANISM_SIZE / 2, amount, obj);
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setPoint(points.get(i));
         }
     }
@@ -181,7 +182,7 @@ public class OrganismManager implements Commons {
      */
     public void checkHover() {
 
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             //if mouse is countained in a certain organism
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
@@ -199,7 +200,7 @@ public class OrganismManager implements Commons {
 
     public boolean checkPanel() {
        
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
                 if (game.getMouseManager().isLeft() && !game.getSelection().isActive()) {
@@ -256,7 +257,7 @@ public class OrganismManager implements Commons {
     }
 
     public void setResource(Resource resource) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setTarget(resource);
         }
     }
@@ -270,7 +271,7 @@ public class OrganismManager implements Commons {
     }
 
     public void checkOrganismResourceStatus() {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             Organism org = organisms.get(i);
             Resource target = organisms.get(i).getTarget();
             //Check if target exists
@@ -325,6 +326,13 @@ public class OrganismManager implements Commons {
                 org.setTarget(null);
             }
         } else {
+            if(!game.getButtonBar().isFightActive()){
+                Point generatedPoint = org.getEscapePoint();
+
+                //Point newPoint = new Point(generatedPoint.x, generatedPoint.y);
+                org.setPoint(generatedPoint);
+                System.out.println("toi esKpando");
+            }
             //System.out.println("AUTOLOOK WHEN CONSUMING");
         }
     }
@@ -369,6 +377,7 @@ public class OrganismManager implements Commons {
         return closestWater;
     }
 
+    
     public void checkArrivalOnResource() {
         for (int i = 0; i < organisms.size(); i++) {
             Organism org = organisms.get(i);
@@ -471,7 +480,7 @@ public class OrganismManager implements Commons {
      */
     public void render(Graphics g) {
 
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).render(g);
         }
         //render the hover panel of an organism

@@ -24,6 +24,7 @@ public class SwarmMovement implements Commons {
     public static ArrayList<Point> generateHexPattern(int n) {
         //If n is 0 or less, it is not possible to generate pattern
         if (n < 1) {
+            System.out.println("GAME OVER");
             return null;
         }
         

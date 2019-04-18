@@ -40,7 +40,7 @@ public class Organism extends Item implements Commons {
     private int stealth;
     private int survivability;
 
-    private int life;           //Health points of the organism
+    private double life;           //Health points of the organism
     private int hunger;         //hunger of the organism
     private int thirst;         //thirst of the organism
     private int maturity;       //maturity level of the organsim
@@ -53,8 +53,9 @@ public class Organism extends Item implements Commons {
 
     private boolean needOffspring;
     private boolean dead;
-
+    private boolean beingChased;
     private String name;
+    private Point escapePoint;
 
     private boolean moving;
     private boolean inPlant;
@@ -103,7 +104,7 @@ public class Organism extends Item implements Commons {
         thirst = 100;
         maturity = 0;
         generation = 1;
-
+        escapePoint = point;
         prevHungerRed = 0;
         prevThirstRed = 0;
         prevMatInc = 0;
@@ -169,11 +170,11 @@ public class Organism extends Item implements Commons {
         return survivability;
     }
 
-    public int getLife() {
+    public double getLife() {
         return life;
     }
 
-    public void setLife(int life){
+    public void setLife(double life){
         this.life = life;
     }
     
@@ -485,12 +486,27 @@ public class Organism extends Item implements Commons {
     public void setThirst(int thirst){
         this.thirst = thirst;
     }
-
+  
     public boolean isSelected() {
         return selected;
     }
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+     
+    public boolean isBeingChased(){
+        return beingChased;
+    }
+    
+    public void isBeingChased(boolean a){
+        this.beingChased = a;
+    }
+    
+    public void setEscapePoint(Point p){
+        this.escapePoint = p;
+    }
+    
+    public Point getEscapePoint(){
+        return escapePoint;
     }
 }
