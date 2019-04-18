@@ -345,7 +345,6 @@ public class Organism extends Item implements Commons {
      */
     @Override
     public void render(Graphics g) {
-        System.out.println("ORG ID: " + id);
         g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
         if (selected) {
             g.setColor(Color.RED);
