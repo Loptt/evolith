@@ -517,6 +517,10 @@ public class Organism extends Item implements Commons {
     public void setId(int id) {
         this.id = id;
     }
+
+    public MutationManager getOrgMutations() {
+        return orgMutations;
+    }
     
     
     
@@ -530,6 +534,14 @@ public class Organism extends Item implements Commons {
         org.setMaxHealth(maxHealth);
         org.setLife(maxHealth*2+60);
         org.setGeneration(generation+1);
+        
+        for(int i=0; i<4; i++){
+            for(int j=0; j<orgMutations.getMutations().get(i).size(); j++){
+                if(orgMutations.getMutations().get(i).get(j).isActive()){
+                    org.getOrgMutations().getMutations().get(i).get(j).setActive(true);
+                }
+            }
+        }
         
         return org;
     }
