@@ -353,8 +353,8 @@ public class Game implements Runnable, Commons {
                     }
                     break;
             }
-            g.drawString(Integer.toString(camera.getAbsX(mouseManager.getX())), 30, 650);
-            g.drawString(Integer.toString(camera.getAbsY(mouseManager.getY())), 80, 650);
+            /*g.drawString(Integer.toString(camera.getAbsX(mouseManager.getX())), 30, 650);
+            g.drawString(Integer.toString(camera.getAbsY(mouseManager.getY())), 80, 650);*/
             bs.show();
             g.dispose();
         }
