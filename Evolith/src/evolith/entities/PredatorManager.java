@@ -93,7 +93,7 @@ public class PredatorManager implements Commons {
                 if(predators.get(i).intersects(game.getOrganisms().getOrganism(j))){
                     int acutalLife = game.getOrganisms().getOrganism(j).getLife();
                     game.getOrganisms().getOrganism(j).setLife(acutalLife-1);
-                    System.out.println("quitando vida " + "id: "+  game.getOrganisms().getOrganism(j).getId() + " vida actual: " + game.getOrganisms().getOrganism(j).getLife());
+                    //System.out.println("quitando vida " + "id: "+  game.getOrganisms().getOrganism(j).getId() + " vida actual: " + game.getOrganisms().getOrganism(j).getLife());
                 }           
             }
 

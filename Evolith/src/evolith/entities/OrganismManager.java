@@ -14,6 +14,7 @@ import java.awt.Color;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 /**
@@ -83,10 +84,8 @@ public class OrganismManager implements Commons {
             //checkReproduce(organisms.get(i));
             checkKill(organisms.get(i));
         }
-
-        //check the hover
-        checkHover();
-        checkPanel();
+        
+        panel.tick();
     }
 
     /**
@@ -148,7 +147,7 @@ public class OrganismManager implements Commons {
     /**
      * To check the hover panel over an organism
      */
-    private void checkHover() {
+    public void checkHover() {
 
         for (int i = 0; i < amount; i++) {
             //if mouse is countained in a certain organism
@@ -166,15 +165,16 @@ public class OrganismManager implements Commons {
         }
     }
 
-    private void checkPanel() {
+    public boolean checkPanel() {
        
         for (int i = 0; i < amount; i++) {
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
-                if (game.getMouseManager().isLeft()) {
+                if (game.getMouseManager().isLeft() && !game.getSelection().isActive()) {
                     panelNum = i;
                     panel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, game, organisms.get(panelNum));
                     game.getMouseManager().setLeft(false);
+                    return true;
                 }
             }
         }
@@ -186,7 +186,14 @@ public class OrganismManager implements Commons {
                 System.out.println("The name is " + organisms.get(panelNum).getName());
             }
         */
-        panel.tick();
+        return false;
+    }
+    
+    public void checkSelection(Rectangle r) {
+        for (int i = 0; i < organisms.size(); i++) {
+            organisms.get(i).setSelected(organisms.get(i).intersects(r));
+            System.out.println("SELECTED: " + organisms.get(i).isSelected());
+        }
     }
 
     /**
