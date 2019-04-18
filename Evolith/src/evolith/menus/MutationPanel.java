@@ -147,7 +147,6 @@ public class MutationPanel extends Menu implements Commons {
             
         }
         
-        if(buttons.get(0).isPressed())
     }
 
     @Override
