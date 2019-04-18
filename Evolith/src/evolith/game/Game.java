@@ -248,6 +248,7 @@ public class Game implements Runnable, Commons {
             buttonBar.applyMouse(mouseX, mouseY);
             organisms.setSelectedSearchFood(buttonBar.isFoodActive());
             organisms.setSelectedSearchWater(buttonBar.isWaterActive());
+            organisms.emptySelectedTargets();
             mouseManager.setLeft(false);
         //Second in hierarchy is the minimap
         } else if(minimap.hasMouse(mouseX,mouseY)){
@@ -298,7 +299,7 @@ public class Game implements Runnable, Commons {
                     organisms.setSearchFood(false);
                 }
             } else {
-                //Else move the swarm to desired position
+                //Else move the swarm to desired position and deactivate all searching
 
                 organisms.moveSelectedSwarm(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                 organisms.emptySelectedTargets();
