@@ -34,6 +34,7 @@ public class Assets {
     public static BufferedImage organismPanel_close;
     public static BufferedImage mutation_menu;
     public static BufferedImage mutation_max_tier;
+    public static BufferedImage mutation_select;
 
     public static BufferedImage minimapFrame;
     
@@ -78,6 +79,7 @@ public class Assets {
 
         mutation_menu = ImageLoader.loadImage("/images/panel/mutationmenu.png");
         mutation_max_tier = ImageLoader.loadImage("/images/panel/maxtier.png");
+        mutation_select = ImageLoader.loadImage("/images/panel/mutselect.png");
         
 
         //Top Bar in 0,0

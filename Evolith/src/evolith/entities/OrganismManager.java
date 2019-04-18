@@ -88,6 +88,7 @@ public class OrganismManager implements Commons {
         //check the hover
         checkHover();
         checkPanel();
+        mutPanel.tick();
     }
 
     /**
@@ -238,7 +239,7 @@ public class OrganismManager implements Commons {
         
         offspring = org.cloneOrg();
         
-        if(mutationChance == 1){
+        if(mutationChance == 1) {
             orgPanel.setActive(false);
         }
         mutPanel = new MutationPanel(org,MUTATION_PANEL_X,MUTATION_PANEL_Y,MUTATION_PANEL_WIDTH,MUTATION_PANEL_HEIGHT,game);
