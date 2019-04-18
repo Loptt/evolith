@@ -53,9 +53,11 @@ public class ButtonBarMenu extends Menu {
         
         foodActive = orgs.selectionHasActiveFood();
         waterActive = orgs.selectionHasActiveWater();
+        fightActive = orgs.selectionHasAggressiveness();
 
         buttons.get(1).setActive(foodActive);
         buttons.get(0).setActive(waterActive);
+        buttons.get(2).setActive(fightActive);
     }
 
     @Override

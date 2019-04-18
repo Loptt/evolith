@@ -66,6 +66,7 @@ public class Organism extends Item implements Commons {
 
     private boolean searchFood;
     private boolean searchWater;
+    private boolean aggressive;
 
     private boolean eating;
     private boolean drinking;
@@ -119,6 +120,7 @@ public class Organism extends Item implements Commons {
 
         searchFood = false;
         searchWater = false;
+        aggressive = false;
 
         eating = false;
         drinking = false;
@@ -454,6 +456,10 @@ public class Organism extends Item implements Commons {
         return searchWater;
     }
 
+    public boolean isAggressive() {
+        return aggressive;
+    }
+
     public void setSearchFood(boolean searchFood) {
         this.searchFood = searchFood;
     }
@@ -462,6 +468,10 @@ public class Organism extends Item implements Commons {
         this.searchWater = searchWater;
     }
 
+    public void setAggressive(boolean aggressive) {
+        this.aggressive = aggressive;
+    }
+    
     public boolean isEating() {
         return eating;
     }

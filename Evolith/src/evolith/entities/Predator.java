@@ -10,9 +10,6 @@ import evolith.game.Game;
 import evolith.game.Item;
 import evolith.helpers.Commons;
 import static evolith.helpers.Commons.MAX_MATURITY;
-import static evolith.helpers.Commons.SECONDS_PER_HUNGER;
-import static evolith.helpers.Commons.SECONDS_PER_MATURITY;
-import static evolith.helpers.Commons.SECONDS_PER_THIRST;
 import evolith.helpers.Time;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -33,32 +30,14 @@ public class Predator extends Item implements Commons {
 
     private Time time;
     
-    private int id;
-
-    /**
-     * These are the five evolutionary traits
-     */
-    private int size;
-    private int speed;
-    private int strength;
-    private int stealth;
-    private int survivability;
-
-    private int life;           //Health points of the organism
-    private int hunger;         //hunger of the organism
-    private int thirst;         //thirst of the organism
-    private int maturity;       //maturity level of the organsim
-    private int generation;     //generation level of the organsim
-    private int skin;
+    private int life;
+    private int hunger;
+    private int thirst;
 
     private int prevHungerRed;  //Time in seconds at which hunger was previously reduced
     private int prevThirstRed;  //Time in seconds at which hunger was previously reduced
-    private int prevMatInc;     //Time in seconds at which maturity was previously increased
 
-    private boolean needOffspring;
     private boolean dead;
-
-    private String name;
 
     private boolean moving;
     private boolean inPlant;
@@ -82,37 +61,19 @@ public class Predator extends Item implements Commons {
      * @param width
      * @param height
      * @param game
-     * @param skin
-     * @param id
      */
-    public Predator(int x, int y, int width, int height, Game game, int skin, int id) {
+    public Predator(int x, int y, int width, int height, Game game) {
         super(x, y, width, height);
         this.game = game;
-        this.skin = skin;
-        this.id = id;
         point = new Point(x, y);
         maxVel = 3;
         xVel = 0;
         yVel = 0;
         acc = 0.1;
 
-        size = 100;
-        speed = 10;
-        strength = 20;
-        stealth = 10;
-        survivability = 10;
-
-        life = 100;
-        hunger = 100;
-        thirst = 100;
-        maturity = 0;
-        generation = 1;
-
         prevHungerRed = 0;
         prevThirstRed = 0;
-        prevMatInc = 0;
 
-        needOffspring = false;
         dead = false;
         inPlant = false;
         inWater = false;
@@ -123,17 +84,12 @@ public class Predator extends Item implements Commons {
 
         eating = false;
         drinking = false;
+        
+        hunger = 100;
+        thirst = 100;
+        life = 100;
 
         time = new Time();
-        name = "";
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -148,42 +104,8 @@ public class Predator extends Item implements Commons {
         checkVitals();  
     }
     
-    
-
-    public int getSize() {
-        return size;
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public int getStrength() {
-        return strength;
-    }
-
-    public int getStealth() {
-        return stealth;
-    }
-
-    public int getSurvivability() {
-        return survivability;
-    }
-
     public int getLife() {
         return life;
-    }
-
-    public int getHunger() {
-        return hunger;
-    }
-
-    public int getThirst() {
-        return thirst;
-    }
-
-    public int getMaturity() {
-        return maturity;
     }
 
     public Time getTime() {
@@ -192,14 +114,6 @@ public class Predator extends Item implements Commons {
 
     public void setTime(Time time) {
         this.time = time;
-    }
-
-    public int getGeneration() {
-        return generation;
-    }
-
-    public void setGeneration(int generation) {
-        this.generation = generation;
     }
 
     /**
@@ -275,26 +189,6 @@ public class Predator extends Item implements Commons {
             thirst--;
             prevThirstRed = (int) time.getSeconds();
         }
-
-        //Increase maturity every x seconds defined in the commmons class
-        if (time.getSeconds() >= prevMatInc + SECONDS_PER_MATURITY) {
-            maturity++;
-            prevMatInc = (int) time.getSeconds();
-
-            //Reproduction happen at these two points in maturity
-            if (maturity == 10) {
-                needOffspring = true;
-            }
-
-            if (maturity == 26) {
-                needOffspring = true;
-            }
-        }
-
-        //Once the organisms reaches max maturity, kill it
-        if (maturity >= MAX_MATURITY) {
-            //kill();
-        }
     }
     
     public void handleTarget() {
@@ -305,8 +199,6 @@ public class Predator extends Item implements Commons {
         } else if(target != null && targetResource == null){
             point.x = target.getX();
             point.y = target.getY();
-        }else{
-            return; 
         }
     }
     
@@ -318,7 +210,7 @@ public class Predator extends Item implements Commons {
      * Kill the organism
      */
     public void kill() {
-
+        dead = true;
     }
 
     /**
@@ -347,24 +239,6 @@ public class Predator extends Item implements Commons {
      */
     public void setPoint(Point point) {
         this.point = point;
-    }
-
-    /**
-     * To get needOffspring
-     *
-     * @return needOffspring
-     */
-    public boolean isNeedOffspring() {
-        return needOffspring;
-    }
-
-    /**
-     * To set needOffspring
-     *
-     * @param needOffspring
-     */
-    public void setNeedOffspring(boolean needOffspring) {
-        this.needOffspring = needOffspring;
     }
 
     /**
@@ -476,18 +350,6 @@ public class Predator extends Item implements Commons {
     public boolean isConsuming() {
         return eating || drinking;
     }
-
-    public int getSkin() {
-        return skin;
-    }
-
-    public void setSkin(int skin) {
-        this.skin = skin;
-    }
-
-    public int getId() {
-        return id;
-    }
     
     public void setHunger(int hunger){
         this.hunger = hunger;
@@ -495,10 +357,5 @@ public class Predator extends Item implements Commons {
     
     public void setThirst(int thirst){
         this.thirst = thirst;
-    }
-
-
-
-        
-        
+    }      
 }

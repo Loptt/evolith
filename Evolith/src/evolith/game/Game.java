@@ -248,6 +248,7 @@ public class Game implements Runnable, Commons {
             buttonBar.applyMouse(mouseX, mouseY);
             organisms.setSelectedSearchFood(buttonBar.isFoodActive());
             organisms.setSelectedSearchWater(buttonBar.isWaterActive());
+            organisms.setSelectedAggressiveness(buttonBar.isFightActive());
             organisms.emptySelectedTargets();
             mouseManager.setLeft(false);
         //Second in hierarchy is the minimap

@@ -83,6 +83,7 @@ public class OrganismManager implements Commons {
             organisms.get(i).tick();
             //checkReproduce(organisms.get(i));
             checkKill(organisms.get(i));
+            checkPredators();
         }
         
         panel.tick();
@@ -255,6 +256,46 @@ public class OrganismManager implements Commons {
             amount--;
         }
     }
+    
+    private void checkPredators() {
+        //Check every organism
+        for (int i = 0; i < organisms.size(); i++) {
+            Organism org = organisms.get(i);
+            //Check for every predator
+            for (int j = 0; j < game.getPredators().getPredatorAmount(); j++) {
+                Predator pred = game.getPredators().getPredator(j);
+                
+                //If predator is in the range of the organism
+                if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) < MAX_SIGHT_DISTANCE) {
+                    safeLeaveResource(org);
+                    
+                    if (!org.isAggressive()) {
+                        //Escape
+                        
+                        //TODO: FIX THIS SHIT
+                        Point generatedPoint = generateEscapePoint(pred, org);
+
+                        //Point newPoint = new Point(generatedPoint.x, generatedPoint.y);
+                        org.setPoint(generatedPoint);
+                        System.out.println("toi esKpando");
+                    } else {
+                        //FIGHT
+                    }
+                }
+            }
+        }
+    }
+    
+    public Point generateEscapePoint(Predator pred, Organism org){
+        
+        Point generatedPoint = new Point(org.getX(),org.getY());
+        
+        generatedPoint.x = org.getX()+(org.getX()-pred.getX());
+        generatedPoint.y = org.getY()+(org.getY()-pred.getY());
+        //System.out.println("generating point: (" + generatedPoint.x + "," + generatedPoint.y+")");
+        
+        return generatedPoint;
+    }
 
     public void setResource(Resource resource) {
         for (int i = 0; i < organisms.size(); i++) {
@@ -280,13 +321,7 @@ public class OrganismManager implements Commons {
                 if ((target.isFull() && !target.hasParasite(org)) || target.isOver()) {
                     //System.out.println("HEHE CHANGE RESOURCE");
                     
-                    if (target.hasParasite(org)) {
-                        target.removeParasite(org, i + 1000);
-                    }
-                    
-                    org.setTarget(null);
-                    org.setEating(false);
-                    org.setDrinking(false);
+                    safeLeaveResource(org);
                     autoLookTarget(org);
                 }
             } else {
@@ -325,15 +360,6 @@ public class OrganismManager implements Commons {
                 //Not looking for anything, idle
                 org.setTarget(null);
             }
-        } else {
-            if(!game.getButtonBar().isFightActive()){
-                Point generatedPoint = org.getEscapePoint();
-
-                //Point newPoint = new Point(generatedPoint.x, generatedPoint.y);
-                org.setPoint(generatedPoint);
-                System.out.println("toi esKpando");
-            }
-            //System.out.println("AUTOLOOK WHEN CONSUMING");
         }
     }
     
@@ -410,18 +436,7 @@ public class OrganismManager implements Commons {
     public void emptyTargets() {
         for (int i = 0; i < organisms.size(); i++) {
             Organism org = organisms.get(i);
-            Resource target = organisms.get(i).getTarget();
-            if (target != null) {
-                //System.out.println("REMOVING TARGET ORGMANAGER");
-                
-                if (org.isConsuming()) {
-                    target.removeParasite(org, org.getId() + 5000);
-                    org.setEating(false);
-                    org.setDrinking(false);
-                    //System.out.println("DONE REMOVING TARGET ORGMANAGER");
-                }
-                org.setTarget(null);
-            }
+            safeLeaveResource(org);
         }
     }
     
@@ -429,28 +444,21 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSelected()) {
                 Organism org = organisms.get(i);
-                Resource target = organisms.get(i).getTarget();
-                if (target != null) {
-                    //System.out.println("REMOVING TARGET ORGMANAGER");
-                    
-                    /*if (target.hasParasite(org)) {
-                        target.removeParasite(org, org.getId() + 5000);
-                        org.setEating(false);
-                        org.setDrinking(false);
-                        //System.out.println("DONE REMOVING TARGET ORGMANAGER");
-                    }
-                    org.setTarget(null);*/
-
-                    if (org.isConsuming()) {
-                        target.removeParasite(org, org.getId() + 5000);
-                        org.setEating(false);
-                        org.setDrinking(false);
-                        //System.out.println("DONE REMOVING TARGET ORGMANAGER");
-                    }
-                    org.setTarget(null);
-                }
+                safeLeaveResource(org);
             }
         } 
+    }
+    
+    private void safeLeaveResource(Organism org) {
+        Resource target = org.getTarget();
+        if (target != null) {
+            if (target.hasParasite(org)) {
+                target.removeParasite(org, org.getId() + 5000);
+                org.setEating(false);
+                org.setDrinking(false);
+            }
+            org.setTarget(null);
+        }
     }
     
     public boolean selectionHasActiveFood() {
@@ -466,6 +474,16 @@ public class OrganismManager implements Commons {
     public boolean selectionHasActiveWater() {
         for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSearchWater() && organisms.get(i).isSelected()) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public boolean selectionHasAggressiveness() {
+        for (int i = 0; i < organisms.size(); i++) {
+            if (organisms.get(i).isAggressive() && organisms.get(i).isSelected()) {
                 return true;
             }
         }
@@ -588,6 +606,14 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < amount; i++) {
             if (organisms.get(i).isSelected()) {
                 organisms.get(i).setSearchWater(val);
+            }
+        }
+    }
+    
+    public void setSelectedAggressiveness(boolean val) {
+        for (int i = 0; i < amount; i++) {
+            if (organisms.get(i).isSelected()) {
+                organisms.get(i).setAggressive(val);
             }
         }
     }

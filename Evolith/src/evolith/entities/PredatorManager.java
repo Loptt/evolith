@@ -7,12 +7,6 @@ import evolith.helpers.SwarmMovement;
 import evolith.helpers.Time;
 import evolith.engine.Assets;
 import evolith.helpers.Commons;
-import static evolith.helpers.Commons.INITIAL_POINT;
-import static evolith.helpers.Commons.PREDATOR_SIZE;
-import static evolith.helpers.Commons.PANEL_HEIGHT;
-import static evolith.helpers.Commons.PANEL_WIDTH;
-import static evolith.helpers.Commons.PANEL_X;
-import static evolith.helpers.Commons.PANEL_Y;
 
 import evolith.menus.OrganismPanel;
 
@@ -35,24 +29,6 @@ public class PredatorManager implements Commons {
     private int amount;         //max organism amount
 
     private Game game;          // game instance
-    private int counter;        //frame counter
-
-    private Hover h;            // hover panel
-    private boolean hover;      // to know if hovering
-
-    private int newX;           // new x position of the organisms
-    private int newY;           // new y position of the organisms
-
-    private int skin;
-
-    private OrganismPanel panel;
-    private ArrayList<Point> currentPoss;
-
-    private Point centralPoint;
-    private Point targetPoint;
-    
-    private int panelNum;
-    private int idCounter;
 
     /**
      * Constructor of the organisms
@@ -60,24 +36,13 @@ public class PredatorManager implements Commons {
      * @param game
      */
     public PredatorManager(Game game) {
-        panelNum = 0;
         this.game = game;
         predators = new ArrayList<>();
         amount = PREDATORS_AMOUNT;
-        idCounter = 1;
 
         for (int i = 0; i < amount; i++) {
-            predators.add(new Predator(INITIAL_POINT + i*100, INITIAL_POINT + i*100, PREDATOR_SIZE, PREDATOR_SIZE, game, 0, idCounter++));
+            predators.add(new Predator(INITIAL_POINT + i*100, INITIAL_POINT + i*100, PREDATOR_SIZE, PREDATOR_SIZE, game));
         }
-        newX = INITIAL_POINT;
-        newY = INITIAL_POINT;
-
-        centralPoint = new Point(INITIAL_POINT, INITIAL_POINT);
-
-        panel = new OrganismPanel(0, 0, 0, 0, this.game);
-
-        targetPoint = new Point(INITIAL_POINT, INITIAL_POINT);
-        currentPoss = SwarmMovement.getPositions(500, 500, 50, 1);
     }
 
     /**
@@ -86,27 +51,25 @@ public class PredatorManager implements Commons {
     public void tick() {
         for (int i = 0; i < predators.size(); i++) { 
             predators.get(i).tick();
+            
+            //Look for the nearest organism, if no, then water
             autoLookTarget(predators.get(i));
-            for(int j=0; j<game.getOrganisms().getOrganismsAmount(); j++){
-                if(predators.get(i).intersects(game.getOrganisms().getOrganism(j))){
+            
+            //Check status with every organism
+            for (int j = 0; j < game.getOrganisms().getOrganismsAmount(); j++) {
+                //Check if the predator is touching an organism
+                if (predators.get(i).intersects(game.getOrganisms().getOrganism(j))) {
+                    //Get current life
                     double acutalLife = game.getOrganisms().getOrganism(j).getLife();
-                    game.getOrganisms().getOrganism(j).setLife(acutalLife-0.1);
-                    System.out.println("quitando vida " + "id: "+  game.getOrganisms().getOrganism(j).getId() + " vida actual: " + game.getOrganisms().getOrganism(j).getLife());
-                    if(game.getOrganisms().getOrganism(j).isBeingChased()){
-                        System.out.println("organism #" + game.getOrganisms().getOrganism(j).getId()+ " is being chased");
-                    }
-                    if(acutalLife < 1){
-                        game.getOrganisms().getOrganism(j).setDead(true);
-                    }
+                    
+                    //Decrease life
+                    game.getOrganisms().getOrganism(j).setLife(acutalLife - 0.1);
                 }           
             }
 
-            //checkReproduce(organisms.get(i));
-            //checkKill(predators.get(i));
+            checkKill(predators.get(i));
         }
     }
-
-
 
     /**
      * Check if an organism needs to be killed
@@ -119,58 +82,21 @@ public class PredatorManager implements Commons {
             amount--;
         }
     }
-
-    public void setOrganism(Organism org) {
-        for (int i = 0; i < amount; i++) {
-            predators.get(i).setTarget(org);
-        }
-    }
-    
-    public void setResource(Resource res){
-        for (int i = 0; i < amount; i++) {
-            predators.get(i).setTargetResource(res);
-        }  
-    }
-
-    public void checkOrganismResourceStatus() {
-        for (int i = 0; i < amount; i++) {
-            Predator pred = predators.get(i);
-            Organism target = predators.get(i).getTarget();
-            //Check if target exists
-        }
-    }
-
-    public double distanceBetweenTwoPoints(double x1, double y1, double x2, double y2){
-        return Math.sqrt(Math.pow(x1-x2,2) + Math.pow(y1-y2,2));
-    }
-    
-    public Point generateEscapePoint(Predator pred, Organism org){
-        
-        Point generatedPoint = new Point(org.getX(),org.getY());
-        
-        generatedPoint.x = org.getX()+(org.getX()-pred.getX());
-        generatedPoint.y = org.getY()+(org.getY()-pred.getY());
-       System.out.println("generating point: (" + generatedPoint.x + "," + generatedPoint.y+")");
-        
-        return generatedPoint;
-    }
     
     public void autoLookTarget(Predator pred) {
+        
+        //Finds closest organism or water
         Resource res = findNearestValidWater(pred);
         Organism org = findNearestOrganism(pred);
-        if(res == null) return; 
-        if(org == null) return;
-        if( distanceBetweenTwoPoints(pred.getX(), pred.getY(), org.getX(), org.getY()) > MAX_SIGHT_DISTANCE){
+        
+        //If there is an organism and is in valid distance
+        if (org != null && SwarmMovement.distanceBetweenTwoPoints(pred.getX(), pred.getY(), org.getX(), org.getY()) > MAX_SIGHT_DISTANCE) {
+            pred.setTarget(org);
+            pred.setTargetResource(null);
+        } else if (res != null) {
+            //If not check if a resource is nearby and set target to that one
             pred.setTargetResource(res);
             pred.setTarget(null);
-            org.isBeingChased(false);
-            Point toEscape = generateEscapePoint(pred, org);
-            org.setEscapePoint(toEscape);
-        }else{
-            pred.setTarget(org);
-            Point toEscape = generateEscapePoint(pred, org);
-            org.setEscapePoint(toEscape);
-            pred.setTargetResource(null);
         }
     }
         
@@ -205,8 +131,6 @@ public class PredatorManager implements Commons {
         return closestOrganism;
     }
     
-    
-    
     public Resource findNearestValidWater(Predator pred) {
         Resource closestWater = null; 
         double closestDistanceBetweenWaterAndOrganism = 1000000;
@@ -214,44 +138,16 @@ public class PredatorManager implements Commons {
         for(int i = 1; i < game.getResources().getWaterAmount(); i++){
             double distanceBetweenPlantAndOrganism = 7072;
             
-                distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(pred.getX()-game.getResources().getWater(i).getX(),2)
-                        + Math.pow(pred.getY()-game.getResources().getWater(i).getY(),2) );
+                distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(pred.getX()- game.getResources().getWater(i).getX(), 2)
+                        + Math.pow(pred.getY()- game.getResources().getWater(i).getY(), 2));
 
-            if(distanceBetweenPlantAndOrganism<closestDistanceBetweenWaterAndOrganism){
+            if(distanceBetweenPlantAndOrganism < closestDistanceBetweenWaterAndOrganism) {
                 closestDistanceBetweenWaterAndOrganism = distanceBetweenPlantAndOrganism;
                 closestWater = game.getResources().getWater(i);
             }
         }
         
         return closestWater;
-    }
-
-    public void checkArrivalOnResource() {
-        for (int i = 0; i < predators.size(); i++) {
-            Predator pred = predators.get(i);
-            Resource target = predators.get(i).getTargetResource();
-            if (target != null) {
-                if (target.intersects(pred)) {
-                    if (!target.isFull()) {
-                        if (!target.hasPredator(pred)) {
-                            target.addPredator(pred);
-                            //Check the resource type
-                            if (target.getType() == Resource.ResourceType.Water) {
-                                pred.setEating(true);
-                            } else {
-                                pred.setDrinking(true);
-                            }
-                        } else {
-                            //System.out.println("ORG ALREADY IN TARGET");
-                            autoLookTarget(pred);
-                        }
-                    } else {
-                        //System.out.println("TARGET FULL");
-                        autoLookTarget(pred);
-                    }
-                }
-            }
-        }
     }
     
     /**
@@ -267,28 +163,6 @@ public class PredatorManager implements Commons {
     }
 
     /**
-     * Set the skin of the organisms
-     *
-     * @param skin
-     */
-    public void setSkin(int skin) {
-        this.skin = skin;
-
-        for (int i = 0; i < predators.size(); i++) {
-            predators.get(i).setSkin(skin);
-        }
-    }
-
-    /**
-     * Get the skin <code>int</code> used by the organisms
-     *
-     * @return
-     */
-    public int getSkin() {
-        return skin;
-    }
-
-    /**
      * Get the positions <code>Point</code> of the organisms
      *
      * @return
@@ -301,24 +175,6 @@ public class PredatorManager implements Commons {
         }
 
         return positions;
-    }
-
-    /**
-     * to set the central point of the swarm
-     *
-     * @param centralPoint
-     */
-    public void setCentralPoint(Point centralPoint) {
-        this.centralPoint = centralPoint;
-    }
-
-    /**
-     * to get the central point of the swarm
-     *
-     * @return
-     */
-    public Point getCentralPoint() {
-        return centralPoint;
     }
 
     public Predator getPredator(int i){
