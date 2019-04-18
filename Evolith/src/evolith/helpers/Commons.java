@@ -44,8 +44,8 @@ public interface Commons {
     public static final int PANEL_HEIGHT = 369;
     public static final int BUTTON_CLOSE_DIMENSION = 40;
     
-    public static final int MUTATION_PANEL_X = 100;
-    public static final int MUTATION_PANEL_Y = 50;
+    public static final int MUTATION_PANEL_X = 50;
+    public static final int MUTATION_PANEL_Y = 75;
     public static final int MUTATION_PANEL_WIDTH = 732;
     public static final int MUTATION_PANEL_HEIGHT = 517;
     public static final int MUTATION_BUTTON_CLOSE_DIMENSION = 40;
