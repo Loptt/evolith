@@ -333,7 +333,6 @@ public class Organism extends Item implements Commons {
         if (selected) {
             g.setColor(Color.RED);
             g.fillOval(game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height);
-            System.out.println("HEEHEEE");
         }
     }
 

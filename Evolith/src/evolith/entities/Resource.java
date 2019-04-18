@@ -28,6 +28,7 @@ public class Resource extends Item implements Commons{
     private int quantity;
     private Game game;
     private boolean full;
+    private boolean fullOfPredators;
     private boolean over;
     private int parasiteAmount;
     private int predatorAmount;
@@ -46,6 +47,7 @@ public class Resource extends Item implements Commons{
         this.game = game;
         quantity = 100;
         full = false;
+        fullOfPredators = false;
         over = false;
         parasiteAmount = 0;
         predatorAmount = 0;
@@ -81,7 +83,7 @@ public class Resource extends Item implements Commons{
     }
     
     public void addPredator(Predator pred) {
-        if (!full) {
+        if (!fullOfPredators) {
             for (int i = 0; i < 6; i++) {
                 if (!mapOfPredators.containsValue(i)) {
                     mapOfPredators.put(pred, i);
@@ -90,7 +92,7 @@ public class Resource extends Item implements Commons{
                     //System.out.println("TO ID:   " + org.getId());
                     predatorAmount++;
                     if (predatorAmount >= 6) {
-                        full = true;
+                        fullOfPredators = true;
                     }
                     return;
                 }
@@ -120,10 +122,10 @@ public class Resource extends Item implements Commons{
     public void removePredator(Predator pred, int i) {
         if (mapOfPredators.containsKey(pred)) {
             //System.out.println("AMOUNT  :" + map.size());
-            map.remove(pred);
+            mapOfPredators.remove(pred);
             predatorAmount--;
             if (predatorAmount < 6) {
-                full = false;
+                fullOfPredators = false;
             }
             //System.out.println("PARASITE REMOVED  ID:  " + i);
         } else {

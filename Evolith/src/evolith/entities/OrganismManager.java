@@ -119,7 +119,7 @@ public class OrganismManager implements Commons {
     /**
      * to move the swarm to the specified coordinates given there is an object
      * in the middle
-     *
+     *                          
      * @param x
      * @param y
      * @param obj
@@ -135,7 +135,39 @@ public class OrganismManager implements Commons {
             organisms.get(i).setPoint(points.get(i));
         }
     }
+    
+    public void moveSelectedSwarm(int x, int y) {
+        ArrayList<Point> points;
+        
+        int count = 0;
+        
+        for (int i = 0; i < organisms.size(); i++) {
+            if (organisms.get(i).isSelected()) {
+                count++;
+            }
+        }
+        
+        if (count <= 0) {
+            return;
+        }
 
+        points = SwarmMovement.getPositions(x - ORGANISM_SIZE / 2, y - ORGANISM_SIZE / 2, count);
+        
+        int pointIndex = 0;
+        
+        for (int i = 0; i < organisms.size(); i++) {
+            if (organisms.get(i).isSelected()) {
+                organisms.get(i).setPoint(points.get(pointIndex++));
+            }
+        }
+    }
+
+    /**
+     * deprecated
+     * @param x
+     * @param y
+     * @param obj 
+     */
     public void moveSwarmToPoint(int x, int y, int obj) {
         Point p = new Point(x, y);
 
@@ -192,7 +224,7 @@ public class OrganismManager implements Commons {
     public void checkSelection(Rectangle r) {
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setSelected(organisms.get(i).intersects(r));
-            System.out.println("SELECTED: " + organisms.get(i).isSelected());
+            //System.out.println("SELECTED: " + organisms.get(i).isSelected());
         }
     }
 
@@ -226,6 +258,14 @@ public class OrganismManager implements Commons {
     public void setResource(Resource resource) {
         for (int i = 0; i < amount; i++) {
             organisms.get(i).setTarget(resource);
+        }
+    }
+    
+    public void setSelectedResource(Resource resource) {
+        for (int i = 0; i < amount; i++) {
+            if (organisms.get(i).isSelected()) {
+                organisms.get(i).setTarget(resource);
+            }
         }
     }
 
@@ -375,6 +415,34 @@ public class OrganismManager implements Commons {
             }
         }
     }
+    
+    public void emptySelectedTargets() {
+        for (int i = 0; i < organisms.size(); i++) {
+            if (organisms.get(i).isSelected()) {
+                Organism org = organisms.get(i);
+                Resource target = organisms.get(i).getTarget();
+                if (target != null) {
+                    //System.out.println("REMOVING TARGET ORGMANAGER");
+                    
+                    /*if (target.hasParasite(org)) {
+                        target.removeParasite(org, org.getId() + 5000);
+                        org.setEating(false);
+                        org.setDrinking(false);
+                        //System.out.println("DONE REMOVING TARGET ORGMANAGER");
+                    }
+                    org.setTarget(null);*/
+
+                    if (org.isConsuming()) {
+                        target.removeParasite(org, org.getId() + 5000);
+                        org.setEating(false);
+                        org.setDrinking(false);
+                        //System.out.println("DONE REMOVING TARGET ORGMANAGER");
+                    }
+                    org.setTarget(null);
+                }
+            }
+        } 
+    }
 
     /**
      * To render the organisms
@@ -472,10 +540,26 @@ public class OrganismManager implements Commons {
             organisms.get(i).setSearchFood(val);
         }
     }
+    
+    public void setSelectedSearchFood(boolean val) {
+        for (int i = 0; i < amount; i++) {
+            if (organisms.get(i).isSelected()) {
+                organisms.get(i).setSearchFood(val);
+            }
+        }
+    }
 
     public void setSearchWater(boolean val) {
         for (int i = 0; i < amount; i++) {
             organisms.get(i).setSearchWater(val);
+        }
+    }
+    
+    public void setSelectedSearchWater(boolean val) {
+        for (int i = 0; i < amount; i++) {
+            if (organisms.get(i).isSelected()) {
+                organisms.get(i).setSearchWater(val);
+            }
         }
     }
     
