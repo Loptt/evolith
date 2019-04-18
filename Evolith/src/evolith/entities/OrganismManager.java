@@ -250,10 +250,13 @@ public class OrganismManager implements Commons {
         }
         else{
             //if mutation
+            offspring = org.cloneOrg();
+
             
         }
+        offspring.setId(idCounter+1);
+        idCounter++;
         organisms.add(offspring);
-
         organisms.get(organisms.size() - 1).setSearchFood(org.isSearchFood());
         organisms.get(organisms.size() - 1).setSearchWater(org.isSearchWater());
         org.setNeedOffspring(false);
