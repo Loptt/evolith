@@ -97,8 +97,8 @@ public class Organism extends Item implements Commons {
         size = 100;
         speed = 20;
         strength = 20;
-        stealth = 10;
-        maxHealth = 10;
+        stealth = 20;
+        maxHealth = 20;
 
         life = 100;
         hunger = 100;
