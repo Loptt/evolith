@@ -279,6 +279,13 @@ public class OrganismManager implements Commons {
                 org.setTarget(null);
             }
         } else {
+            if(!game.getButtonBar().isFightActive()){
+                Point generatedPoint = org.getEscapePoint();
+
+                //Point newPoint = new Point(generatedPoint.x, generatedPoint.y);
+                org.setPoint(generatedPoint);
+                System.out.println("toi esKpando");
+            }
             //System.out.println("AUTOLOOK WHEN CONSUMING");
         }
     }
@@ -323,6 +330,7 @@ public class OrganismManager implements Commons {
         return closestWater;
     }
 
+    
     public void checkArrivalOnResource() {
         for (int i = 0; i < organisms.size(); i++) {
             Organism org = organisms.get(i);

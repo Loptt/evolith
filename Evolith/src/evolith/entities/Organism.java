@@ -55,6 +55,7 @@ public class Organism extends Item implements Commons {
     private boolean dead;
     private boolean beingChased;
     private String name;
+    private Point escapePoint;
 
     private boolean moving;
     private boolean inPlant;
@@ -102,7 +103,7 @@ public class Organism extends Item implements Commons {
         thirst = 100;
         maturity = 0;
         generation = 1;
-
+        escapePoint = point;
         prevHungerRed = 0;
         prevThirstRed = 0;
         prevMatInc = 0;
@@ -487,5 +488,12 @@ public class Organism extends Item implements Commons {
     public void isBeingChased(boolean a){
         this.beingChased = a;
     }
-        
+    
+    public void setEscapePoint(Point p){
+        this.escapePoint = p;
+    }
+    
+    public Point getEscapePoint(){
+        return escapePoint;
+    }
 }

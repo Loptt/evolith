@@ -84,7 +84,7 @@ public class PredatorManager implements Commons {
      * updates all organisms
      */
     public void tick() {
-        for (int i = 0; i < amount; i++) { 
+        for (int i = 0; i < predators.size(); i++) { 
             predators.get(i).tick();
             autoLookTarget(predators.get(i));
             for(int j=0; j<game.getOrganisms().getOrganismsAmount(); j++){
@@ -144,6 +144,17 @@ public class PredatorManager implements Commons {
         return Math.sqrt(Math.pow(x1-x2,2) + Math.pow(y1-y2,2));
     }
     
+    public Point generateEscapePoint(Predator pred, Organism org){
+        
+        Point generatedPoint = new Point(org.getX(),org.getY());
+        
+        generatedPoint.x = org.getX()+(org.getX()-pred.getX());
+        generatedPoint.y = org.getY()+(org.getY()-pred.getY());
+       System.out.println("generating point: (" + generatedPoint.x + "," + generatedPoint.y+")");
+        
+        return generatedPoint;
+    }
+    
     public void autoLookTarget(Predator pred) {
         Resource res = findNearestValidWater(pred);
         Organism org = findNearestOrganism(pred);
@@ -153,13 +164,14 @@ public class PredatorManager implements Commons {
             pred.setTargetResource(res);
             pred.setTarget(null);
             org.isBeingChased(false);
+            Point toEscape = generateEscapePoint(pred, org);
+            org.setEscapePoint(toEscape);
         }else{
             pred.setTarget(org);
-            org.isBeingChased(true);
+            Point toEscape = generateEscapePoint(pred, org);
+            org.setEscapePoint(toEscape);
             pred.setTargetResource(null);
         }
-        
-
     }
         
     /**

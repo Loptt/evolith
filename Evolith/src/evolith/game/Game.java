@@ -432,6 +432,10 @@ public class Game implements Runnable, Commons {
         return resources;
     }
     
+    
+    public ButtonBarMenu getButtonBar(){
+        return buttonBar;
+    }
     /**
      * start game
      */
