@@ -69,6 +69,7 @@ public class Organism extends Item implements Commons {
 
     private boolean eating;
     private boolean drinking;
+    private boolean selected;
 
     /**
      * Constructor of the organism
@@ -119,6 +120,7 @@ public class Organism extends Item implements Commons {
 
         eating = false;
         drinking = false;
+        selected = false;
 
         time = new Time();
         name = "";
@@ -329,6 +331,10 @@ public class Organism extends Item implements Commons {
     @Override
     public void render(Graphics g) {
         g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
+        if (selected) {
+            g.setColor(Color.RED);
+            g.fillOval(game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height);
+        }
     }
 
     /**
@@ -480,6 +486,13 @@ public class Organism extends Item implements Commons {
     public void setThirst(int thirst){
         this.thirst = thirst;
     }
+  
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
      
     public boolean isBeingChased(){
         return beingChased;
