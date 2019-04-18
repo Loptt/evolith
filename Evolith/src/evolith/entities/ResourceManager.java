@@ -57,7 +57,7 @@ public class ResourceManager implements Commons {
             yCoord = randomGen.nextInt(5000) + 1;
             plants.add(new Resource(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE, game, Resource.ResourceType.Plant));
             
-            System.out.println("plants size: " + plants.size());
+            //System.out.println("plants size: " + plants.size());
             
             for (int j = 0; j < plants.size() - 1; j++) {
                 if (plants.get(i).intersects(plants.get(j)) && i != j) {
@@ -74,7 +74,7 @@ public class ResourceManager implements Commons {
             yCoord = randomGen.nextInt(5000) + 1;
             waters.add(new Resource(xCoord, yCoord, WATER_SIZE, WATER_SIZE, game, Resource.ResourceType.Water));
 
-            System.out.println("waters size: " + waters.size());
+            //System.out.println("waters size: " + waters.size());
             
             for (int j = 0; j < waters.size() - 1; j++) {
                 if (waters.get(i).intersects(waters.get(j)) && i != j) {
@@ -182,6 +182,7 @@ public class ResourceManager implements Commons {
         for (int i = 0; i < waters.size(); i++) {
             waters.get(i).tick();
         }
+        
         deleteResources();
         respawnResources();
     }

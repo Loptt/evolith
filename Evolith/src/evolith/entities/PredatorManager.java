@@ -7,6 +7,8 @@ import evolith.helpers.SwarmMovement;
 import evolith.helpers.Time;
 import evolith.engine.Assets;
 import evolith.helpers.Commons;
+import static evolith.helpers.Commons.WATERS_AMOUNT;
+import static evolith.helpers.Commons.WATER_SIZE;
 
 import evolith.menus.OrganismPanel;
 
@@ -15,6 +17,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -39,9 +42,23 @@ public class PredatorManager implements Commons {
         this.game = game;
         predators = new ArrayList<>();
         amount = PREDATORS_AMOUNT;
-
+/*
         for (int i = 0; i < amount; i++) {
             predators.add(new Predator(INITIAL_POINT + i*100, INITIAL_POINT + i*100, PREDATOR_SIZE, PREDATOR_SIZE, game));
+        }*/
+        
+        Random randomGen = new Random();
+        
+        int newWidthPredators = (int) Math.ceil( 5000/Math.sqrt(PREDATORS_AMOUNT) );
+        int newHeightPredators = (int) Math.ceil( 5000/Math.sqrt(PREDATORS_AMOUNT) );
+         
+        for (int i = newWidthPredators; i < 5000 - 2 * newWidthPredators; i += newWidthPredators){
+            for (int j = newHeightPredators; j < 5000 - 2 * newHeightPredators; j += newHeightPredators){
+                int xCoord, yCoord; 
+                xCoord = randomGen.nextInt(newWidthPredators) + j;
+                yCoord = randomGen.nextInt(newHeightPredators) + i;
+                predators.add(new Predator(xCoord, yCoord, PREDATOR_SIZE, PREDATOR_SIZE, game));
+            }
         }
     }
 
@@ -90,7 +107,7 @@ public class PredatorManager implements Commons {
         Organism org = findNearestOrganism(pred);
         
         //If there is an organism and is in valid distance
-        if (org != null && SwarmMovement.distanceBetweenTwoPoints(pred.getX(), pred.getY(), org.getX(), org.getY()) > MAX_SIGHT_DISTANCE) {
+        if (org != null && SwarmMovement.distanceBetweenTwoPoints(pred.getX(), pred.getY(), org.getX(), org.getY()) < MAX_SIGHT_DISTANCE) {
             pred.setTarget(org);
             pred.setTargetResource(null);
         } else if (res != null) {
@@ -157,7 +174,7 @@ public class PredatorManager implements Commons {
      */
     public void render(Graphics g) {
 
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < predators.size(); i++) {
             predators.get(i).render(g);
         }
     }

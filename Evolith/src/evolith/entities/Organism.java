@@ -300,6 +300,10 @@ public class Organism extends Item implements Commons {
         if (maturity >= MAX_MATURITY) {
             //kill();
         }
+        
+        if (life <= 0) {
+            dead = true;
+        }
     }
     
     public void handleTarget() {

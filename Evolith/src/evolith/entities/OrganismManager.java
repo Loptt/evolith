@@ -274,10 +274,12 @@ public class OrganismManager implements Commons {
                         
                         //TODO: FIX THIS SHIT
                         Point generatedPoint = generateEscapePoint(pred, org);
+                        org.setSearchFood(false);
+                        org.setSearchWater(false);
 
                         //Point newPoint = new Point(generatedPoint.x, generatedPoint.y);
                         org.setPoint(generatedPoint);
-                        System.out.println("toi esKpando");
+                        //System.out.println("toi esKpando");
                     } else {
                         //FIGHT
                     }
@@ -289,9 +291,25 @@ public class OrganismManager implements Commons {
     public Point generateEscapePoint(Predator pred, Organism org){
         
         Point generatedPoint = new Point(org.getX(),org.getY());
+
+        generatedPoint.x = org.getX()+(org.getX()-pred.getX()) + SwarmMovement.generateRandomness(50);
+        generatedPoint.y = org.getY()+(org.getY()-pred.getY()) + SwarmMovement.generateRandomness(50);;
         
-        generatedPoint.x = org.getX()+(org.getX()-pred.getX());
-        generatedPoint.y = org.getY()+(org.getY()-pred.getY());
+        if (generatedPoint.x <= 0) {
+            generatedPoint.x = 100;
+        }
+        
+        if (generatedPoint.x >= BACKGROUND_WIDTH) {
+            generatedPoint.x = BACKGROUND_WIDTH - 100;
+        }
+        
+        if (generatedPoint.y <= 0) {
+            generatedPoint.y = 100;
+        }
+        
+        if (generatedPoint.y >= BACKGROUND_HEIGHT) {
+            generatedPoint.y = BACKGROUND_HEIGHT - 100;
+        }
         //System.out.println("generating point: (" + generatedPoint.x + "," + generatedPoint.y+")");
         
         return generatedPoint;

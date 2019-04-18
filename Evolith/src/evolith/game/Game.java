@@ -62,12 +62,11 @@ public class Game implements Runnable, Commons {
     private SetupMenu setupMenu;
 
     private Clock clock;                        // the time of the game
-    
     private InputReader inputReader;
-
     private Minimap minimap;
-    
     private Selection selection;
+    
+    private boolean night;
     
     /**
      * to create title, width and height and set the game is still not running
@@ -90,6 +89,8 @@ public class Game implements Runnable, Commons {
 
         state = States.MainMenu;
         selection = new Selection(this);
+        
+        night = false;
         
     }
 
@@ -131,7 +132,7 @@ public class Game implements Runnable, Commons {
         display = new Display(title, width, height);
         Assets.init();
 
-        background = new Background(Assets.background, 5000, 5000, width, height);
+        background = new Background(5000, 5000, width, height);
         buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
         setupMenu = new SetupMenu(0, 0, width, height, this);
         //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
@@ -344,6 +345,7 @@ public class Game implements Runnable, Commons {
                     break;
                 case Play:
                     g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
+                    
                     resources.render(g);
                     organisms.render(g);
                     predators.render(g);
@@ -351,6 +353,9 @@ public class Game implements Runnable, Commons {
                     buttonBar.render(g);
                     if (selection.isActive()) {
                         selection.render(g);
+                    }
+                    if (night) {
+                        g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
                     }
                     break;
             }
@@ -491,6 +496,12 @@ public class Game implements Runnable, Commons {
     public ButtonBarMenu getButtonBar(){
         return buttonBar;
     }
+
+    public boolean isNight() {
+        return night;
+    }
+    
+    
     /**
      * start game
      */

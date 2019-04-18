@@ -115,7 +115,7 @@ public class Minimap extends Menu implements Commons{
     }
     
     public void render(Graphics g) {
-        g.drawImage(Assets.background, MINIMAP_X, MINIMAP_Y, MINIMAP_WIDTH, MINIMAP_HEIGHT, null);
+        g.drawImage(game.getBackground().getCurrentFullBackground(), MINIMAP_X, MINIMAP_Y, MINIMAP_WIDTH, MINIMAP_HEIGHT, null);
         
         switch(game.getOrganismsSkin()) {
             case '0':

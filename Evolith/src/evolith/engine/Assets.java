@@ -16,7 +16,9 @@ import java.util.ArrayList;
  */
 public class Assets {
 
-    public static BufferedImage background; //background image
+    public static BufferedImage backgroundDay; //background image
+    public static BufferedImage backgroundNight; //background image
+    public static BufferedImage backgroundFilter; //background image
     public static BufferedImage plant; //plant image
     public static BufferedImage water;
     public static BufferedImage predator;
@@ -54,7 +56,9 @@ public class Assets {
      * Initalizes the assets and links to the image folder
      */
     public static void init() {
-        background = ImageLoader.loadImage("/images/backgrounds/bigbackground.png");
+        backgroundDay = ImageLoader.loadImage("/images/backgrounds/backgroundday.png");
+        backgroundNight = ImageLoader.loadImage("/images/backgrounds/backgroundnight.png");
+        backgroundFilter = ImageLoader.loadImage("/images/backgrounds/nightmode.png");
         plant = ImageLoader.loadImage("/images/playgraphics/food.png");
         water = ImageLoader.loadImage("/images/playgraphics/water.png");
         predator = ImageLoader.loadImage("/images/playgraphics/alien_enemy.png");

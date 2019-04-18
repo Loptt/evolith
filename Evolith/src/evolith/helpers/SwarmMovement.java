@@ -151,7 +151,7 @@ public class SwarmMovement implements Commons {
      * @param random
      * @return
      */
-    private static int generateRandomness(int random) {
+    public static int generateRandomness(int random) {
         return (int) (Math.random() * random - random / 2);
     }
     
