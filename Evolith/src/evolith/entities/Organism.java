@@ -332,7 +332,8 @@ public class Organism extends Item implements Commons {
         g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
         if (selected) {
             g.setColor(Color.RED);
-            g.fillOval(x, y, width + 100, height + 100);
+            g.fillOval(game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height);
+            System.out.println("HEEHEEE");
         }
     }
 
