@@ -7,6 +7,7 @@ import evolith.helpers.SwarmMovement;
 import evolith.helpers.Time;
 import evolith.engine.Assets;
 import evolith.helpers.Commons;
+import evolith.menus.MutationPanel;
 
 import evolith.menus.OrganismPanel;
 
@@ -39,6 +40,7 @@ public class OrganismManager implements Commons {
     private int skin;
 
     private OrganismPanel orgPanel;
+    private MutationPanel mutPanel;
     private ArrayList<Point> currentPoss;
 
     private Point centralPoint;
@@ -68,6 +70,7 @@ public class OrganismManager implements Commons {
         centralPoint = new Point(INITIAL_POINT, INITIAL_POINT);
 
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
+        mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
 
         targetPoint = new Point(INITIAL_POINT, INITIAL_POINT);
         currentPoss = SwarmMovement.getPositions(500, 500, 50, 1);
@@ -79,7 +82,6 @@ public class OrganismManager implements Commons {
     public void tick() {
         for (int i = 0; i < amount; i++) {
             organisms.get(i).tick();
-            checkReproduce(organisms.get(i));
             checkKill(organisms.get(i));
         }
 
@@ -224,19 +226,7 @@ public class OrganismManager implements Commons {
             reproduce(orgPanel.getOrganism());
             orgPanel.setReproduce(false);
          }
-
-        
-    }
-
-    /**
-     * Check if individual organism needs reproduction
-     *
-     * @param org
-     */
-    private void checkReproduce(Organism org) {
-        if (org.isNeedOffspring()) {
-            
-        }
+ 
     }
 
     private void reproduce(Organism org) {
@@ -245,15 +235,14 @@ public class OrganismManager implements Commons {
         //generate an int for a chance of mutation
         int mutationChance = (int) (Math.random() * (2 - 0)); 
         //if it should not mutate
-        if(mutationChance<1){
-            offspring = org.cloneOrg();
+        
+        offspring = org.cloneOrg();
+        
+        if(mutationChance == 1){
+            orgPanel.setActive(false);
         }
-        else{
-            //if mutation
-            offspring = org.cloneOrg();
-
-            
-        }
+        mutPanel = new MutationPanel(org,MUTATION_PANEL_X,MUTATION_PANEL_Y,MUTATION_PANEL_WIDTH,MUTATION_PANEL_HEIGHT,game);
+        
         offspring.setId(idCounter+1);
         idCounter++;
         organisms.add(offspring);
@@ -436,12 +425,13 @@ public class OrganismManager implements Commons {
         }
         //render the hover panel of an organism
 
-        if (!orgPanel.isActive()) {
+        if (!orgPanel.isActive() || !mutPanel.isActive()) {
             if (h != null && isHover()) {
                 h.render(g);
             }
         }
         orgPanel.render(g);
+        mutPanel.render(g);
     }
 
     /**

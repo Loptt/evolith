@@ -95,7 +95,10 @@ public class OrganismPanel extends Menu implements Commons {
     
     @Override
     public void tick() {
-
+        /*if(organism.isDead())
+        {
+            active = false;
+        }*/
         inputReader.readInput();
         if (active) {
 

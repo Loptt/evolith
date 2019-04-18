@@ -32,6 +32,8 @@ public class Assets {
 
     public static BufferedImage organismPanel_menu;
     public static BufferedImage organismPanel_close;
+    public static BufferedImage mutation_menu;
+    public static BufferedImage mutation_max_tier;
 
     public static BufferedImage minimapFrame;
     
@@ -68,10 +70,16 @@ public class Assets {
         
         organismPanel_close = ImageLoader.loadImage("/images/panel/closedetails.png");
         organismPanel_menu = ImageLoader.loadImage("/images/panel/detailsmenu2.png");
+        
         organismPanel_prevArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
         organismPanel_nextArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
         organismPanel_reproduceButton = ImageLoader.loadImage("/images/mainmenu/onplay.png");
         
+
+        mutation_menu = ImageLoader.loadImage("/images/panel/mutationmenu.png");
+        mutation_max_tier = ImageLoader.loadImage("/images/panel/maxtier.png");
+        
+
         //Top Bar in 0,0
         ArrayList<BufferedImage> a1 = new ArrayList<BufferedImage>();
         a1.add(ImageLoader.loadImage("/images/buttonbar/buttonbarnew.png"));
