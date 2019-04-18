@@ -208,11 +208,10 @@ public class MutationPanel extends Menu implements Commons {
         }
 
         for (int i = 0; i < buttons.size(); i++) {
-            
-            if(selection != 0  || i != 0)
+            if(selection != 0  || i != 0){
                 buttons.get(i).render(g);
+            }
         }
-
     }
 
     public boolean isActive() {
