@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package evolith.menus;
 
 import evolith.engine.Assets;
@@ -25,15 +21,6 @@ import java.util.logging.Logger;
  * @author ErickFrank
  */
 public class OrganismPanel extends Menu implements Commons {
-
-    private int speed;
-    private int size;
-    private int strength;
-    private int maturity;
-    private int survivability;
-    private int stealth;
-    private int generation;
-    private double duration;
     private Organism organism;
 
     private String fontPath;
@@ -69,15 +56,6 @@ public class OrganismPanel extends Menu implements Commons {
     public OrganismPanel(int x, int y, int width, int height, Game game, Organism org) {
         super(x, y, width, height, game);
         this.organism = org;
-        this.speed = org.getSpeed();
-        this.size = org.getSize();
-        this.strength = org.getStrength();
-        this.survivability = org.getMaxHealth();
-        this.stealth = org.getStealth();
-        this.maturity = org.getMaturity();
-        this.generation = org.getGeneration();
-        this.duration = org.getTime().getSeconds();
-        this.name = org.getName();
         this.searchNext = false;
         this.searchPrev = false;
         this.reproduce = false;
@@ -226,38 +204,33 @@ public class OrganismPanel extends Menu implements Commons {
             g.drawImage(Assets.organismPanel_close, x + width - 20, y - 20, BUTTON_CLOSE_DIMENSION, BUTTON_CLOSE_DIMENSION, null);
             //Stealth
             g.setColor(Color.ORANGE);
-            g.fillRect(x + 470, y + 112, (int) 68 * stealth / MAX_STEALTH, 20);
+            g.fillRect(x + 470, y + 112, (int) 68 * organism.getStealth() / MAX_STEALTH, 20);
             //Max Health
             g.setColor(Color.CYAN);
-            g.fillRect(x + 470, y + 167, (int) 68 * survivability / MAX_SURVIVABILITY, 20);
+            g.fillRect(x + 470, y + 167, (int) 68 * organism.getSize() / MAX_SURVIVABILITY, 20);
             //maturity
             g.setColor(Color.YELLOW);
-            g.fillRect(x + 470, y + 224, (int) 68 * maturity / MAX_MATURITY, 20);
+            g.fillRect(x + 470, y + 224, (int) 68 * organism.getMaturity() / MAX_MATURITY, 20);
             //speed
             g.setColor(Color.MAGENTA);
-            g.fillRect(x + 368, y + 112, (int) 68 * speed / MAX_SPEED, 20);
+            g.fillRect(x + 368, y + 112, (int) 68 * organism.getSpeed() / MAX_SPEED, 20);
             //size
             g.setColor(Color.WHITE);
-            g.fillRect(x + 368, y + 167, (int) 68 * size / MAX_SIZE, 20);
+            g.fillRect(x + 368, y + 167, (int) 68 * organism.getSize() / MAX_SIZE, 20);
             //strength
             g.setColor(Color.LIGHT_GRAY);
-            g.fillRect(x + 368, y + 224, (int) 68 * strength / MAX_STRENGTH, 20);
+            g.fillRect(x + 368, y + 224, (int) 68 * organism.getStrength() / MAX_STRENGTH, 20);
 
             // Edit
             g.setColor(Color.WHITE);
             g.setFont(fontEvolve);
-            g.drawString(Integer.toString(generation), x + 160, y + 277);
-            g.drawString(Double.toString(duration), x + 130, y + 305);
+            g.drawString(Integer.toString(organism.getGeneration()), x + 160, y + 277);
+            g.drawString(Double.toString(organism.getTime().getSeconds()+organism.getTime().getMilliseconds()), x + 130, y + 305);
 
             g.setColor(Color.WHITE);
             g.setFont(fontEvolve);
-            g.drawString(name, x + 40, y + 57);
-            
-  
-           g.setColor(Color.red);
-           g.drawRect(x+PANEL_WIDTH+50,y+PANEL_HEIGHT/2,50,50);
-           g.drawRect(x-100,y+PANEL_HEIGHT/2,50,50);
-           g.drawRect(x+PANEL_WIDTH/2,y+400,300,75);
+            g.drawString(organism.getName(), x + 40, y + 57);
+         
             
         for (int i = 0; i < buttons.size(); i++) {
             

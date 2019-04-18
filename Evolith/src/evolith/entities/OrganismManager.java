@@ -29,7 +29,6 @@ public class OrganismManager implements Commons {
     private int amount;         //max organism amount
 
     private Game game;          // game instance
-    private int counter;        //frame counter
 
     private Hover h;            // hover panel
     private boolean hover;      // to know if hovering
@@ -39,7 +38,7 @@ public class OrganismManager implements Commons {
 
     private int skin;
 
-    private OrganismPanel panel;
+    private OrganismPanel orgPanel;
     private ArrayList<Point> currentPoss;
 
     private Point centralPoint;
@@ -68,7 +67,7 @@ public class OrganismManager implements Commons {
 
         centralPoint = new Point(INITIAL_POINT, INITIAL_POINT);
 
-        panel = new OrganismPanel(0, 0, 0, 0, this.game);
+        orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
 
         targetPoint = new Point(INITIAL_POINT, INITIAL_POINT);
         currentPoss = SwarmMovement.getPositions(500, 500, 50, 1);
@@ -171,60 +170,59 @@ public class OrganismManager implements Commons {
     }
 
     private void checkPanel() {
-        panel.tick();
+        orgPanel.tick();
         for (int i = 0; i < organisms.size(); i++) {
             
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
                 if (game.getMouseManager().isLeft()) {
-                    panel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, game, organisms.get(i));
+                    orgPanel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, game, organisms.get(i));
                     
-                    panel.setIndex(panelIndex);
+                    orgPanel.setIndex(panelIndex);
                     
                     game.getMouseManager().setLeft(false);
                 }
             }    
         }
-        if(panel.isSearchNext() || panel.isSearchPrev())
+        if(orgPanel.isSearchNext() || orgPanel.isSearchPrev())
         {            
             for (int i = 0; i < organisms.size(); i++){
-               if(panel.getOrganism() == organisms.get(i))
+               if(orgPanel.getOrganism() == organisms.get(i))
                {
-                   panel.setIndex(i);
+                   orgPanel.setIndex(i);
                    panelIndex = i;
                }
             }
-            while(panel.isSearchNext() || panel.isSearchPrev())
+            while(orgPanel.isSearchNext() || orgPanel.isSearchPrev())
             {    
-            if(panel.isSearchNext())
+            if(orgPanel.isSearchNext())
              {
-                 int auxIndex = panel.getIndex();
-                 panel.setIndex(++auxIndex % organisms.size());
+                 int auxIndex = orgPanel.getIndex();
+                 orgPanel.setIndex(++auxIndex % organisms.size());
                  //panel.setIndex((panel.getIndex()+1) % organisms.size());
              }
             
-            if(panel.isSearchPrev())
+            if(orgPanel.isSearchPrev())
              {
-                 int auxIndex = panel.getIndex();
-                 panel.setIndex(realMod(--auxIndex, organisms.size()));
+                 int auxIndex = orgPanel.getIndex();
+                 orgPanel.setIndex(realMod(--auxIndex, organisms.size()));
              }
              
-             if(panelIndex == panel.getIndex() || organisms.get(panel.getIndex()).isNeedOffspring())
+             if(panelIndex == orgPanel.getIndex() || organisms.get(orgPanel.getIndex()).isNeedOffspring())
              {
                  
-                 panelIndex = panel.getIndex();
-                 panel.setOrganism(organisms.get(panelIndex));
-                 panel.setSearchNext(false);
-                 panel.setSearchPrev(false);
+                 panelIndex = orgPanel.getIndex();
+                 orgPanel.setOrganism(organisms.get(panelIndex));
+                 orgPanel.setSearchNext(false);
+                 orgPanel.setSearchPrev(false);
              }
-           
          }
         }
 
-         if(panel.isReproduce())
+         if(orgPanel.isReproduce())
          {
-            reproduce(panel.getOrganism());
-            panel.setReproduce(false);
+            reproduce(orgPanel.getOrganism());
+            orgPanel.setReproduce(false);
          }
 
         
@@ -435,12 +433,12 @@ public class OrganismManager implements Commons {
         }
         //render the hover panel of an organism
 
-        if (!panel.isActive()) {
+        if (!orgPanel.isActive()) {
             if (h != null && isHover()) {
                 h.render(g);
             }
         }
-        panel.render(g);
+        orgPanel.render(g);
     }
 
     /**
