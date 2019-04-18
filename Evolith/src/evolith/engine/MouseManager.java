@@ -89,7 +89,6 @@ public class MouseManager implements MouseListener, MouseMotionListener {
             left = true;
             x = e.getX();
             y = e.getY();
-            System.out.println("DRAGGING");
         }
     }
 

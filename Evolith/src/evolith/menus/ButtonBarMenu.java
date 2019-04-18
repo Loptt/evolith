@@ -7,6 +7,7 @@ package evolith.menus;
 
 import evolith.game.Game;
 import evolith.engine.Assets;
+import evolith.entities.OrganismManager;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -48,6 +49,13 @@ public class ButtonBarMenu extends Menu {
 
     @Override
     public void tick() {
+        OrganismManager orgs = game.getOrganisms();
+        
+        foodActive = orgs.selectionHasActiveFood();
+        waterActive = orgs.selectionHasActiveWater();
+
+        buttons.get(1).setActive(foodActive);
+        buttons.get(0).setActive(waterActive);
     }
 
     @Override

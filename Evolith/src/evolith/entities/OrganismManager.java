@@ -443,6 +443,26 @@ public class OrganismManager implements Commons {
             }
         } 
     }
+    
+    public boolean selectionHasActiveFood() {
+        for (int i = 0; i < organisms.size(); i++) {
+            if (organisms.get(i).isSearchFood() && organisms.get(i).isSelected()) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public boolean selectionHasActiveWater() {
+        for (int i = 0; i < organisms.size(); i++) {
+            if (organisms.get(i).isSearchWater() && organisms.get(i).isSelected()) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
     /**
      * To render the organisms
