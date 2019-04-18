@@ -92,6 +92,7 @@ public class MutationPanel extends Menu implements Commons {
             active = false;
         }
          */
+<<<<<<< HEAD
         if (active) {
             for (int i = 0; i < buttons.size(); i++) {
                 if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
@@ -122,8 +123,64 @@ public class MutationPanel extends Menu implements Commons {
                 if (buttons.get(5).isPressed()) {
                     selection = 4;
                 }
+=======
+        for (int i = 0; i < buttons.size(); i++) {
+            if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
+                //if the mouse is over the button 
+                buttons.get(i).setActive(true);
+                //if left click change mouse status
+                if (game.getMouseManager().isLeft()) {
+                    buttons.get(i).setPressed(true);
+                    for(int j=0; j<buttons.size(); j++){
+                        if(i!=j){
+                            buttons.get(j).setPressed(false);
+                        }
+                    }
+                    game.getMouseManager().setLeft(false);
+                }
+            } else {
+                buttons.get(i).setActive(false);
+            }
+            if(selection != 0 && buttons.get(0).isPressed())
+            {
+                int j = 0;
+
+                for (int k = 0; k < organism.getOrgMutations().getMutations().get(i).size(); k++) {
+                    if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
+                        j = k;
+                    }
+                }
+                if(j!=organism.getOrgMutations().getMutations().get(selection-1).size()-1){
+                    active = false;
+                    organism.getOrgMutations().getMutations().get(selection-1).get(j).setActive(false);
+                    organism.getOrgMutations().getMutations().get(selection-1).get(j+1).setActive(true);
+                    
+            
+                }
+            }
+            if (buttons.get(2).isPressed()) {
+                selection = 1;
+                
+            }
+            if (buttons.get(3).isPressed()) {
+                
+                selection = 2;
+                
+            }
+            if (buttons.get(4).isPressed()) {
+                
+                selection = 3;
+                
+            }
+            if (buttons.get(5).isPressed()) {
+                
+                selection = 4;
+                
+>>>>>>> 58e2c9f64e05c9a5e0d83c01e4ea38e4b8584aab
             }
         }
+        
+        if(buttons.get(0).isPressed())
     }
 
     @Override
@@ -212,6 +269,7 @@ public class MutationPanel extends Menu implements Commons {
             }
         }
 
+<<<<<<< HEAD
     }
 
     public Organism getOrganism() {
@@ -220,6 +278,13 @@ public class MutationPanel extends Menu implements Commons {
 
     public void setOrganism(Organism organism) {
         this.organism = organism;
+=======
+        for (int i = 0; i < buttons.size(); i++) {
+            if(selection != 0  || i != 0){
+                buttons.get(i).render(g);
+            }
+        }
+>>>>>>> 58e2c9f64e05c9a5e0d83c01e4ea38e4b8584aab
     }
 
     public String getName() {
