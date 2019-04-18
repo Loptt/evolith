@@ -43,6 +43,8 @@ public class MutationPanel extends Menu implements Commons {
     private HashMap<Integer, String> hmap;
 
     private InputReader inputReader;
+    
+    private int selection;
 
     public MutationPanel(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
@@ -66,6 +68,11 @@ public class MutationPanel extends Menu implements Commons {
         buttons.add(new Button(this.x + PANEL_WIDTH / 2 + 200, this.y + 600, 240, 60, Assets.organismPanel_reproduceButton));
         //Not Evolve
         buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 250, this.y + 600, 240, 60, Assets.organismPanel_reproduceButton));
+        buttons.add(new Button(x + 300, y + 30, 390, 110));
+        buttons.add(new Button(x + 300, y + 145, 390, 110));
+        buttons.add(new Button(x + 300, y + 260, 390, 110));
+        buttons.add(new Button(x + 300, y + 375, 390, 110));
+        selection = 0;
         active = true;
         hmap = new HashMap<Integer, String>();
         hmap.put(1, "I");
@@ -84,6 +91,43 @@ public class MutationPanel extends Menu implements Commons {
             active = false;
         }
          */
+        for (int i = 0; i < buttons.size(); i++) {
+            if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
+                //if the mouse is over the button 
+                buttons.get(i).setActive(true);
+                //if left click change mouse status
+                if (game.getMouseManager().isLeft()) {
+                    buttons.get(i).setPressed(true);
+                    game.getMouseManager().setLeft(false);
+                }
+            } else {
+                buttons.get(i).setActive(false);
+            }
+            if(selection != 0 && buttons.get(0).isPressed())
+            {
+                active = false;
+            }
+            if (buttons.get(2).isPressed()) {
+                selection = 1;
+                
+            }
+            if (buttons.get(3).isPressed()) {
+                
+                selection = 2;
+                
+            }
+            if (buttons.get(4).isPressed()) {
+                
+                selection = 3;
+                
+            }
+            if (buttons.get(5).isPressed()) {
+                
+                selection = 4;
+                
+            }
+            
+        }
     }
 
     @Override
@@ -111,16 +155,15 @@ public class MutationPanel extends Menu implements Commons {
                         j = k;
                     }
                 }
-                j = 0;
                 if (j == organism.getOrgMutations().getMutations().get(i).size() - 1) {
-                    g.drawImage(Assets.mutation_max_tier, 380, 110, y + 395, x + 30 + i * 115, null);
+                    g.drawImage(Assets.mutation_max_tier, x + 300, y + 30 + i * 115, 390, 110, null);
                     g.setColor(Color.red);
-                    g.drawRect(380, 110, y + 395, x + 30 + i * 115);
+                    g.drawRect(x + 300, y + 30 + i * 115, 390, 110);
                 } else {
                     g.setColor(Color.WHITE);
                     g.setFont(fontEvolve);
-                    // g.drawString((String)hmap.get(organism.getOrgMutations().getMutations().get(i).get(j).getTier()) , x + 468, y + 48 + i*118);
-                    g.drawString(organism.getOrgMutations().getMutations().get(i).get(j).getName(), x + 501, y + 48 + i * 118);
+                    g.drawString((String) hmap.get(organism.getOrgMutations().getMutations().get(i).get(j).getTier()), x + 468, y + 60 + i * 115);
+                    g.drawString(organism.getOrgMutations().getMutations().get(i).get(j).getName(), x + 500, y + 60 + i * 115);
 
                     if (organism.getOrgMutations().getMutations().get(i).get(j).getStrength() != 0) {
 
@@ -147,7 +190,7 @@ public class MutationPanel extends Menu implements Commons {
                             g.fillRect(x + 613 + (int) 60 * ((organism.getStealth() + organism.getOrgMutations().getMutations().get(i).get(j).getStealth()) / MAX_STEALTH), y + 106 + 115 * i, (int) 60 * -1 * organism.getOrgMutations().getMutations().get(i).get(j).getStealth() / MAX_STEALTH, 15);
                         } else {
                             g.setColor(Color.GREEN);
-                            g.fillRect(x + 613 + (int) 60 * organism.getStealth()/MAX_STEALTH, y + 106 + 115 * i, (int) 60 * organism.getOrgMutations().getMutations().get(i).get(j).getStealth() / MAX_STEALTH, 15);
+                            g.fillRect(x + 613 + (int) 60 * organism.getStealth() / MAX_STEALTH, y + 106 + 115 * i, (int) 60 * organism.getOrgMutations().getMutations().get(i).get(j).getStealth() / MAX_STEALTH, 15);
                         }
                     }
                     if (organism.getOrgMutations().getMutations().get(i).get(j).getSpeed() != 0) {
@@ -156,7 +199,7 @@ public class MutationPanel extends Menu implements Commons {
                             g.fillRect(x + 613 + (int) 60 * ((organism.getSpeed() + organism.getOrgMutations().getMutations().get(i).get(j).getSpeed()) / MAX_SPEED), y + 81 + 115 * i, (int) 60 * -1 * organism.getOrgMutations().getMutations().get(i).get(j).getSpeed() / MAX_SPEED, 15);
                         } else {
                             g.setColor(Color.GREEN);
-                            g.fillRect(x + 613 + (int) 60 * organism.getSpeed()/MAX_SPEED, y + 81 + 115 * i, (int) 60 * organism.getOrgMutations().getMutations().get(i).get(j).getSpeed() / MAX_SPEED, 15);
+                            g.fillRect(x + 613 + (int) 60 * organism.getSpeed() / MAX_SPEED, y + 81 + 115 * i, (int) 60 * organism.getOrgMutations().getMutations().get(i).get(j).getSpeed() / MAX_SPEED, 15);
                         }
                     }
                 }
@@ -165,7 +208,9 @@ public class MutationPanel extends Menu implements Commons {
         }
 
         for (int i = 0; i < buttons.size(); i++) {
-            buttons.get(i).render(g);
+            
+            if(selection != 0  || i != 0)
+                buttons.get(i).render(g);
         }
 
     }
