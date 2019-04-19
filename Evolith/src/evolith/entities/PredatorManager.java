@@ -54,8 +54,8 @@ public class PredatorManager implements Commons {
         System.out.println("WIDTH PRED:  " + newWidthPredators);
         System.out.println("HEIGHT PRED:  " + newHeightPredators);
          
-        for (int i = newWidthPredators; i < 5000 - newWidthPredators; i += newWidthPredators){
-            for (int j = newHeightPredators; j < 5000 - newHeightPredators; j += newHeightPredators){
+        for (int i = newWidthPredators; i < 5000; i += newWidthPredators){
+            for (int j = newHeightPredators; j < 5000; j += newHeightPredators){
                 int xCoord, yCoord; 
                 xCoord = randomGen.nextInt(newWidthPredators) + j;
                 yCoord = randomGen.nextInt(newHeightPredators) + i;
