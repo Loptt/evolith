@@ -183,7 +183,7 @@ public class MutationPanel extends Menu implements Commons {
                 }
                 if(selection != 0)
                 {
-                    g.drawImage(Assets.mutation_select, x + 295, y + 25 + (selection-1) * 115, 400, 120, null);  
+                    g.drawImage(Assets.mutation_select, x + 297, y + 25 + (selection-1) * 115, 397, 120, null);  
                 }
                 if (j == organism.getOrgMutations().getMutations().get(i).size() - 1) {
                     g.drawImage(Assets.mutation_max_tier, x + 300, y + 30 + i * 115, 390, 110, null);
@@ -234,6 +234,7 @@ public class MutationPanel extends Menu implements Commons {
                     }
                 }
             }
+            
             for (int i = 0; i < buttons.size(); i++) {
 
                 if (selection != 0 || i != 0) {
