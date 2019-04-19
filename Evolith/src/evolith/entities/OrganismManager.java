@@ -217,7 +217,6 @@ public class OrganismManager implements Commons {
                     
                     orgPanel.setIndex(panelIndex);
                     game.getMouseManager().setLeft(false);
-                    return true;
                 }
             }    
         }
@@ -262,9 +261,6 @@ public class OrganismManager implements Commons {
             reproduce(orgPanel.getOrganism());
             orgPanel.setReproduce(false);
          }
- 
-        */
-        return false;
     }
     
     public void checkSelection(Rectangle r) {

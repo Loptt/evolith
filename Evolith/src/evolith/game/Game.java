@@ -262,8 +262,6 @@ public class Game implements Runnable, Commons {
             minimap.applyMouse(mouseX, mouseY, camera);
             mouseManager.setLeft(false);
         //Third in hierarchy is the background   
-        } else if (organisms.checkPanel()){
-            mouseManager.setLeft(false);
         } else {
             //System.out.println("START DRAGGING");
 
@@ -287,8 +285,6 @@ public class Game implements Runnable, Commons {
         } else if(minimap.hasMouse(mouseX,mouseY)){
             mouseManager.setRight(false);
         //Third in hierarchy is the background   
-        } else if (organisms.checkPanel()){
-            mouseManager.setRight(false);
         } else {
             selection.deactivate();
             Resource clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
