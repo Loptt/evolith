@@ -1,4 +1,3 @@
-
 package evolith.menus;
 
 import evolith.engine.Assets;
@@ -21,6 +20,7 @@ import java.util.logging.Logger;
  * @author ErickFrank
  */
 public class OrganismPanel extends Menu implements Commons {
+
     private Organism organism;
 
     private String fontPath;
@@ -62,13 +62,17 @@ public class OrganismPanel extends Menu implements Commons {
         this.index = 0;
 
         this.active = true;
-
-        buttons.add(new Button(this.x + this.width - 20, this.y - 20, 40, 40)); // Exit
+        //Exit
+        buttons.add(new Button(this.x + this.width - 20, this.y - 20, 40, 40));
+        //Edit
         buttons.add(new Button(this.x + 32, this.y + 28, 190, 35)); // Edit 
-        
-        buttons.add(new Button(this.x+PANEL_WIDTH+50,this.y+PANEL_HEIGHT/2,50,50, Assets.organismPanel_nextArrow)); // Arrow next
-        buttons.add(new Button(this.x-100,this.y+PANEL_HEIGHT/2,50,50,Assets.organismPanel_prevArrow)); // Arrow prev   
-        buttons.add(new Button(this.x+PANEL_WIDTH/2-150,this.y+400,300,75, Assets.organismPanel_reproduceButton)); // Reproduce button 
+        // Arrow next
+        buttons.add(new Button(this.x + PANEL_WIDTH + 50, this.y + PANEL_HEIGHT / 2, 50, 50, Assets.organismPanel_nextArrow));
+        // Arrow prev
+        buttons.add(new Button(this.x - 100, this.y + PANEL_HEIGHT / 2, 50, 50, Assets.organismPanel_prevArrow));
+        // Reproduce button 
+        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 400, 300, 75, Assets.organismPanel_reproduceButton));
+
         inputReader = new InputReader(game);
     }
 
@@ -79,7 +83,7 @@ public class OrganismPanel extends Menu implements Commons {
     public void setIndex(int index) {
         this.index = index;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -90,9 +94,9 @@ public class OrganismPanel extends Menu implements Commons {
 
     public void setOrganism(Organism organism) {
         this.organism = organism;
-        
+
     }
-    
+
     @Override
     public void tick() {
         /*if(organism.isDead())
@@ -119,30 +123,31 @@ public class OrganismPanel extends Menu implements Commons {
                 }
                 //next
                 if (buttons.get(2).isPressed()) {
-                    if(searchNext){
-                      buttons.get(2).setPressed(false);
-                    }else{
+                    if (searchNext) {
+                        buttons.get(2).setPressed(false);
+                    } else {
                         searchNext = true;
                     }
                 }
                 //prev
                 if (buttons.get(3).isPressed()) {
-                    if(searchPrev)
-                       buttons.get(3).setPressed(false);
-                    else searchPrev = true;
+                    if (searchPrev) {
+                        buttons.get(3).setPressed(false);
+                    } else {
+                        searchPrev = true;
+                    }
                 }
                 //reproduce
                 if (buttons.get(4).isPressed() && organism.isNeedOffspring()) {
-                    
-                    if(reproduce){
-                      buttons.get(4).setPressed(false);
-                      reproduce = false;
-                    }else{
+
+                    if (reproduce) {
+                        buttons.get(4).setPressed(false);
+                        reproduce = false;
+                    } else {
                         reproduce = true;
                         buttons.get(4).setPressed(true);
                     }
                 }
-                
 
             }
         }
@@ -163,9 +168,9 @@ public class OrganismPanel extends Menu implements Commons {
 
     public void setReproduce(boolean reproduce) {
         this.reproduce = reproduce;
-        
+
     }
-    
+
     public boolean isSearchNext() {
         return searchNext;
     }
@@ -173,7 +178,7 @@ public class OrganismPanel extends Menu implements Commons {
     public void setSearchNext(boolean searchNext) {
         this.searchNext = searchNext;
     }
-    
+
     public boolean isActive() {
         return active;
     }
@@ -197,7 +202,7 @@ public class OrganismPanel extends Menu implements Commons {
     public void setButtons(ArrayList<Button> buttons) {
         this.buttons = buttons;
     }
-    
+
     @Override
     public void render(Graphics g) {
 
@@ -228,20 +233,20 @@ public class OrganismPanel extends Menu implements Commons {
             g.setColor(Color.WHITE);
             g.setFont(fontEvolve);
             g.drawString(Integer.toString(organism.getGeneration()), x + 160, y + 277);
-            g.drawString(Double.toString(organism.getTime().getSeconds()+organism.getTime().getMilliseconds()), x + 130, y + 305);
+            g.drawString(Double.toString(organism.getTime().getSeconds() + organism.getTime().getMilliseconds()), x + 130, y + 305);
 
             g.setColor(Color.WHITE);
             g.setFont(fontEvolve);
             g.drawString(organism.getName(), x + 40, y + 57);
-         
-            
-        for (int i = 0; i < buttons.size(); i++) {
-            
-            if(i != 4 || organism.isNeedOffspring())
-                buttons.get(i).render(g);
-            
-        }
-        
+
+            for (int i = 0; i < buttons.size(); i++) {
+
+                if (i != 4 || organism.isNeedOffspring()) {
+                    buttons.get(i).render(g);
+                }
+
+            }
+
         }
 
     }
