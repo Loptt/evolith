@@ -54,6 +54,9 @@ public class Predator extends Item implements Commons {
     private boolean drinking;
     
     private double damage;
+    private double stamina;
+    
+    private boolean recovering;
 
     /**
      * Constructor of the organism
@@ -94,6 +97,8 @@ public class Predator extends Item implements Commons {
         time = new Time();
         
         damage = 0.1;
+        stamina = 100;
+        recovering = false;
     }
 
     /**
@@ -194,8 +199,20 @@ public class Predator extends Item implements Commons {
             prevThirstRed = (int) time.getSeconds();
         }
         
+        if (stamina <= 0) {
+            recovering = true;
+        }
+        
+        if (stamina >= 50) {
+            recovering = false;
+        }
+        
         if (life <= 0) {
             dead = true;
+        }
+        
+        if (stamina < 100) {
+            stamina += 0.1;
         }
     }
     
@@ -225,10 +242,16 @@ public class Predator extends Item implements Commons {
     @Override
     public void render(Graphics g) {
         g.drawImage(Assets.predator, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
+        
         g.setColor(Color.RED);
         g.fillRect(game.getCamera().getRelX(x)+3, game.getCamera().getRelY(y) + 70, (int) (80 * this.life / 100), 5);
         g.setColor(Color.white);
         g.drawRect(game.getCamera().getRelX(x)+2, game.getCamera().getRelY(y) + 70, 80, 6);
+        
+        g.setColor(Color.YELLOW);
+        g.fillRect(game.getCamera().getRelX(x)+3, game.getCamera().getRelY(y) + 76, (int) (80 * this.stamina / 100), 5);
+        g.setColor(Color.white);
+        g.drawRect(game.getCamera().getRelX(x)+2, game.getCamera().getRelY(y) + 76, 80, 6);
     }
 
     /**
@@ -377,5 +400,21 @@ public class Predator extends Item implements Commons {
 
     public void setLife(double life) {
         this.life = life;
+    }
+
+    public void setStamina(double stamina) {
+        this.stamina = stamina;
+    }
+
+    public double getStamina() {
+        return stamina;
+    }
+
+    public boolean isRecovering() {
+        return recovering;
+    }
+
+    public void setRecovering(boolean recovering) {
+        this.recovering = recovering;
     }
 }

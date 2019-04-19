@@ -114,9 +114,11 @@ public class PredatorManager implements Commons {
         Organism org = findNearestOrganism(pred);
         
         //If there is an organism and is in valid distance
-        if (org != null && SwarmMovement.distanceBetweenTwoPoints(pred.getX(), pred.getY(), org.getX(), org.getY()) < MAX_SIGHT_DISTANCE) {
+        if (org != null && SwarmMovement.distanceBetweenTwoPoints(pred.getX(), pred.getY(), org.getX(), org.getY()) < MAX_SIGHT_DISTANCE 
+                && !pred.isRecovering()) {
             pred.setTarget(org);
             pred.setTargetResource(null);
+            pred.setStamina(pred.getStamina() - 0.3);
         } else if (res != null) {
             //If not check if a resource is nearby and set target to that one
             pred.setTargetResource(res);
