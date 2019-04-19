@@ -36,7 +36,7 @@ public class Clock extends Item implements Commons {
 
         //displays the actual time in the terminal
         if (time.getTicker() % 60 == 0) {
-            System.out.println("Seconds Passed: " + time.getSeconds());
+            //System.out.println("Seconds Passed: " + time.getSeconds());
         }
     }
 

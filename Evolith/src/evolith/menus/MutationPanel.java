@@ -72,7 +72,7 @@ public class MutationPanel extends Menu implements Commons {
         //Max_Health
         buttons.add(new Button(x + 300, y + 260, 390, 110));
         //Strealth
-        buttons.add(new Button(x + 300, y + 375, 390, 110));   
+        buttons.add(new Button(x + 300, y + 375, 390, 110));
         selection = 0;
         active = true;
         hmap = new HashMap<Integer, String>();
@@ -85,75 +85,80 @@ public class MutationPanel extends Menu implements Commons {
 
     @Override
     public void tick() {
-        if(active){
+        if (active) {
             for (int i = 0; i < buttons.size(); i++) {
-            if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
-                //if the mouse is over the button 
-                buttons.get(i).setActive(true);
-                //if left click change mouse status
-                if (game.getMouseManager().isLeft()) {
-                    buttons.get(i).setPressed(true);
-                    for(int j=0; j<buttons.size(); j++){
-                        if(i!=j){
-                            buttons.get(j).setPressed(false);
+                if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
+                    //if the mouse is over the button 
+                    buttons.get(i).setActive(true);
+                    //if left click change mouse status
+                    if (game.getMouseManager().isLeft()) {
+                        buttons.get(i).setPressed(true);
+                        for (int j = 0; j < buttons.size(); j++) {
+                            if (i != j) {
+                                buttons.get(j).setPressed(false);
+                            }
                         }
+                        game.getMouseManager().setLeft(false);
                     }
-                    game.getMouseManager().setLeft(false);
+                } else {
+                    buttons.get(i).setActive(false);
                 }
-            } else {
-                buttons.get(i).setActive(false);
-            }   
-        }
-            if(buttons.get(1).isPressed())
-            {
+            }
+            if (buttons.get(1).isPressed()) {
                 active = false;
             }
-            if(selection != 0 && buttons.get(0).isPressed())
-            {
-                int j = 0;
+            if (buttons.get(2).isPressed() && !organism.getOrgMutations().getMutations().get(0).get(organism.getOrgMutations().getMutations().get(0).size() -1).isActive()) {
+                selection = 1;
 
-                for (int k = 0; k < organism.getOrgMutations().getMutations().get(selection-1).size(); k++) {
-                    if (organism.getOrgMutations().getMutations().get(selection-1).get(j).isActive()) {
+            }
+            if (buttons.get(3).isPressed() && !organism.getOrgMutations().getMutations().get(1).get(organism.getOrgMutations().getMutations().get(1).size() -1).isActive()) {
+
+                selection = 2;
+
+            }
+            if (buttons.get(4).isPressed()  && !organism.getOrgMutations().getMutations().get(2).get(organism.getOrgMutations().getMutations().get(2).size() -1).isActive()) {
+
+                selection = 3;
+
+            }
+            if (buttons.get(5).isPressed()  && !organism.getOrgMutations().getMutations().get(3).get(organism.getOrgMutations().getMutations().get(3).size() -1).isActive()) {
+
+                selection = 4;
+
+            }
+            
+            //Evolve organism
+            if (selection != 0 && buttons.get(0).isPressed()) {
+                int j = 0;
+                
+                //Iterate over the specified type of mutation
+                for (int k = 0; k < organism.getOrgMutations().getMutations().get(selection - 1).size(); k++) {
+                    if (organism.getOrgMutations().getMutations().get(selection - 1).get(k).isActive()) {
+                        //J has the current active tier
                         j = k;
                     }
                 }
-                if(j!=organism.getOrgMutations().getMutations().get(selection-1).size()-1){
-                    if(j==0 && !organism.getOrgMutations().getMutations().get(selection-1).get(0).isActive()){
-                        organism.getOrgMutations().getMutations().get(selection-1).get(j).setActive(true);
-                    }
-                    else{
-                        organism.getOrgMutations().getMutations().get(selection-1).get(j).setActive(false);
-                        organism.getOrgMutations().getMutations().get(selection-1).get(j+1).setActive(true);
+                //Check if mutation is not already in the max tier
+                if (j != organism.getOrgMutations().getMutations().get(selection - 1).size() - 1) {
+                    //Check if no tier is active
+                    if (j == 0 && !organism.getOrgMutations().getMutations().get(selection - 1).get(0).isActive()) {
+                        organism.getOrgMutations().getMutations().get(selection - 1).get(j).setActive(true); //Working fine
+                    } else {
+                        //Deactivate current tier
+                        organism.getOrgMutations().getMutations().get(selection - 1).get(j).setActive(false);
+                        //Activate next tier
+                        organism.getOrgMutations().getMutations().get(selection - 1).get(j + 1).setActive(true);
                     }
                     //organism.updateMutation(selection-1, j+1);
-            
+
                 }
                 buttons.get(0).setPressed(false);
                 selection = 0;
                 active = false;
 
             }
-            if (buttons.get(2).isPressed()) {
-                selection = 1;
-                
-            }
-            if (buttons.get(3).isPressed()) {
-                
-                selection = 2;
-                
-            }
-            if (buttons.get(4).isPressed()) {
-                
-                selection = 3;
-                
-            }
-            if (buttons.get(5).isPressed()) {
-                
-                selection = 4;
-                
-            }
-        
-    }
+
+        }
         /*
         if(organism.isDead())
         {
@@ -161,7 +166,6 @@ public class MutationPanel extends Menu implements Commons {
         }
          */
 
-       
     }
 
     @Override
@@ -179,17 +183,19 @@ public class MutationPanel extends Menu implements Commons {
                 g.fillRect(x + 613, y + 106 + 115 * i, (int) 60 * organism.getStealth() / MAX_STEALTH, 15);
 
                 int j = 0;
-
-                for (int k = 0; k < organism.getOrgMutations().getMutations().get(i).size(); k++) {
-                    if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
+                
+                //Get current active tier
+                for (int k = 1; k <= organism.getOrgMutations().getMutations().get(i).size(); k++) {
+                    if (organism.getOrgMutations().getMutations().get(i).get(k-1).isActive()) {
                         j = k;
                     }
                 }
-                if(selection != 0)
-                {
-                    g.drawImage(Assets.mutation_select, x + 297, y + 25 + (selection-1) * 115, 397, 120, null);  
+                //Draws selection rectangle
+                if (selection != 0) {
+                    g.drawImage(Assets.mutation_select, x + 297, y + 25 + (selection - 1) * 115, 397, 120, null);
                 }
-                if (j == organism.getOrgMutations().getMutations().get(i).size() - 1) {
+                //Check if max tier
+                if (j == organism.getOrgMutations().getMutations().get(i).size()) {
                     g.drawImage(Assets.mutation_max_tier, x + 300, y + 30 + i * 115, 390, 110, null);
                 } else {
                     g.setColor(Color.WHITE);
@@ -236,7 +242,7 @@ public class MutationPanel extends Menu implements Commons {
                     }
                 }
             }
-            
+
             for (int i = 0; i < buttons.size(); i++) {
 
                 if (selection != 0 || i != 0) {
@@ -277,7 +283,7 @@ public class MutationPanel extends Menu implements Commons {
     public void setSelection(int selection) {
         this.selection = selection;
     }
-    
+
     public boolean isActive() {
         return active;
     }

@@ -242,7 +242,9 @@ public class OrganismManager implements Commons {
         if(mutationChance == 1) {
             orgPanel.setActive(false);
         }
-        mutPanel = new MutationPanel(org,MUTATION_PANEL_X,MUTATION_PANEL_Y,MUTATION_PANEL_WIDTH,MUTATION_PANEL_HEIGHT,game);
+        mutPanel = new MutationPanel(offspring, MUTATION_PANEL_X,MUTATION_PANEL_Y,MUTATION_PANEL_WIDTH,MUTATION_PANEL_HEIGHT,game);
+        
+        
         
         offspring.setId(idCounter+1);
         idCounter++;
