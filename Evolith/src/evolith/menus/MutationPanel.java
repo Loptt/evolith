@@ -115,7 +115,7 @@ public class MutationPanel extends Menu implements Commons {
                 int j = 0;
 
                 for (int k = 0; k < organism.getOrgMutations().getMutations().get(selection-1).size(); k++) {
-                    if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
+                    if (organism.getOrgMutations().getMutations().get(selection-1).get(j).isActive()) {
                         j = k;
                     }
                 }
