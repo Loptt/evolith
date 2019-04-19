@@ -19,7 +19,7 @@ public interface Commons {
 
     public static final int MAX_THIRST = 100;               // maximum water level of organism
     public static final int MAX_HUNGER = 100;               // maximum hunger level of organism
-    public static final int MAX_MATURITY = 30;              // maximum maturity level of organism
+    public static final int MAX_MATURITY = 100;              // maximum maturity level of organism
     public static final int MAX_SPEED = 100;              // maximum maturity level of organism
     public static final int MAX_SIZE = 100;              // maximum maturity level of organism
     public static final int MAX_STRENGTH = 100;              // maximum maturity level of organism
@@ -42,11 +42,17 @@ public interface Commons {
     public static final int BUTTON_PLAY_X = 340;
     public static final int BUTTON_PLAY_Y = 390;
       
-    public static final int PANEL_X = 700;
-    public static final int PANEL_Y = 250;
-    public static final int PANEL_WIDTH = 245;
-    public static final int PANEL_HEIGHT = 350;
+    public static final int PANEL_X = 190;
+    public static final int PANEL_Y = 150;
+    public static final int PANEL_WIDTH = 620;
+    public static final int PANEL_HEIGHT = 369;
     public static final int BUTTON_CLOSE_DIMENSION = 40;
+    
+    public static final int MUTATION_PANEL_X = 50;
+    public static final int MUTATION_PANEL_Y = 75;
+    public static final int MUTATION_PANEL_WIDTH = 732;
+    public static final int MUTATION_PANEL_HEIGHT = 517;
+    public static final int MUTATION_BUTTON_CLOSE_DIMENSION = 40;
     
     
     public static final int BUTTON_INSTRUCTIONS_Y = 530;

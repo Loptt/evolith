@@ -43,14 +43,22 @@ public class Assets {
 
     public static BufferedImage organismPanel_menu;
     public static BufferedImage organismPanel_close;
+    public static BufferedImage mutation_menu;
+    public static BufferedImage mutation_max_tier;
+    public static BufferedImage mutation_select;
 
     public static BufferedImage minimapFrame;
     public static BufferedImage rotatedPlant;
     
     public static ArrayList<BufferedImage> orgColors;
     
+    public static ArrayList<ArrayList<BufferedImage>> mutations = new ArrayList<ArrayList<BufferedImage>>();
+    
     public static ArrayList<ArrayList<BufferedImage>> buttonBar = new ArrayList<ArrayList<BufferedImage>>();
 
+    public static BufferedImage organismPanel_prevArrow;
+    public static BufferedImage organismPanel_nextArrow;
+    public static BufferedImage organismPanel_reproduceButton;
 
     /**
      * Initalizes the assets and links to the image folder
@@ -85,8 +93,18 @@ public class Assets {
         hoverImage = ImageLoader.loadImage("/images/playgraphics/hover_bar.png");
         
         organismPanel_close = ImageLoader.loadImage("/images/panel/closedetails.png");
-        organismPanel_menu = ImageLoader.loadImage("/images/panel/detailsmenu.png");
+        organismPanel_menu = ImageLoader.loadImage("/images/panel/detailsmenu2.png");
         
+        organismPanel_prevArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
+        organismPanel_nextArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
+        organismPanel_reproduceButton = ImageLoader.loadImage("/images/mainmenu/onplay.png");
+        
+
+        mutation_menu = ImageLoader.loadImage("/images/panel/mutationmenu.png");
+        mutation_max_tier = ImageLoader.loadImage("/images/panel/maxtier.png");
+        mutation_select = ImageLoader.loadImage("/images/panel/mutselect.png");
+        
+
         //Top Bar in 0,0
         ArrayList<BufferedImage> a1 = new ArrayList<BufferedImage>();
         a1.add(ImageLoader.loadImage("/images/buttonbar/buttonbarnew.png"));
@@ -113,8 +131,38 @@ public class Assets {
         orgColors.add(ImageLoader.loadImage("/images/organisms/purpleorganism.png"));
         orgColors.add(ImageLoader.loadImage("/images/organisms/bluegreenorganism.png"));
         orgColors.add(ImageLoader.loadImage("/images/organisms/orangeorganism.png"));
+        
+        //Strength
+        ArrayList<BufferedImage> m1 = new ArrayList<BufferedImage>();
+        m1.add(ImageLoader.loadImage("/images/Traits/spines.png"));
+        m1.add(ImageLoader.loadImage("/images/Traits/sting.png"));
+        m1.add(ImageLoader.loadImage("/images/Traits/claws.png"));
+        m1.add(ImageLoader.loadImage("/images/Traits/horns.png"));
+        mutations.add(m1);
+        //Speed
+        ArrayList<BufferedImage> m2 = new ArrayList<BufferedImage>();
+        m2.add(ImageLoader.loadImage("/images/Traits/legs1.png"));
+        m2.add(ImageLoader.loadImage("/images/Traits/legs2.png"));
+        m2.add(ImageLoader.loadImage("/images/Traits/legs3.png"));
+        m2.add(ImageLoader.loadImage("/images/Traits/wings.png"));
+        mutations.add(m2);
+        //Health
+        ArrayList<BufferedImage> m3 = new ArrayList<BufferedImage>();
+        m3.add(ImageLoader.loadImage("/images/Traits/shell.png"));
+        m3.add(ImageLoader.loadImage("/images/Traits/shell.png"));
+        m3.add(ImageLoader.loadImage("/images/Traits/shell.png"));
+        mutations.add(m3);
+        //Stealth
+        ArrayList<BufferedImage> m4 = new ArrayList<BufferedImage>();
+        m4.add(ImageLoader.loadImage("/images/Traits/ears.png"));
+        m4.add(ImageLoader.loadImage("/images/Traits/stripes.png"));
+        mutations.add(m4);
 
         minimapFrame = ImageLoader.loadImage("/images/playgraphics/minimap_frame.png");
+        
+        
+        
+        
     }
     
     /**

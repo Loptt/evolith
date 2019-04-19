@@ -181,7 +181,6 @@ public class Game implements Runnable, Commons {
             state = States.SetupMenu;
         }
     }
-    
     /**
      * Tick the setup menu
      */
@@ -197,7 +196,6 @@ public class Game implements Runnable, Commons {
             state = States.Play;
         }
     }
-    
     /**
      * Tick the main game
      */
@@ -334,7 +332,7 @@ public class Game implements Runnable, Commons {
      * renders all objects in a frame
      */
     private void render() {
-        Toolkit.getDefaultToolkit().sync(); //Linux
+        //Toolkit.getDefaultToolkit().sync(); //Linux
         bs = display.getCanvas().getBufferStrategy();
 
         if (bs == null) {

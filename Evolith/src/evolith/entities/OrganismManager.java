@@ -7,6 +7,7 @@ import evolith.helpers.SwarmMovement;
 import evolith.helpers.Time;
 import evolith.engine.Assets;
 import evolith.helpers.Commons;
+import evolith.menus.MutationPanel;
 
 import evolith.menus.OrganismPanel;
 
@@ -30,7 +31,6 @@ public class OrganismManager implements Commons {
     private int amount;         //max organism amount
 
     private Game game;          // game instance
-    private int counter;        //frame counter
 
     private Hover h;            // hover panel
     private boolean hover;      // to know if hovering
@@ -40,13 +40,14 @@ public class OrganismManager implements Commons {
 
     private int skin;
 
-    private OrganismPanel panel;
+    private OrganismPanel orgPanel;
+    private MutationPanel mutPanel;
     private ArrayList<Point> currentPoss;
 
     private Point centralPoint;
     private Point targetPoint;
-    
-    private int panelNum;
+
+    private int panelIndex;
     private int idCounter;
 
     /**
@@ -55,7 +56,7 @@ public class OrganismManager implements Commons {
      * @param game
      */
     public OrganismManager(Game game) {
-        panelNum = 0;
+        panelIndex = 0;
         this.game = game;
         organisms = new ArrayList<>();
         amount = 10;
@@ -69,7 +70,8 @@ public class OrganismManager implements Commons {
 
         centralPoint = new Point(INITIAL_POINT, INITIAL_POINT);
 
-        panel = new OrganismPanel(0, 0, 0, 0, this.game);
+        orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
+        mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
 
         targetPoint = new Point(INITIAL_POINT, INITIAL_POINT);
         currentPoss = SwarmMovement.getPositions(500, 500, 50, 1);
@@ -81,12 +83,13 @@ public class OrganismManager implements Commons {
     public void tick() {
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).tick();
-            //checkReproduce(organisms.get(i));
             checkKill(organisms.get(i));
             checkPredators();
         }
-        
-        panel.tick();
+        //check the hover
+        checkHover();
+        checkPanel();
+        mutPanel.tick();
     }
 
     /**
@@ -198,27 +201,68 @@ public class OrganismManager implements Commons {
             }
         }
     }
+    
+    private int realMod(int a, int b){
+        return ((((a%b)+b)%b)+b)%b;
+    }
 
-    public boolean checkPanel() {
-       
+    private void checkPanel() {
+        orgPanel.tick();
         for (int i = 0; i < organisms.size(); i++) {
+            
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
-                if (game.getMouseManager().isLeft() && !game.getSelection().isActive()) {
-                    panelNum = i;
-                    panel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, game, organisms.get(panelNum));
+                if (game.getMouseManager().isLeft()) {
+                    orgPanel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, game, organisms.get(i));
+                    
+                    orgPanel.setIndex(panelIndex);
                     game.getMouseManager().setLeft(false);
                     return true;
                 }
-            }
+            }    
         }
-        /*
-        if(panel.isActive())
-            {
-                panel.update(organisms.get(panelNum));
-                organisms.get(panelNum).setName(panel.getName());
-                System.out.println("The name is " + organisms.get(panelNum).getName());
+        if(orgPanel.isSearchNext() || orgPanel.isSearchPrev())
+        {            
+            for (int i = 0; i < organisms.size(); i++){
+               if(orgPanel.getOrganism() == organisms.get(i))
+               {
+                   orgPanel.setIndex(i);
+                   panelIndex = i;
+               }
             }
+          
+            while(orgPanel.isSearchNext() || orgPanel.isSearchPrev())
+            {    
+            if(orgPanel.isSearchNext())
+             {
+                 int auxIndex = orgPanel.getIndex();
+                 orgPanel.setIndex(++auxIndex % organisms.size());
+                 //panel.setIndex((panel.getIndex()+1) % organisms.size());
+             }
+            
+            if(orgPanel.isSearchPrev())
+             {
+                 int auxIndex = orgPanel.getIndex();
+                 orgPanel.setIndex(realMod(--auxIndex, organisms.size()));
+             }
+             
+             if(panelIndex == orgPanel.getIndex() || organisms.get(orgPanel.getIndex()).isNeedOffspring())
+             {
+                 
+                 panelIndex = orgPanel.getIndex();
+                 orgPanel.setOrganism(organisms.get(panelIndex));
+                 orgPanel.setSearchNext(false);
+                 orgPanel.setSearchPrev(false);
+             }
+         }
+        }
+
+         if(orgPanel.isReproduce())
+         {
+            reproduce(orgPanel.getOrganism());
+            orgPanel.setReproduce(false);
+         }
+ 
         */
         return false;
     }
@@ -230,19 +274,28 @@ public class OrganismManager implements Commons {
         }
     }
 
-    /**
-     * Check if individual organism needs reproduction
-     *
-     * @param org
-     */
-    private void checkReproduce(Organism org) {
-        if (org.isNeedOffspring()) {
-            org.setNeedOffspring(false);
-            amount++;
-            organisms.add(new Organism(org.getX() + ORGANISM_SIZE, org.getY(), ORGANISM_SIZE, ORGANISM_SIZE, game, org.getSkin(), idCounter++));
-            organisms.get(organisms.size()-1).setSearchFood(org.isSearchFood());
-            organisms.get(organisms.size()-1).setSearchWater(org.isSearchWater());
+    private void reproduce(Organism org) {
+        amount++;
+        Organism offspring = new Organism(org.getX() + ORGANISM_SIZE, org.getY(), ORGANISM_SIZE, ORGANISM_SIZE, game, org.getSkin(), idCounter++);
+        //generate an int for a chance of mutation
+        int mutationChance = (int) (Math.random() * (2 - 0)); 
+        //if it should not mutate
+        
+        offspring = org.cloneOrg();
+        
+        if(mutationChance == 1) {
+            orgPanel.setActive(false);
         }
+        mutPanel = new MutationPanel(offspring, MUTATION_PANEL_X,MUTATION_PANEL_Y,MUTATION_PANEL_WIDTH,MUTATION_PANEL_HEIGHT,game);
+        
+        
+        
+        offspring.setId(idCounter+1);
+        idCounter++;
+        organisms.add(offspring);
+        organisms.get(organisms.size() - 1).setSearchFood(org.isSearchFood());
+        organisms.get(organisms.size() - 1).setSearchWater(org.isSearchWater());
+        org.setNeedOffspring(false);
     }
 
     /**
@@ -347,7 +400,7 @@ public class OrganismManager implements Commons {
             }
         }
     }
-    
+
     public void autoLookTarget(Organism org) {
         if (!org.isConsuming()) {
             Resource plant = findNearestValidFood(org);
@@ -382,15 +435,15 @@ public class OrganismManager implements Commons {
     public Resource findNearestValidFood(Organism org) {
         Resource closestPlant = null; 
         double closestDistanceBetweenPlantAndOrganism = 1000000;
-        
-        for(int i = 1; i < game.getResources().getPlantAmount(); i++){
+
+        for (int i = 1; i < game.getResources().getPlantAmount(); i++) {
             double distanceBetweenPlantAndOrganism = 7072;
             if(!game.getResources().getPlant(i).isFull() && !game.getResources().getPlant(i).isOver()){
                 distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX()-game.getResources().getPlant(i).getX(),2)
                         + Math.pow(org.getY()-game.getResources().getPlant(i).getY(),2) );
             }
-            
-            if(distanceBetweenPlantAndOrganism<closestDistanceBetweenPlantAndOrganism){
+
+            if (distanceBetweenPlantAndOrganism < closestDistanceBetweenPlantAndOrganism) {
                 closestDistanceBetweenPlantAndOrganism = distanceBetweenPlantAndOrganism;
                 closestPlant = game.getResources().getPlant(i);
             }
@@ -402,15 +455,15 @@ public class OrganismManager implements Commons {
     public Resource findNearestValidWater(Organism org) {
         Resource closestWater = null; 
         double closestDistanceBetweenWaterAndOrganism = 1000000;
-        
-        for(int i = 1; i < game.getResources().getWaterAmount(); i++){
+
+        for (int i = 1; i < game.getResources().getWaterAmount(); i++) {
             double distanceBetweenPlantAndOrganism = 7072;
             if(!game.getResources().getWater(i).isFull() && !game.getResources().getWater(i).isOver()){
                 distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX()-game.getResources().getWater(i).getX(),2)
                         + Math.pow(org.getY()-game.getResources().getWater(i).getY(),2) );
             }
-            
-            if(distanceBetweenPlantAndOrganism<closestDistanceBetweenWaterAndOrganism){
+
+            if (distanceBetweenPlantAndOrganism < closestDistanceBetweenWaterAndOrganism) {
                 closestDistanceBetweenWaterAndOrganism = distanceBetweenPlantAndOrganism;
                 closestWater = game.getResources().getWater(i);
             }
@@ -448,7 +501,6 @@ public class OrganismManager implements Commons {
         }
     }
 
-    
     public void emptyTargets() {
         for (int i = 0; i < organisms.size(); i++) {
             Organism org = organisms.get(i);
@@ -526,11 +578,14 @@ public class OrganismManager implements Commons {
             organisms.get(i).render(g);
         }
         //render the hover panel of an organism
-        if (h != null && isHover()) {
-            h.render(g);
 
+        if (!orgPanel.isActive() || !mutPanel.isActive()) {
+            if (h != null && isHover()) {
+                h.render(g);
+            }
         }
-        panel.render(g);
+        orgPanel.render(g);
+        mutPanel.render(g);
     }
 
     /**

@@ -13,6 +13,7 @@ import evolith.helpers.Time;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.ArrayList;
 
 /**
  *
@@ -38,7 +39,7 @@ public class Organism extends Item implements Commons {
     private int speed;
     private int strength;
     private int stealth;
-    private int survivability;
+    private int maxHealth;
 
     private double life;           //Health points of the organism
     private int hunger;         //hunger of the organism
@@ -70,6 +71,9 @@ public class Organism extends Item implements Commons {
 
     private boolean eating;
     private boolean drinking;
+
+    private MutationManager orgMutations; 
+
     private boolean selected;
     private boolean godCommand;
     
@@ -101,8 +105,8 @@ public class Organism extends Item implements Commons {
         size = 100;
         speed = 20;
         strength = 20;
-        stealth = 10;
-        survivability = 10;
+        stealth = 20;
+        maxHealth = 20;
 
         life = 100;
         hunger = 100;
@@ -133,6 +137,8 @@ public class Organism extends Item implements Commons {
 
         time = new Time();
         name = "";
+
+        orgMutations = new MutationManager(this, game);
         angle = 0.0;
     }
 
@@ -172,8 +178,8 @@ public class Organism extends Item implements Commons {
         return stealth;
     }
 
-    public int getSurvivability() {
-        return survivability;
+    public int getMaxHealth() {
+        return maxHealth;
     }
 
     public double getLife() {
@@ -211,6 +217,32 @@ public class Organism extends Item implements Commons {
     public void setGeneration(int generation) {
         this.generation = generation;
     }
+    
+    public void setSpeed(int speed){
+        this.speed = speed;
+    }
+    
+    public void setStealth(int stealth){
+        this.stealth = stealth;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
+    
+    
 
     /**
      * Update the position of the organism accordingly
@@ -295,13 +327,14 @@ public class Organism extends Item implements Commons {
             prevMatInc = (int) time.getSeconds();
 
             //Reproduction happen at these two points in maturity
-            if (maturity == 10) {
+            if (maturity == 3) {
                 needOffspring = true;
             }
 
-            if (maturity == 26) {
+            if (maturity == 10) {
                 needOffspring = true;
             }
+            
         }
 
         //Once the organisms reaches max maturity, kill it
@@ -359,7 +392,16 @@ public class Organism extends Item implements Commons {
      */
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
+        g.drawImage(Assets.orgColors.get(0), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
+        
+        //Warning that the organism can reproduce
+        if(isNeedOffspring()){
+            g.setColor(Color.BLACK);
+            g.fillOval(game.getCamera().getRelX(radius.getX() - width / 2), game.getCamera().getRelY(radius.getY() - width / 2), radius.getRadius(), radius.getRadius());
+        }
+        
+        orgMutations.render(g);
+      
         if (selected) {
             g.setColor(Color.RED);
             g.fillOval(game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height);
@@ -514,6 +556,48 @@ public class Organism extends Item implements Commons {
 
     public int getId() {
         return id;
+    }
+
+    public void setMaxVel(int maxVel) {
+        this.maxVel = maxVel;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public MutationManager getOrgMutations() {
+        return orgMutations;
+    }
+    
+        
+    public void updateMutation(int trait, int newTier){
+        setStrength(getOrgMutations().getMutations().get(trait).get(newTier).getStrength());
+        setSpeed(getOrgMutations().getMutations().get(trait).get(newTier).getSpeed());
+        setMaxHealth(getOrgMutations().getMutations().get(trait).get(newTier).getMaxHealth());
+        setStealth(getOrgMutations().getMutations().get(trait).get(newTier).getStealth());
+    }
+    
+    public Organism cloneOrg(){
+        Organism org = new Organism(x,y,width, height, game, skin, id);
+        org.setPoint((Point) point.clone());
+        org.setMaxVel(maxVel);
+        org.setSize(size);
+        org.setSpeed(speed);
+        org.setStrength(strength);
+        org.setMaxHealth(maxHealth);
+        org.setLife(maxHealth*2+60);
+        org.setGeneration(generation+1);
+        
+        for(int i=0; i<4; i++){
+            for(int j=0; j<orgMutations.getMutations().get(i).size(); j++){
+                if(orgMutations.getMutations().get(i).get(j).isActive()){
+                    org.getOrgMutations().getMutations().get(i).get(j).setActive(true);
+                }
+            }
+        }
+        
+        return org;
     }
     
     public void setHunger(int hunger){
