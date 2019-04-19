@@ -309,7 +309,7 @@ public class Game implements Runnable, Commons {
                 }
             } else {
                 //Else move the swarm to desired position and deactivate all searching
-
+                organisms.setSelectedGodCommand(true);
                 organisms.moveSelectedSwarm(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
                 organisms.emptySelectedTargets();
                 organisms.setSelectedResource(null);

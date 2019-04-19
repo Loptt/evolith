@@ -272,14 +272,12 @@ public class OrganismManager implements Commons {
                     if (!org.isAggressive()) {
                         //Escape
                         
-                        //TODO: FIX THIS SHIT
-                        Point generatedPoint = generateEscapePoint(pred, org);
-                        org.setSearchFood(false);
-                        org.setSearchWater(false);
-
-                        //Point newPoint = new Point(generatedPoint.x, generatedPoint.y);
-                        org.setPoint(generatedPoint);
-                        //System.out.println("toi esKpando");
+                        //If god command is active, organisms shouldn't generate a new point
+                        if (!org.isGodCommand()) {
+                            Point generatedPoint = generateEscapePoint(pred, org);
+                            org.setSearchFood(false);
+                            org.setPoint(generatedPoint);
+                        }
                     } else {
                         //FIGHT
                     }
@@ -476,6 +474,14 @@ public class OrganismManager implements Commons {
                 org.setDrinking(false);
             }
             org.setTarget(null);
+        }
+    }
+    
+    public void setSelectedGodCommand(boolean value) {
+        for (int i = 0; i < amount; i++) {
+            if (organisms.get(i).isSelected()) {
+                organisms.get(i).setGodCommand(value);
+            }
         }
     }
     

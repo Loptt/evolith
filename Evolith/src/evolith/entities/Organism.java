@@ -71,6 +71,7 @@ public class Organism extends Item implements Commons {
     private boolean eating;
     private boolean drinking;
     private boolean selected;
+    private boolean godCommand;
     
     private double angle;
 
@@ -125,6 +126,7 @@ public class Organism extends Item implements Commons {
         eating = false;
         drinking = false;
         selected = false;
+        godCommand = false;
 
         time = new Time();
         name = "";
@@ -219,6 +221,9 @@ public class Organism extends Item implements Commons {
                 if (Math.abs((int) point.getX() - x) < 5 && Math.abs((int) point.getY() - y) < 5) {
                     moving = false;
                     maxVel = 0;
+                    if (godCommand) {
+                        godCommand = false;
+                    }
                 } else {
                     moving = true;
                     maxVel = 1;
@@ -538,5 +543,13 @@ public class Organism extends Item implements Commons {
     
     public Point getEscapePoint(){
         return escapePoint;
+    }
+
+    public boolean isGodCommand() {
+        return godCommand;
+    }
+
+    public void setGodCommand(boolean godCommand) {
+        this.godCommand = godCommand;
     }
 }
