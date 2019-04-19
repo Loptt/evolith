@@ -51,13 +51,16 @@ public class PredatorManager implements Commons {
         
         int newWidthPredators = (int) Math.ceil( 5000/Math.sqrt(PREDATORS_AMOUNT) );
         int newHeightPredators = (int) Math.ceil( 5000/Math.sqrt(PREDATORS_AMOUNT) );
+        System.out.println("WIDTH PRED:  " + newWidthPredators);
+        System.out.println("HEIGHT PRED:  " + newHeightPredators);
          
-        for (int i = newWidthPredators; i < 5000 - 2 * newWidthPredators; i += newWidthPredators){
-            for (int j = newHeightPredators; j < 5000 - 2 * newHeightPredators; j += newHeightPredators){
+        for (int i = newWidthPredators; i < 5000; i += newWidthPredators){
+            for (int j = newHeightPredators; j < 5000; j += newHeightPredators){
                 int xCoord, yCoord; 
                 xCoord = randomGen.nextInt(newWidthPredators) + j;
                 yCoord = randomGen.nextInt(newHeightPredators) + i;
                 predators.add(new Predator(xCoord, yCoord, PREDATOR_SIZE, PREDATOR_SIZE, game));
+                System.out.println("ADDED PRED");
             }
         }
     }
@@ -71,20 +74,24 @@ public class PredatorManager implements Commons {
             
             //Look for the nearest organism, if no, then water
             autoLookTarget(predators.get(i));
-            
-            //Check status with every organism
-            for (int j = 0; j < game.getOrganisms().getOrganismsAmount(); j++) {
-                //Check if the predator is touching an organism
-                if (predators.get(i).intersects(game.getOrganisms().getOrganism(j))) {
-                    //Get current life
-                    double acutalLife = game.getOrganisms().getOrganism(j).getLife();
-                    
-                    //Decrease life
-                    game.getOrganisms().getOrganism(j).setLife(acutalLife - 0.1);
-                }           
-            }
-
+            checkWithOrganisms(predators.get(i));
             checkKill(predators.get(i));
+        }
+    }
+    
+    private void checkWithOrganisms(Predator pred) {
+        //Check status with every organism
+        for (int j = 0; j < game.getOrganisms().getOrganismsAmount(); j++) {
+            Organism org = game.getOrganisms().getOrganism(j);
+            //Check if the predator is touching an organism
+            if (pred.intersects(org)) {
+                //Get current life
+                double acutalLife = org.getLife();
+
+                //Decrease life
+                org.setLife(acutalLife - pred.getDamage());
+                pred.setLife(pred.getLife() - org.getDamage());
+            }           
         }
     }
 
@@ -107,9 +114,11 @@ public class PredatorManager implements Commons {
         Organism org = findNearestOrganism(pred);
         
         //If there is an organism and is in valid distance
-        if (org != null && SwarmMovement.distanceBetweenTwoPoints(pred.getX(), pred.getY(), org.getX(), org.getY()) < MAX_SIGHT_DISTANCE) {
+        if (org != null && SwarmMovement.distanceBetweenTwoPoints(pred.getX(), pred.getY(), org.getX(), org.getY()) < MAX_SIGHT_DISTANCE 
+                && !pred.isRecovering()) {
             pred.setTarget(org);
             pred.setTargetResource(null);
+            pred.setStamina(pred.getStamina() - 0.3);
         } else if (res != null) {
             //If not check if a resource is nearby and set target to that one
             pred.setTargetResource(res);

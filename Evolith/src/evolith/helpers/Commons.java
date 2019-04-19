@@ -26,7 +26,7 @@ public interface Commons {
     public static final int MAX_SURVIVABILITY = 100;              // maximum maturity level of organism
     public static final int MAX_STEALTH = 100;              // maximum maturity level of organism
     public static final double MAX_HEALTH = 100;
-    public static final int MAX_SIGHT_DISTANCE = 100;
+    public static final int MAX_SIGHT_DISTANCE = 500;
     
     public static final int PLANTS_AMOUNT = 150;              // number of plants
     public static final int WATERS_AMOUNT = 150;
