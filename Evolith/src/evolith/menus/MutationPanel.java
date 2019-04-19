@@ -42,8 +42,6 @@ public class MutationPanel extends Menu implements Commons {
     private InputStream is;
     private HashMap<Integer, String> hmap;
 
-    private InputReader inputReader;
-
     private int selection;
 
     public MutationPanel(int x, int y, int width, int height, Game game) {
@@ -58,7 +56,6 @@ public class MutationPanel extends Menu implements Commons {
         } catch (IOException ex) {
             Logger.getLogger(MutationPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        inputReader = new InputReader(game);
     }
 
     public MutationPanel(Organism organism, int x, int y, int width, int height, Game game) {
@@ -68,10 +65,13 @@ public class MutationPanel extends Menu implements Commons {
         buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 250, this.y + 450, 240, 60, Assets.organismPanel_reproduceButton));
         //Not Evolve
         buttons.add(new Button(this.x + PANEL_WIDTH / 2 + 250, this.y + 450, 240, 60, Assets.organismPanel_reproduceButton));
-
+        //Strength
         buttons.add(new Button(x + 300, y + 30, 390, 110));
+        //Speed
         buttons.add(new Button(x + 300, y + 145, 390, 110));
+        //Max_Health
         buttons.add(new Button(x + 300, y + 260, 390, 110));
+        //Strealth
         buttons.add(new Button(x + 300, y + 375, 390, 110));   
         selection = 0;
         active = true;
@@ -163,10 +163,6 @@ public class MutationPanel extends Menu implements Commons {
     public void render(Graphics g) {
         if (active) {
             g.drawImage(Assets.mutation_menu, x, y, width, height, null);
-            g.setColor(Color.red);
-
-            g.drawRect(x + MUTATION_PANEL_WIDTH / 2 - 250, y + 500, 240, 60);
-            g.drawRect(x + MUTATION_PANEL_WIDTH / 2 + 250, y + 500, 240, 60);
 
             for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
 
@@ -190,8 +186,6 @@ public class MutationPanel extends Menu implements Commons {
                 }
                 if (j == organism.getOrgMutations().getMutations().get(i).size() - 1) {
                     g.drawImage(Assets.mutation_max_tier, x + 300, y + 30 + i * 115, 390, 110, null);
-                    g.setColor(Color.red);
-                    g.drawRect(x + 300, y + 30 + i * 115, 390, 110);
                 } else {
                     g.setColor(Color.WHITE);
                     g.setFont(fontEvolve);
