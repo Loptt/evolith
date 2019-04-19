@@ -85,15 +85,8 @@ public class MutationPanel extends Menu implements Commons {
 
     @Override
     public void tick() {
-
-        /*
-        if(organism.isDead())
-        {
-            active = false;
-        }
-         */
-
-        for (int i = 0; i < buttons.size(); i++) {
+        if(active){
+            for (int i = 0; i < buttons.size(); i++) {
             if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
                 //if the mouse is over the button 
                 buttons.get(i).setActive(true);
@@ -109,7 +102,8 @@ public class MutationPanel extends Menu implements Commons {
                 }
             } else {
                 buttons.get(i).setActive(false);
-            }
+            }   
+        }
             if(buttons.get(1).isPressed())
             {
                 active = false;
@@ -124,8 +118,11 @@ public class MutationPanel extends Menu implements Commons {
                     }
                 }
                 if(j!=organism.getOrgMutations().getMutations().get(selection-1).size()-1){
-                    if(j==0){
+                    if(!organism.getOrgMutations().getMutations().get(selection-1).get(0).isActive()){
                         organism.getOrgMutations().getMutations().get(selection-1).get(j).setActive(true);
+                    }
+                    else if(j==0){
+                        organism.getOrgMutations().getMutations().get(selection-1).get(j).setActive(false);
                     }
                     else{
                         organism.getOrgMutations().getMutations().get(selection-1).get(j).setActive(false);
@@ -155,8 +152,16 @@ public class MutationPanel extends Menu implements Commons {
                 selection = 4;
                 
             }
-        }
         
+    }
+        /*
+        if(organism.isDead())
+        {
+            active = false;
+        }
+         */
+
+       
     }
 
     @Override
