@@ -522,7 +522,13 @@ public class Organism extends Item implements Commons {
         return orgMutations;
     }
     
-    
+        
+    public void updateMutation(int trait, int newTier){
+        setStrength(getOrgMutations().getMutations().get(trait).get(newTier).getStrength());
+        setSpeed(getOrgMutations().getMutations().get(trait).get(newTier).getSpeed());
+        setMaxHealth(getOrgMutations().getMutations().get(trait).get(newTier).getMaxHealth());
+        setStealth(getOrgMutations().getMutations().get(trait).get(newTier).getStealth());
+    }
     
     public Organism cloneOrg(){
         Organism org = new Organism(x,y,width, height, game, skin, id);
