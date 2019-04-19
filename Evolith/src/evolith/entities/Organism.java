@@ -74,6 +74,7 @@ public class Organism extends Item implements Commons {
     private boolean godCommand;
     
     private double angle;
+    private double damage;
 
     /**
      * Constructor of the organism
@@ -127,6 +128,8 @@ public class Organism extends Item implements Commons {
         drinking = false;
         selected = false;
         godCommand = false;
+        
+        damage = 0.1;
 
         time = new Time();
         name = "";
@@ -551,5 +554,13 @@ public class Organism extends Item implements Commons {
 
     public void setGodCommand(boolean godCommand) {
         this.godCommand = godCommand;
+    }
+
+    public double getDamage() {
+        return damage;
+    }
+
+    public void setDamage(double damage) {
+        this.damage = damage;
     }
 }

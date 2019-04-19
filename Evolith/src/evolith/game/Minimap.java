@@ -45,7 +45,7 @@ public class Minimap extends Menu implements Commons{
     public void applyMouse(int mouseX, int mouseY, Camera camera) {
         relativeX = mouseX - MINIMAP_X + MINIMAP_WIDTH;
         relativeY = mouseY - MINIMAP_Y + MINIMAP_HEIGHT;
-        System.out.println("relativeX: " + relativeX + " relativeY: " + relativeY);
+        //System.out.println("relativeX: " + relativeX + " relativeY: " + relativeY);
 
         int XOutputStart = 0;
         int XOutputEnd = 4000; 

@@ -115,7 +115,6 @@ public class Assets {
         orgColors.add(ImageLoader.loadImage("/images/organisms/orangeorganism.png"));
 
         minimapFrame = ImageLoader.loadImage("/images/playgraphics/minimap_frame.png");
-        rotatedPlant = rotateImage(plant, 180);
     }
     
     /**
