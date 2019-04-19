@@ -120,10 +120,16 @@ public class MutationPanel extends Menu implements Commons {
                     }
                 }
                 if(j!=organism.getOrgMutations().getMutations().get(selection-1).size()-1){
+                    if(j==0){
+                        organism.getOrgMutations().getMutations().get(selection-1).get(j).setActive(true);
+                    }
+                    else{
+                        organism.getOrgMutations().getMutations().get(selection-1).get(j).setActive(false);
+                        organism.getOrgMutations().getMutations().get(selection-1).get(j+1).setActive(true);
+                    }
+           
                     active = false;
-                    organism.getOrgMutations().getMutations().get(selection-1).get(j).setActive(false);
-                    organism.getOrgMutations().getMutations().get(selection-1).get(j+1).setActive(true);
-                    
+
             
                 }
             }
