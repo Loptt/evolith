@@ -63,7 +63,7 @@ public class MutationManager implements Commons{
     public ArrayList<ArrayList<Mutation>> getMutations() {
         return mutations;
     }
-    
+
     /*
     public void setMutationData(Mutation orgMutation, int stat, int tier){
         orgMutation.setSpeed(mutations.get(stat).get(tier).getSpeed());
