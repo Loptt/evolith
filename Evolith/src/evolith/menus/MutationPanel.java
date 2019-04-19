@@ -103,6 +103,10 @@ public class MutationPanel extends Menu implements Commons {
             } else {
                 buttons.get(i).setActive(false);
             }
+            if(buttons.get(1).isPressed())
+            {
+                active = false;
+            }
             if(selection != 0 && buttons.get(0).isPressed())
             {
                 int j = 0;
@@ -122,7 +126,6 @@ public class MutationPanel extends Menu implements Commons {
                     }
                     organism.updateMutation(selection-1, j);
                     active = false;
-
             
                 }
             }
