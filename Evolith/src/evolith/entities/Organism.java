@@ -41,7 +41,7 @@ public class Organism extends Item implements Commons {
     private int stealth;
     private int maxHealth;
 
-    private int life;           //Health points of the organism
+    private double life;           //Health points of the organism
     private int hunger;         //hunger of the organism
     private int thirst;         //thirst of the organism
     private int maturity;       //maturity level of the organsim
@@ -54,8 +54,9 @@ public class Organism extends Item implements Commons {
 
     private boolean needOffspring;
     private boolean dead;
-
+    private boolean beingChased;
     private String name;
+    private Point escapePoint;
 
     private boolean moving;
     private boolean inPlant;
@@ -66,13 +67,19 @@ public class Organism extends Item implements Commons {
 
     private boolean searchFood;
     private boolean searchWater;
+    private boolean aggressive;
 
     private boolean eating;
     private boolean drinking;
-    
+
     private MutationManager orgMutations; 
+
+    private boolean selected;
+    private boolean godCommand;
     
-    
+    private double angle;
+    private double damage;
+
     /**
      * Constructor of the organism
      *
@@ -82,6 +89,7 @@ public class Organism extends Item implements Commons {
      * @param height
      * @param game
      * @param skin
+     * @param id
      */
     public Organism(int x, int y, int width, int height, Game game, int skin, int id) {
         super(x, y, width, height);
@@ -105,7 +113,7 @@ public class Organism extends Item implements Commons {
         thirst = 100;
         maturity = 0;
         generation = 1;
-
+        escapePoint = point;
         prevHungerRed = 0;
         prevThirstRed = 0;
         prevMatInc = 0;
@@ -118,13 +126,20 @@ public class Organism extends Item implements Commons {
 
         searchFood = false;
         searchWater = false;
+        aggressive = false;
 
         eating = false;
         drinking = false;
+        selected = false;
+        godCommand = false;
+        
+        damage = 0.1;
 
         time = new Time();
         name = "";
+
         orgMutations = new MutationManager(this, game);
+        angle = 0.0;
     }
 
     public String getName() {
@@ -144,13 +159,8 @@ public class Organism extends Item implements Commons {
         time.tick();
         handleTarget();
         checkMovement();
-        checkVitals();
-
-        radius.setX(x);
-        radius.setY(y);
+        checkVitals();  
     }
-    
-    
 
     public int getSize() {
         return size;
@@ -172,10 +182,14 @@ public class Organism extends Item implements Commons {
         return maxHealth;
     }
 
-    public int getLife() {
+    public double getLife() {
         return life;
     }
 
+    public void setLife(double life){
+        this.life = life;
+    }
+    
     public int getHunger() {
         return hunger;
     }
@@ -242,6 +256,9 @@ public class Organism extends Item implements Commons {
                 if (Math.abs((int) point.getX() - x) < 5 && Math.abs((int) point.getY() - y) < 5) {
                     moving = false;
                     maxVel = 0;
+                    if (godCommand) {
+                        godCommand = false;
+                    }
                 } else {
                     moving = true;
                     maxVel = 1;
@@ -322,7 +339,11 @@ public class Organism extends Item implements Commons {
 
         //Once the organisms reaches max maturity, kill it
         if (maturity >= MAX_MATURITY) {
-            kill();
+            //kill();
+        }
+        
+        if (life <= 0) {
+            dead = true;
         }
     }
     
@@ -337,14 +358,31 @@ public class Organism extends Item implements Commons {
             point.y = target.getY();
         }
     }
+    
+    private void calculateAngle() {
+        
+        if (point.y == y) {
+            if (point.x > x) {
+                angle = 180.0;
+            } else {
+                angle = 0.0;
+            }
+        } else {
+            //angle = (double) Math.atan((double)(x - point.x) / (double) (point.y - y));
+        }
+        /*System.out.println(point);
+        System.out.println("x: " + x + "  y: " + y);
+        System.out.println("ANGLE IN ORG:  " +  angle);*/
+    }
 
     /**
      * Kill the organism
      */
     public void kill() {
         dead = true;
-        if (target != null && isConsuming())
-        target.removeParasite(this);
+        if (target != null && isConsuming()) {
+            target.removeParasite(this, id);
+        }
     }
 
     /**
@@ -355,8 +393,6 @@ public class Organism extends Item implements Commons {
     @Override
     public void render(Graphics g) {
         g.drawImage(Assets.orgColors.get(0), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
-        g.setColor(Color.RED);
-        g.drawOval(game.getCamera().getRelX(radius.getX() - width / 2), game.getCamera().getRelY(radius.getY() - width / 2), radius.getRadius(), radius.getRadius());
         
         //Warning that the organism can reproduce
         if(isNeedOffspring()){
@@ -365,7 +401,11 @@ public class Organism extends Item implements Commons {
         }
         
         orgMutations.render(g);
-        
+      
+        if (selected) {
+            g.setColor(Color.RED);
+            g.fillOval(game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height);
+        }
     }
 
     /**
@@ -470,6 +510,10 @@ public class Organism extends Item implements Commons {
         return searchWater;
     }
 
+    public boolean isAggressive() {
+        return aggressive;
+    }
+
     public void setSearchFood(boolean searchFood) {
         this.searchFood = searchFood;
     }
@@ -478,6 +522,10 @@ public class Organism extends Item implements Commons {
         this.searchWater = searchWater;
     }
 
+    public void setAggressive(boolean aggressive) {
+        this.aggressive = aggressive;
+    }
+    
     public boolean isEating() {
         return eating;
     }
@@ -550,5 +598,53 @@ public class Organism extends Item implements Commons {
         }
         
         return org;
+    }
+    
+    public void setHunger(int hunger){
+        this.hunger = hunger;
+    }
+    
+    public void setThirst(int thirst){
+        this.thirst = thirst;
+    }
+  
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+     
+    public boolean isBeingChased(){
+        return beingChased;
+    }
+    
+    public void isBeingChased(boolean a){
+        this.beingChased = a;
+    }
+    
+    public void setEscapePoint(Point p){
+        this.escapePoint = p;
+    }
+    
+    public Point getEscapePoint(){
+        return escapePoint;
+    }
+
+    public boolean isGodCommand() {
+        return godCommand;
+    }
+
+    public void setGodCommand(boolean godCommand) {
+        this.godCommand = godCommand;
+    }
+
+    public double getDamage() {
+        return damage;
+    }
+
+    public void setDamage(double damage) {
+        this.damage = damage;
     }
 }

@@ -7,6 +7,7 @@ package evolith.game;
 
 import evolith.engine.Assets;
 import evolith.helpers.Commons;
+import evolith.menus.Menu;
 import static evolith.helpers.Commons.MINIMAP_HEIGHT;
 import static evolith.helpers.Commons.MINIMAP_WIDTH;
 import static evolith.helpers.Commons.MINIMAP_X;
@@ -21,9 +22,10 @@ import java.awt.Graphics;
  * @author Víctor Villarreal
  * @author Moisés Fernández
  */
-public class Minimap implements Commons {
+public class Minimap extends Menu implements Commons{
     private int width, height, x, y;
-    private Game game;
+    private int relativeX, relativeY;
+    //private Game game;
     private Color organismsColor;
     
     /**
@@ -35,15 +37,47 @@ public class Minimap implements Commons {
      * @param height
      * @param game
      */
-    public Minimap(Game game) {
-        this.game = game;
-        x = MINIMAP_X;
-        y = MINIMAP_Y;
-        width = MINIMAP_WIDTH;
-        height = MINIMAP_HEIGHT;
+    public Minimap(int x, int y, int width, int height, Game game) {
+        super(x,y,width,height,game);
         organismsColor = new Color(0, 0, 0);
     }
+    
+    public void applyMouse(int mouseX, int mouseY, Camera camera) {
+        relativeX = mouseX - MINIMAP_X + MINIMAP_WIDTH;
+        relativeY = mouseY - MINIMAP_Y + MINIMAP_HEIGHT;
+        //System.out.println("relativeX: " + relativeX + " relativeY: " + relativeY);
 
+        int XOutputStart = 0;
+        int XOutputEnd = 4000; 
+        int XInputStart = 170 + 500/30;
+        int XInputEnd = 330 - 500/30;
+        
+        if(relativeX > (int)(330 - 500/30)){
+            camera.setX(4000);
+        }else if(relativeX < (int)(170 + 500/30)){
+            camera.setX(0);
+        }else{
+            camera.setX(XOutputStart + ((XOutputEnd - XOutputStart) / (XInputEnd - XInputStart)) * (relativeX - XInputStart));
+        }
+        
+        
+        int YOutputStart = 0;
+        int YOutputEnd = 4300; 
+        int YInputStart = (170 + 350/30);
+        int YInputEnd = (330 - 350/30);
+        
+        if(relativeY > (int)(330 - 350/30)){
+            camera.setY(4300);
+        }else if(relativeY < (int)(170 + 350/30)){
+            camera.setY(0);
+        }else{
+            camera.setY(YOutputStart + ((YOutputEnd - YOutputStart) / (YInputEnd - YInputStart)) * (relativeY - YInputStart));
+        }
+
+        //limites en x de 0 a 4000
+        //limites en y de 0 a 4300
+
+    }
     /**
      * To set the x of the minimap
      *
@@ -81,7 +115,7 @@ public class Minimap implements Commons {
     }
     
     public void render(Graphics g) {
-        g.drawImage(Assets.background, MINIMAP_X, MINIMAP_Y, MINIMAP_WIDTH, MINIMAP_HEIGHT, null);
+        g.drawImage(game.getBackground().getCurrentFullBackground(), MINIMAP_X, MINIMAP_Y, MINIMAP_WIDTH, MINIMAP_HEIGHT, null);
         
         switch(game.getOrganismsSkin()) {
             case '0':
@@ -114,5 +148,10 @@ public class Minimap implements Commons {
         
         g.drawRect(MINIMAP_X + game.getCamera().getX() / 30, MINIMAP_Y + game.getCamera().getY() / 30, game.getWidth() / 30 + 2, game.getHeight() / 30 + 2);
         g.drawImage(Assets.minimapFrame, MINIMAP_X, MINIMAP_Y, null);
+    }
+
+    @Override
+    public void tick() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

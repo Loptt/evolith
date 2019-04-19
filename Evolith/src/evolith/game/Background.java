@@ -1,5 +1,7 @@
 package evolith.game;
 
+import evolith.engine.Assets;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 /**
@@ -11,10 +13,12 @@ import java.awt.image.BufferedImage;
  */
 public class Background {
 
-    BufferedImage image;
+    private BufferedImage imageDay;
+    private BufferedImage imageNight;
 
-    int cameraWidth, cameraHeight;
-    int width, height;
+    private int cameraWidth, cameraHeight;
+    private int width, height;
+    private boolean night;
 
     /**
      *
@@ -24,8 +28,9 @@ public class Background {
      * @param cameraWidth
      * @param cameraHeight
      */
-    public Background(BufferedImage img, int width, int height, int cameraWidth, int cameraHeight) {
-        image = img;
+    public Background(int width, int height, int cameraWidth, int cameraHeight) {
+        imageDay = Assets.backgroundDay;
+        imageNight = Assets.backgroundNight;
         this.width = width;
         this.height = height;
         this.cameraWidth = cameraWidth;
@@ -39,8 +44,12 @@ public class Background {
      * @param y
      * @return
      */
-    BufferedImage getBackground(int x, int y) {
-        return image.getSubimage(x, y, cameraWidth, cameraHeight);
+    public BufferedImage getBackground(int x, int y) {
+        if (!night) { 
+            return imageDay.getSubimage(x, y, cameraWidth, cameraHeight);
+        } else {
+            return imageNight.getSubimage(x, y, cameraWidth, cameraHeight);
+        }
     }
 
     /**
@@ -60,4 +69,18 @@ public class Background {
     public int getHeight() {
         return height;
     }
+    
+    public BufferedImage getCurrentFullBackground() {
+        if (!night) {
+            return imageDay;
+        } else {
+            return imageNight;
+        }
+    }
+
+    public void setNight(boolean night) {
+        this.night = night;
+    }
+    
+    
 }

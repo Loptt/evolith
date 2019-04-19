@@ -8,9 +8,11 @@ import evolith.helpers.Clock;
 import evolith.helpers.Commons;
 import evolith.entities.ResourceManager;
 import evolith.entities.OrganismManager;
+import evolith.entities.PredatorManager;
 import evolith.engine.*;
 import evolith.entities.Resource;
 import evolith.helpers.InputReader;
+import evolith.helpers.Selection;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -47,6 +49,8 @@ public class Game implements Runnable, Commons {
     //private Plants plants;                      // resources of plants in the game
     //private Waters waters;
     private ResourceManager resources;
+    
+    private PredatorManager predators;
 
     private enum States {
         MainMenu, Paused, GameOver, Play, Instructions, SetupMenu
@@ -58,10 +62,12 @@ public class Game implements Runnable, Commons {
     private SetupMenu setupMenu;
 
     private Clock clock;                        // the time of the game
-    
     private InputReader inputReader;
-
     private Minimap minimap;
+    private Selection selection;
+    
+    private boolean night;
+    private int prevSecDayCycleChange;
     
     /**
      * to create title, width and height and set the game is still not running
@@ -80,10 +86,13 @@ public class Game implements Runnable, Commons {
         camera = new Camera(INITIAL_POINT - width / 2, INITIAL_POINT - height / 2, width, height, this);
         mainMenu = new MainMenu(0, 0, width, height, this);
         inputKeyboard = new InputKeyboard();
-        minimap = new Minimap(this);
+        minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
 
         state = States.MainMenu;
+        selection = new Selection(this);
         
+        night = false;
+        prevSecDayCycleChange = 0;
     }
 
     /**
@@ -93,7 +102,7 @@ public class Game implements Runnable, Commons {
     public void run() {
         init();
         
-        int fps = 60; //Current game requirements demand 60 fps
+        int fps = 60;//Current game requirements demand 60 fps
         double timeTick = 1000000000 / fps;
         double delta = 0;
         long now;
@@ -124,11 +133,12 @@ public class Game implements Runnable, Commons {
         display = new Display(title, width, height);
         Assets.init();
 
-        background = new Background(Assets.background, 5000, 5000, width, height);
+        background = new Background(5000, 5000, width, height);
         buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
         setupMenu = new SetupMenu(0, 0, width, height, this);
-
+        //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
         organisms = new OrganismManager(this);
+        predators = new PredatorManager(this);
         //plants = new Plants(this);
         //waters = new Waters(this);
         resources = new ResourceManager(this);
@@ -145,8 +155,7 @@ public class Game implements Runnable, Commons {
      */
     private void tick() {
         //Every single case is separated in its own function
-        
-        clock.tick();
+
         switch (state) {
             case MainMenu:
                 mainMenuTick();
@@ -183,6 +192,7 @@ public class Game implements Runnable, Commons {
         if (setupMenu.isClickPlay()) {
             setupMenu.setActive(false);
             organisms.setSkin(setupMenu.getOption());
+            System.out.println(setupMenu.getOption());
             state = States.Play;
         }
     }
@@ -190,15 +200,24 @@ public class Game implements Runnable, Commons {
      * Tick the main game
      */
     private void playTick() {
+        clock.tick();
         keyManager.tick();
         camera.tick();
         organisms.tick();
         resources.tick();
+        predators.tick();
         buttonBar.tick();
         inputKeyboard.tick();
+        selection.tick();
         
         manageMouse();
         checkEntitiesInteraction();
+        
+        if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
+            night = !night;
+            background.setNight(night);
+            prevSecDayCycleChange = clock.getSeconds();
+        }
     }
     
     /**
@@ -207,56 +226,108 @@ public class Game implements Runnable, Commons {
     private void manageMouse() {
         //Check for click
         if (mouseManager.isLeft()) {
-            int mouseX = mouseManager.getX();
-            int mouseY = mouseManager.getY();
-            
-            /**
-             * This set of if-else statements allows for processing the mouse in the screen only once per frame
-             * This prevents the mouse triggering multiple events where elements in the screen may overlap
-             * For example, it prevents the organisms to move when the player clicks on the button bar
-             */
-            //Check if the mouse is over the buttonbar
-            if (buttonBar.hasMouse(mouseX, mouseY)) {
-                //Process the mouse in the button bar
-                buttonBar.applyMouse(mouseX, mouseY);
-            } else {
-                //System.out.println("Removing targets in game");
-                organisms.emptyTargets();
-                Resource clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
-                
-                //If the x value is greater than 0, then a plant has been clicked
-                if (clickedResource != null) {
-                    
-                    //In this case, move the selected swarm to the selected resource
-                    //organisms.moveSwarmToPoint(clickedResource.getX(), clickedResource.getY(), 1);
-                    organisms.setResource(clickedResource);
-                    if (clickedResource.getType() == Resource.ResourceType.Plant) {
-                        organisms.setSearchFood(true);
-                    } else {
-                        organisms.setSearchWater(true);
-                    }
-                } else {
-                    //Else move the swarm to desired position
-                    organisms.moveSwarm(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
-                    organisms.setResource(null);
-                    organisms.setSearchFood(false);
-                    organisms.setSearchWater(false);
-                    //organisms.applyMouse(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
-                }
-                
-            }
-            
+            manageLeftClick();
+        } else if (mouseManager.isRight()){
+            manageRightClick();
+        } else {
+            //Dragging is false
+            organisms.checkHover();
+            selection.deactivate();
+            //System.out.println("DEACTIVATING SELECTION");
+        }
+    }
+    
+    public void manageLeftClick() {
+        int mouseX = mouseManager.getX();
+        int mouseY = mouseManager.getY();
+        
+        //System.out.println("LEFT CLICKED");
+
+        /**
+         * This set of if-else statements allows for processing the mouse in the screen only once per frame
+         * This prevents the mouse triggering multiple events where elements in the screen may overlap
+         * For example, it prevents the organisms to move when the player clicks on the button bar
+         */
+        //First in hierarchy is the buttonbar
+        if (buttonBar.hasMouse(mouseX, mouseY)) {
+            //Process the mouse in the button bar
+            buttonBar.applyMouse(mouseX, mouseY);
+            organisms.setSelectedSearchFood(buttonBar.isFoodActive());
+            organisms.setSelectedSearchWater(buttonBar.isWaterActive());
+            organisms.setSelectedAggressiveness(buttonBar.isFightActive());
+            organisms.emptySelectedTargets();
+            mouseManager.setLeft(false);
+        //Second in hierarchy is the minimap
+        } else if(minimap.hasMouse(mouseX,mouseY)){
+            minimap.applyMouse(mouseX, mouseY, camera);
+            mouseManager.setLeft(false);
+        //Third in hierarchy is the background   
+        } else if (organisms.checkPanel()){
             mouseManager.setLeft(false);
         } else {
-            //Check for hover
+            //System.out.println("START DRAGGING");
+
+            if (!selection.isActive()) {
+                selection.activate(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+            }
+
+            checkOrganismsInSelection();
         }
+    }
+    
+    public void manageRightClick() {
+        int mouseX = mouseManager.getX();
+        int mouseY = mouseManager.getY();
+        
+        //System.out.println("RIGHT CLICKED");
+
+        if (buttonBar.hasMouse(mouseX, mouseY)) {
+            mouseManager.setRight(false);
+        //Second in hierarchy is the minimap
+        } else if(minimap.hasMouse(mouseX,mouseY)){
+            mouseManager.setRight(false);
+        //Third in hierarchy is the background   
+        } else if (organisms.checkPanel()){
+            mouseManager.setRight(false);
+        } else {
+            selection.deactivate();
+            Resource clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+
+            //if clicked is not null, a resource has been clicked
+            if (clickedResource != null) {
+                organisms.emptySelectedTargets();
+                //Set the resource to the selected organisms
+                organisms.setSelectedResource(clickedResource);
+                if (clickedResource.getType() == Resource.ResourceType.Plant) {
+                    organisms.setSelectedSearchFood(true);
+                    organisms.setSelectedSearchWater(false);
+                } else {
+                    organisms.setSelectedSearchWater(true);
+                    organisms.setSearchFood(false);
+                }
+            } else {
+                //Else move the swarm to desired position and deactivate all searching
+                organisms.setSelectedGodCommand(true);
+                organisms.moveSelectedSwarm(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
+                organisms.emptySelectedTargets();
+                organisms.setSelectedResource(null);
+                organisms.setSelectedSearchFood(false);
+                organisms.setSelectedSearchWater(false);
+            }
+        }
+        
+        mouseManager.setRight(false);
     }
     
     public void checkEntitiesInteraction() {
         organisms.checkArrivalOnResource();
         organisms.checkOrganismResourceStatus();
     }
-
+    
+    public void checkOrganismsInSelection() {
+        organisms.checkSelection(selection.getSel());
+    }
+    
     /**
      * renders all objects in a frame
      */
@@ -279,15 +350,22 @@ public class Game implements Runnable, Commons {
                     break;
                 case Play:
                     g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
-                    //plants.render(g);
+                    
                     resources.render(g);
+                    organisms.render(g);
+                    predators.render(g);
                     minimap.render(g);
                     buttonBar.render(g);
-                    organisms.render(g);
+                    if (selection.isActive()) {
+                        selection.render(g);
+                    }
+                    if (night) {
+                        g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
+                    }
                     break;
             }
-            g.drawString(Integer.toString(camera.getAbsX(mouseManager.getX())), 30, 650);
-            g.drawString(Integer.toString(camera.getAbsY(mouseManager.getY())), 80, 650);
+            /*g.drawString(Integer.toString(camera.getAbsX(mouseManager.getX())), 30, 650);
+            g.drawString(Integer.toString(camera.getAbsY(mouseManager.getY())), 80, 650);*/
             bs.show();
             g.dispose();
         }
@@ -397,6 +475,12 @@ public class Game implements Runnable, Commons {
      *
      * @return organisms
      */
+    
+    public PredatorManager getPredators(){
+        return predators;
+    }
+    
+    
     public OrganismManager getOrganisms() {
         return organisms;
     }
@@ -404,6 +488,24 @@ public class Game implements Runnable, Commons {
     public ResourceManager getResources() {
         return resources;
     }
+
+    public Selection getSelection() {
+        return selection;
+    }
+
+    public void setSelection(Selection selection) {
+        this.selection = selection;
+    }
+    
+    
+    public ButtonBarMenu getButtonBar(){
+        return buttonBar;
+    }
+
+    public boolean isNight() {
+        return night;
+    }
+    
     
     /**
      * start game

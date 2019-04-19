@@ -15,6 +15,7 @@ public interface Commons {
     public static final int MAX_ORGANISM_AMOUNT = 256;      // maximum organism amount
     public static final int PLANT_SIZE = 100;               // plant quanitity per unit
     public static final int FRAME_RATE = 60;                // frame rate
+    public static final int PREDATOR_SIZE = 80;
 
     public static final int MAX_THIRST = 100;               // maximum water level of organism
     public static final int MAX_HUNGER = 100;               // maximum hunger level of organism
@@ -24,9 +25,12 @@ public interface Commons {
     public static final int MAX_STRENGTH = 100;              // maximum maturity level of organism
     public static final int MAX_SURVIVABILITY = 100;              // maximum maturity level of organism
     public static final int MAX_STEALTH = 100;              // maximum maturity level of organism
+    public static final double MAX_HEALTH = 100;
+    public static final int MAX_SIGHT_DISTANCE = 500;
     
     public static final int PLANTS_AMOUNT = 150;              // number of plants
     public static final int WATERS_AMOUNT = 150;
+    public static final int PREDATORS_AMOUNT = 10;
     public static final int WATER_SIZE = 100;
     public static final int SWARM_SEPARATION = ORGANISM_SIZE+10;
     
@@ -75,4 +79,6 @@ public interface Commons {
     public static final Color PINK_COLOR = new Color(255, 111, 199);
     
     public static final int CONSUMING_RATE = 2;
+    
+    public static final int DAY_CYCLE_DURATION_SECONDS = 60;
 }

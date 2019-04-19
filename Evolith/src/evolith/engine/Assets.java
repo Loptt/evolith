@@ -1,5 +1,9 @@
 package evolith.engine;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -12,19 +16,26 @@ import java.util.ArrayList;
  */
 public class Assets {
 
-    public static BufferedImage background; //background image
+    public static BufferedImage backgroundDay; //background image
+    public static BufferedImage backgroundNight; //background image
+    public static BufferedImage backgroundFilter; //background image
     public static BufferedImage plant; //plant image
     public static BufferedImage water;
-
+    public static BufferedImage predator;
+    
     public static BufferedImage start; // start image
     public static BufferedImage startInstructions; // start menu instruction image
     public static BufferedImage startPlay; // start play button image
     public static BufferedImage setupSpeciesBackground; // start play button image
     
-    public static BufferedImage bluegreenOption;
-    public static BufferedImage orangeOption;
-    public static BufferedImage pinkOption;
-    public static BufferedImage purpleOption;
+    public static BufferedImage bluegreenOptionOn;
+    public static BufferedImage bluegreenOptionOff;
+    public static BufferedImage yellowOptionOn;
+    public static BufferedImage yellowOptionOff;
+    public static BufferedImage pinkOptionOn;
+    public static BufferedImage pinkOptionOff;
+    public static BufferedImage purpleOptionOn;
+    public static BufferedImage purpleOptionOff;
     
     public static BufferedImage playOn;
     public static BufferedImage playOff;
@@ -37,6 +48,7 @@ public class Assets {
     public static BufferedImage mutation_select;
 
     public static BufferedImage minimapFrame;
+    public static BufferedImage rotatedPlant;
     
     public static ArrayList<BufferedImage> orgColors;
     
@@ -52,19 +64,30 @@ public class Assets {
      * Initalizes the assets and links to the image folder
      */
     public static void init() {
-        background = ImageLoader.loadImage("/images/backgrounds/bigbackground.png");
+        backgroundDay = ImageLoader.loadImage("/images/backgrounds/backgroundday.png");
+        backgroundNight = ImageLoader.loadImage("/images/backgrounds/backgroundnight.png");
+        backgroundFilter = ImageLoader.loadImage("/images/backgrounds/nightmode.png");
         plant = ImageLoader.loadImage("/images/playgraphics/food.png");
         water = ImageLoader.loadImage("/images/playgraphics/water.png");
-
+        predator = ImageLoader.loadImage("/images/playgraphics/alien_enemy.png");
+        
         start = ImageLoader.loadImage("/images/mainmenu/mainmenu.png");
         startInstructions = ImageLoader.loadImage("/images/mainmenu/maininstructions.png");
         startPlay = ImageLoader.loadImage("/images/mainmenu/mainplay.png");
-        setupSpeciesBackground = ImageLoader.loadImage("/images/setupmenu/setup_species_background.png");
+        setupSpeciesBackground = ImageLoader.loadImage("/images/setupmenu/choosemenu.png");
         
-        bluegreenOption = ImageLoader.loadImage("/images/setupmenu/blueone.png");
-        orangeOption = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
-        pinkOption = ImageLoader.loadImage("/images/setupmenu/pinkone.png");
-        purpleOption = ImageLoader.loadImage("/images/setupmenu/purpleone.png");
+        bluegreenOptionOff = ImageLoader.loadImage("/images/setupmenu/bluecolor.png");
+        yellowOptionOff = ImageLoader.loadImage("/images/setupmenu/yellowcolor.png");
+        pinkOptionOff = ImageLoader.loadImage("/images/setupmenu/pinkcolor.png");
+        purpleOptionOff = ImageLoader.loadImage("/images/setupmenu/purplecolor.png");
+        
+        bluegreenOptionOn = ImageLoader.loadImage("/images/setupmenu/bigbluecolor.png");
+        yellowOptionOn = ImageLoader.loadImage("/images/setupmenu/bigyellowcolor.png");
+        pinkOptionOn = ImageLoader.loadImage("/images/setupmenu/bigpinkcolor.png");
+        purpleOptionOn = ImageLoader.loadImage("/images/setupmenu/bigpurplecolor.png");
+        
+        
+        
         playOn = ImageLoader.loadImage("/images/mainmenu/onplay.png");
         playOff = ImageLoader.loadImage("/images/mainmenu/offplay.png");
         hoverImage = ImageLoader.loadImage("/images/playgraphics/hover_bar.png");
@@ -140,5 +163,42 @@ public class Assets {
         
         
         
+    }
+    
+    /**
+     * SLOWS DOWN GAME
+     * @param img
+     * @param angle
+     * @return 
+     */
+    public static BufferedImage rotateImage(BufferedImage img, double angle) {
+        
+        angle /= 2;
+        
+        System.out.println("ANGLE:   " + angle);
+
+        double rads = Math.toRadians(angle);
+        double sin = Math.abs(Math.sin(rads)), cos = Math.abs(Math.cos(rads));
+        int w = img.getWidth();
+        int h = img.getHeight();
+        int newWidth = (int) Math.floor(w * cos + h * sin);
+        int newHeight = (int) Math.floor(h * cos + w * sin);
+        
+        System.out.println("WIDTH: " + newWidth + "  HEIGHT:  " + newHeight);
+
+        BufferedImage rotated = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = rotated.createGraphics();
+        AffineTransform at = new AffineTransform();
+        at.translate((newWidth - w) / 2, (newHeight - h) / 2);
+
+        int x = w / 2;
+        int y = h / 2;
+
+        at.rotate(rads, x, y);
+        g2d.setTransform(at);
+        g2d.drawImage(img, at, null);
+        g2d.dispose();
+
+        return rotated;
     }
 }

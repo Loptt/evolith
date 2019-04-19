@@ -30,6 +30,8 @@ public class ResourceManager implements Commons {
 
     private int watersAmount;                 //max amount of waters
     private int plantsAmount;
+    private int deadWaters; 
+    private int deadPlants;
 
     /**
      * Constructor of the plants in the game
@@ -42,70 +44,23 @@ public class ResourceManager implements Commons {
         waters = new ArrayList<>();
         watersAmount = WATERS_AMOUNT;
         plantsAmount = PLANTS_AMOUNT;
-        
-        generateResources(true);
+        deleteResources();
+        respawnResources();
+        generateResources();
     }
     
-    
-    public void generateResources(boolean a){//firma momentanea en lo que borro la otra
+    public void respawnResources(){
         Random randomGen = new Random();
-        
-        int newWidthWaters = (int) Math.floor( 5000/Math.sqrt(WATERS_AMOUNT) );
-        int newHeightWaters = (int) Math.floor( 5000/Math.sqrt(WATERS_AMOUNT) );
-        
-        for(int i=1; i<5000-newWidthWaters; i+=newWidthWaters){
-            for(int j=1; j<5000-newHeightWaters; j+=newHeightWaters){
-                int xCoord, yCoord; 
-                int boundWidth = 1;
-                int boundHeigth = 1;
-                if(j>newWidthWaters){
-                    boundWidth = j-3*newWidthWaters;
-                }
-                if(i>newHeightWaters){
-                    boundHeigth = i-3*newHeightWaters;
-                }
-                xCoord = randomGen.nextInt(j) + boundWidth;
-                yCoord = randomGen.nextInt(i) + boundHeigth;
-                waters.add(new Resource(xCoord, yCoord, WATER_SIZE, WATER_SIZE, game, Resource.ResourceType.Water));
-            }
-        }
-        
-        int newWidthPlants = (int) Math.floor( 5000/Math.sqrt(PLANTS_AMOUNT) );
-        int newHeightPlants = (int) Math.floor( 5000/Math.sqrt(PLANTS_AMOUNT) );
-        
-        for(int i=1; i<5000-newWidthPlants; i+=newWidthPlants){
-            for(int j=1; j<5000-newHeightPlants; j+=newHeightPlants){
-                int xCoord, yCoord; 
-                int boundWidth = 1;
-                int boundHeigth = 1;
-                if(j>newWidthPlants){
-                    boundWidth = j-3*newWidthPlants;
-                }
-                if(i>newHeightPlants){
-                    boundHeigth = i-3*newHeightPlants;
-                }
-                xCoord = randomGen.nextInt(j) + boundWidth;
-                yCoord = randomGen.nextInt(i) + boundHeigth;
-                plants.add(new Resource(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE, game, Resource.ResourceType.Plant));
-            }
-        }
-    }
-    /*
-    public void generateResources() {
-        Random randomGen = new Random();
-
-        for (int i = 0; i < plantsAmount; ++i) {
-            System.out.println("amount " + plantsAmount);
+        for (int i = 0; i < deadPlants; ++i) {
             int xCoord, yCoord; 
             xCoord = randomGen.nextInt(5000) + 1;
             yCoord = randomGen.nextInt(5000) + 1;
             plants.add(new Resource(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE, game, Resource.ResourceType.Plant));
             
-            //Circle actualCircle = plants.get(i).getRadius();
-            System.out.println(i);
+            //System.out.println("plants size: " + plants.size());
             
             for (int j = 0; j < plants.size() - 1; j++) {
-                if (plants.get(i).intersects(plants.get(j))) {
+                if (plants.get(i).intersects(plants.get(j)) && i != j) {
                     plants.remove(i);
                     i--;
                 }
@@ -113,24 +68,69 @@ public class ResourceManager implements Commons {
         }
         
         
-        for (int i = 0; i < watersAmount; ++i) {
-            System.out.println("amount " + watersAmount);
+        for (int i = 0; i < deadWaters; ++i) {
             int xCoord, yCoord; 
             xCoord = randomGen.nextInt(5000) + 1;
             yCoord = randomGen.nextInt(5000) + 1;
             waters.add(new Resource(xCoord, yCoord, WATER_SIZE, WATER_SIZE, game, Resource.ResourceType.Water));
-            
-            //Circle actualCircle = waters.get(i).getRadius();
-            System.out.println(i);
+
+            //System.out.println("waters size: " + waters.size());
             
             for (int j = 0; j < waters.size() - 1; j++) {
-                if (waters.get(i).intersects(waters.get(j))) {
+                if (waters.get(i).intersects(waters.get(j)) && i != j) {
                     waters.remove(i);
                     i--;
                 }
             }
         }
-    }*/
+  
+    
+    }
+    
+    public void deleteResources(){
+        deadWaters = 0;
+        deadPlants = 0;
+        for(int i=0; i<waters.size(); i++){
+            if(waters.get(i).isOver()){
+                deadWaters++;
+                waters.remove(i);
+            }
+        }
+        for(int i=0; i<plants.size(); i++){
+            if(plants.get(i).isOver()){
+                deadPlants++;
+                plants.remove(i);
+            }
+        }
+        
+    }
+    public void generateResources(){
+        Random randomGen = new Random();
+        
+        int newWidthWaters = (int) Math.ceil( 5000/Math.sqrt(WATERS_AMOUNT) );
+        int newHeightWaters = (int) Math.ceil( 5000/Math.sqrt(WATERS_AMOUNT) );
+         
+        for(int i=newWidthWaters; i<5000 - 2 * newWidthWaters; i+=newWidthWaters){
+            for(int j=newHeightWaters; j<5000 - 2 * newHeightWaters; j+=newHeightWaters){
+                int xCoord, yCoord; 
+                xCoord = randomGen.nextInt(newWidthWaters) + j;
+                yCoord = randomGen.nextInt(newHeightWaters) + i;
+                waters.add(new Resource(xCoord, yCoord, WATER_SIZE, WATER_SIZE, game, Resource.ResourceType.Water));
+            }
+        }
+        
+        int newWidthPlants = (int) Math.ceil( 5000/Math.sqrt(PLANTS_AMOUNT) );
+        int newHeightPlants = (int) Math.ceil( 5000/Math.sqrt(PLANTS_AMOUNT) );
+        
+        for(int i = newWidthPlants; i < 5000 - 2 * newWidthPlants; i += newWidthPlants){
+            for(int j = newHeightPlants; j < 5000 - 2 * newHeightPlants; j += newHeightPlants){
+                int xCoord, yCoord; 
+                xCoord = randomGen.nextInt(newWidthPlants) + j;
+                yCoord = randomGen.nextInt(newHeightPlants) + i;
+                plants.add(new Resource(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE, game, Resource.ResourceType.Plant));
+            }
+        }
+    }
     
     public Resource containsResource(int x, int y) {
         for (int i = 0; i < plants.size()-1; i++) {
@@ -148,6 +148,16 @@ public class ResourceManager implements Commons {
         return null;
     }
     
+    public void emptyParasites() {
+        for (int i = 0; i < plants.size()-1; i++) {
+            plants.get(i).removeParasites();
+        }
+        
+        for (int i = 0; i < waters.size()-1; i++) {
+            waters.get(i).removeParasites();
+        } 
+    }
+    
     public int getPlantAmount() {
         return plants.size();
     }
@@ -161,7 +171,7 @@ public class ResourceManager implements Commons {
     }
     
     public Resource getWater(int i) {
-        return plants.get(i);
+        return waters.get(i);
     }
     
     public void tick() {
@@ -172,6 +182,9 @@ public class ResourceManager implements Commons {
         for (int i = 0; i < waters.size(); i++) {
             waters.get(i).tick();
         }
+        
+        deleteResources();
+        respawnResources();
     }
         
     public void render(Graphics g) {
@@ -183,98 +196,4 @@ public class ResourceManager implements Commons {
             waters.get(i).render(g);
         }
     }
-    
-    /*
-    public boolean checkPlantsRadius(Circle c, int actualIndex) {
-        for (int i = 0; i <= plants.size()-1; i++) {
-        System.out.println("checking" + i);
-            if (plants.get(i).getRadius().intersects(c) && i != actualIndex) {
-                System.out.println("INTERSECTION.");
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
-    public Item containsResource(int x, int y) {
-        for (int i = 0; i < plants.size()-1; i++) {
-            if (plants.get(i).getPerimeter().contains(x, y)) {
-                return plants.get(i);
-            }
-        }
-        
-        return null;
-    }
-    
-    public Plant getPlant(int i) {
-       return plants.get(i);
-    }
-    
-    public Water getWater(int i) {
-       return waters.get(i);
-    }
-*/
-    /**
-     * To tick the resources
-     */
-    /*public void tick() {
-        for (int i = 0; i < plantsAmount; i++) {
-            plants.get(i).tick();
-        }
-        
-        for (int i = 0; i <  watersAmount; i++) {
-            waters.get(i).tick();
-        }
-    }*/
-/*
-    /**
-     * To render the plants
-     *
-     * @param g
-     */
-    /*public void render(Graphics g) {
-        for (int i = 0; i < plantsAmount; i++) {
-            plants.get(i).render(g);
-        }
-        
-        for (int i = 0; i <  watersAmount; i++) {
-            waters.get(i).render(g);
-        }
-    }
-    
-    /*
-    public int getPlantsAmount(){
-            return plantsAmount;
-    }
-    
-    public boolean checkRadius(Circle c, int actualIndex) {
-        
-        for (int i = 0; i <= plants.size()-1; i++) {
-        //System.out.println("checking" + i);
-            if (plants.get(i).getRadius().intersects(c) && i != actualIndex) {
-                System.out.println("INTERSECTION." + numberOfIntersections++);
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
-    public Item assignOnResource(Rectangle r) {
-        for (int i = 0; i < plants.size(); i++) {
-            if (plants.get(i).intersects(r)) {
-                if (!plants.get(i).isFull()) {
-                    plants.get(i).setParasitesAm(plants.get(i).getParasitesAm()+1);
-                    if (plants.get(i).getParasitesAm() >= 6) {
-                        System.out.println("FULL");
-                        plants.get(i).setFull(true);
-                    }
-                    return plants.get(i);
-                }
-            }
-        }
-        
-        return null;
-    }*/
 }

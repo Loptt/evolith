@@ -14,7 +14,7 @@ import java.awt.event.MouseMotionListener;
 public class MouseManager implements MouseListener, MouseMotionListener {
 
     private boolean left;
-    private boolean derecho;
+    private boolean right;
     private int x;
     private int y;
 
@@ -45,6 +45,10 @@ public class MouseManager implements MouseListener, MouseMotionListener {
             left = true;
             x = e.getX();
             y = e.getY();
+        } else if (e.getButton() == MouseEvent.BUTTON3) {
+            right = true;
+            x = e.getX();
+            y = e.getY();
         }
     }
 
@@ -58,6 +62,8 @@ public class MouseManager implements MouseListener, MouseMotionListener {
         // if the right button of the mouse is released
         if (e.getButton() == MouseEvent.BUTTON1) {
             left = false;
+        } else if (e.getButton() == MouseEvent.BUTTON3) {
+            right = false;
         }
     }
 
@@ -76,7 +82,10 @@ public class MouseManager implements MouseListener, MouseMotionListener {
      */
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (true) {
+        int b1 = MouseEvent.BUTTON1_DOWN_MASK;
+        int b3 = MouseEvent.BUTTON3_DOWN_MASK;
+        
+        if ((e.getModifiersEx() & (b1 | b3)) == b1) {
             left = true;
             x = e.getX();
             y = e.getY();
@@ -126,10 +135,10 @@ public class MouseManager implements MouseListener, MouseMotionListener {
     /**
      * To get the status of the right button
      *
-     * @return derecho
+     * @return right
      */
-    public boolean isDerecho() {
-        return derecho;
+    public boolean isRight() {
+        return right;
     }
 
     /**
@@ -139,5 +148,9 @@ public class MouseManager implements MouseListener, MouseMotionListener {
      */
     public void setLeft(boolean left) {
         this.left = left;
+    }
+
+    public void setRight(boolean right) {
+        this.right = right;
     }
 }
