@@ -170,6 +170,9 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * update all menu panels of the organisms
+     */
     private void updateMenuPanels() {
         if (orgPanel.isActive()) {
             orgPanel.tick();
@@ -241,7 +244,11 @@ public class OrganismManager implements Commons {
     private int realMod(int a, int b) {
         return ((((a % b) + b) % b) + b) % b;
     }
-
+    
+    /**
+     * check if orgPanel is activated
+     * @return true if orgPanel has been activated, false otherwise
+     */
     public boolean checkPanel() {
         for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
@@ -804,18 +811,34 @@ public class OrganismManager implements Commons {
         return organisms.get(i);
     }
     
+    /**
+     * to check if orgPanel is active
+     * @return orgPanel.isActive()
+     */
     public boolean isOrgPanelActive() {
         return orgPanel.isActive();
     }
     
+    /**
+     * to check if mutPanel is active
+     * @return mutPanel.isActive()
+     */
     public boolean isMutPanelActive() {
         return mutPanel.isActive();
     }
 
+    /**
+     * to get the orgPanel
+     * @return orgPanel
+     */
     public OrganismPanel getOrgPanel() {
         return orgPanel;
     }
-
+    
+    /**
+     * to get the mutPanel
+     * @return mutPanel
+     */
     public MutationPanel getMutPanel() {
         return mutPanel;
     }
