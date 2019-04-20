@@ -51,8 +51,6 @@ public class PredatorManager implements Commons {
         
         int newWidthPredators = (int) Math.ceil( 5000/Math.sqrt(PREDATORS_AMOUNT) );
         int newHeightPredators = (int) Math.ceil( 5000/Math.sqrt(PREDATORS_AMOUNT) );
-        System.out.println("WIDTH PRED:  " + newWidthPredators);
-        System.out.println("HEIGHT PRED:  " + newHeightPredators);
          
         for (int i = newWidthPredators; i < 5000; i += newWidthPredators){
             for (int j = newHeightPredators; j < 5000; j += newHeightPredators){
@@ -60,7 +58,6 @@ public class PredatorManager implements Commons {
                 xCoord = randomGen.nextInt(newWidthPredators) + j;
                 yCoord = randomGen.nextInt(newHeightPredators) + i;
                 predators.add(new Predator(xCoord, yCoord, PREDATOR_SIZE, PREDATOR_SIZE, game));
-                System.out.println("ADDED PRED");
             }
         }
     }
