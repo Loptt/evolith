@@ -62,7 +62,7 @@ public class Game implements Runnable, Commons {
     private SetupMenu setupMenu;
 
     private Clock clock;                        // the time of the game
-    private InputReader inputReader;
+    private InputReader inputReader;            //To read text from keyboard
     private Minimap minimap;
     private Selection selection;
     
