@@ -131,59 +131,59 @@ public class OrganismPanel extends Menu implements Commons {
         }*/
         //Reads the input
         inputReader.readInput();
-        //If the panel is active, ticks
-        if (active) {
-            //Checks the mouse positon relative to the button
-            for (int i = 0; i < buttons.size(); i++) {
-                if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
-                    //if the mouse is over the button 
-                    buttons.get(i).setActive(true);
-                    //if left click change mouse status
-                    if (game.getMouseManager().isLeft()) {
-                        //Sets the button to the pressed status
-                        buttons.get(i).setPressed(true);
-                        //Turns off mouse 
-                        game.getMouseManager().setLeft(false);
-                    }
-                } else {
-                    //Sets the button to false if the button is hovered
-                    buttons.get(i).setActive(false);
-                }
-                //Closes the 
-                if (buttons.get(0).isPressed()) {
-                    active = false;
-                }
-                //next
-                if (buttons.get(2).isPressed()) {
-                    if (searchNext) {
-                        buttons.get(2).setPressed(false);
-                    } else {
-                        searchNext = true;
-                    }
-                }
-                //prev
-                if (buttons.get(3).isPressed()) {
-                    if (searchPrev) {
-                        buttons.get(3).setPressed(false);
-                    } else {
-                        searchPrev = true;
-                    }
-                }
-                //reproduce
-                if (buttons.get(4).isPressed() && organism.isNeedOffspring()) {
-
-                    if (reproduce) {
-                        buttons.get(4).setPressed(false);
-                        reproduce = false;
-                    } else {
-                        reproduce = true;
-                        buttons.get(4).setPressed(true);
-                    }
-                }
-
-            }
+        //If the panel is not active, do nothing
+        if (!active) {
+            return;
         }
+        //Checks the mouse positon relative to the button
+        for (int i = 0; i < buttons.size(); i++) {
+            if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
+                //if the mouse is over the button 
+                buttons.get(i).setActive(true);
+                //if left click change mouse status
+                if (game.getMouseManager().isLeft()) {
+                    //Sets the button to the pressed status
+                    buttons.get(i).setPressed(true);
+                    //Turns off mouse 
+                    game.getMouseManager().setLeft(false);
+                }
+            } else {
+                //Sets the button to false if the button is hovered
+                buttons.get(i).setActive(false);
+            }
+            //Closes the 
+            if (buttons.get(0).isPressed()) {
+                active = false;
+            }
+            //next
+            if (buttons.get(2).isPressed()) {
+                if (searchNext) {
+                    buttons.get(2).setPressed(false);
+                } else {
+                    searchNext = true;
+                }
+            }
+            //prev
+            if (buttons.get(3).isPressed()) {
+                if (searchPrev) {
+                    buttons.get(3).setPressed(false);
+                } else {
+                    searchPrev = true;
+                }
+            }
+            //reproduce
+            if (buttons.get(4).isPressed() && organism.isNeedOffspring()) {
 
+                if (reproduce) {
+                    buttons.get(4).setPressed(false);
+                    reproduce = false;
+                } else {
+                    reproduce = true;
+                    buttons.get(4).setPressed(true);
+                }
+            }
+
+        }
     }
 
     public boolean isSearchPrev() {

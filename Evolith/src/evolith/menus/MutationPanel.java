@@ -74,7 +74,7 @@ public class MutationPanel extends Menu implements Commons {
         //Strealth
         buttons.add(new Button(x + 300, y + 375, 390, 110));
         selection = 0;
-        active = true;
+        active = false;
         hmap = new HashMap<Integer, String>();
         hmap.put(1, "I");
         hmap.put(2, "II");
