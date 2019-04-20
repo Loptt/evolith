@@ -173,10 +173,6 @@ public class OrganismManager implements Commons {
                 if (game.getMouseManager().isLeft()) {
                     panel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, game, organisms.get(i));
                     game.getMouseManager().setLeft(false);
-                    
-                    if (game.getInputReader().getSpeciesName() != null) {
-                        organisms.get(i).setName(game.getInputReader().getSpeciesName());
-                    }
                 }
             }
         }
