@@ -230,8 +230,6 @@ public class Game implements Runnable, Commons {
         } else if (mouseManager.isRight()){
             manageRightClick();
         } else {
-            //Dragging is false
-            organisms.checkHover();
             selection.deactivate();
             //System.out.println("DEACTIVATING SELECTION");
         }
@@ -249,7 +247,13 @@ public class Game implements Runnable, Commons {
          * For example, it prevents the organisms to move when the player clicks on the button bar
          */
         //First in hierarchy is the buttonbar
-        if (buttonBar.hasMouse(mouseX, mouseY)) {
+        if (organisms.isOrgPanelActive() || organisms.isMutPanelActive()) {
+            //Let the panels handle mouse activity
+        } else if (selection.isActive()) {
+            checkOrganismsInSelection();
+        } else if (organisms.checkPanel()) {
+            mouseManager.setLeft(false);
+        } else if (buttonBar.hasMouse(mouseX, mouseY)) {
             //Process the mouse in the button bar
             buttonBar.applyMouse(mouseX, mouseY);
             organisms.setSelectedSearchFood(buttonBar.isFoodActive());
@@ -263,13 +267,7 @@ public class Game implements Runnable, Commons {
             mouseManager.setLeft(false);
         //Third in hierarchy is the background   
         } else {
-            //System.out.println("START DRAGGING");
-
-            if (!selection.isActive()) {
-                selection.activate(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
-            }
-
-            checkOrganismsInSelection();
+            selection.activate(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
         }
     }
     
@@ -350,14 +348,23 @@ public class Game implements Runnable, Commons {
                     resources.render(g);
                     organisms.render(g);
                     predators.render(g);
-                    minimap.render(g);
-                    buttonBar.render(g);
-                    if (selection.isActive()) {
-                        selection.render(g);
-                    }
+                    
                     if (night) {
                         g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
                     }
+                    minimap.render(g);
+                    buttonBar.render(g);
+                    
+                    if (selection.isActive()) {
+                        selection.render(g);
+                    }
+                    
+                    if (organisms.isOrgPanelActive()) {
+                        organisms.getOrgPanel().render(g);
+                    } else if (organisms.isMutPanelActive()) {
+                        organisms.getMutPanel().render(g);
+                    }
+                    
                     break;
             }
             /*g.drawString(Integer.toString(camera.getAbsX(mouseManager.getX())), 30, 650);
