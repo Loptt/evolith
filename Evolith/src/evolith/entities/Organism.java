@@ -13,7 +13,6 @@ import evolith.helpers.Time;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.util.ArrayList;
 
 /**
  *
@@ -21,16 +20,16 @@ import java.util.ArrayList;
  */
 public class Organism extends Item implements Commons {
 
-    private Point point;
-    private int maxVel;
-    private int acc;
-    private int xVel;
-    private int yVel;
-    private Game game;
+    private Point point;    //Point where the organism will try to move
+    private int maxVel;     //Maximum speed the organism can reach
+    private int acc;        //Rate at which speed increases
+    private int xVel;       //Speed in the x axis
+    private int yVel;       //Speed in the y axis
+    private Game game;      //Game object to access other objecs
 
-    private Time time;
+    private Time time;      //Time tracking class to simulate life
     
-    private int id;
+    private int id;         //Unique identifier
 
     /**
      * These are the five evolutionary traits
@@ -52,44 +51,42 @@ public class Organism extends Item implements Commons {
     private int prevThirstRed;  //Time in seconds at which hunger was previously reduced
     private int prevMatInc;     //Time in seconds at which maturity was previously increased
 
-    private boolean needOffspring;
-    private boolean dead;
-    private boolean beingChased;
-    private String name;
-    private Point escapePoint;
+    private boolean needOffspring;  //Value indicating if the organisms needs to reproduce
+    private boolean dead;           //Whether the organism is dead or not
+    private boolean beingChased;    //Value wether it is being chased or not
+    private String name;            //Name of the organism
 
-    private boolean moving;
-    private boolean inPlant;
-    private boolean inWater;
-    private boolean inResource;
+    private boolean moving;         //Value if it is moving
+    private boolean inPlant;        //Value if it is on a plant
+    private boolean inWater;        //Value if it is in a water srource
+    private boolean inResource;     //Value if it is on a resource
 
-    private Resource target;
+    private Resource target;        //Its current resource target
 
-    private boolean searchFood;
-    private boolean searchWater;
-    private boolean aggressive;
+    private boolean searchFood;     //Value if it is actively looking for food
+    private boolean searchWater;    //Value if it is actively lokking for water
+    private boolean aggressive;     //value if it will actively fight when a predator attacks
 
-    private boolean eating;
-    private boolean drinking;
+    private boolean eating;         //If it is currently eating
+    private boolean drinking;       //If it is currently drinking
 
-    private MutationManager orgMutations; 
+    private MutationManager orgMutations;  //Manager of the mutations of this organism
 
-    private boolean selected;
-    private boolean godCommand;
+    private boolean selected;       //If the organism is currently selected by the player
+    private boolean godCommand;     //If the organism has received an explicit movement command from the player
     
-    private double angle;
-    private double damage;
+    private double damage;          //Amount of damage the organism deals to predators
 
     /**
      * Constructor of the organism
      *
-     * @param x
-     * @param y
-     * @param width
-     * @param height
-     * @param game
-     * @param skin
-     * @param id
+     * @param x starting x value
+     * @param y starting y value
+     * @param width current width
+     * @param height current height
+     * @param game the game object where the organism resides
+     * @param skin the id of the selected skin
+     * @param id the unique identifier
      */
     public Organism(int x, int y, int width, int height, Game game, int skin, int id) {
         super(x, y, width, height);
@@ -113,7 +110,6 @@ public class Organism extends Item implements Commons {
         thirst = 100;
         maturity = 0;
         generation = 1;
-        escapePoint = point;
         prevHungerRed = 0;
         prevThirstRed = 0;
         prevMatInc = 0;
@@ -139,113 +135,10 @@ public class Organism extends Item implements Commons {
         name = "";
 
         orgMutations = new MutationManager(this, game);
-        angle = 0.0;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
-     * To tick the organism
-     */
-    @Override
-    public void tick() {
-        //to determine the lifespan of the organism
-        time.tick();
-        handleTarget();
-        checkMovement();
-        checkVitals();  
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public int getStrength() {
-        return strength;
-    }
-
-    public int getStealth() {
-        return stealth;
-    }
-
-    public int getMaxHealth() {
-        return maxHealth;
-    }
-
-    public double getLife() {
-        return life;
-    }
-
-    public void setLife(double life){
-        this.life = life;
-    }
-    
-    public int getHunger() {
-        return hunger;
-    }
-
-    public int getThirst() {
-        return thirst;
-    }
-
-    public int getMaturity() {
-        return maturity;
-    }
-
-    public Time getTime() {
-        return time;
-    }
-
-    public void setTime(Time time) {
-        this.time = time;
-    }
-
-    public int getGeneration() {
-        return generation;
-    }
-
-    public void setGeneration(int generation) {
-        this.generation = generation;
-    }
-    
-    public void setSpeed(int speed){
-        this.speed = speed;
-    }
-    
-    public void setStealth(int stealth){
-        this.stealth = stealth;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public void setStrength(int strength) {
-        this.strength = strength;
-    }
-
-    public void setMaxHealth(int maxHealth) {
-        this.maxHealth = maxHealth;
-    }
-
-    public void setLife(int life) {
-        this.life = life;
-    }
-    
-    
-
-    /**
-     * Update the position of the organism accordingly
+     * Update the position of the organism according to the point
      */
     private void checkMovement() {
         // if the organism is less than 25 units reduce velocity
@@ -347,6 +240,9 @@ public class Organism extends Item implements Commons {
         }
     }
     
+    /**
+     * Update according to its current target
+     */
     public void handleTarget() {
         //If no target, do nothing
         if (target == null) {
@@ -358,22 +254,6 @@ public class Organism extends Item implements Commons {
             point.y = target.getY();
         }
     }
-    
-    private void calculateAngle() {
-        
-        if (point.y == y) {
-            if (point.x > x) {
-                angle = 180.0;
-            } else {
-                angle = 0.0;
-            }
-        } else {
-            //angle = (double) Math.atan((double)(x - point.x) / (double) (point.y - y));
-        }
-        /*System.out.println(point);
-        System.out.println("x: " + x + "  y: " + y);
-        System.out.println("ANGLE IN ORG:  " +  angle);*/
-    }
 
     /**
      * Kill the organism
@@ -383,6 +263,56 @@ public class Organism extends Item implements Commons {
         if (target != null && isConsuming()) {
             target.removeParasite(this, id);
         }
+    }
+    
+    /**
+     * Update its stats and vitals with its current mutations
+     * @param trait
+     * @param newTier 
+     */
+    public void updateMutation(int trait, int newTier){
+        setStrength(getOrgMutations().getMutations().get(trait).get(newTier).getStrength());
+        setSpeed(getOrgMutations().getMutations().get(trait).get(newTier).getSpeed());
+        setMaxHealth(getOrgMutations().getMutations().get(trait).get(newTier).getMaxHealth());
+        setStealth(getOrgMutations().getMutations().get(trait).get(newTier).getStealth());
+    }
+    
+    /**
+     * Create a copy of this organism
+     * @return new organism
+     */
+    public Organism cloneOrg(){
+        Organism org = new Organism(x,y,width, height, game, skin, id);
+        org.setPoint((Point) point.clone());
+        org.setMaxVel(maxVel);
+        org.setSize(size);
+        org.setSpeed(speed);
+        org.setStrength(strength);
+        org.setMaxHealth(maxHealth);
+        org.setLife(maxHealth*2+60);
+        org.setGeneration(generation+1);
+        
+        for(int i=0; i<4; i++){
+            for(int j=0; j<orgMutations.getMutations().get(i).size(); j++){
+                if(orgMutations.getMutations().get(i).get(j).isActive()){
+                    org.getOrgMutations().getMutations().get(i).get(j).setActive(true);
+                }
+            }
+        }
+        
+        return org;
+    }
+    
+    /**
+     * To tick the organism
+     */
+    @Override
+    public void tick() {
+        //to determine the lifespan of the organism
+        time.tick();
+        handleTarget();
+        checkMovement();
+        checkVitals();  
     }
 
     /**
@@ -406,6 +336,186 @@ public class Organism extends Item implements Commons {
             g.setColor(Color.RED);
             g.fillOval(game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height);
         }
+    }
+    
+    /**
+     * GETTERS AND SETTERS
+     */
+    
+    /**
+     * to get the name
+     * @return name
+     */
+    public String getName() {
+        return name;
+    }
+    
+    /**
+     * to set the name
+     * @param name 
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    /**
+     * to get the size
+     * @return size
+     */
+    public int getSize() {
+        return size;
+    }
+    
+    /**
+     * to get the speed
+     * @return speed
+     */
+    public int getSpeed() {
+        return speed;
+    }
+    
+    /**
+     * to get the strength
+     * @return strength
+     */
+    public int getStrength() {
+        return strength;
+    }
+    
+    /**
+     * to get the stealth
+     * @return stealth
+     */
+    public int getStealth() {
+        return stealth;
+    }
+    
+    /**
+     * to get the max health
+     * @return max health
+     */
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+    
+    /**
+     * to get the life
+     * @return life
+     */
+    public double getLife() {
+        return life;
+    }
+
+    /**
+     * to set life
+     * @param life
+     */
+    public void setLife(double life){
+        this.life = life;
+    }
+    
+    /**
+     * to get hunger
+     * @return hunger
+     */
+    public int getHunger() {
+        return hunger;
+    }
+
+    /**
+     * to get thirst
+     * @return thirst
+     */
+    public int getThirst() {
+        return thirst;
+    }
+
+    /**
+     * to get maturity
+     * @return maturity
+     */
+    public int getMaturity() {
+        return maturity;
+    }
+
+    /**
+     * to get time
+     * @return time
+     */
+    public Time getTime() {
+        return time;
+    }
+
+    /**
+     * to set time
+     * @param time
+     */
+    public void setTime(Time time) {
+        this.time = time;
+    }
+
+    /**
+     * to get generation
+     * @return generation
+     */
+    public int getGeneration() {
+        return generation;
+    }
+
+    /**
+     * to set generation
+     * @param generation
+     */
+    public void setGeneration(int generation) {
+        this.generation = generation;
+    }
+    
+    /**
+     * to set speed
+     * @param speed
+     */
+    public void setSpeed(int speed){
+        this.speed = speed;
+    }
+    
+    /**
+     * to set stealth
+     * @param stealth
+     */
+    public void setStealth(int stealth){
+        this.stealth = stealth;
+    }
+
+    /**
+     * to set size
+     * @param size
+     */
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    /**
+     * to set strength
+     * @param strength
+     */
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
+    /**
+     * to set maxHealth
+     * @param maxHealth
+     */
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
+    /**
+     * to set life
+     * @param life
+     */
+    public void setLife(int life) {
+        this.life = life;
     }
 
     /**
@@ -462,188 +572,298 @@ public class Organism extends Item implements Commons {
         this.dead = dead;
     }
 
+    /**
+     * to get moving
+     * @return moving
+     */
     public boolean isMoving() {
         return moving;
     }
 
+    /**
+     * to set moving
+     * @param moving
+     */
     public void setMoving(boolean moving) {
         this.moving = moving;
     }
 
+    /**
+     * to get inPlant
+     * @return inPlant
+     */
     public boolean isInPlant() {
         return inPlant;
     }
 
+    /**
+     * to set inPlant
+     * @param inPlant
+     */
     public void setInPlant(boolean inPlant) {
         this.inPlant = inPlant;
     }
 
+    /**
+     * to get inWater
+     * @return inWater
+     */
     public boolean isInWater() {
         return inWater;
     }
 
+    /**
+     * to set inWater
+     * @param inWater
+     */
     public void setInWater(boolean inWater) {
         this.inWater = inWater;
     }
 
+    /**
+     * to get inResource
+     * @return inResource
+     */
     public boolean isInResource() {
         return inResource;
     }
 
+    /**
+     * to set inResource
+     * @param inResource
+     */
     public void setInResource(boolean inResource) {
         this.inResource = inResource;
     }
 
+    /**
+     * to get target
+     * @return target
+     */
     public Resource getTarget() {
         return target;
     }
 
+    /**
+     * to set target
+     * @param target
+     */
     public void setTarget(Resource target) {
         this.target = target;
     }
 
+    /**
+     * to get searchFood
+     * @return searchFood
+     */
     public boolean isSearchFood() {
         return searchFood;
     }
 
+    /**
+     * to get searchWater
+     * @return searchWater
+     */
     public boolean isSearchWater() {
         return searchWater;
     }
 
+    /**
+     * to get aggressive
+     * @return aggressive
+     */
     public boolean isAggressive() {
         return aggressive;
     }
 
+    /**
+     * to set searchFood
+     * @param searchFood
+     */
     public void setSearchFood(boolean searchFood) {
         this.searchFood = searchFood;
     }
 
+    /**
+     * to set searchWater
+     * @param searchWater
+     */
     public void setSearchWater(boolean searchWater) {
         this.searchWater = searchWater;
     }
 
+    /**
+     * to set aggressive
+     * @param aggressive
+     */
     public void setAggressive(boolean aggressive) {
         this.aggressive = aggressive;
     }
     
+    /**
+     * to get eating
+     * @return eating
+     */
     public boolean isEating() {
         return eating;
     }
 
+    /**
+     * to get drinking
+     * @return drinking
+     */
     public boolean isDrinking() {
         return drinking;
     }
 
+    /**
+     * to set eating
+     * @param eating
+     */
     public void setEating(boolean eating) {
         this.eating = eating;
     }
 
+    /**
+     * to seat drinking
+     * @param drinking
+     */
     public void setDrinking(boolean drinking) {
         this.drinking = drinking;
     }
 
+    /**
+     * to set get if the organism is consuming something
+     * @return
+     */
     public boolean isConsuming() {
         return eating || drinking;
     }
 
+    /**
+     * to get current skin id
+     * @return skin
+     */
     public int getSkin() {
         return skin;
     }
 
+    /**
+     * to set skin id
+     * @param skin
+     */
     public void setSkin(int skin) {
         this.skin = skin;
     }
 
+    /**
+     * to get id
+     * @return id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * to set maxVel
+     * @param maxVel
+     */
     public void setMaxVel(int maxVel) {
         this.maxVel = maxVel;
     }
 
+    /**
+     * to set id
+     * @param id
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * to get the mutationManager
+     * @return orgMutations
+     */
     public MutationManager getOrgMutations() {
         return orgMutations;
     }
     
-        
-    public void updateMutation(int trait, int newTier){
-        setStrength(getOrgMutations().getMutations().get(trait).get(newTier).getStrength());
-        setSpeed(getOrgMutations().getMutations().get(trait).get(newTier).getSpeed());
-        setMaxHealth(getOrgMutations().getMutations().get(trait).get(newTier).getMaxHealth());
-        setStealth(getOrgMutations().getMutations().get(trait).get(newTier).getStealth());
-    }
-    
-    public Organism cloneOrg(){
-        Organism org = new Organism(x,y,width, height, game, skin, id);
-        org.setPoint((Point) point.clone());
-        org.setMaxVel(maxVel);
-        org.setSize(size);
-        org.setSpeed(speed);
-        org.setStrength(strength);
-        org.setMaxHealth(maxHealth);
-        org.setLife(maxHealth*2+60);
-        org.setGeneration(generation+1);
-        
-        for(int i=0; i<4; i++){
-            for(int j=0; j<orgMutations.getMutations().get(i).size(); j++){
-                if(orgMutations.getMutations().get(i).get(j).isActive()){
-                    org.getOrgMutations().getMutations().get(i).get(j).setActive(true);
-                }
-            }
-        }
-        
-        return org;
-    }
-    
+    /**
+     * to set hunger
+     * @param hunger
+     */
     public void setHunger(int hunger){
         this.hunger = hunger;
     }
     
+    /**
+     * to get hunger
+     * @param thirst
+     */
     public void setThirst(int thirst){
         this.thirst = thirst;
     }
   
+    /**
+     * to get selected
+     * @return selected
+     */
     public boolean isSelected() {
         return selected;
     }
 
+    /**
+     * to set selected
+     * @param selected
+     */
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
      
+    /**
+     * to get beingChased
+     * @return beingChased
+     */
     public boolean isBeingChased(){
         return beingChased;
     }
     
-    public void isBeingChased(boolean a){
-        this.beingChased = a;
-    }
-    
-    public void setEscapePoint(Point p){
-        this.escapePoint = p;
-    }
-    
-    public Point getEscapePoint(){
-        return escapePoint;
+    /**
+     * to set beingChased
+     * @param beingChased
+     */
+    public void isBeingChased(boolean beingChased){
+        this.beingChased = beingChased;
     }
 
+    /**
+     * to get godCommand
+     * @return godCommand
+     */
     public boolean isGodCommand() {
         return godCommand;
     }
 
+    /**
+     * to set godCommand
+     * @param godCommand
+     */
     public void setGodCommand(boolean godCommand) {
         this.godCommand = godCommand;
     }
 
+    /**
+     * to get damage
+     * @return damage
+     */
     public double getDamage() {
         return damage;
     }
 
+    /**
+     * to set damage
+     * @param damage
+     */
     public void setDamage(double damage) {
         this.damage = damage;
     }
