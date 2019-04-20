@@ -35,17 +35,10 @@ public class OrganismManager implements Commons {
     private Hover h;            // hover panel
     private boolean hover;      // to know if hovering
 
-    private int newX;           // new x position of the organisms
-    private int newY;           // new y position of the organisms
+    private int skin;           //skin id of the organisms
 
-    private int skin;
-
-    private OrganismPanel orgPanel;
-    private MutationPanel mutPanel;
-    private ArrayList<Point> currentPoss;
-
-    private Point centralPoint;
-    private Point targetPoint;
+    private OrganismPanel orgPanel; //info panel 
+    private MutationPanel mutPanel; //Mutation panel
 
     private int panelIndex;
     private int idCounter;
@@ -65,16 +58,9 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < amount; i++) {
             organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE, ORGANISM_SIZE, game, 0, idCounter++));
         }
-        newX = INITIAL_POINT;
-        newY = INITIAL_POINT;
-
-        centralPoint = new Point(INITIAL_POINT, INITIAL_POINT);
 
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
         mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
-
-        targetPoint = new Point(INITIAL_POINT, INITIAL_POINT);
-        currentPoss = SwarmMovement.getPositions(500, 500, 50, 1);
     }
 
     /**
@@ -112,9 +98,8 @@ public class OrganismManager implements Commons {
         ArrayList<Point> points;
         //if left clicked move the organisms to determined point
 
-        centralPoint = new Point(x, y);
         if(organisms.size()>0){
-            points = SwarmMovement.getPositions(centralPoint.x - ORGANISM_SIZE / 2, centralPoint.y - ORGANISM_SIZE / 2, organisms.size());
+            points = SwarmMovement.getPositions(x - ORGANISM_SIZE / 2, y - ORGANISM_SIZE / 2, organisms.size());
             for (int i = 0; i < organisms.size(); i++) {
                 organisms.get(i).setPoint(points.get(i));
             }
@@ -133,14 +118,17 @@ public class OrganismManager implements Commons {
         ArrayList<Point> points;
         //if left clicked move the organisms to determined point
 
-        centralPoint = new Point(x, y);
-
-        points = SwarmMovement.getPositions(centralPoint.x - ORGANISM_SIZE / 2, centralPoint.y - ORGANISM_SIZE / 2, amount, obj);
+        points = SwarmMovement.getPositions(x - ORGANISM_SIZE / 2, y - ORGANISM_SIZE / 2, amount, obj);
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setPoint(points.get(i));
         }
     }
     
+    /**
+     * move the selected organisms to an indicated x and y coordinate
+     * @param x coordinate in the x axis
+     * @param y coordinate in the y axis
+     */
     public void moveSelectedSwarm(int x, int y) {
         ArrayList<Point> points;
         
@@ -263,10 +251,13 @@ public class OrganismManager implements Commons {
          }
     }
     
+    /**
+     * Check which organisms are in the selected area and toggle them
+     * @param r the selection area
+     */
     public void checkSelection(Rectangle r) {
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setSelected(organisms.get(i).intersects(r));
-            //System.out.println("SELECTED: " + organisms.get(i).isSelected());
         }
     }
 
@@ -306,6 +297,9 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * Check for predators nearby and act accordingly
+     */
     private void checkPredators() {
         //Check every organism
         for (int i = 0; i < organisms.size(); i++) {
@@ -335,6 +329,12 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * Generate a point to run when an organism is being chased by a predator
+     * @param pred the predator to check
+     * @param org the organism to check
+     * @return the generated point
+     */
     public Point generateEscapePoint(Predator pred, Organism org){
         
         Point generatedPoint = new Point(org.getX(),org.getY());
@@ -361,13 +361,21 @@ public class OrganismManager implements Commons {
         
         return generatedPoint;
     }
-
+    
+    /**
+     * sets a resource for all organisms (deprecated)
+     * @param resource 
+     */
     public void setResource(Resource resource) {
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setTarget(resource);
         }
     }
     
+    /**
+     * sets a resource for selected organisms
+     * @param resource 
+     */
     public void setSelectedResource(Resource resource) {
         for (int i = 0; i < amount; i++) {
             if (organisms.get(i).isSelected()) {
@@ -375,7 +383,11 @@ public class OrganismManager implements Commons {
             }
         }
     }
-
+    
+    /**
+     * Checks if the target resource for each organism is still valid (has qty and is not full)
+     * if not, leave and look for another target resource
+     */
     public void checkOrganismResourceStatus() {
         for (int i = 0; i < organisms.size(); i++) {
             Organism org = organisms.get(i);
@@ -396,7 +408,11 @@ public class OrganismManager implements Commons {
             }
         }
     }
-
+    
+    /**
+     * Look for a new resource according to what the organism is looking for
+     * @param org organism
+     */
     public void autoLookTarget(Organism org) {
         if (!org.isConsuming()) {
             Resource plant = findNearestValidFood(org);
@@ -428,6 +444,11 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * Finds the nearest valid (not empty and not full) source of food
+     * @param org organism
+     * @return the closest food
+     */
     public Resource findNearestValidFood(Organism org) {
         Resource closestPlant = null; 
         double closestDistanceBetweenPlantAndOrganism = 1000000;
@@ -448,6 +469,11 @@ public class OrganismManager implements Commons {
         return closestPlant;
     }
     
+    /**
+     * Finds the nearest valid (not empty and not full) source of water
+     * @param org organism
+     * @return the closest water
+     */
     public Resource findNearestValidWater(Organism org) {
         Resource closestWater = null; 
         double closestDistanceBetweenWaterAndOrganism = 1000000;
@@ -468,7 +494,9 @@ public class OrganismManager implements Commons {
         return closestWater;
     }
 
-    
+    /**
+     * Check if the organism has arrived to resource, if so, assign it to it
+     */
     public void checkArrivalOnResource() {
         for (int i = 0; i < organisms.size(); i++) {
             Organism org = organisms.get(i);
@@ -496,7 +524,10 @@ public class OrganismManager implements Commons {
             }
         }
     }
-
+    
+    /**
+     * empty the resource target for all organisms
+     */
     public void emptyTargets() {
         for (int i = 0; i < organisms.size(); i++) {
             Organism org = organisms.get(i);
@@ -504,6 +535,9 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * empty the resource target for selected organisms
+     */
     public void emptySelectedTargets() {
         for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSelected()) {
@@ -513,6 +547,11 @@ public class OrganismManager implements Commons {
         } 
     }
     
+    /**
+     * leave a resource safely, meaning, remove the organism parasite form the resource
+     * and set the target to null
+     * @param org organism
+     */
     private void safeLeaveResource(Organism org) {
         Resource target = org.getTarget();
         if (target != null) {
@@ -525,6 +564,10 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * set the god command to selected organisms
+     * @param value 
+     */
     public void setSelectedGodCommand(boolean value) {
         for (int i = 0; i < amount; i++) {
             if (organisms.get(i).isSelected()) {
@@ -533,6 +576,10 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * get if at least one form selection has activeFood
+     * @return true if at least one has searchFood active, false otherwise
+     */
     public boolean selectionHasActiveFood() {
         for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSearchFood() && organisms.get(i).isSelected()) {
@@ -543,6 +590,10 @@ public class OrganismManager implements Commons {
         return false;
     }
     
+    /**
+     * get if at least one form selection has activeWater
+     * @return true if at least one has searchWater active, false otherwise
+     */
     public boolean selectionHasActiveWater() {
         for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSearchWater() && organisms.get(i).isSelected()) {
@@ -553,6 +604,10 @@ public class OrganismManager implements Commons {
         return false;
     }
     
+    /**
+     * get if at least one form selection has aggressiveness
+     * @return true if at least one has aggressiveness active, false otherwise
+     */
     public boolean selectionHasAggressiveness() {
         for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isAggressive() && organisms.get(i).isSelected()) {
@@ -638,31 +693,21 @@ public class OrganismManager implements Commons {
 
         return positions;
     }
-
+    
     /**
-     * to set the central point of the swarm
-     *
-     * @param centralPoint
+     * set searchFood for all organisms
+     * @param val boolean to be assigned
      */
-    public void setCentralPoint(Point centralPoint) {
-        this.centralPoint = centralPoint;
-    }
-
-    /**
-     * to get the central point of the swarm
-     *
-     * @return
-     */
-    public Point getCentralPoint() {
-        return centralPoint;
-    }
-
     public void setSearchFood(boolean val) {
         for (int i = 0; i < amount; i++) {
             organisms.get(i).setSearchFood(val);
         }
     }
     
+    /**
+     * set searchFood for selected organisms
+     * @param val boolean to be assigned
+     */
     public void setSelectedSearchFood(boolean val) {
         for (int i = 0; i < amount; i++) {
             if (organisms.get(i).isSelected()) {
@@ -670,13 +715,21 @@ public class OrganismManager implements Commons {
             }
         }
     }
-
+    
+    /**
+     * set searchWater for all organisms
+     * @param val boolean to be assigned
+     */
     public void setSearchWater(boolean val) {
         for (int i = 0; i < amount; i++) {
             organisms.get(i).setSearchWater(val);
         }
     }
     
+    /**
+     * set searchWater for selected organisms
+     * @param val boolean to be assigned
+     */
     public void setSelectedSearchWater(boolean val) {
         for (int i = 0; i < amount; i++) {
             if (organisms.get(i).isSelected()) {
@@ -685,6 +738,20 @@ public class OrganismManager implements Commons {
         }
     }
     
+     /**
+     * set aggressiveness for all organisms
+     * @param val boolean to be assigned
+     */
+    public void setAggressiveness(boolean val) {
+        for (int i = 0; i < amount; i++) {
+            organisms.get(i).setAggressive(val);
+        }
+    }
+    
+    /**
+     * set aggressiveness for selected organisms
+     * @param val boolean to be assigned
+     */
     public void setSelectedAggressiveness(boolean val) {
         for (int i = 0; i < amount; i++) {
             if (organisms.get(i).isSelected()) {
@@ -693,14 +760,20 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * to get the organisms amount
+     * @return the <code>ArrayList</code> size
+     */
     public int getOrganismsAmount() {
         return organisms.size();
     }
+    
+    /**
+     * to get a specific organism
+     * @param i index of the array
+     * @return organism at index i
+     */
     public Organism getOrganism(int i){
         return organisms.get(i);
     }
-
-    /**
-     * Single organism class
-     */
 }
