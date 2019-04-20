@@ -322,12 +322,12 @@ public class Organism extends Item implements Commons {
      */
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.orgColors.get(0), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
+        g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
         
         //Warning that the organism can reproduce
         if(isNeedOffspring()){
             g.setColor(Color.BLACK);
-            g.fillOval(game.getCamera().getRelX(radius.getX() - width / 2), game.getCamera().getRelY(radius.getY() - width / 2), radius.getRadius(), radius.getRadius());
+            g.fillOval(game.getCamera().getRelX(getX() - width / 2), game.getCamera().getRelY(getY() - width / 2), ORGANISM_SIZE / 2, ORGANISM_SIZE / 2);
         }
         
         orgMutations.render(g);
