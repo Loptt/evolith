@@ -60,6 +60,8 @@ public class Predator extends Item implements Commons {
     
     private boolean recovering;
     private int id;
+    
+    private int absMaxVel;
 
     /**
      * Constructor of the organism
@@ -104,6 +106,7 @@ public class Predator extends Item implements Commons {
         stamina = 100;
         recovering = false;
         this.id = id;
+        absMaxVel = 3;
     }
 
     /**
@@ -146,15 +149,15 @@ public class Predator extends Item implements Commons {
                     maxVel = 0;
                 } else {
                     moving = true;
-                    maxVel = 1;
+                    maxVel = (int) Math.ceil(absMaxVel / 3);
                 }
             } else {
                 moving = true;
-                maxVel = 2;
+                maxVel = (int) Math.ceil(absMaxVel / 2);
             }
         } else {
             moving = true;
-            maxVel = 3;
+            maxVel = absMaxVel / 1;
         }
 
         //move in the x to the point
@@ -264,16 +267,20 @@ public class Predator extends Item implements Commons {
                 getTargetResource().setPredator(null);
             }
             
+            absMaxVel = 3;
+            
             setTargetResource(null);
             setStamina(getStamina() - 0.3);
         } else if (res != null) {
             if (getTargetResource() == null) {
                 setTargetResource(res);
                 setTarget(null);
+                absMaxVel = 1;
             } else if (getTargetResource().getPredator() != this) {
                 //If not check if a resource is nearby and set target to that one
                 setTargetResource(res);
                 setTarget(null);
+                absMaxVel = 1;
             }
         }
     }

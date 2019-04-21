@@ -1,18 +1,7 @@
 package evolith.entities;
 
 import evolith.game.Game;
-import evolith.menus.Hover;
-import evolith.game.Item;
-import evolith.helpers.SwarmMovement;
-import evolith.helpers.Time;
-import evolith.engine.Assets;
 import evolith.helpers.Commons;
-import static evolith.helpers.Commons.WATERS_AMOUNT;
-import static evolith.helpers.Commons.WATER_SIZE;
-
-import evolith.menus.OrganismPanel;
-
-import java.awt.Color;
 
 import java.awt.Graphics;
 import java.awt.Point;
@@ -51,8 +40,8 @@ public class PredatorManager implements Commons {
         
         Random randomGen = new Random();
         
-        int newWidthPredators = (int) Math.ceil( 5000/Math.sqrt(PREDATORS_AMOUNT) );
-        int newHeightPredators = (int) Math.ceil( 5000/Math.sqrt(PREDATORS_AMOUNT) );
+        int newWidthPredators = (int) Math.ceil(5000/Math.sqrt(PREDATORS_AMOUNT) );
+        int newHeightPredators = (int) Math.ceil(5000/Math.sqrt(PREDATORS_AMOUNT) );
          
         for (int i = newWidthPredators; i < 5000; i += newWidthPredators){
             for (int j = newHeightPredators; j < 5000; j += newHeightPredators){
