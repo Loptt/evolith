@@ -10,6 +10,8 @@ import evolith.game.Game;
 import evolith.game.Item;
 import evolith.helpers.Commons;
 import static evolith.helpers.Commons.MAX_MATURITY;
+import static evolith.helpers.Commons.MAX_SIGHT_DISTANCE;
+import evolith.helpers.SwarmMovement;
 import evolith.helpers.Time;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -111,6 +113,8 @@ public class Predator extends Item implements Commons {
     public void tick() {
         //to determine the lifespan of the organism
         time.tick();
+        autoLookTarget();
+        checkResourceStatus();
         handleTarget();
         checkMovement();
         checkVitals();  
@@ -227,6 +231,109 @@ public class Predator extends Item implements Commons {
         } else if(target != null && targetResource == null){
             point.x = target.getX();
             point.y = target.getY();
+        }
+    }
+    
+    public void checkResourceStatus() {
+        //Check if target exists
+        if (targetResource != null) {
+            checkArrivalOnResource();
+            //Check if the current target does have a predator
+            if ((targetResource.getPredator() != null && targetResource.getPredator() != this) || targetResource.isOver()) {
+                autoLookTarget();
+            } else {
+                //System.out.println("PREDATOR IN RESOURCE:  " + i);
+            }
+        } else {
+            //System.out.println("NO TARGET:  " + i);
+            autoLookTarget();
+        }
+    }
+    
+    public void autoLookTarget() {
+        //Finds closest organism or water
+        Resource res = findNearestValidWater();
+        Organism org = findNearestOrganism();
+        
+        //If there is an organism and is in valid distance
+        if (org != null && SwarmMovement.distanceBetweenTwoPoints(getX(), getY(), org.getX(), org.getY()) < MAX_SIGHT_DISTANCE 
+                && !isRecovering()) {
+            setTarget(org);
+            
+            if (getTargetResource() != null && getTargetResource().getPredator() == this) {
+                getTargetResource().setPredator(null);
+            }
+            
+            setTargetResource(null);
+            setStamina(getStamina() - 0.3);
+        } else if (res != null) {
+            if (getTargetResource() == null) {
+                setTargetResource(res);
+                setTarget(null);
+            } else if (getTargetResource().getPredator() != this) {
+                //If not check if a resource is nearby and set target to that one
+                setTargetResource(res);
+                setTarget(null);
+            }
+        }
+    }
+    
+    public Organism findNearestOrganism(){
+        Organism closestOrganism = null; 
+        double closestDistanceBetweenPredatorAndOrganism = 1000000;
+
+        //Organism(int x, int y, int width, int height, Game game, int skin, int id)
+        for(int i = 1; i < game.getOrganisms().getOrganismsAmount(); i++){
+            double distanceBetweenPredatorAndOrganism = 7072;
+
+                distanceBetweenPredatorAndOrganism = Math.sqrt(Math.pow(getX()-game.getOrganisms().getOrganism(i).getX(),2)
+                        + Math.pow(getY()-game.getOrganisms().getOrganism(i).getY(),2) );
+
+            
+            if(distanceBetweenPredatorAndOrganism<closestDistanceBetweenPredatorAndOrganism){
+                closestDistanceBetweenPredatorAndOrganism = distanceBetweenPredatorAndOrganism;
+                closestOrganism = game.getOrganisms().getOrganism(i);
+            }
+        }
+        /*
+        if (closestDistanceBetweenPredatorAndOrganism > 100){
+            return null;
+        }
+        */
+        
+        return closestOrganism;
+    }
+    
+    public Resource findNearestValidWater() {
+        Resource closestWater = null; 
+        double closestDistanceBetweenWaterAndOrganism = 1000000;
+        
+        for(int i = 1; i < game.getResources().getWaterAmount(); i++){
+            double distanceBetweenPlantAndOrganism = 7072;
+            
+                distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(getX()- game.getResources().getWater(i).getX(), 2)
+                        + Math.pow(getY()- game.getResources().getWater(i).getY(), 2));
+
+            if (distanceBetweenPlantAndOrganism < closestDistanceBetweenWaterAndOrganism) {
+                if (game.getResources().getWater(i).getPredator() == null) {
+                    closestDistanceBetweenWaterAndOrganism = distanceBetweenPlantAndOrganism;
+                    closestWater = game.getResources().getWater(i);
+                } else {
+                    //System.out.println("RESOURCE BUSY");
+                }
+            }
+        }
+        
+        return closestWater;
+    }
+    
+    public void checkArrivalOnResource() {
+        if (targetResource != null) {
+            if (targetResource.intersects(this) && targetResource.getPredator() == null) {
+                targetResource.setPredator(this);
+            } else {
+                autoLookTarget();
+            }
         }
     }
 
