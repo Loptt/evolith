@@ -57,6 +57,7 @@ public class Predator extends Item implements Commons {
     private double stamina;
     
     private boolean recovering;
+    private int id;
 
     /**
      * Constructor of the organism
@@ -66,8 +67,9 @@ public class Predator extends Item implements Commons {
      * @param width
      * @param height
      * @param game
+     * @param id
      */
-    public Predator(int x, int y, int width, int height, Game game) {
+    public Predator(int x, int y, int width, int height, Game game, int id) {
         super(x, y, width, height);
         this.game = game;
         point = new Point(x, y);
@@ -99,6 +101,7 @@ public class Predator extends Item implements Commons {
         damage = 0.1;
         stamina = 100;
         recovering = false;
+        this.id = id;
     }
 
     /**
@@ -252,6 +255,9 @@ public class Predator extends Item implements Commons {
         g.fillRect(game.getCamera().getRelX(x)+3, game.getCamera().getRelY(y) + 76, (int) (80 * this.stamina / 100), 5);
         g.setColor(Color.white);
         g.drawRect(game.getCamera().getRelX(x)+2, game.getCamera().getRelY(y) + 76, 80, 6);
+        
+        g.setColor(Color.BLACK);
+        g.drawString(Integer.toString(id), game.getCamera().getRelX(x)-20, game.getCamera().getRelY(y) + 90);
     }
 
     /**

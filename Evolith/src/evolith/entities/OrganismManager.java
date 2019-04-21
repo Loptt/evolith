@@ -77,7 +77,6 @@ public class OrganismManager implements Commons {
         checkOrganismResourceStatus();
         
         updateMenuPanels();
-        
     }
 
     /**
