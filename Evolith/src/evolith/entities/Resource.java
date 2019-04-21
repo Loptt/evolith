@@ -34,13 +34,14 @@ public class Resource extends Item implements Commons{
     private int predatorAmount;
     private final ArrayList<Point> positions;
     private HashMap<Organism, Integer> map;
-    private HashMap<Predator, Integer> mapOfPredators;
     private Time time;
 
     public enum ResourceType {Plant, Water};
     private ResourceType type;
     
     private int prevSecUpdate;
+    
+    private Predator predator;
     
     public Resource(int x, int y, int width, int height, Game game, ResourceType type) {
         super(x, y, width, height);
@@ -52,13 +53,14 @@ public class Resource extends Item implements Commons{
         parasiteAmount = 0;
         predatorAmount = 0;
         map = new HashMap<>();
-        mapOfPredators = new HashMap<>();
         positions = SwarmMovement.getPositions(x + PLANT_SIZE / 2, y + PLANT_SIZE / 2, 6, 1);
         
         time = new Time();
         prevSecUpdate = 0;
         
         this.type = type;
+        
+        predator = null;
     }
     
     public void addParasite(Organism org) {
@@ -81,28 +83,7 @@ public class Resource extends Item implements Commons{
             System.out.println("ERROR, POSITIONS FULL");
         }
     }
-    
-    public void addPredator(Predator pred) {
-        if (!fullOfPredators) {
-            for (int i = 0; i < 6; i++) {
-                if (!mapOfPredators.containsValue(i)) {
-                    mapOfPredators.put(pred, i);
-                    pred.setPoint((Point) positions.get(i).clone());
-                    //System.out.println(positions.get(i));
-                    //System.out.println("TO ID:   " + org.getId());
-                    predatorAmount++;
-                    if (predatorAmount >= 6) {
-                        fullOfPredators = true;
-                    }
-                    return;
-                }
-            }
-            
-            //If code reaches here, it is already full so error
-            System.out.println("ERROR, POSITIONS FULL");
-        }
-    }
-    
+
     public void removeParasite(Organism org, int i) {
         if (map.containsKey(org)) {
             //System.out.println("AMOUNT  :" + map.size());
@@ -119,26 +100,6 @@ public class Resource extends Item implements Commons{
         //System.out.println("END OF REMOVEPAR FUNCTION:  ID:   " + i);
     }
     
-    public void removePredator(Predator pred, int i) {
-        if (mapOfPredators.containsKey(pred)) {
-            //System.out.println("AMOUNT  :" + map.size());
-            mapOfPredators.remove(pred);
-            predatorAmount--;
-            if (predatorAmount < 6) {
-                fullOfPredators = false;
-            }
-            //System.out.println("PARASITE REMOVED  ID:  " + i);
-        } else {
-            System.out.println("ERROR, predator NOT IN RESOURCE  ID:  " + i);
-        }
-        
-        //System.out.println("END OF REMOVEPAR FUNCTION:  ID:   " + i);
-    }
-    
-    public void removePredators(){
-        mapOfPredators.clear();
-    }
-    
     public void removeParasites() {
         map.clear();
     }
@@ -147,10 +108,6 @@ public class Resource extends Item implements Commons{
         return map.containsKey(org);
     }
 
-    boolean hasPredator(Predator pred){
-        return mapOfPredators.containsKey(pred);
-    }
-    
     public int getQuantity() {
         return quantity;
     }
@@ -181,6 +138,14 @@ public class Resource extends Item implements Commons{
 
     public void setOver(boolean over) {
         this.over = over;
+    }
+
+    public Predator getPredator() {
+        return predator;
+    }
+
+    public void setPredator(Predator predator) {
+        this.predator = predator;
     }
     
     @Override

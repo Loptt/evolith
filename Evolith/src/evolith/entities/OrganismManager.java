@@ -73,6 +73,9 @@ public class OrganismManager implements Commons {
             checkPredators();
         }
         
+        checkArrivalOnResource();
+        checkOrganismResourceStatus();
+        
         updateMenuPanels();
         
     }

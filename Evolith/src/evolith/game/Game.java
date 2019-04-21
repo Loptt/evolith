@@ -210,7 +210,6 @@ public class Game implements Runnable, Commons {
         selection.tick();
         
         manageMouse();
-        checkEntitiesInteraction();
         
         if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
             night = !night;
@@ -313,8 +312,7 @@ public class Game implements Runnable, Commons {
     }
     
     public void checkEntitiesInteraction() {
-        organisms.checkArrivalOnResource();
-        organisms.checkOrganismResourceStatus();
+        
     }
     
     public void checkOrganismsInSelection() {

@@ -74,6 +74,9 @@ public class PredatorManager implements Commons {
             checkWithOrganisms(predators.get(i));
             checkKill(predators.get(i));
         }
+        
+        checkArrivalOnResource();
+        checkPredatorResourceStatus();
     }
     
     private void checkWithOrganisms(Predator pred) {
@@ -101,6 +104,43 @@ public class PredatorManager implements Commons {
         if (pred.isDead()) {
             predators.remove(pred);
             amount--;
+        }
+    }
+    
+    public void checkPredatorResourceStatus() {
+        for (int i = 0; i < predators.size(); i++) {
+            Predator pred = predators.get(i);
+            Resource target = predators.get(i).getTargetResource();
+            //Check if target exists
+            if (target != null) {
+                //Check if the current target does have a predator
+                if (target.getPredator() != null && target.getPredator() != pred || target.isOver()) {
+                    //System.out.println("FULL:  " + i);
+                    pred.getTargetResource().setPredator(null);
+                    autoLookTarget(pred);
+                } else {
+                    //System.out.println("PREDATOR IN RESOURCE:  " + i);
+                }
+            } else {
+                //System.out.println("NO TARGET:  " + i);
+                autoLookTarget(pred);
+            }
+        }
+    }
+    
+    /**
+     * Check if the predator has arrived to resource, if so, assign it to it
+     */
+    public void checkArrivalOnResource() {
+        for (int i = 0; i < predators.size(); i++) {
+            Predator pred = predators.get(i);
+            Resource target = predators.get(i).getTargetResource();
+            if (target != null) {
+                if (target.intersects(pred)) {
+                    target.setPredator(pred);
+                    System.out.println("ARRIVED");
+                }
+            }
         }
     }
     
@@ -164,7 +204,7 @@ public class PredatorManager implements Commons {
                 distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(pred.getX()- game.getResources().getWater(i).getX(), 2)
                         + Math.pow(pred.getY()- game.getResources().getWater(i).getY(), 2));
 
-            if(distanceBetweenPlantAndOrganism < closestDistanceBetweenWaterAndOrganism) {
+            if (distanceBetweenPlantAndOrganism < closestDistanceBetweenWaterAndOrganism && game.getResources().getWater(i).getPredator() == null) {
                 closestDistanceBetweenWaterAndOrganism = distanceBetweenPlantAndOrganism;
                 closestWater = game.getResources().getWater(i);
             }
