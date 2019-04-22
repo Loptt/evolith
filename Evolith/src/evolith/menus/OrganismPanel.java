@@ -91,7 +91,7 @@ public class OrganismPanel extends Menu implements Commons {
         // Arrow prev
         buttons.add(new Button(this.x - 100, this.y + PANEL_HEIGHT / 2, 50, 50, Assets.organismPanel_prevArrow));
         // Reproduce button 
-        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 400, 300, 75, Assets.organismPanel_reproduceButton));
+        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 400, 300, 75, Assets.organismPanel_reproduceButton_ON,Assets.organismPanel_reproduceButton_OFF));
 
         inputReader = new InputReader(game);
     }

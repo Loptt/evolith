@@ -9,13 +9,10 @@ import evolith.engine.Assets;
 import evolith.entities.Organism;
 import evolith.game.Game;
 import evolith.helpers.Commons;
-import static evolith.helpers.Commons.MAX_MATURITY;
-import static evolith.helpers.Commons.MAX_SIZE;
 import static evolith.helpers.Commons.MAX_SPEED;
 import static evolith.helpers.Commons.MAX_STEALTH;
 import static evolith.helpers.Commons.MAX_STRENGTH;
 import static evolith.helpers.Commons.MAX_SURVIVABILITY;
-import static evolith.helpers.Commons.PANEL_WIDTH;
 import evolith.helpers.InputReader;
 import java.awt.Color;
 import java.awt.Font;
@@ -62,9 +59,9 @@ public class MutationPanel extends Menu implements Commons {
         super(x, y, width, height, game);
         this.organism = organism;
         //Evolve
-        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 - 250, this.y + MUTATION_PANEL_HEIGHT+50, 240, 60, Assets.organismPanel_reproduceButton));
+        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 - 250, this.y + MUTATION_PANEL_HEIGHT+50, 240, 60, Assets.mutationPanel_evolveButton_ON));
         //Not Evolve
-        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 + 250, this.y + MUTATION_PANEL_HEIGHT+50, 240, 60, Assets.organismPanel_reproduceButton));
+        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 + 250, this.y + MUTATION_PANEL_HEIGHT+50, 240, 60, Assets.mutationPanel_evolveButton_OFF));
         //Strength
         buttons.add(new Button(x + 300, y + 30, 390, 110));
         //Speed
