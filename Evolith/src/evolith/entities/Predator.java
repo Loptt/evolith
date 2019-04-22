@@ -9,8 +9,6 @@ import evolith.engine.Assets;
 import evolith.game.Game;
 import evolith.game.Item;
 import evolith.helpers.Commons;
-import static evolith.helpers.Commons.MAX_MATURITY;
-import static evolith.helpers.Commons.MAX_SIGHT_DISTANCE;
 import evolith.helpers.SwarmMovement;
 import evolith.helpers.Time;
 import java.awt.Color;
@@ -49,6 +47,8 @@ public class Predator extends Item implements Commons {
 
     private Organism target;
     private Resource targetResource;
+    private Resource prevTargetResource;
+    private Resource prevprevTargetResource;
     private boolean searchFood;
     private boolean searchWater;
 
@@ -62,6 +62,12 @@ public class Predator extends Item implements Commons {
     private int id;
     
     private int absMaxVel;
+    private int prevResourceChangeSec;
+    private int prevPointGeneratedSec;
+    
+    private enum Mode {Water, Roaming, Attacking};
+    private Mode mode;
+    private Mode prevMode;
 
     /**
      * Constructor of the organism
@@ -107,6 +113,11 @@ public class Predator extends Item implements Commons {
         recovering = false;
         this.id = id;
         absMaxVel = 3;
+        
+        prevResourceChangeSec = 0;
+        prevPointGeneratedSec = 0;
+        mode = Mode.Roaming;
+        prevMode = Mode.Roaming;
     }
 
     /**
@@ -117,10 +128,25 @@ public class Predator extends Item implements Commons {
         //to determine the lifespan of the organism
         time.tick();
         autoLookTarget();
-        checkResourceStatus();
+        
+        switch (mode) {
+            case Attacking:
+                System.out.println("ATTACKING:  " + id);
+                break;
+            case Roaming:
+                System.out.println("ROAMING:  " + id);
+                roaming();
+                break;
+            case Water:
+                System.out.println("WATER:  " + id);
+                checkResourceStatus();
+                waterChecking();
+                break;
+        }
+
         handleTarget();
         checkMovement();
-        checkVitals();  
+        checkVitals(); 
     }
     
     public double getLife() {
@@ -139,26 +165,7 @@ public class Predator extends Item implements Commons {
      * Update the position of the organism accordingly
      */
     private void checkMovement() {
-        // if the organism is less than 25 units reduce velocity
-        if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 25) {
-            // if the organism is less than 15 units reduce velocity
-            if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 15) {
-                // if the organism is less than 5 units reduce velocity
-                if (Math.abs((int) point.getX() - x) < 5 && Math.abs((int) point.getY() - y) < 5) {
-                    moving = false;
-                    maxVel = 0;
-                } else {
-                    moving = true;
-                    maxVel = (int) Math.ceil(absMaxVel / 3);
-                }
-            } else {
-                moving = true;
-                maxVel = (int) Math.ceil(absMaxVel / 2);
-            }
-        } else {
-            moving = true;
-            maxVel = absMaxVel / 1;
-        }
+        moveToPoint();
 
         //move in the x to the point
         if ((int) point.getX() > x) {
@@ -192,6 +199,51 @@ public class Predator extends Item implements Commons {
         x += xVel;
         y += yVel;
     }
+    
+    private void moveToPoint() {
+        // if the organism is less than 25 units reduce velocity
+        if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 25) {
+            // if the organism is less than 15 units reduce velocity
+            if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 15) {
+                // if the organism is less than 5 units reduce velocity
+                if (Math.abs((int) point.getX() - x) < 5 && Math.abs((int) point.getY() - y) < 5) {
+                    moving = false;
+                    maxVel = 0;
+                } else {
+                    moving = true;
+                    maxVel = (int) Math.ceil(absMaxVel / 3);
+                }
+            } else {
+                moving = true;
+                maxVel = (int) Math.ceil(absMaxVel / 2);
+            }
+        } else {
+            moving = true;
+            maxVel = absMaxVel / 1;
+        }
+    }
+    
+    private void waterChecking() {
+        if (time.getSeconds() >= prevResourceChangeSec + PREDATOR_SECONDS_IN_RESOURCE) {
+            lookNewTarget();
+            prevResourceChangeSec = (int) time.getSeconds();
+        }
+    }
+    
+    private void roaming() {
+        absMaxVel = 1;
+        if (time.getSeconds() >= prevPointGeneratedSec + PREDATOR_SECONDS_TO_ROAM) {
+            assignNewPoint();
+            prevPointGeneratedSec = (int) time.getSeconds();
+        }
+    }
+    
+    private void assignNewPoint() {
+        int newX = (int) (Math.random() * (BACKGROUND_WIDTH - 200) + 100 );
+        int newY = (int) (Math.random() * (BACKGROUND_HEIGHT - 200) + 100 );
+        
+        point = new Point(newX, newY);
+    }
 
     /**
      * To check the update and react to the vital stats of the organism
@@ -211,6 +263,9 @@ public class Predator extends Item implements Commons {
         
         if (stamina <= 0) {
             recovering = true;
+            target = null;
+            assignNewPoint();
+            mode = prevMode;
         }
         
         if (stamina >= 50) {
@@ -268,21 +323,60 @@ public class Predator extends Item implements Commons {
             }
             
             absMaxVel = 3;
+            if (mode != Mode.Attacking) {
+                prevMode = mode;
+                mode = Mode.Attacking;
+            }
             
             setTargetResource(null);
             setStamina(getStamina() - 0.3);
-        } else if (res != null) {
-            if (getTargetResource() == null) {
-                setTargetResource(res);
-                setTarget(null);
-                absMaxVel = 1;
-            } else if (getTargetResource().getPredator() != this) {
-                //If not check if a resource is nearby and set target to that one
-                setTargetResource(res);
-                setTarget(null);
-                absMaxVel = 1;
+        } else {
+            if (mode == Mode.Attacking) {
+                assignNewPoint();
+                mode = prevMode;
+            }
+            if (res != null && mode != Mode.Roaming) {
+                if (getTargetResource() == null) {
+                    setTargetResource(res);
+                    setTarget(null);
+                    absMaxVel = 1;
+                } else if (getTargetResource().getPredator() != this) {
+                    //If not check if a resource is nearby and set target to that one
+                    setTargetResource(res);
+                    setTarget(null);
+                    absMaxVel = 1;
+                }
             }
         }
+    }
+    
+    private void lookNewTarget() {
+        Resource closestWater = null; 
+        double closestDistanceBetweenWaterAndOrganism = 1000000;
+        
+        for(int i = 1; i < game.getResources().getWaterAmount(); i++){
+            double distanceBetweenPlantAndOrganism = 7072;
+            
+                distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(getX()- game.getResources().getWater(i).getX(), 2)
+                        + Math.pow(getY()- game.getResources().getWater(i).getY(), 2));
+
+            if (distanceBetweenPlantAndOrganism < closestDistanceBetweenWaterAndOrganism) {
+                if (game.getResources().getWater(i).getPredator() == null) {
+                    closestDistanceBetweenWaterAndOrganism = distanceBetweenPlantAndOrganism;
+                    closestWater = game.getResources().getWater(i);
+                } else {
+                    //System.out.println("RESOURCE BUSY");
+                }
+            }
+        }
+        
+        if (prevprevTargetResource != null) {
+            prevprevTargetResource.setPredator(null);
+        }
+        
+        prevprevTargetResource = prevTargetResource;
+        prevTargetResource = targetResource;
+        targetResource = closestWater;
     }
     
     public Organism findNearestOrganism(){
@@ -322,7 +416,7 @@ public class Predator extends Item implements Commons {
                         + Math.pow(getY()- game.getResources().getWater(i).getY(), 2));
 
             if (distanceBetweenPlantAndOrganism < closestDistanceBetweenWaterAndOrganism) {
-                if (game.getResources().getWater(i).getPredator() == null) {
+                if (game.getResources().getWater(i).getPredator() == null && game.getResources().getWater(i) != prevTargetResource) {
                     closestDistanceBetweenWaterAndOrganism = distanceBetweenPlantAndOrganism;
                     closestWater = game.getResources().getWater(i);
                 } else {
@@ -338,6 +432,7 @@ public class Predator extends Item implements Commons {
         if (targetResource != null) {
             if (targetResource.intersects(this) && targetResource.getPredator() == null) {
                 targetResource.setPredator(this);
+                prevResourceChangeSec = (int) time.getSeconds();
             } else {
                 autoLookTarget();
             }
