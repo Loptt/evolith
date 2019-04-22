@@ -60,7 +60,7 @@ public class ResourceManager implements Commons {
             //System.out.println("plants size: " + plants.size());
             
             for (int j = 0; j < plants.size() - 1; j++) {
-                if (plants.get(i).intersects(plants.get(j)) && i != j) {
+                if (plants.get(plants.size()-1).intersects(plants.get(j))) {
                     plants.remove(i);
                     i--;
                 }
@@ -77,7 +77,7 @@ public class ResourceManager implements Commons {
             //System.out.println("waters size: " + waters.size());
             
             for (int j = 0; j < waters.size() - 1; j++) {
-                if (waters.get(i).intersects(waters.get(j)) && i != j) {
+                if (waters.get(waters.size() - 1).intersects(waters.get(j)) && i != j) {
                     waters.remove(i);
                     i--;
                 }

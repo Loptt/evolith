@@ -81,4 +81,7 @@ public interface Commons {
     public static final int CONSUMING_RATE = 2;
     
     public static final int DAY_CYCLE_DURATION_SECONDS = 60;
+    
+    public static final int PREDATOR_SECONDS_IN_RESOURCE = 7;
+    public static final int PREDATOR_SECONDS_TO_ROAM = 10;
 }
