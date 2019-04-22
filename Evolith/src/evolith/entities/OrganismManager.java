@@ -338,7 +338,11 @@ public class OrganismManager implements Commons {
                             org.setPoint(generatedPoint);
                         }
                     } else {
-                        //FIGHT
+                        if (!org.isGodCommand()) {
+                            int randX = SwarmMovement.generateRandomness(100);
+                            int randY = SwarmMovement.generateRandomness(100);
+                            org.setPoint(new Point(pred.getX() + 30 + randX, pred.getY() + 30 + randY));
+                        }
                     }
                 }
             }
