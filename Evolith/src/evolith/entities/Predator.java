@@ -151,14 +151,13 @@ public class Predator extends Item implements Commons {
         if (random == 10 && mode != Mode.Attacking) {
             
             if (mode == Mode.Roaming) {
-                System.out.println("CHANGED TO WATER   " + id);
                 mode = Mode.Water;
             } else {
-                System.out.println("CHANGED TO ROAMING   " + id);
                 mode = Mode.Roaming;
                 if (targetResource.getPredator() != null && targetResource.getPredator() == this) {
                     targetResource.setPredator(null);
                 }
+                targetResource = null;
                 assignNewPoint();
             }
         }
