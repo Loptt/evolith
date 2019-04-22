@@ -34,13 +34,15 @@ public class OrganismPanel extends Menu implements Commons {
     private boolean searchPrev;             //Searches the previous reproductable Species
     private boolean reproduce;              //Determines if the reproduce button is pressed
     private int index;                      //Actual index of the organism in the organism manager
+
     /**
      * Constructor of the panel initializes the reader and font
+     *
      * @param x
      * @param y
      * @param width
      * @param height
-     * @param game 
+     * @param game
      */
     public OrganismPanel(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
@@ -57,24 +59,26 @@ public class OrganismPanel extends Menu implements Commons {
         }
         inputReader = new InputReader(game);
     }
+
     /**
      * Constructor that activates the display of the organism received
+     *
      * @param x
      * @param y
      * @param width
      * @param height
      * @param game
-     * @param org 
+     * @param org
      */
     public OrganismPanel(int x, int y, int width, int height, Game game, Organism org) {
         super(x, y, width, height, game);
-        
+
         this.organism = org;
         //Sets all events to false
         this.searchNext = false;
         this.searchPrev = false;
         this.reproduce = false;
-        
+
         this.index = 0;
         //Set display to true
         this.active = true;
@@ -91,35 +95,44 @@ public class OrganismPanel extends Menu implements Commons {
 
         inputReader = new InputReader(game);
     }
+
     /**
      * Gets the index of the organism
-     * @return 
+     *
+     * @return
      */
     public int getIndex() {
         return index;
     }
+
     /**
      * Sets the index of the organism
-     * @param index 
+     *
+     * @param index
      */
     public void setIndex(int index) {
         this.index = index;
     }
+
     /**
      * Gets the organism of the actived panel
+     *
      * @return organism
      */
     public Organism getOrganism() {
         return organism;
     }
+
     /**
      * Sets the organism to the new organism
-     * @param organism 
+     *
+     * @param organism
      */
     public void setOrganism(Organism organism) {
         this.organism = organism;
 
     }
+
     /**
      * Ticks the organism panel depending on the info
      */
@@ -233,6 +246,17 @@ public class OrganismPanel extends Menu implements Commons {
         if (active) {
 
             g.drawImage(Assets.organismPanel_menu, x, y, width, height, null);
+
+            g.drawImage(Assets.orgColors.get(organism.getSkin()), x + 83, y + 70, 196, 196, null);
+
+            for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
+                for (int j = 0; j < organism.getOrgMutations().getMutations().get(i).size(); j++) {
+                    if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
+                        g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getSprite(), x + 83, y + 70, 196, 196, null);
+                    }
+                }
+            }
+
             g.drawImage(Assets.organismPanel_close, x + width - 20, y - 20, BUTTON_CLOSE_DIMENSION, BUTTON_CLOSE_DIMENSION, null);
             //Stealth
             g.setColor(Color.ORANGE);
@@ -256,8 +280,8 @@ public class OrganismPanel extends Menu implements Commons {
             // Edit
             g.setColor(Color.WHITE);
             g.setFont(fontEvolve);
-            g.drawString(Integer.toString(organism.getGeneration()), x + 474, y + 279);
-            g.drawString(Double.toString(organism.getTime().getSeconds()), x + 458, y + 283);
+            g.drawString(Integer.toString(organism.getGeneration()), x + 474, y + 270);
+            g.drawString(Double.toString(organism.getTime().getSeconds()), x + 458, y + 294);
 
             g.setColor(Color.WHITE);
             g.setFont(fontEvolve);

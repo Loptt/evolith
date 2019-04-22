@@ -62,9 +62,9 @@ public class MutationPanel extends Menu implements Commons {
         super(x, y, width, height, game);
         this.organism = organism;
         //Evolve
-        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 250, this.y + 450, 240, 60, Assets.organismPanel_reproduceButton));
+        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 - 250, this.y + MUTATION_PANEL_HEIGHT+50, 240, 60, Assets.organismPanel_reproduceButton));
         //Not Evolve
-        buttons.add(new Button(this.x + PANEL_WIDTH / 2 + 250, this.y + 450, 240, 60, Assets.organismPanel_reproduceButton));
+        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 + 250, this.y + MUTATION_PANEL_HEIGHT+50, 240, 60, Assets.organismPanel_reproduceButton));
         //Strength
         buttons.add(new Button(x + 300, y + 30, 390, 110));
         //Speed
@@ -171,7 +171,19 @@ public class MutationPanel extends Menu implements Commons {
     @Override
     public void render(Graphics g) {
         if (active) {
+            
             g.drawImage(Assets.mutation_menu, x, y, width, height, null);
+            
+            g.drawImage(Assets.orgColors.get(organism.getSkin()), x + 71, y + 188, 140, 140, null);
+
+            for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
+                for (int j = 0; j < organism.getOrgMutations().getMutations().get(i).size(); j++) {
+                    if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
+                        g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getSprite(), x + 71, y + 188, 140, 140, null);
+                    }
+                }
+            }
+            
 
             for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
 
@@ -200,6 +212,7 @@ public class MutationPanel extends Menu implements Commons {
                 } else {
                     g.setColor(Color.WHITE);
                     g.setFont(fontEvolve);
+                    g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getSprite(), x + 331, y + 55 + i*115, 60, 60, null);
                     g.drawString((String) hmap.get(organism.getOrgMutations().getMutations().get(i).get(j).getTier()), x + 468, y + 60 + i * 115);
                     g.drawString(organism.getOrgMutations().getMutations().get(i).get(j).getName(), x + 500, y + 60 + i * 115);
 
