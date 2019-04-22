@@ -131,14 +131,11 @@ public class Predator extends Item implements Commons {
         
         switch (mode) {
             case Attacking:
-                System.out.println("ATTACKING:  " + id);
                 break;
             case Roaming:
-                System.out.println("ROAMING:  " + id);
                 roaming();
                 break;
             case Water:
-                System.out.println("WATER:  " + id);
                 checkResourceStatus();
                 waterChecking();
                 break;
@@ -146,7 +143,25 @@ public class Predator extends Item implements Commons {
 
         handleTarget();
         checkMovement();
-        checkVitals(); 
+        checkVitals();
+        
+        //Expected value: once every 40 seconds
+        int random = (int) (Math.random() * 2400);
+        
+        if (random == 10 && mode != Mode.Attacking) {
+            
+            if (mode == Mode.Roaming) {
+                System.out.println("CHANGED TO WATER   " + id);
+                mode = Mode.Water;
+            } else {
+                System.out.println("CHANGED TO ROAMING   " + id);
+                mode = Mode.Roaming;
+                if (targetResource.getPredator() != null && targetResource.getPredator() == this) {
+                    targetResource.setPredator(null);
+                }
+                assignNewPoint();
+            }
+        }
     }
     
     public double getLife() {
