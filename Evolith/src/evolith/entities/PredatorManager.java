@@ -76,9 +76,6 @@ public class PredatorManager implements Commons {
                 //Decrease life
                 org.setLife(acutalLife - pred.getDamage());
                 pred.setLife(pred.getLife() - org.getDamage());
-                
-                //Bounce
-                org.setxVel(0);
             }           
         }
     }
