@@ -1,2 +1,2 @@
-# evolith
-Evolution Game
+# Evolith
+Evolution Game created using Java
