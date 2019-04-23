@@ -334,7 +334,6 @@ public class OrganismManager implements Commons {
                         //If god command is active, organisms shouldn't generate a new point
                         if (!org.isGodCommand()) {
                             Point generatedPoint = generateEscapePoint(pred, org);
-                            org.setSearchFood(false);
                             org.setPoint(generatedPoint);
                         }
                     } else {

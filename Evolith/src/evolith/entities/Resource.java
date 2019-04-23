@@ -156,6 +156,7 @@ public class Resource extends Item implements Commons{
             quantity -= parasiteAmount;
             prevSecUpdate = (int) time.getSeconds();
             Iterator it = map.entrySet().iterator();
+            
             while(it.hasNext()){
                 Map.Entry element = (Map.Entry) it.next();
                 Organism org = (Organism) element.getKey();

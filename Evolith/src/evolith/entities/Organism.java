@@ -203,13 +203,13 @@ public class Organism extends Item implements Commons {
      */
     private void checkVitals() {
         //Reduce hunger every x seconds defined in the commmons class
-        if (time.getSeconds() >= prevHungerRed + SECONDS_PER_HUNGER) {
+        if (time.getSeconds() >= prevHungerRed + SECONDS_PER_HUNGER && !eating) {
             hunger--;
             prevHungerRed = (int) time.getSeconds();
         }
 
         //Reduce thirst every x seconds defined in the commmons class
-        if (time.getSeconds() >= prevThirstRed + SECONDS_PER_THIRST) {
+        if (time.getSeconds() >= prevThirstRed + SECONDS_PER_THIRST && !drinking) {
             thirst--;
             prevThirstRed = (int) time.getSeconds();
         }

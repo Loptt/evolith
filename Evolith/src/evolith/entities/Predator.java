@@ -328,7 +328,7 @@ public class Predator extends Item implements Commons {
         Organism org = findNearestOrganism();
         
         //If there is an organism and is in valid distance
-        if (org != null && SwarmMovement.distanceBetweenTwoPoints(getX(), getY(), org.getX(), org.getY()) < MAX_SIGHT_DISTANCE 
+        if (org != null && SwarmMovement.distanceBetweenTwoPoints(getX(), getY(), org.getX(), org.getY()) - 50 < MAX_SIGHT_DISTANCE 
                 && !isRecovering()) {
             setTarget(org);
             
