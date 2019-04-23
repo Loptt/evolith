@@ -70,9 +70,9 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).tick();
             checkKill(organisms.get(i));
-            checkPredators();
         }
         
+        checkPredators();
         checkArrivalOnResource();
         checkOrganismResourceStatus();
         

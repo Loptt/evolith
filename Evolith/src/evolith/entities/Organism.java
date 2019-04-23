@@ -107,7 +107,7 @@ public class Organism extends Item implements Commons {
 
         life = 100;
         hunger = 50;
-        thirst = 0;
+        thirst = 50;
         maturity = 0;
         generation = 1;
         prevHungerRed = 0;
