@@ -867,4 +867,12 @@ public class Organism extends Item implements Commons {
     public void setDamage(double damage) {
         this.damage = damage;
     }
+
+    public void setxVel(int xVel) {
+        this.xVel = xVel;
+    }
+
+    public void setyVel(int yVel) {
+        this.yVel = yVel;
+    }
 }
