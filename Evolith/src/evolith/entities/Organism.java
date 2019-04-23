@@ -106,8 +106,8 @@ public class Organism extends Item implements Commons {
         maxHealth = 20;
 
         life = 100;
-        hunger = 100;
-        thirst = 100;
+        hunger = 50;
+        thirst = 0;
         maturity = 0;
         generation = 1;
         prevHungerRed = 0;
@@ -212,6 +212,16 @@ public class Organism extends Item implements Commons {
         if (time.getSeconds() >= prevThirstRed + SECONDS_PER_THIRST && !drinking) {
             thirst--;
             prevThirstRed = (int) time.getSeconds();
+        }
+        
+        if (hunger <= 0) {
+            hunger = 0;
+            life -= 0.05;
+        }
+        
+        if (thirst <= 0) {
+            thirst = 0;
+            life -= 0.05;
         }
 
         //Increase maturity every x seconds defined in the commmons class
@@ -336,6 +346,9 @@ public class Organism extends Item implements Commons {
             g.setColor(Color.RED);
             g.fillOval(game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height);
         }
+        
+        g.setColor(Color.BLACK);
+        g.drawString(Integer.toString(id), game.getCamera().getRelX(x)-20, game.getCamera().getRelY(y) + 70);
     }
     
     /**

@@ -328,7 +328,7 @@ public class Predator extends Item implements Commons {
         Organism org = findNearestOrganism();
         
         //If there is an organism and is in valid distance
-        if (org != null && SwarmMovement.distanceBetweenTwoPoints(getX(), getY(), org.getX(), org.getY()) - 50 < MAX_SIGHT_DISTANCE 
+        if (org != null && SwarmMovement.distanceBetweenTwoPoints(getX(), getY(), org.getX(), org.getY()) < MAX_SIGHT_DISTANCE 
                 && !isRecovering()) {
             setTarget(org);
             
@@ -368,7 +368,7 @@ public class Predator extends Item implements Commons {
         Resource closestWater = null; 
         double closestDistanceBetweenWaterAndOrganism = 1000000;
         
-        for(int i = 1; i < game.getResources().getWaterAmount(); i++){
+        for(int i = 0; i < game.getResources().getWaterAmount(); i++){
             double distanceBetweenPlantAndOrganism = 7072;
             
                 distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(getX()- game.getResources().getWater(i).getX(), 2)
@@ -398,7 +398,7 @@ public class Predator extends Item implements Commons {
         double closestDistanceBetweenPredatorAndOrganism = 1000000;
 
         //Organism(int x, int y, int width, int height, Game game, int skin, int id)
-        for(int i = 1; i < game.getOrganisms().getOrganismsAmount(); i++){
+        for(int i = 0; i < game.getOrganisms().getOrganismsAmount(); i++){
             double distanceBetweenPredatorAndOrganism = 7072;
 
                 distanceBetweenPredatorAndOrganism = Math.sqrt(Math.pow(getX()-game.getOrganisms().getOrganism(i).getX(),2)
@@ -423,7 +423,7 @@ public class Predator extends Item implements Commons {
         Resource closestWater = null; 
         double closestDistanceBetweenWaterAndOrganism = 1000000;
         
-        for(int i = 1; i < game.getResources().getWaterAmount(); i++){
+        for(int i = 0; i < game.getResources().getWaterAmount(); i++){
             double distanceBetweenPlantAndOrganism = 7072;
             
                 distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(getX()- game.getResources().getWater(i).getX(), 2)

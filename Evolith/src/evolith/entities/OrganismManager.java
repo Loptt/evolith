@@ -325,7 +325,7 @@ public class OrganismManager implements Commons {
                 Predator pred = game.getPredators().getPredator(j);
 
                 //If predator is in the range of the organism
-                if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) < MAX_SIGHT_DISTANCE) {
+                if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) + 150 < MAX_SIGHT_DISTANCE) {
                     safeLeaveResource(org);
 
                     if (!org.isAggressive()) {
@@ -477,7 +477,7 @@ public class OrganismManager implements Commons {
         Resource closestPlant = null;
         double closestDistanceBetweenPlantAndOrganism = 1000000;
 
-        for (int i = 1; i < game.getResources().getPlantAmount(); i++) {
+        for (int i = 0; i < game.getResources().getPlantAmount(); i++) {
             double distanceBetweenPlantAndOrganism = 7072;
             if (!game.getResources().getPlant(i).isFull() && !game.getResources().getPlant(i).isOver()) {
                 distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX() - game.getResources().getPlant(i).getX(), 2)
@@ -503,7 +503,7 @@ public class OrganismManager implements Commons {
         Resource closestWater = null;
         double closestDistanceBetweenWaterAndOrganism = 1000000;
 
-        for (int i = 1; i < game.getResources().getWaterAmount(); i++) {
+        for (int i = 0; i < game.getResources().getWaterAmount(); i++) {
             double distanceBetweenPlantAndOrganism = 7072;
             if (!game.getResources().getWater(i).isFull() && !game.getResources().getWater(i).isOver()) {
                 distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX() - game.getResources().getWater(i).getX(), 2)

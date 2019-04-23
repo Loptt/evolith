@@ -28,8 +28,8 @@ public interface Commons {
     public static final double MAX_HEALTH = 100;
     public static final int MAX_SIGHT_DISTANCE = 500;
     
-    public static final int PLANTS_AMOUNT = 150;              // number of plants
-    public static final int WATERS_AMOUNT = 150;
+    public static final int PLANTS_AMOUNT = 50;              // number of plants
+    public static final int WATERS_AMOUNT = 50;
     public static final int PREDATORS_AMOUNT = 10;
     public static final int WATER_SIZE = 100;
     public static final int SWARM_SEPARATION = ORGANISM_SIZE+10;
