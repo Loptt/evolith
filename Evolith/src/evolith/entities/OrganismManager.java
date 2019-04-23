@@ -326,6 +326,7 @@ public class OrganismManager implements Commons {
 
                 //If predator is in the range of the organism
                 if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) + 150 < MAX_SIGHT_DISTANCE) {
+                    System.out.println("PREDATOR FOUND   " + org.getId());
                     safeLeaveResource(org);
 
                     if (!org.isAggressive()) {
@@ -582,6 +583,7 @@ public class OrganismManager implements Commons {
         Resource target = org.getTarget();
         if (target != null) {
             if (target.hasParasite(org)) {
+                System.out.println("LEAVING   " + org.getId());
                 target.removeParasite(org, org.getId() + 5000);
                 org.setEating(false);
                 org.setDrinking(false);

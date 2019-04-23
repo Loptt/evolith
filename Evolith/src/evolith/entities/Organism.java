@@ -256,7 +256,10 @@ public class Organism extends Item implements Commons {
     public void handleTarget() {
         //If no target, do nothing
         if (target == null) {
+            System.out.println("NO TARGET  " + id);
             return;
+        } else {
+            System.out.println("YES TARGET  " + id);
         }
         
         if (!isConsuming()) {
