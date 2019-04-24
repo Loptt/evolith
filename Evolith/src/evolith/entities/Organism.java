@@ -21,7 +21,8 @@ import java.awt.Point;
 public class Organism extends Item implements Commons {
 
     private Point point;    //Point where the organism will try to move
-    private int maxVel;     //Maximum speed the organism can reach
+    private int maxVel;     //Maximum speed the organism can reach at some point
+    private int absMaxVel;  //Maximum speed the organism can reach at all points
     private int acc;        //Rate at which speed increases
     private int xVel;       //Speed in the x axis
     private int yVel;       //Speed in the y axis
@@ -94,7 +95,8 @@ public class Organism extends Item implements Commons {
         this.skin = skin;
         this.id = id;
         point = new Point(x, y);
-        maxVel = 3;
+        maxVel = 2;
+        absMaxVel = 2;
         xVel = 0;
         yVel = 0;
         acc = 1;
@@ -129,7 +131,7 @@ public class Organism extends Item implements Commons {
         selected = false;
         godCommand = false;
         
-        damage = 0.1;
+        damage = 0.05;
 
         time = new Time();
         name = "";
@@ -158,11 +160,11 @@ public class Organism extends Item implements Commons {
                 }
             } else {
                 moving = true;
-                maxVel = 2;
+                maxVel = absMaxVel / 2;
             }
         } else {
             moving = true;
-            maxVel = 3;
+            maxVel = absMaxVel;
         }
 
         //move in the x to the point

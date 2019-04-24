@@ -108,8 +108,8 @@ public class Predator extends Item implements Commons {
 
         time = new Time();
         
-        damage = 0.1;
-        stamina = 100;
+        damage = 0.3;
+        stamina = MAX_STAMINA;
         recovering = false;
         this.id = id;
         absMaxVel = 3;
@@ -282,7 +282,7 @@ public class Predator extends Item implements Commons {
             mode = prevMode;
         }
         
-        if (stamina >= 50) {
+        if (stamina >= MAX_STAMINA / 2) {
             recovering = false;
         }
         
@@ -475,7 +475,7 @@ public class Predator extends Item implements Commons {
         g.drawRect(game.getCamera().getRelX(x)+2, game.getCamera().getRelY(y) + 70, 80, 6);
         
         g.setColor(Color.YELLOW);
-        g.fillRect(game.getCamera().getRelX(x)+3, game.getCamera().getRelY(y) + 76, (int) (80 * this.stamina / 100), 5);
+        g.fillRect(game.getCamera().getRelX(x)+3, game.getCamera().getRelY(y) + 76, (int) (80 * this.stamina / MAX_STAMINA), 5);
         g.setColor(Color.white);
         g.drawRect(game.getCamera().getRelX(x)+2, game.getCamera().getRelY(y) + 76, 80, 6);
         
