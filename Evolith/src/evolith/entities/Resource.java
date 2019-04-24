@@ -46,7 +46,7 @@ public class Resource extends Item implements Commons{
     public Resource(int x, int y, int width, int height, Game game, ResourceType type) {
         super(x, y, width, height);
         this.game = game;
-        quantity = 100;
+        quantity = 50;
         full = false;
         fullOfPredators = false;
         over = false;
@@ -156,6 +156,7 @@ public class Resource extends Item implements Commons{
             quantity -= parasiteAmount;
             prevSecUpdate = (int) time.getSeconds();
             Iterator it = map.entrySet().iterator();
+            
             while(it.hasNext()){
                 Map.Entry element = (Map.Entry) it.next();
                 Organism org = (Organism) element.getKey();
@@ -200,7 +201,7 @@ public class Resource extends Item implements Commons{
                 //g.drawString(Integer.toString(quantity) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
                 g.setColor(Color.BLUE);
         }
-        g.fillRect(game.getCamera().getRelX(x) + 10, game.getCamera().getRelY(y) + 85, (int) 87 * this.quantity / 100, 7);
+        g.fillRect(game.getCamera().getRelX(x) + 10, game.getCamera().getRelY(y) + 85, (int) 87 * this.quantity / 50, 7);
         g.setColor(Color.white);
         g.drawRect(game.getCamera().getRelX(x) + 9, game.getCamera().getRelY(y) + 85, 87, 8);
     }

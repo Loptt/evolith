@@ -70,9 +70,9 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).tick();
             checkKill(organisms.get(i));
-            checkPredators();
         }
         
+        checkPredators();
         checkArrivalOnResource();
         checkOrganismResourceStatus();
         
@@ -320,13 +320,15 @@ public class OrganismManager implements Commons {
         //Check every organism
         for (int i = 0; i < organisms.size(); i++) {
             Organism org = organisms.get(i);
+            org.setBeingChased(false);
             //Check for every predator
             for (int j = 0; j < game.getPredators().getPredatorAmount(); j++) {
                 Predator pred = game.getPredators().getPredator(j);
 
                 //If predator is in the range of the organism
-                if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) < MAX_SIGHT_DISTANCE) {
+                if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) + 150 < MAX_SIGHT_DISTANCE) {
                     safeLeaveResource(org);
+                    org.setBeingChased(true);
 
                     if (!org.isAggressive()) {
                         //Escape
@@ -334,7 +336,6 @@ public class OrganismManager implements Commons {
                         //If god command is active, organisms shouldn't generate a new point
                         if (!org.isGodCommand()) {
                             Point generatedPoint = generateEscapePoint(pred, org);
-                            org.setSearchFood(false);
                             org.setPoint(generatedPoint);
                         }
                     } else {
@@ -423,6 +424,8 @@ public class OrganismManager implements Commons {
 
                     safeLeaveResource(org);
                     autoLookTarget(org);
+                    org.setEating(false);
+                    org.setDrinking(false);
                 }
             } else {
                 org.setEating(false);
@@ -438,7 +441,7 @@ public class OrganismManager implements Commons {
      * @param org organism
      */
     public void autoLookTarget(Organism org) {
-        if (!org.isConsuming()) {
+        if (!org.isConsuming() && !org.isBeingChased()) {
             Resource plant = findNearestValidFood(org);
             Resource water = findNearestValidWater(org);
             if (org.isSearchFood() && org.isSearchWater()) {
@@ -478,7 +481,7 @@ public class OrganismManager implements Commons {
         Resource closestPlant = null;
         double closestDistanceBetweenPlantAndOrganism = 1000000;
 
-        for (int i = 1; i < game.getResources().getPlantAmount(); i++) {
+        for (int i = 0; i < game.getResources().getPlantAmount(); i++) {
             double distanceBetweenPlantAndOrganism = 7072;
             if (!game.getResources().getPlant(i).isFull() && !game.getResources().getPlant(i).isOver()) {
                 distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX() - game.getResources().getPlant(i).getX(), 2)
@@ -504,7 +507,7 @@ public class OrganismManager implements Commons {
         Resource closestWater = null;
         double closestDistanceBetweenWaterAndOrganism = 1000000;
 
-        for (int i = 1; i < game.getResources().getWaterAmount(); i++) {
+        for (int i = 0; i < game.getResources().getWaterAmount(); i++) {
             double distanceBetweenPlantAndOrganism = 7072;
             if (!game.getResources().getWater(i).isFull() && !game.getResources().getWater(i).isOver()) {
                 distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX() - game.getResources().getWater(i).getX(), 2)
@@ -584,9 +587,10 @@ public class OrganismManager implements Commons {
         if (target != null) {
             if (target.hasParasite(org)) {
                 target.removeParasite(org, org.getId() + 5000);
-                org.setEating(false);
-                org.setDrinking(false);
             }
+            
+            org.setEating(false);
+            org.setDrinking(false);
             org.setTarget(null);
         }
     }
