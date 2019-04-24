@@ -62,7 +62,7 @@ public class Game implements Runnable, Commons {
     private SetupMenu setupMenu;
 
     private Clock clock;                        // the time of the game
-    private InputReader inputReader;
+    private InputReader inputReader;            //To read text from keyboard
     private Minimap minimap;
     private Selection selection;
     
@@ -210,7 +210,6 @@ public class Game implements Runnable, Commons {
         selection.tick();
         
         manageMouse();
-        checkEntitiesInteraction();
         
         if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
             night = !night;
@@ -313,8 +312,7 @@ public class Game implements Runnable, Commons {
     }
     
     public void checkEntitiesInteraction() {
-        organisms.checkArrivalOnResource();
-        organisms.checkOrganismResourceStatus();
+        
     }
     
     public void checkOrganismsInSelection() {

@@ -28,8 +28,10 @@ public interface Commons {
     public static final double MAX_HEALTH = 100;
     public static final int MAX_SIGHT_DISTANCE = 500;
     
-    public static final int PLANTS_AMOUNT = 150;              // number of plants
-    public static final int WATERS_AMOUNT = 150;
+    public static final int MAX_STAMINA = 200;
+    
+    public static final int PLANTS_AMOUNT = 50;              // number of plants
+    public static final int WATERS_AMOUNT = 50;
     public static final int PREDATORS_AMOUNT = 10;
     public static final int WATER_SIZE = 100;
     public static final int SWARM_SEPARATION = ORGANISM_SIZE+10;
@@ -78,7 +80,10 @@ public interface Commons {
     public static final Color ORANGE_COLOR = new Color(239, 186, 1);
     public static final Color PINK_COLOR = new Color(255, 111, 199);
     
-    public static final int CONSUMING_RATE = 2;
+    public static final int CONSUMING_RATE = 1;
     
     public static final int DAY_CYCLE_DURATION_SECONDS = 60;
+    
+    public static final int PREDATOR_SECONDS_IN_RESOURCE = 7;
+    public static final int PREDATOR_SECONDS_TO_ROAM = 10;
 }
