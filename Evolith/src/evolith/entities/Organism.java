@@ -345,9 +345,10 @@ public class Organism extends Item implements Commons {
         orgMutations.render(g);
       
         if (selected) {
-            g.setColor(Color.RED);
-            g.fillOval(game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height);
+             g.drawImage(Assets.glow, game.getCamera().getRelX(x) - 6, game.getCamera().getRelY(y) - 6, width + 12, height + 12, null);
         }
+        
+       
         
         //g.setColor(Color.BLACK);
         //g.drawString(Integer.toString(id), game.getCamera().getRelX(x)-20, game.getCamera().getRelY(y) + 70);

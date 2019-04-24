@@ -62,7 +62,7 @@ public class MutationPanel extends Menu implements Commons {
         //Evolve
         buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 - 250, this.y + MUTATION_PANEL_HEIGHT+10, 240, 60, Assets.mutationPanel_evolveButton_ON,Assets.mutationPanel_evolveButton_OFF));
         //Not Evolve
-        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 + 250, this.y + MUTATION_PANEL_HEIGHT+10, 240, 60, Assets.mutationPanel_evolveButton_ON,Assets.mutationPanel_evolveButton_OFF));
+        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 + 250, this.y + MUTATION_PANEL_HEIGHT+10, 240, 60, Assets.mutationPanel_not_evolveButton_ON,Assets.mutationPanel_not_evolveButton_OFF));
         //Strength
         buttons.add(new Button(x + 300, y + 30, 390, 110));
         //Speed

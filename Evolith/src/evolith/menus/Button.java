@@ -89,7 +89,7 @@ public class Button extends Item {
         if (imgOff != null) {
             if (active || hover) {
                 if (!enlarge) {
-                    g.drawImage(imgOn, x, y, width, height, null);
+                    g.drawImage(imgOn, x -4, y - 4, width + 8, height + 8, null);
                 } else if (imgOn != null) {
                     g.drawImage(imgOn, x-enlargement/2, y-enlargement/2, width+enlargement, height+enlargement, null);
                 } else {
@@ -105,7 +105,6 @@ public class Button extends Item {
                 }
             } else {
                 g.drawImage(imgOff, x, y, width, height, null);
-
             }
         } else {
             //no image to show

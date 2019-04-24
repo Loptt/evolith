@@ -64,6 +64,10 @@ public class Assets {
     public static BufferedImage mutation_select;
     public static BufferedImage mutationPanel_evolveButton_ON;
     public static BufferedImage mutationPanel_evolveButton_OFF;
+    public static BufferedImage mutationPanel_not_evolveButton_ON;
+    public static BufferedImage mutationPanel_not_evolveButton_OFF;
+    
+    public static BufferedImage glow;
 
     /**
      * Initalizes the assets and links to the image folder
@@ -112,6 +116,8 @@ public class Assets {
         mutation_select = ImageLoader.loadImage("/images/panel/mutselect.png");
         mutationPanel_evolveButton_ON  = ImageLoader.loadImage("/images/panel/evolveon.png");
         mutationPanel_evolveButton_OFF  = ImageLoader.loadImage("/images/panel/evolveoff.png");
+        mutationPanel_not_evolveButton_ON  = ImageLoader.loadImage("/images/panel/notevolveon.png");
+        mutationPanel_not_evolveButton_OFF  = ImageLoader.loadImage("/images/panel/notevolveoff.png");
 
         //Top Bar in 0,0
         ArrayList<BufferedImage> a1 = new ArrayList<BufferedImage>();
@@ -169,7 +175,7 @@ public class Assets {
         minimapFrame = ImageLoader.loadImage("/images/playgraphics/minimap_frame.png");
         
         
-        
+        glow = ImageLoader.loadImage("/images/organisms/glow.png");
         
     }
     
