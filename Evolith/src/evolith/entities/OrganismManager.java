@@ -327,7 +327,6 @@ public class OrganismManager implements Commons {
 
                 //If predator is in the range of the organism
                 if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) + 150 < MAX_SIGHT_DISTANCE) {
-                    System.out.println("PREDATOR FOUND   " + org.getId());
                     safeLeaveResource(org);
                     org.setBeingChased(true);
 
@@ -338,7 +337,6 @@ public class OrganismManager implements Commons {
                         if (!org.isGodCommand()) {
                             Point generatedPoint = generateEscapePoint(pred, org);
                             org.setPoint(generatedPoint);
-                            System.out.println("ESCAPE POINT GENERATED  " + org.getId());
                         }
                     } else {
                         if (!org.isGodCommand()) {
@@ -585,13 +583,9 @@ public class OrganismManager implements Commons {
      * @param org organism
      */
     private void safeLeaveResource(Organism org) {
-        System.out.println("START LEAVING   " + org.getId());
-
         Resource target = org.getTarget();
         if (target != null) {
-            System.out.println("NOT NULL LEAVING   " + org.getId());
             if (target.hasParasite(org)) {
-                System.out.println("UNASSIGNING LEAVING   " + org.getId());
                 target.removeParasite(org, org.getId() + 5000);
             }
             

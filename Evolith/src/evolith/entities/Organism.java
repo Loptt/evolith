@@ -256,10 +256,7 @@ public class Organism extends Item implements Commons {
     public void handleTarget() {
         //If no target, do nothing
         if (target == null) {
-            System.out.println("NO TARGET  " + id);
             return;
-        } else {
-            System.out.println("YES TARGET  " + id);
         }
         
         if (!isConsuming()) {
@@ -326,12 +323,6 @@ public class Organism extends Item implements Commons {
         handleTarget();
         checkMovement();
         checkVitals();  
-        
-        if (target != null) {
-            System.out.println("POSIS  :" + target.getX() + " - " + target.getY());
-        } else {
-            System.out.println("TARGET IS NULL:  ");
-        }
     }
 
     /**
