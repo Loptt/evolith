@@ -210,7 +210,6 @@ public class OrganismManager implements Commons {
 
             if (orgPanel.isReproduce()) {
                 reproduce(orgPanel.getOrganism());
-                orgPanel.setReproduce(false);
             }   
         } else if (mutPanel.isActive()) {
             mutPanel.tick();
@@ -274,9 +273,9 @@ public class OrganismManager implements Commons {
             organisms.get(i).setSelected(organisms.get(i).intersects(r));
         }
     }
-
+    
     private void reproduce(Organism org) {
-        amount++;
+        
         Organism offspring = new Organism(org.getX() + ORGANISM_SIZE, org.getY(), ORGANISM_SIZE, ORGANISM_SIZE, game, org.getSkin(), idCounter++);
         //generate an int for a chance of mutation
         int mutationChance = (int) (Math.random() * (2 - 0));
@@ -290,13 +289,17 @@ public class OrganismManager implements Commons {
             orgPanel.setActive(false);
             mutPanel.setActive(true);
         }
-
+        
+      //  if((orgPanel.isReproduce() && mutPanel.getButtons().get(0).isPressed()) || (orgPanel.isReproduce() && !mutPanel.isActive()) ){
+        amount++;
+        orgPanel.setReproduce(false);
         offspring.setId(idCounter + 1);
         idCounter++;
         organisms.add(offspring);
         organisms.get(organisms.size() - 1).setSearchFood(org.isSearchFood());
         organisms.get(organisms.size() - 1).setSearchWater(org.isSearchWater());
         org.setNeedOffspring(false);
+        
     }
 
     /**

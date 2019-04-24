@@ -101,8 +101,8 @@ public class Assets {
         organismPanel_menu = ImageLoader.loadImage("/images/panel/detailsmenu2.png");   
         organismPanel_prevArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
         organismPanel_nextArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
-        organismPanel_reproduceButton_ON = ImageLoader.loadImage("/images/mainmenu/reproduceoff.png");
-        organismPanel_reproduceButton_OFF = ImageLoader.loadImage("/images/mainmenu/reproduceon.png");
+        organismPanel_reproduceButton_ON = ImageLoader.loadImage("/images/panel/reproduceon.png");
+        organismPanel_reproduceButton_OFF = ImageLoader.loadImage("/images/panel/reproduceoff.png");
         
         
         

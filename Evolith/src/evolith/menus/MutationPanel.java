@@ -20,6 +20,7 @@ import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,9 +60,9 @@ public class MutationPanel extends Menu implements Commons {
         super(x, y, width, height, game);
         this.organism = organism;
         //Evolve
-        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 - 250, this.y + MUTATION_PANEL_HEIGHT+50, 240, 60, Assets.mutationPanel_evolveButton_ON));
+        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 - 250, this.y + MUTATION_PANEL_HEIGHT+10, 240, 60, Assets.mutationPanel_evolveButton_ON,Assets.mutationPanel_evolveButton_OFF));
         //Not Evolve
-        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 + 250, this.y + MUTATION_PANEL_HEIGHT+50, 240, 60, Assets.mutationPanel_evolveButton_OFF));
+        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 + 250, this.y + MUTATION_PANEL_HEIGHT+10, 240, 60, Assets.mutationPanel_evolveButton_ON,Assets.mutationPanel_evolveButton_OFF));
         //Strength
         buttons.add(new Button(x + 300, y + 30, 390, 110));
         //Speed
@@ -164,7 +165,7 @@ public class MutationPanel extends Menu implements Commons {
          */
 
     }
-
+    
     @Override
     public void render(Graphics g) {
         if (active) {
@@ -176,7 +177,7 @@ public class MutationPanel extends Menu implements Commons {
             for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
                 for (int j = 0; j < organism.getOrgMutations().getMutations().get(i).size(); j++) {
                     if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
-                        g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getSprite(), x + 71, y + 188, 140, 140, null);
+                        g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getSprite(), x + 71, y + 188,(int) 140*organism.getOrgMutations().getMutations().get(i).get(j).getWidth()/ORGANISM_SIZE, (int)140*organism.getOrgMutations().getMutations().get(i).get(j).getHeight()/ORGANISM_SIZE, null);
                     }
                 }
             }
@@ -262,6 +263,10 @@ public class MutationPanel extends Menu implements Commons {
         }
     }
 
+    public ArrayList<Button> getButtons() {
+        return buttons;
+    }
+    
     public Organism getOrganism() {
         return organism;
     }
