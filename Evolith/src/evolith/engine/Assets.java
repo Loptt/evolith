@@ -43,9 +43,6 @@ public class Assets {
 
     public static BufferedImage organismPanel_menu;
     public static BufferedImage organismPanel_close;
-    public static BufferedImage mutation_menu;
-    public static BufferedImage mutation_max_tier;
-    public static BufferedImage mutation_select;
 
     public static BufferedImage minimapFrame;
     public static BufferedImage rotatedPlant;
@@ -58,7 +55,15 @@ public class Assets {
 
     public static BufferedImage organismPanel_prevArrow;
     public static BufferedImage organismPanel_nextArrow;
-    public static BufferedImage organismPanel_reproduceButton;
+    public static BufferedImage organismPanel_reproduceButton_ON;
+    public static BufferedImage organismPanel_reproduceButton_OFF;
+    
+    
+    public static BufferedImage mutation_menu;
+    public static BufferedImage mutation_max_tier;
+    public static BufferedImage mutation_select;
+    public static BufferedImage mutationPanel_evolveButton_ON;
+    public static BufferedImage mutationPanel_evolveButton_OFF;
 
     /**
      * Initalizes the assets and links to the image folder
@@ -93,17 +98,20 @@ public class Assets {
         hoverImage = ImageLoader.loadImage("/images/playgraphics/hover_bar.png");
         
         organismPanel_close = ImageLoader.loadImage("/images/panel/closedetails.png");
-        organismPanel_menu = ImageLoader.loadImage("/images/panel/detailsmenu2.png");
-        
+        organismPanel_menu = ImageLoader.loadImage("/images/panel/detailsmenu2.png");   
         organismPanel_prevArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
         organismPanel_nextArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
-        organismPanel_reproduceButton = ImageLoader.loadImage("/images/mainmenu/onplay.png");
+        organismPanel_reproduceButton_ON = ImageLoader.loadImage("/images/panel/reproduceon.png");
+        organismPanel_reproduceButton_OFF = ImageLoader.loadImage("/images/panel/reproduceoff.png");
+        
+        
         
 
         mutation_menu = ImageLoader.loadImage("/images/panel/mutationmenu.png");
         mutation_max_tier = ImageLoader.loadImage("/images/panel/maxtier.png");
         mutation_select = ImageLoader.loadImage("/images/panel/mutselect.png");
-        
+        mutationPanel_evolveButton_ON  = ImageLoader.loadImage("/images/panel/evolveon.png");
+        mutationPanel_evolveButton_OFF  = ImageLoader.loadImage("/images/panel/evolveoff.png");
 
         //Top Bar in 0,0
         ArrayList<BufferedImage> a1 = new ArrayList<BufferedImage>();

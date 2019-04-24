@@ -9,13 +9,10 @@ import evolith.engine.Assets;
 import evolith.entities.Organism;
 import evolith.game.Game;
 import evolith.helpers.Commons;
-import static evolith.helpers.Commons.MAX_MATURITY;
-import static evolith.helpers.Commons.MAX_SIZE;
 import static evolith.helpers.Commons.MAX_SPEED;
 import static evolith.helpers.Commons.MAX_STEALTH;
 import static evolith.helpers.Commons.MAX_STRENGTH;
 import static evolith.helpers.Commons.MAX_SURVIVABILITY;
-import static evolith.helpers.Commons.PANEL_WIDTH;
 import evolith.helpers.InputReader;
 import java.awt.Color;
 import java.awt.Font;
@@ -23,6 +20,7 @@ import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,9 +60,9 @@ public class MutationPanel extends Menu implements Commons {
         super(x, y, width, height, game);
         this.organism = organism;
         //Evolve
-        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 250, this.y + 450, 240, 60, Assets.organismPanel_reproduceButton));
+        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 - 250, this.y + MUTATION_PANEL_HEIGHT+10, 240, 60, Assets.mutationPanel_evolveButton_ON,Assets.mutationPanel_evolveButton_OFF));
         //Not Evolve
-        buttons.add(new Button(this.x + PANEL_WIDTH / 2 + 250, this.y + 450, 240, 60, Assets.organismPanel_reproduceButton));
+        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 + 250, this.y + MUTATION_PANEL_HEIGHT+10, 240, 60, Assets.mutationPanel_evolveButton_ON,Assets.mutationPanel_evolveButton_OFF));
         //Strength
         buttons.add(new Button(x + 300, y + 30, 390, 110));
         //Speed
@@ -167,11 +165,23 @@ public class MutationPanel extends Menu implements Commons {
          */
 
     }
-
+    
     @Override
     public void render(Graphics g) {
         if (active) {
+            
             g.drawImage(Assets.mutation_menu, x, y, width, height, null);
+            
+            g.drawImage(Assets.orgColors.get(organism.getSkin()), x + 71, y + 188, 140, 140, null);
+
+            for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
+                for (int j = 0; j < organism.getOrgMutations().getMutations().get(i).size(); j++) {
+                    if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
+                        g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getSprite(), x + 71, y + 188,(int) 140*organism.getOrgMutations().getMutations().get(i).get(j).getWidth()/ORGANISM_SIZE, (int)140*organism.getOrgMutations().getMutations().get(i).get(j).getHeight()/ORGANISM_SIZE, null);
+                    }
+                }
+            }
+            
 
             for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
 
@@ -200,6 +210,7 @@ public class MutationPanel extends Menu implements Commons {
                 } else {
                     g.setColor(Color.WHITE);
                     g.setFont(fontEvolve);
+                    g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getSprite(), x + 331, y + 55 + i*115, 60, 60, null);
                     g.drawString((String) hmap.get(organism.getOrgMutations().getMutations().get(i).get(j).getTier()), x + 468, y + 60 + i * 115);
                     g.drawString(organism.getOrgMutations().getMutations().get(i).get(j).getName(), x + 500, y + 60 + i * 115);
 
@@ -252,6 +263,10 @@ public class MutationPanel extends Menu implements Commons {
         }
     }
 
+    public ArrayList<Button> getButtons() {
+        return buttons;
+    }
+    
     public Organism getOrganism() {
         return organism;
     }
