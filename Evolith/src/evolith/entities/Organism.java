@@ -326,6 +326,12 @@ public class Organism extends Item implements Commons {
         handleTarget();
         checkMovement();
         checkVitals();  
+        
+        if (target != null) {
+            System.out.println("POSIS  :" + target.getX() + " - " + target.getY());
+        } else {
+            System.out.println("TARGET IS NULL:  ");
+        }
     }
 
     /**
@@ -890,5 +896,9 @@ public class Organism extends Item implements Commons {
 
     public void setyVel(int yVel) {
         this.yVel = yVel;
+    }
+
+    public void setBeingChased(boolean beingChased) {
+        this.beingChased = beingChased;
     }
 }

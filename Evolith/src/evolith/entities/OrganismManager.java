@@ -320,6 +320,7 @@ public class OrganismManager implements Commons {
         //Check every organism
         for (int i = 0; i < organisms.size(); i++) {
             Organism org = organisms.get(i);
+            org.setBeingChased(false);
             //Check for every predator
             for (int j = 0; j < game.getPredators().getPredatorAmount(); j++) {
                 Predator pred = game.getPredators().getPredator(j);
@@ -328,6 +329,7 @@ public class OrganismManager implements Commons {
                 if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) + 150 < MAX_SIGHT_DISTANCE) {
                     System.out.println("PREDATOR FOUND   " + org.getId());
                     safeLeaveResource(org);
+                    org.setBeingChased(true);
 
                     if (!org.isAggressive()) {
                         //Escape
@@ -336,6 +338,7 @@ public class OrganismManager implements Commons {
                         if (!org.isGodCommand()) {
                             Point generatedPoint = generateEscapePoint(pred, org);
                             org.setPoint(generatedPoint);
+                            System.out.println("ESCAPE POINT GENERATED  " + org.getId());
                         }
                     } else {
                         if (!org.isGodCommand()) {
@@ -423,6 +426,8 @@ public class OrganismManager implements Commons {
 
                     safeLeaveResource(org);
                     autoLookTarget(org);
+                    org.setEating(false);
+                    org.setDrinking(false);
                 }
             } else {
                 org.setEating(false);
@@ -438,7 +443,7 @@ public class OrganismManager implements Commons {
      * @param org organism
      */
     public void autoLookTarget(Organism org) {
-        if (!org.isConsuming()) {
+        if (!org.isConsuming() && !org.isBeingChased()) {
             Resource plant = findNearestValidFood(org);
             Resource water = findNearestValidWater(org);
             if (org.isSearchFood() && org.isSearchWater()) {
@@ -580,14 +585,18 @@ public class OrganismManager implements Commons {
      * @param org organism
      */
     private void safeLeaveResource(Organism org) {
+        System.out.println("START LEAVING   " + org.getId());
+
         Resource target = org.getTarget();
         if (target != null) {
+            System.out.println("NOT NULL LEAVING   " + org.getId());
             if (target.hasParasite(org)) {
-                System.out.println("LEAVING   " + org.getId());
+                System.out.println("UNASSIGNING LEAVING   " + org.getId());
                 target.removeParasite(org, org.getId() + 5000);
-                org.setEating(false);
-                org.setDrinking(false);
             }
+            
+            org.setEating(false);
+            org.setDrinking(false);
             org.setTarget(null);
         }
     }
