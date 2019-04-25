@@ -84,7 +84,12 @@ public class OrganismPanel extends Menu implements Commons {
         buttons.add(new Button(this.x + this.width - 20, this.y - 20, 40, 40)); // Exit
         buttons.add(new Button(this.x + 32, this.y + 28, 190, 35)); // Edit
 
-        inputReader = new InputReader(game);
+        if (this.org.getName() != null || this.org.getName() != "") {
+            inputReader = new InputReader(this.org.getName(), game);
+        }
+        else {
+            inputReader = new InputReader(game);
+        }
 
         this.timeOpen = 0;
         this.tickToWrite = false;
@@ -98,16 +103,17 @@ public class OrganismPanel extends Menu implements Commons {
     public void tick() {
         if (active) {
             timeOpen++;
-
-            if (org.getName().length() <= 15) {
-                inputReader.readInput();
-
-                org.setName(inputReader.getSpeciesName());
+            
+            if (game.getG().getFontMetrics().stringWidth(inputReader.getSpeciesName()) > 150) {
+                inputReader.setOnlyDelete(true);
+            }
+            else {
+                inputReader.setOnlyDelete(false);
             }
             
-            if (org.getName() == null || org.getName() == "") {
-                inputReader = new InputReader(org.getName(), game);
-            } 
+            inputReader.readInput();
+            
+            org.setName(inputReader.getSpeciesName());
 
             for (int i = 0; i < buttons.size(); i++) {
                 if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
@@ -205,7 +211,7 @@ public class OrganismPanel extends Menu implements Commons {
             
             int width = g.getFontMetrics().stringWidth(org.getName());
             
-            if (tickToWrite && org.getName().length() < 15) {
+            if (tickToWrite && !inputReader.isOnlyDelete()) {
                 g.drawString("l", x + 40 + width, y + 57);
             }
         }

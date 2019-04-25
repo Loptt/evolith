@@ -449,4 +449,9 @@ public class Game implements Runnable, Commons {
             }
         }
     }
+
+    public Graphics getG() {
+        return g;
+    }
+    
 }
