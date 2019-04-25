@@ -42,6 +42,8 @@ public class OrganismManager implements Commons {
 
     private int panelIndex;
     private int idCounter;
+    
+    private boolean updatedNight;
 
     /**
      * Constructor of the organisms
@@ -61,6 +63,8 @@ public class OrganismManager implements Commons {
 
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
         mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
+        
+        updatedNight = false;
     }
 
     /**
@@ -72,6 +76,7 @@ public class OrganismManager implements Commons {
             checkKill(organisms.get(i));
         }
         
+        checkNight();
         checkPredators();
         checkArrivalOnResource();
         checkOrganismResourceStatus();
@@ -220,6 +225,23 @@ public class OrganismManager implements Commons {
             checkHover();
         }
     }
+    
+    private void checkNight() {
+        if (game.isNight()) {
+            if (!updatedNight) {
+                for (int i = 0; i < organisms.size(); i++) {
+                    organisms.get(i).setStealthRange(organisms.get(i).getStealthRange() - 100);
+                }
+                updatedNight = true;
+            }
+        } else if (updatedNight) {
+            for (int i = 0; i < organisms.size(); i++) {
+                organisms.get(i).setStealthRange(organisms.get(i).getStealthRange() + 100);
+            }
+            
+            updatedNight = false;
+        }
+    }
 
     /**
      * To check the hover panel over an organism
@@ -329,7 +351,7 @@ public class OrganismManager implements Commons {
                 Predator pred = game.getPredators().getPredator(j);
 
                 //If predator is in the range of the organism
-                if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) + 150 < MAX_SIGHT_DISTANCE) {
+                if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) + 150 < org.getStealthRange()) {
                     safeLeaveResource(org);
                     org.setBeingChased(true);
 

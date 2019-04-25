@@ -107,19 +107,19 @@ public class PredatorManager implements Commons {
                 //RIGHT
                 if (foo && bar) {
                     yCord = (int) (Math.random() *  BACKGROUND_HEIGHT);
-                    xCord = BACKGROUND_WIDTH + 1000;
+                    xCord = BACKGROUND_WIDTH + 300;
                 //DOWN
                 } else if (!foo && bar) {
                     xCord = (int) (Math.random() *  BACKGROUND_WIDTH);
-                    yCord = BACKGROUND_HEIGHT + 1000;
+                    yCord = BACKGROUND_HEIGHT + 300;
                 //LEFT
                 } else if (foo && !bar) {
                     yCord = (int) (Math.random() *  BACKGROUND_HEIGHT);
-                    xCord = -1000;
+                    xCord = -300;
                 //UP
                 } else {
                     xCord = (int) (Math.random() *  BACKGROUND_WIDTH);
-                    yCord = -1000;
+                    yCord = -300;
                 }
                 
                 predators.add(new Predator(xCord, yCord, PREDATOR_SIZE, PREDATOR_SIZE, game, ++idCounter));
