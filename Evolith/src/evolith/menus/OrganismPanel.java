@@ -87,9 +87,9 @@ public class OrganismPanel extends Menu implements Commons {
         //Edit buttons name
         buttons.add(new Button(this.x + 196, this.y + 281, 190, 35)); // Edit 
         // Arrow next
-        buttons.add(new Button(this.x + PANEL_WIDTH + 50, this.y + PANEL_HEIGHT / 2, 50, 50, Assets.organismPanel_nextArrow));
+        buttons.add(new Button(this.x + PANEL_WIDTH + 50, this.y + PANEL_HEIGHT / 2, 50, 50, Assets.nextArrow));
         // Arrow prev
-        buttons.add(new Button(this.x - 100, this.y + PANEL_HEIGHT / 2, 50, 50, Assets.organismPanel_prevArrow));
+        buttons.add(new Button(this.x - 100, this.y + PANEL_HEIGHT / 2, 50, 50, Assets.prevArrow));
         // Reproduce button 
         buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 400, 300, 75, Assets.organismPanel_reproduceButton_ON,Assets.organismPanel_reproduceButton_OFF));
 

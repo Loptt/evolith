@@ -66,6 +66,8 @@ public class Assets {
     public static BufferedImage mutationPanel_evolveButton_OFF;
     public static BufferedImage mutationPanel_not_evolveButton_ON;
     public static BufferedImage mutationPanel_not_evolveButton_OFF;
+    public static BufferedImage nextArrow;
+    public static BufferedImage prevArrow;
     
     public static BufferedImage glow;
 
@@ -174,8 +176,10 @@ public class Assets {
 
         minimapFrame = ImageLoader.loadImage("/images/playgraphics/minimap_frame.png");
         
-        
         glow = ImageLoader.loadImage("/images/organisms/glow.png");
+        
+        nextArrow = ImageLoader.loadImage("/images/panel/next.png");
+        prevArrow = ImageLoader.loadImage("/images/panel/prev.png");
         
     }
     
