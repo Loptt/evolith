@@ -478,9 +478,6 @@ public class Predator extends Item implements Commons {
         g.fillRect(game.getCamera().getRelX(x)+3, game.getCamera().getRelY(y) + 76, (int) (80 * this.stamina / MAX_STAMINA), 5);
         g.setColor(Color.white);
         g.drawRect(game.getCamera().getRelX(x)+2, game.getCamera().getRelY(y) + 76, 80, 6);
-        
-        g.setColor(Color.BLACK);
-        g.drawString(Integer.toString(id), game.getCamera().getRelX(x)-20, game.getCamera().getRelY(y) + 90);
     }
 
     /**
