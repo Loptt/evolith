@@ -79,10 +79,9 @@ public class Selection {
 
     public void render(Graphics g) {
         if (active) {
-            g.setColor(Color.BLACK);
+            g.setColor(Color.white);
             g.drawRect(game.getCamera().getRelX(sel.x), game.getCamera().getRelY(sel.y), sel.width, sel.height);
         }
-    }
-    
+    }    
     
 }

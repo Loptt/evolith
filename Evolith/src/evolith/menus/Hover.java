@@ -3,6 +3,7 @@ package evolith.menus;
 import evolith.game.Game;
 import evolith.game.Item;
 import evolith.engine.Assets;
+import evolith.entities.Organism;
 import evolith.helpers.Commons;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -20,6 +21,9 @@ public class Hover extends Item implements Commons {
     private int food;       // food of the organism
     private int water;      //  water of the organism
     private double life;        //maturity level of the organism
+    private int stealthX;
+    private int stealthY;
+    private int stealthRange;
 
     /**
      * Contructor of the hover panel of the organism
@@ -33,12 +37,17 @@ public class Hover extends Item implements Commons {
      * @param mat
      * @param game
      */
-    public Hover(int x, int y, int width, int height, int food, int water, double life, Game game) {
+    public Hover(int x, int y, int width, int height, int food, int water, double life, Game game, Organism org) {
         super(x, y, width, height);
         this.game = game;
         this.food = food;
         this.water = water;
         this.life = life;
+        
+        stealthRange = org.getStealthRange();
+        
+        stealthX = org.getX() - stealthRange + org.getWidth() / 2;
+        stealthY = org.getY() - stealthRange + org.getHeight() / 2;
     }
 
     /**
@@ -102,7 +111,10 @@ public class Hover extends Item implements Commons {
         //g.fillRect(x + 24, y + 174, (int) 121 * this.mat / MAX_MATURITY, 12);
         g.setColor(Color.red);
         g.fillRect(x + 42, y + 167, (int) (87 * this.life / MAX_HEALTH), 20);
-
         
+        g.setColor(new Color(88,241,252, 20));
+        g.fillOval(game.getCamera().getRelX(stealthX) , game.getCamera().getRelY(stealthY), stealthRange*2, stealthRange*2);
+        g.setColor(new Color(88,241,252));
+        g.drawOval(game.getCamera().getRelX(stealthX) , game.getCamera().getRelY(stealthY), stealthRange*2, stealthRange*2);
     }
 }

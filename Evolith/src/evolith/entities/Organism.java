@@ -77,6 +77,7 @@ public class Organism extends Item implements Commons {
     private boolean godCommand;     //If the organism has received an explicit movement command from the player
     
     private double damage;          //Amount of damage the organism deals to predators
+    private int stealthRange;
 
     /**
      * Constructor of the organism
@@ -115,6 +116,8 @@ public class Organism extends Item implements Commons {
         prevHungerRed = 0;
         prevThirstRed = 0;
         prevMatInc = 0;
+        
+        stealthRange = MAX_SIGHT_DISTANCE - (stealth - 20) * 5; 
 
         needOffspring = false;
         dead = false;
@@ -899,5 +902,13 @@ public class Organism extends Item implements Commons {
 
     public void setBeingChased(boolean beingChased) {
         this.beingChased = beingChased;
+    }
+
+    public int getStealthRange() {
+        return stealthRange;
+    }
+
+    public void setStealthRange(int stealthRange) {
+        this.stealthRange = stealthRange;
     }
 }

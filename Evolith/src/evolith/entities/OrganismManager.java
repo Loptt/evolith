@@ -232,7 +232,7 @@ public class OrganismManager implements Commons {
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
                 //sets new hover panel with that organism's location and information
                 h = new Hover(game.getMouseManager().getX(), game.getMouseManager().getY(), 170, 220,
-                        organisms.get(i).getHunger(), organisms.get(i).getThirst(), organisms.get(i).getLife(), game);
+                        organisms.get(i).getHunger(), organisms.get(i).getThirst(), organisms.get(i).getLife(), game, organisms.get(i));
                 //activates the hover
                 setHover(true);
                 break;
