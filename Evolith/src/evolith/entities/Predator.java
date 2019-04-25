@@ -54,6 +54,7 @@ public class Predator extends Item implements Commons {
 
     private boolean eating;
     private boolean drinking;
+    private boolean leaving;
     
     private double damage;
     private double stamina;
@@ -102,6 +103,8 @@ public class Predator extends Item implements Commons {
         eating = false;
         drinking = false;
         
+        leaving = false;
+        
         hunger = 100;
         thirst = 100;
         life = 100;
@@ -127,6 +130,14 @@ public class Predator extends Item implements Commons {
     public void tick() {
         //to determine the lifespan of the organism
         time.tick();
+        
+        if (leaving) {
+            checkMovement();
+            checkVitals();
+            checkLeft();
+            return;
+        }
+        
         autoLookTarget();
         
         switch (mode) {
@@ -212,6 +223,24 @@ public class Predator extends Item implements Commons {
         //increments the velocity
         x += xVel;
         y += yVel;
+    }
+    
+    private void checkLeft() {
+        if (x > BACKGROUND_WIDTH + 100) {
+            kill();
+        }
+        
+        if (x < 0 - 100) {
+            kill();
+        }
+        
+        if (y > BACKGROUND_HEIGHT + 100) {
+            kill();
+        }
+        
+        if (y < 0 - 100) {
+            kill();
+        }
     }
     
     private void moveToPoint() {
@@ -642,5 +671,13 @@ public class Predator extends Item implements Commons {
 
     public void setRecovering(boolean recovering) {
         this.recovering = recovering;
+    }
+
+    public boolean isLeaving() {
+        return leaving;
+    }
+
+    public void setLeaving(boolean leaving) {
+        this.leaving = leaving;
     }
 }

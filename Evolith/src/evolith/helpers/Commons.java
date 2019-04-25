@@ -11,7 +11,6 @@ import java.awt.Color;
  */
 public interface Commons {
     public static final int ORGANISM_SIZE = 30;            // organism size
-    public static final int INITIAL_POINT = 1000;           // inital point
     public static final int MAX_ORGANISM_AMOUNT = 256;      // maximum organism amount
     public static final int PLANT_SIZE = 100;               // plant quanitity per unit
     public static final int FRAME_RATE = 60;                // frame rate
@@ -32,10 +31,9 @@ public interface Commons {
     
     public static final int PLANTS_AMOUNT = 50;              // number of plants
     public static final int WATERS_AMOUNT = 50;
-    public static final int PREDATORS_AMOUNT = 10;
+    public static final int PREDATORS_AMOUNT = 6;
     public static final int WATER_SIZE = 100;
     public static final int SWARM_SEPARATION = ORGANISM_SIZE+10;
-    
     
     public static final int SECONDS_PER_HUNGER = 3;
     public static final int SECONDS_PER_THIRST = 3;
@@ -71,6 +69,9 @@ public interface Commons {
             
     public static final int BACKGROUND_WIDTH = 5000;
     public static final int BACKGROUND_HEIGHT = 5000;
+    
+    public static final int INITIAL_POINT = BACKGROUND_WIDTH / 2;           // inital point
+
     
     public static final int MINIMAP_WIDTH = BACKGROUND_WIDTH / 30; // 166~
     public static final int MINIMAP_HEIGHT = BACKGROUND_HEIGHT / 30; // 166~
