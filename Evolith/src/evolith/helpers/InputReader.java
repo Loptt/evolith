@@ -24,6 +24,11 @@ public class InputReader {
         this.speciesName = "";
     }
 
+    public InputReader(String speciesName, Game game) {
+        this.speciesName = speciesName;
+        this.game = game;
+    }
+    
     public String getSpeciesName() {
         return speciesName;
     }
@@ -33,7 +38,7 @@ public class InputReader {
     }
     
     public void readInput() {
-        if(speciesName.length() <= 20)
+        if(speciesName.length() <= 15)
         {
             if (game.getInputKeyboard().a) {
                 speciesName += 'a';

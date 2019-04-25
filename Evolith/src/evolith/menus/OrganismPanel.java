@@ -34,18 +34,22 @@ public class OrganismPanel extends Menu implements Commons {
     private int generation;
     private double duration;
     private Organism org;
-    
+
     private String fontPath;
     private String name;
     private Font fontEvolve;
     private InputStream is;
-    
+
     private InputReader inputReader;
 
     private boolean active;
     private boolean clickEdit;
-    
-    public OrganismPanel(int x, int y, int width,int height,Game game) {
+
+    private int timeOpen;
+
+    private boolean tickToWrite;
+
+    public OrganismPanel(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
         active = false;
         fontPath = "/Fonts/MADE-Evolve-Sans-Regular.ttf";
@@ -58,11 +62,11 @@ public class OrganismPanel extends Menu implements Commons {
         } catch (IOException ex) {
             Logger.getLogger(OrganismPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         inputReader = new InputReader(game);
     }
 
-    public OrganismPanel(int x, int y, int width, int height, Game game, Organism org)
-    {
+    public OrganismPanel(int x, int y, int width, int height, Game game, Organism org) {
         super(x, y, width, height, game);
         this.org = org;
         this.speed = org.getSpeed();
@@ -74,23 +78,37 @@ public class OrganismPanel extends Menu implements Commons {
         this.generation = org.getGeneration();
         this.duration = org.getTime().getSeconds();
         this.name = org.getName();
-        
+
         this.active = true;
-        
+
         buttons.add(new Button(this.x + this.width - 20, this.y - 20, 40, 40)); // Exit
         buttons.add(new Button(this.x + 32, this.y + 28, 190, 35)); // Edit
-        
+
         inputReader = new InputReader(game);
+
+        this.timeOpen = 0;
+        this.tickToWrite = false;
     }
 
     public String getName() {
         return name;
     }
-    
+
     @Override
     public void tick() {
-        inputReader.readInput();        
         if (active) {
+            timeOpen++;
+
+            if (org.getName().length() <= 15) {
+                inputReader.readInput();
+
+                org.setName(inputReader.getSpeciesName());
+            }
+            
+            if (org.getName() == null || org.getName() == "") {
+                inputReader = new InputReader(org.getName(), game);
+            } 
+
             for (int i = 0; i < buttons.size(); i++) {
                 if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
                     System.out.println("button is here");
@@ -105,25 +123,25 @@ public class OrganismPanel extends Menu implements Commons {
                     buttons.get(i).setActive(false);
                 }
                 if (buttons.get(0).isPressed()) {
-                    active = false;     
+                    active = false;
                 }
                 if (buttons.get(1).isPressed()) {
-                    clickEdit = true;   
+                    clickEdit = true;
                 }
-                    
+
             }
-        this.speed = org.getSpeed();
-        this.size = org.getSize();
-        this.strength = org.getStrength();
-        this.survivability = org.getSurvivability();
-        this.stealth = org.getStealth();
-        this.maturity = org.getMaturity();
-        this.generation = org.getGeneration();
-        this.duration = org.getTime().getSeconds();
-       // this.org.setName(inputReader.getSpeciesName());
-        this.name = org.getName();
+            this.speed = org.getSpeed();
+            this.size = org.getSize();
+            this.strength = org.getStrength();
+            this.survivability = org.getSurvivability();
+            this.stealth = org.getStealth();
+            this.maturity = org.getMaturity();
+            this.generation = org.getGeneration();
+            this.duration = org.getTime().getSeconds();
+            // this.org.setName(inputReader.getSpeciesName());
+            this.name = org.getName();
         }
-        
+
     }
 
     public boolean isActive() {
@@ -144,10 +162,10 @@ public class OrganismPanel extends Menu implements Commons {
 
     @Override
     public void render(Graphics g) {
-        
-        if(active) {
-            g.drawImage(Assets.organismPanel_menu,x , y ,width, height, null);
-            g.drawImage(Assets.organismPanel_close, x + width - 20, y - 20, BUTTON_CLOSE_DIMENSION, BUTTON_CLOSE_DIMENSION, null);        
+
+        if (active) {
+            g.drawImage(Assets.organismPanel_menu, x, y, width, height, null);
+            g.drawImage(Assets.organismPanel_close, x + width - 20, y - 20, BUTTON_CLOSE_DIMENSION, BUTTON_CLOSE_DIMENSION, null);
             //Stealth
             g.setColor(Color.ORANGE);
             g.fillRect(x + 31, y + 114, (int) 70 * stealth / MAX_STEALTH, 20);
@@ -177,10 +195,20 @@ public class OrganismPanel extends Menu implements Commons {
             g.setColor(Color.WHITE);
             g.setFont(fontEvolve);
 
-            g.drawString(name, x + 40, y + 57);
+            if (timeOpen % 60 == 0) {
+                timeOpen = 0;
+
+                tickToWrite = !tickToWrite;
+            }
+
+            g.drawString(org.getName(), x + 40, y + 57);
             
-            //g.drawString(org.getOrganismName(), );
+            int width = g.getFontMetrics().stringWidth(org.getName());
+            
+            if (tickToWrite && org.getName().length() < 15) {
+                g.drawString("l", x + 40 + width, y + 57);
+            }
         }
-        
+
     }
 };
