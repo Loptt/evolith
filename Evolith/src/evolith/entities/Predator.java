@@ -30,6 +30,7 @@ public class Predator extends Item implements Commons {
 
     private Time time;
     
+    private int maxHealth;
     private double life;
     private int hunger;
     private int thirst;
@@ -105,9 +106,11 @@ public class Predator extends Item implements Commons {
         
         leaving = false;
         
+        maxHealth = 120;
+        
         hunger = 100;
         thirst = 100;
-        life = 100;
+        life = maxHealth;
 
         time = new Time();
         
@@ -499,7 +502,7 @@ public class Predator extends Item implements Commons {
         g.drawImage(Assets.predator, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
         
         g.setColor(Color.RED);
-        g.fillRect(game.getCamera().getRelX(x)+3, game.getCamera().getRelY(y) + 70, (int) (80 * this.life / 100), 5);
+        g.fillRect(game.getCamera().getRelX(x)+3, game.getCamera().getRelY(y) + 70, (int) (80 * this.life / maxHealth), 5);
         g.setColor(Color.white);
         g.drawRect(game.getCamera().getRelX(x)+2, game.getCamera().getRelY(y) + 70, 80, 6);
         

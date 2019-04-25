@@ -104,26 +104,24 @@ public class Organism extends Item implements Commons {
         xVel = 0;
         yVel = 0;
         acc = 1;
-
-        size = 100;
+        
+        //Initialize stats
+        size = 20;
         speed = 20;
         strength = 20;
         stealth = 20;
         maxHealth = 20;
+                
+        updateStats();
         
-        currentMaxHealth = maxHealth * 2 + 60;
-        currentSize = ORGANISM_SIZE;
-
-        life = currentMaxHealth;
         hunger = 50;
         thirst = 50;
-        maturity = 0;
+             this.width = currentSize;
+        this.height = currentSize;   maturity = 0;
         generation = 1;
         prevHungerRed = 0;
         prevThirstRed = 0;
         prevMatInc = 0;
-        
-        stealthRange = MAX_SIGHT_DISTANCE - (stealth - 20) * 5; 
 
         needOffspring = false;
         dead = false;
@@ -296,10 +294,29 @@ public class Organism extends Item implements Commons {
         setSpeed(getOrgMutations().getMutations().get(trait).get(newTier).getSpeed());
         setMaxHealth(getOrgMutations().getMutations().get(trait).get(newTier).getMaxHealth());
         setStealth(getOrgMutations().getMutations().get(trait).get(newTier).getStealth());
+        
+        updateStats();
+    }
+    
+    private void updateStats() {
+        //Transform stat numbers to useful numbers
+        currentMaxHealth = maxHealth * 2 + 60;
+        life = currentMaxHealth;
+        
+        currentSize = maxHealth + 10;
+        width = currentSize;
+        height = currentSize;
+        
+        stealthRange = MAX_SIGHT_DISTANCE - (stealth - 20) * 5;
+        
+        damage = strength * (0.05/20);
+        
+        absMaxVel = (int) ((double) speed * (1.0/20.0) * 2);
+        System.out.println(absMaxVel);
     }
     
     /**
-     * Create a copy of this organism
+     * Create a copy of the organism
      * @return new organism
      */
     public Organism cloneOrg(){
@@ -922,5 +939,13 @@ public class Organism extends Item implements Commons {
 
     public void setStealthRange(int stealthRange) {
         this.stealthRange = stealthRange;
+    }
+
+    public int getCurrentSize() {
+        return currentSize;
+    }
+
+    public void setCurrentSize(int currentSize) {
+        this.currentSize = currentSize;
     }
 }
