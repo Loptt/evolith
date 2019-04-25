@@ -1,6 +1,7 @@
 
 package evolith.game;
 
+import evolith.database.ConnectionMySql;
 import evolith.menus.MainMenu;
 import evolith.menus.SetupMenu;
 import evolith.menus.ButtonBarMenu;
@@ -69,6 +70,8 @@ public class Game implements Runnable, Commons {
     private boolean night;
     private int prevSecDayCycleChange;
     
+    private ConnectionMySql mySql;
+    
     /**
      * to create title, width and height and set the game is still not running
      *
@@ -80,7 +83,7 @@ public class Game implements Runnable, Commons {
         this.title = title;
         this.width = width;
         this.height = height;
-
+        mySql = new ConnectionMySql("jdbc:mysql://SG-Evolith-496-master.servers.mongodirector.com:3306/Evolith","sgroot","a6yaRypnDU-29cBS");
         keyManager = new KeyManager();
         mouseManager = new MouseManager();
         camera = new Camera(INITIAL_POINT - width / 2, INITIAL_POINT - height / 2, width, height, this);
