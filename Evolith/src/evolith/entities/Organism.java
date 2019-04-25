@@ -78,6 +78,9 @@ public class Organism extends Item implements Commons {
     
     private double damage;          //Amount of damage the organism deals to predators
     private int stealthRange;
+    
+    private int currentMaxHealth;
+    private int currentSize;
 
     /**
      * Constructor of the organism
@@ -107,8 +110,11 @@ public class Organism extends Item implements Commons {
         strength = 20;
         stealth = 20;
         maxHealth = 20;
+        
+        currentMaxHealth = maxHealth * 2 + 60;
+        currentSize = ORGANISM_SIZE;
 
-        life = 100;
+        life = currentMaxHealth;
         hunger = 50;
         thirst = 50;
         maturity = 0;
@@ -342,15 +348,21 @@ public class Organism extends Item implements Commons {
         //Warning that the organism can reproduce
         if(isNeedOffspring()){
             g.setColor(Color.BLACK);
-            g.fillOval(game.getCamera().getRelX(getX() - width / 2), game.getCamera().getRelY(getY() - width / 2), ORGANISM_SIZE / 2, ORGANISM_SIZE / 2);
+            g.fillOval(game.getCamera().getRelX(getX() - width / 2), game.getCamera().getRelY(getY() - width / 2), currentSize / 2, currentSize / 2);
         }
         
         orgMutations.render(g);
         
+        double barOffX = 0.05;
+        double barOffY = 1.1;
+
         g.setColor(Color.RED);
-        g.fillRect(game.getCamera().getRelX(x)+3, game.getCamera().getRelY(y) + 35, (int) (30 * this.life / 100), 3);
+        g.fillRect(game.getCamera().getRelX(x) + (int) (currentSize * barOffX) ,
+                game.getCamera().getRelY(y) + (int) (currentSize * barOffY), (int) (currentSize * this.life / currentMaxHealth), 3);
+        
         g.setColor(Color.white);
-        g.drawRect(game.getCamera().getRelX(x)+2, game.getCamera().getRelY(y) + 35, 30, 4);
+        g.drawRect(game.getCamera().getRelX(x) + (int) (currentSize * barOffX) -1,
+                game.getCamera().getRelY(y) + (int) (currentSize * barOffY), currentSize, 4);
       
         if (selected) {
              g.drawImage(Assets.glow, game.getCamera().getRelX(x) - 6, game.getCamera().getRelY(y) - 6, width + 12, height + 12, null);
