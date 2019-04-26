@@ -58,7 +58,7 @@ public class OrganismManager implements Commons {
         idCounter = 1;
 
         for (int i = 0; i < amount; i++) {
-            organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE, ORGANISM_SIZE, game, 0, idCounter++));
+            organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++));
         }
 
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
@@ -105,7 +105,7 @@ public class OrganismManager implements Commons {
         //if left clicked move the organisms to determined point
 
         if (organisms.size() > 0) {
-            points = SwarmMovement.getPositions(x - ORGANISM_SIZE / 2, y - ORGANISM_SIZE / 2, organisms.size());
+            points = SwarmMovement.getPositions(x, y, organisms.size());
             for (int i = 0; i < organisms.size(); i++) {
                 organisms.get(i).setPoint(points.get(i));
             }
@@ -124,7 +124,7 @@ public class OrganismManager implements Commons {
         ArrayList<Point> points;
         //if left clicked move the organisms to determined point
 
-        points = SwarmMovement.getPositions(x - ORGANISM_SIZE / 2, y - ORGANISM_SIZE / 2, amount, obj);
+        points = SwarmMovement.getPositions(x - ORGANISM_SIZE_STAT / 2, y - ORGANISM_SIZE_STAT / 2, amount, obj);
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setPoint(points.get(i));
         }
@@ -151,7 +151,7 @@ public class OrganismManager implements Commons {
             return;
         }
 
-        points = SwarmMovement.getPositions(x - ORGANISM_SIZE / 2, y - ORGANISM_SIZE / 2, count);
+        points = SwarmMovement.getPositions(x - ORGANISM_SIZE_STAT / 2, y - ORGANISM_SIZE_STAT / 2, count);
 
         int pointIndex = 0;
 
@@ -300,7 +300,7 @@ public class OrganismManager implements Commons {
     
     private void reproduce(Organism org) {
         
-        Organism offspring = new Organism(org.getX() + ORGANISM_SIZE, org.getY(), ORGANISM_SIZE, ORGANISM_SIZE, game, org.getSkin(), idCounter++);
+        Organism offspring = new Organism(org.getX() + ORGANISM_SIZE_STAT, org.getY(), ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, org.getSkin(), idCounter++);
         //generate an int for a chance of mutation
         int mutationChance = (int) (Math.random() * (2 - 0));
         //if it should not mutate

@@ -78,6 +78,9 @@ public class Organism extends Item implements Commons {
     
     private double damage;          //Amount of damage the organism deals to predators
     private int stealthRange;
+    
+    private int currentMaxHealth;
+    private int currentSize;
 
     /**
      * Constructor of the organism
@@ -101,23 +104,24 @@ public class Organism extends Item implements Commons {
         xVel = 0;
         yVel = 0;
         acc = 1;
-
-        size = 100;
-        speed = 20;
-        strength = 20;
-        stealth = 20;
-        maxHealth = 20;
-
-        life = 100;
+        
+        //Initialize stats
+        size = 0;
+        speed = 0;
+        strength = 0;
+        stealth = 0;
+        maxHealth = 0;
+                
+        updateStats();
+        
         hunger = 50;
         thirst = 50;
+
         maturity = 0;
         generation = 1;
         prevHungerRed = 0;
         prevThirstRed = 0;
         prevMatInc = 0;
-        
-        stealthRange = MAX_SIGHT_DISTANCE - (stealth - 20) * 5; 
 
         needOffspring = false;
         dead = false;
@@ -286,14 +290,37 @@ public class Organism extends Item implements Commons {
      * @param newTier 
      */
     public void updateMutation(int trait, int newTier){
-        setStrength(getOrgMutations().getMutations().get(trait).get(newTier).getStrength());
-        setSpeed(getOrgMutations().getMutations().get(trait).get(newTier).getSpeed());
-        setMaxHealth(getOrgMutations().getMutations().get(trait).get(newTier).getMaxHealth());
-        setStealth(getOrgMutations().getMutations().get(trait).get(newTier).getStealth());
+        int currStrength = strength + getOrgMutations().getMutations().get(trait).get(newTier).getStrength();
+        int currSpeed = speed + getOrgMutations().getMutations().get(trait).get(newTier).getSpeed();
+        int currMaxHealth = maxHealth + getOrgMutations().getMutations().get(trait).get(newTier).getMaxHealth();
+        int currStealth = stealth + getOrgMutations().getMutations().get(trait).get(newTier).getStealth();
+        
+        setStrength(currStrength > 0 ? currStrength : 0);
+        setSpeed(currSpeed > 0 ? currSpeed : 0);
+        setMaxHealth(currMaxHealth > 0 ? currMaxHealth : 0);
+        setStealth(currStealth > 0 ? currStealth : 0);
+        
+        updateStats();
+    }
+    
+    private void updateStats() {
+        //Transform stat numbers to useful numbers
+        currentMaxHealth = maxHealth * 2 + 100;
+        life = currentMaxHealth;
+        
+        currentSize = (int) (maxHealth * 0.5 + 30);
+        width = currentSize;
+        height = currentSize;
+        
+        stealthRange = MAX_SIGHT_DISTANCE - (stealth) * 5;
+        
+        damage = strength * (0.05/20.0) + 0.05;
+        
+        absMaxVel = (int) ((double) speed * (1.0/20.0)) + 1;
     }
     
     /**
-     * Create a copy of this organism
+     * Create a copy of the organism
      * @return new organism
      */
     public Organism cloneOrg(){
@@ -342,15 +369,21 @@ public class Organism extends Item implements Commons {
         //Warning that the organism can reproduce
         if(isNeedOffspring()){
             g.setColor(Color.BLACK);
-            g.fillOval(game.getCamera().getRelX(getX() - width / 2), game.getCamera().getRelY(getY() - width / 2), ORGANISM_SIZE / 2, ORGANISM_SIZE / 2);
+            g.fillOval(game.getCamera().getRelX(getX() - width / 2), game.getCamera().getRelY(getY() - width / 2), currentSize / 2, currentSize / 2);
         }
         
         orgMutations.render(g);
         
+        double barOffX = 0.05;
+        double barOffY = 1.1;
+
         g.setColor(Color.RED);
-        g.fillRect(game.getCamera().getRelX(x)+3, game.getCamera().getRelY(y) + 35, (int) (30 * this.life / 100), 3);
+        g.fillRect(game.getCamera().getRelX(x) + (int) (currentSize * barOffX) ,
+                game.getCamera().getRelY(y) + (int) (currentSize * barOffY), (int) (currentSize * this.life / currentMaxHealth), 3);
+        
         g.setColor(Color.white);
-        g.drawRect(game.getCamera().getRelX(x)+2, game.getCamera().getRelY(y) + 35, 30, 4);
+        g.drawRect(game.getCamera().getRelX(x) + (int) (currentSize * barOffX) -1,
+                game.getCamera().getRelY(y) + (int) (currentSize * barOffY), currentSize, 4);
       
         if (selected) {
              g.drawImage(Assets.glow, game.getCamera().getRelX(x) - 6, game.getCamera().getRelY(y) - 6, width + 12, height + 12, null);
@@ -910,5 +943,13 @@ public class Organism extends Item implements Commons {
 
     public void setStealthRange(int stealthRange) {
         this.stealthRange = stealthRange;
+    }
+
+    public int getCurrentSize() {
+        return currentSize;
+    }
+
+    public void setCurrentSize(int currentSize) {
+        this.currentSize = currentSize;
     }
 }

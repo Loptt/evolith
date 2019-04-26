@@ -26,6 +26,7 @@ import java.util.*;
 public class Resource extends Item implements Commons{
 
     private int quantity;
+    private int maxQuantity;
     private Game game;
     private boolean full;
     private boolean fullOfPredators;
@@ -46,7 +47,8 @@ public class Resource extends Item implements Commons{
     public Resource(int x, int y, int width, int height, Game game, ResourceType type) {
         super(x, y, width, height);
         this.game = game;
-        quantity = 50;
+        maxQuantity = (int) (Math.random() * 20 + 40);
+        quantity = maxQuantity;
         full = false;
         fullOfPredators = false;
         over = false;
@@ -201,7 +203,7 @@ public class Resource extends Item implements Commons{
                 //g.drawString(Integer.toString(quantity) + "/100", game.getCamera().getRelX(x) + 45, game.getCamera().getRelY(y) + 150);
                 g.setColor(Color.BLUE);
         }
-        g.fillRect(game.getCamera().getRelX(x) + 10, game.getCamera().getRelY(y) + 85, (int) 87 * this.quantity / 50, 7);
+        g.fillRect(game.getCamera().getRelX(x) + 10, game.getCamera().getRelY(y) + 85, (int) 87 * this.quantity / maxQuantity, 7);
         g.setColor(Color.white);
         g.drawRect(game.getCamera().getRelX(x) + 9, game.getCamera().getRelY(y) + 85, 87, 8);
     }
