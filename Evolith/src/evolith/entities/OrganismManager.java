@@ -105,7 +105,7 @@ public class OrganismManager implements Commons {
         //if left clicked move the organisms to determined point
 
         if (organisms.size() > 0) {
-            points = SwarmMovement.getPositions(x - ORGANISM_SIZE_STAT / 2, y - ORGANISM_SIZE_STAT / 2, organisms.size());
+            points = SwarmMovement.getPositions(x, y, organisms.size());
             for (int i = 0; i < organisms.size(); i++) {
                 organisms.get(i).setPoint(points.get(i));
             }
