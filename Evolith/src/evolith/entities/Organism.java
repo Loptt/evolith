@@ -314,10 +314,9 @@ public class Organism extends Item implements Commons {
         
         stealthRange = MAX_SIGHT_DISTANCE - (stealth) * 5;
         
-        damage = strength * (0.1/20.0) + 0.05;
+        damage = strength * (0.05/20.0) + 0.05;
         
         absMaxVel = (int) ((double) speed * (1.0/20.0)) + 1;
-        System.out.println(absMaxVel);
     }
     
     /**
