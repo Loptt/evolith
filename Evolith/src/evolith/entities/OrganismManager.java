@@ -350,7 +350,7 @@ public class OrganismManager implements Commons {
                 Predator pred = game.getPredators().getPredator(j);
 
                 //If predator is in the range of the organism
-                if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) + 150 < org.getStealthRange()) {
+                if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) + 150 < MAX_SIGHT_DISTANCE) {
                     safeLeaveResource(org);
                     org.setBeingChased(true);
 
