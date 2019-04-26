@@ -125,35 +125,38 @@ public class MutationPanel extends Menu implements Commons {
 
             }
             
+            boolean anyActive = false;
+            
             //Evolve organism
             if (selection != 0 && buttons.get(0).isPressed()) {
-                int j = 0;
+                int tier = 0;
                 
                 //Iterate over the specified type of mutation
                 for (int k = 0; k < organism.getOrgMutations().getMutations().get(selection - 1).size(); k++) {
                     if (organism.getOrgMutations().getMutations().get(selection - 1).get(k).isActive()) {
                         //J has the current active tier
-                        j = k;
+                        tier = k;
+                        anyActive = true;
                     }
                 }
                 //Check if mutation is not already in the max tier
-                if (j != organism.getOrgMutations().getMutations().get(selection - 1).size() - 1) {
+                if (tier != organism.getOrgMutations().getMutations().get(selection - 1).size() - 1) {
                     //Check if no tier is active
-                    if (j == 0 && !organism.getOrgMutations().getMutations().get(selection - 1).get(0).isActive()) {
-                        organism.getOrgMutations().getMutations().get(selection - 1).get(j).setActive(true); //Working fine
+                    if (!anyActive) {
+                        organism.getOrgMutations().getMutations().get(selection - 1).get(tier).setActive(true); //Working fine
+                        organism.updateMutation(selection-1, 0);
                     } else {
                         //Deactivate current tier
-                        organism.getOrgMutations().getMutations().get(selection - 1).get(j).setActive(false);
+                        organism.getOrgMutations().getMutations().get(selection - 1).get(tier + 1).setActive(true);
                         //Activate next tier
-                        organism.getOrgMutations().getMutations().get(selection - 1).get(j + 1).setActive(true);
+                        organism.getOrgMutations().getMutations().get(selection - 1).get(tier).setActive(false);
+                        organism.updateMutation(selection-1, tier + 1);
                     }
-                    organism.updateMutation(selection-1, j+1);
 
                 }
                 buttons.get(0).setPressed(false);
                 selection = 0;
                 active = false;
-
             }
 
         }

@@ -322,7 +322,7 @@ public class Organism extends Item implements Commons {
         width = currentSize;
         height = currentSize;
         
-        stealthRange = MAX_SIGHT_DISTANCE - (stealth) * 5;
+        stealthRange = MAX_SIGHT_DISTANCE - (stealth) * 10;
         
         damage = strength * (0.05/20.0) + 0.05;
         
@@ -339,6 +339,7 @@ public class Organism extends Item implements Commons {
         org.setMaxVel(maxVel);
         org.setSize(size);
         org.setSpeed(speed);
+        org.setStealth(stealth);
         org.setStrength(strength);
         org.setMaxHealth(maxHealth);
         org.setLife(maxHealth*2+60);
@@ -364,7 +365,7 @@ public class Organism extends Item implements Commons {
         time.tick();
         handleTarget();
         checkMovement();
-        checkVitals();  
+        checkVitals(); 
     }
 
     /**

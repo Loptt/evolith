@@ -189,23 +189,26 @@ public class Predator extends Item implements Commons {
             width = PREDATOR_SIZE - 20;
             height = PREDATOR_SIZE - 20;
             
-            damage = 0.2;
+            damage = 0.07;
             
             absMaxVel = 3;
+            
+            maxHealth = 100;
+            life = 100;
         } else if (chance  < 8) {
             //Medium
             width = PREDATOR_SIZE;
             height = PREDATOR_SIZE;
             
-            damage = 0.3;
+            damage = 0.2;
             
             absMaxVel = 2;
         } else {
-            //Big
+            //Big *scary*
             width = PREDATOR_SIZE + 20;
             height = PREDATOR_SIZE + 20;
             
-            damage = 0.45;
+            damage = 0.3;
             
             absMaxVel = 2;
             
