@@ -1,8 +1,8 @@
 BEGIN;
-
+SET DATE DMY;
 CREATE TABLE Game (
 game_id INT NOT NULL AUTO_INCREMENT,
-game_date_created DATETIME NOT NULL,
+game_date_created DATE NOT NULL,
 game_duration INT NOT NULL,
 game_score INT NOT NULL,
 PRIMARY KEY (game_id)
