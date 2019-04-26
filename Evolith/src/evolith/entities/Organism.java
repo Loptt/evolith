@@ -75,6 +75,7 @@ public class Organism extends Item implements Commons {
 
     private boolean selected;       //If the organism is currently selected by the player
     private boolean godCommand;     //If the organism has received an explicit movement command from the player
+    private boolean wandering;
     
     private double damage;          //Amount of damage the organism deals to predators
     private int stealthRange;
@@ -137,6 +138,7 @@ public class Organism extends Item implements Commons {
         drinking = false;
         selected = false;
         godCommand = false;
+        wandering = false;
         
         damage = 0.05;
 
@@ -231,6 +233,14 @@ public class Organism extends Item implements Commons {
         if (thirst <= 0) {
             thirst = 0;
             life -= 0.05;
+        }
+        
+        if (hunger > 100) {
+            hunger = 100;
+        }
+        
+        if (thirst > 100) {
+            thirst = 100;
         }
 
         //Increase maturity every x seconds defined in the commmons class
@@ -951,5 +961,13 @@ public class Organism extends Item implements Commons {
 
     public void setCurrentSize(int currentSize) {
         this.currentSize = currentSize;
+    }
+
+    public boolean isWandering() {
+        return wandering;
+    }
+
+    public void setWandering(boolean wandering) {
+        this.wandering = wandering;
     }
 }
