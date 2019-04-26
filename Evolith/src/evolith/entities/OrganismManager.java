@@ -345,7 +345,6 @@ public class OrganismManager implements Commons {
         //Check every organism
         for (int i = 0; i < organisms.size(); i++) {
             Organism org = organisms.get(i);
-            org.setBeingChased(false);
             //Check for every predator
             for (int j = 0; j < game.getPredators().getPredatorAmount(); j++) {
                 Predator pred = game.getPredators().getPredator(j);
@@ -369,6 +368,10 @@ public class OrganismManager implements Commons {
                             int randY = SwarmMovement.generateRandomness(100);
                             org.setPoint(new Point(pred.getX() + 30 + randX, pred.getY() + 30 + randY));
                         }
+                    }
+                } else {
+                    if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) - 150 < org.getStealthRange()) {
+                        org.setBeingChased(false);
                     }
                 }
             }
@@ -452,6 +455,12 @@ public class OrganismManager implements Commons {
                     org.setEating(false);
                     org.setDrinking(false);
                 }
+            } else if (target != null && (target.getType() == Resource.ResourceType.Plant && org.getHunger() == 100) 
+                    && target.getType() == Resource.ResourceType.Water && org.getThirst() == 100){
+                safeLeaveResource(org);
+                org.setEating(false);
+                org.setDrinking(false);
+                autoLookTarget(org);
             } else {
                 org.setEating(false);
                 org.setDrinking(false);
@@ -469,9 +478,26 @@ public class OrganismManager implements Commons {
         if (!org.isConsuming() && !org.isBeingChased()) {
             Resource plant = findNearestValidFood(org);
             Resource water = findNearestValidWater(org);
+            Organism friend = findNearestOrganism(org);
             if (org.isSearchFood() && org.isSearchWater()) {
                 //Find closest of both
                 //System.out.println("FINDING BOTH");
+                
+                if (org.getHunger() > 90 && org.getThirst() > 90) {
+                    goWithAFriend(org, friend);
+                    return;
+                }
+                
+                if (org.getHunger() > 90) {
+                    org.setTarget(water);
+                    return;
+                }
+                
+                if (org.getThirst() > 90) {
+                    org.setTarget(plant);
+                    return;
+                }
+                
                 double distPlant = Math.sqrt(Math.pow(org.getX() - plant.getX(), 2)
                         + Math.pow(org.getY() - plant.getY(), 2));
                 double distWater = Math.sqrt(Math.pow(org.getX() - water.getX(), 2)
@@ -482,18 +508,59 @@ public class OrganismManager implements Commons {
                 } else {
                     org.setTarget(water);
                 }
+                org.setWandering(false);
             } else if (org.isSearchFood()) {
                 //System.out.println("FINDING FOOD ONLY");
+                if (org.getHunger() > 90) {
+                    goWithAFriend(org, friend);
+                    return;
+                }
+                
                 org.setTarget(plant);
+                org.setWandering(false);
             } else if (org.isSearchWater()) {
                 //System.out.println("FINDING WATER ONLY");
+                if (org.getThirst() > 90) {
+                    goWithAFriend(org, friend);
+                    return;
+                }
                 org.setTarget(water);
+                org.setWandering(false);
             } else {
-                //System.out.println("FINDING NEITHER");
-                //Not looking for anything, idle
+                org.setWandering(true);
+                org.setTarget(null);
+            }
+        } else {
+            if (org.isBeingChased()) {
                 org.setTarget(null);
             }
         }
+    }
+    
+    public Organism findNearestOrganism(Organism org){
+        Organism closestOrganism = null; 
+        double closestDistanceBetweenPredatorAndOrganism = 1000000;
+
+        //Organism(int x, int y, int width, int height, Game game, int skin, int id)
+        for(int i = 0; i < game.getOrganisms().getOrganismsAmount(); i++){
+            double distanceBetweenPredatorAndOrganism = 7072;
+
+                distanceBetweenPredatorAndOrganism = Math.sqrt(Math.pow(org.getX()-game.getOrganisms().getOrganism(i).getX(),2)
+                        + Math.pow(org.getY()-game.getOrganisms().getOrganism(i).getY(),2) );
+
+            
+            if(distanceBetweenPredatorAndOrganism<closestDistanceBetweenPredatorAndOrganism){
+                closestDistanceBetweenPredatorAndOrganism = distanceBetweenPredatorAndOrganism;
+                closestOrganism = game.getOrganisms().getOrganism(i);
+            }
+        }
+        /*
+        if (closestDistanceBetweenPredatorAndOrganism > 100){
+            return null;
+        }
+        */
+        
+        return closestOrganism;
     }
 
     /**
@@ -546,6 +613,13 @@ public class OrganismManager implements Commons {
         }
 
         return closestWater;
+    }
+    
+    private void goWithAFriend(Organism org, Organism friend) {
+        int randX = SwarmMovement.generateRandomness(120);
+        int randY = SwarmMovement.generateRandomness(120);
+        org.setTarget(null);
+        org.setPoint(new Point(friend.getX() + randX, friend.getY() + randY));
     }
 
     /**
