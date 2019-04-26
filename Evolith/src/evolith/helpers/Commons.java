@@ -10,7 +10,7 @@ import java.awt.Color;
  * @author Moisés Fernández
  */
 public interface Commons {
-    public static final int ORGANISM_SIZE = 30;            // organism size
+    public static final int ORGANISM_SIZE_STAT = 20;            // organism size
     public static final int MAX_ORGANISM_AMOUNT = 256;      // maximum organism amount
     public static final int PLANT_SIZE = 100;               // plant quanitity per unit
     public static final int FRAME_RATE = 60;                // frame rate
@@ -33,7 +33,7 @@ public interface Commons {
     public static final int WATERS_AMOUNT = 50;
     public static final int PREDATORS_AMOUNT = 6;
     public static final int WATER_SIZE = 100;
-    public static final int SWARM_SEPARATION = ORGANISM_SIZE+10;
+    public static final int SWARM_SEPARATION = ORGANISM_SIZE_STAT+30;
     
     public static final int SECONDS_PER_HUNGER = 3;
     public static final int SECONDS_PER_THIRST = 3;
