@@ -118,7 +118,7 @@ public class Predator extends Item implements Commons {
         stamina = MAX_STAMINA;
         recovering = false;
         this.id = id;
-        absMaxVel = 3;
+        absMaxVel = 2;
         
         prevResourceChangeSec = 0;
         prevPointGeneratedSec = 0;

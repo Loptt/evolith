@@ -106,18 +106,18 @@ public class Organism extends Item implements Commons {
         acc = 1;
         
         //Initialize stats
-        size = 20;
-        speed = 20;
-        strength = 20;
-        stealth = 20;
-        maxHealth = 20;
+        size = 0;
+        speed = 0;
+        strength = 0;
+        stealth = 0;
+        maxHealth = 0;
                 
         updateStats();
         
         hunger = 50;
         thirst = 50;
-             this.width = currentSize;
-        this.height = currentSize;   maturity = 0;
+
+        maturity = 0;
         generation = 1;
         prevHungerRed = 0;
         prevThirstRed = 0;
@@ -290,28 +290,33 @@ public class Organism extends Item implements Commons {
      * @param newTier 
      */
     public void updateMutation(int trait, int newTier){
-        setStrength(getOrgMutations().getMutations().get(trait).get(newTier).getStrength());
-        setSpeed(getOrgMutations().getMutations().get(trait).get(newTier).getSpeed());
-        setMaxHealth(getOrgMutations().getMutations().get(trait).get(newTier).getMaxHealth());
-        setStealth(getOrgMutations().getMutations().get(trait).get(newTier).getStealth());
+        int currStrength = strength + getOrgMutations().getMutations().get(trait).get(newTier).getStrength();
+        int currSpeed = speed + getOrgMutations().getMutations().get(trait).get(newTier).getSpeed();
+        int currMaxHealth = maxHealth + getOrgMutations().getMutations().get(trait).get(newTier).getMaxHealth();
+        int currStealth = stealth + getOrgMutations().getMutations().get(trait).get(newTier).getStealth();
+        
+        setStrength(currStrength > 0 ? currStrength : 0);
+        setSpeed(currSpeed > 0 ? currSpeed : 0);
+        setMaxHealth(currMaxHealth > 0 ? currMaxHealth : 0);
+        setStealth(currStealth > 0 ? currStealth : 0);
         
         updateStats();
     }
     
     private void updateStats() {
         //Transform stat numbers to useful numbers
-        currentMaxHealth = maxHealth * 2 + 60;
+        currentMaxHealth = maxHealth * 2 + 100;
         life = currentMaxHealth;
         
-        currentSize = maxHealth + 10;
+        currentSize = (int) (maxHealth * 0.5 + 30);
         width = currentSize;
         height = currentSize;
         
-        stealthRange = MAX_SIGHT_DISTANCE - (stealth - 20) * 5;
+        stealthRange = MAX_SIGHT_DISTANCE - (stealth) * 5;
         
-        damage = strength * (0.05/20);
+        damage = strength * (0.1/20.0) + 0.05;
         
-        absMaxVel = (int) ((double) speed * (1.0/20.0) * 2);
+        absMaxVel = (int) ((double) speed * (1.0/20.0)) + 1;
         System.out.println(absMaxVel);
     }
     

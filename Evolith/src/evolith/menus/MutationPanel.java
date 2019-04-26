@@ -147,7 +147,7 @@ public class MutationPanel extends Menu implements Commons {
                         //Activate next tier
                         organism.getOrgMutations().getMutations().get(selection - 1).get(j + 1).setActive(true);
                     }
-                    //organism.updateMutation(selection-1, j+1);
+                    organism.updateMutation(selection-1, j+1);
 
                 }
                 buttons.get(0).setPressed(false);
