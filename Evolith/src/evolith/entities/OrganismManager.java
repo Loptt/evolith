@@ -455,12 +455,14 @@ public class OrganismManager implements Commons {
                     org.setEating(false);
                     org.setDrinking(false);
                 }
+            //If organism is full of that resource, leave it
             } else if (target != null && (target.getType() == Resource.ResourceType.Plant && org.getHunger() == 100) 
                     && target.getType() == Resource.ResourceType.Water && org.getThirst() == 100){
                 safeLeaveResource(org);
                 org.setEating(false);
                 org.setDrinking(false);
                 autoLookTarget(org);
+            //Else, look for something
             } else {
                 org.setEating(false);
                 org.setDrinking(false);
@@ -475,6 +477,7 @@ public class OrganismManager implements Commons {
      * @param org organism
      */
     public void autoLookTarget(Organism org) {
+        //If the organism is not already
         if (!org.isConsuming() && !org.isBeingChased()) {
             Resource plant = findNearestValidFood(org);
             Resource water = findNearestValidWater(org);
