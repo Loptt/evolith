@@ -971,4 +971,12 @@ public class Organism extends Item implements Commons {
     public void setWandering(boolean wandering) {
         this.wandering = wandering;
     }
+
+    public int getCurrentMaxHealth() {
+        return currentMaxHealth;
+    }
+
+    public void setCurrentMaxHealth(int currentMaxHealth) {
+        this.currentMaxHealth = currentMaxHealth;
+    }
 }
