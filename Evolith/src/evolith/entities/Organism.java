@@ -84,6 +84,8 @@ public class Organism extends Item implements Commons {
     private int currentSize;
     
     private boolean egg;
+    private boolean born;
+    private boolean needMutation;
 
     /**
      * Constructor of the organism
@@ -150,6 +152,8 @@ public class Organism extends Item implements Commons {
         orgMutations = new MutationManager(this, game);
         
         egg = true;
+        born = false;
+        needMutation = false;
     }
 
     /**
@@ -218,6 +222,16 @@ public class Organism extends Item implements Commons {
      */
     private void checkVitals() {
         //Reduce hunger every x seconds defined in the commmons class
+        if (egg) {
+            if (time.getSeconds() > 10 && !born) {
+                born();
+            }
+            
+            if (life <= 0) {
+                dead = true;
+            }
+        }
+        
         if (time.getSeconds() >= prevHungerRed + SECONDS_PER_HUNGER && !eating) {
             hunger--;
             prevHungerRed = (int) time.getSeconds();
@@ -270,6 +284,17 @@ public class Organism extends Item implements Commons {
         
         if (life <= 0) {
             dead = true;
+        }
+    }
+    
+    private void born() {        
+        born = true;
+        //Check if a mutation will occur. Chance is 1/4 now
+        if ((int) (Math.random() * 4) == 0) {
+            needMutation = true;
+        } else {
+            egg = false;
+            life = currentMaxHealth;
         }
     }
     
@@ -369,6 +394,10 @@ public class Organism extends Item implements Commons {
     public void tick() {
         //to determine the lifespan of the organism
         time.tick();
+        if (egg) {
+            checkVitals();
+            return;
+        }
         handleTarget();
         checkMovement();
         checkVitals(); 
@@ -381,8 +410,28 @@ public class Organism extends Item implements Commons {
      */
     @Override
     public void render(Graphics g) {
+        double barOffX = 0.05;
+        double barOffY = 1.1;
+        
         if (egg) {
             g.drawImage(Assets.egg, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width - 10, height - 10, null);
+            
+            g.setColor(Color.RED);
+            g.fillRect(game.getCamera().getRelX(x) + (int) ((currentSize - 10) * barOffX) ,
+                    game.getCamera().getRelY(y) + (int) ((currentSize - 10) * barOffY)+1, (int) ((currentSize - 10) * this.life / currentMaxHealth), 3);
+            
+            g.setColor(Color.white);
+            g.drawRect(game.getCamera().getRelX(x) + (int) ((currentSize - 10) * barOffX) -1,
+                    game.getCamera().getRelY(y) + (int) ((currentSize - 10) * barOffY), (currentSize - 10), 4);
+            
+            g.setColor(Color.YELLOW);
+            g.fillRect(game.getCamera().getRelX(x) + (int) ((currentSize - 10) * barOffX) ,
+                    game.getCamera().getRelY(y) + (int) ((currentSize - 10) * barOffY) + 5, (int) ((currentSize - 10) * time.getSeconds() / BORN_TIME), 3);
+            
+            g.setColor(Color.white);
+            g.drawRect(game.getCamera().getRelX(x) + (int) ((currentSize - 10) * barOffX) -1,
+                    game.getCamera().getRelY(y) + (int) ((currentSize - 10) * barOffY) + 4, (currentSize - 10), 4);
+            
         } else {
             g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
 
@@ -394,8 +443,7 @@ public class Organism extends Item implements Commons {
 
             orgMutations.render(g);
 
-            double barOffX = 0.05;
-            double barOffY = 1.1;
+            
 
             g.setColor(Color.RED);
             g.fillRect(game.getCamera().getRelX(x) + (int) (currentSize * barOffX) ,
@@ -988,5 +1036,29 @@ public class Organism extends Item implements Commons {
 
     public void setCurrentMaxHealth(int currentMaxHealth) {
         this.currentMaxHealth = currentMaxHealth;
+    }
+
+    public boolean isEgg() {
+        return egg;
+    }
+
+    public void setEgg(boolean egg) {
+        this.egg = egg;
+    }
+
+    public boolean isNeedMutation() {
+        return needMutation;
+    }
+
+    public void setNeedMutation(boolean needMutation) {
+        this.needMutation = needMutation;
+    }
+
+    public boolean isBorn() {
+        return born;
+    }
+
+    public void setBorn(boolean born) {
+        this.born = born;
     }
 }
