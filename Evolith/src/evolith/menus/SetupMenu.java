@@ -73,6 +73,30 @@ public class SetupMenu extends Menu {
     public boolean isActive(){
         return active;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getTimeOpen() {
+        return timeOpen;
+    }
+
+    public void setTimeOpen(int timeOpen) {
+        this.timeOpen = timeOpen;
+    }
+
+    public boolean isTickToWrite() {
+        return tickToWrite;
+    }
+
+    public void setTickToWrite(boolean tickToWrite) {
+        this.tickToWrite = tickToWrite;
+    }
     
     public void setActive(boolean active){
         this.active = active;

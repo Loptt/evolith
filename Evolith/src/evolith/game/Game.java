@@ -194,6 +194,7 @@ public class Game implements Runnable, Commons {
 
         if (setupMenu.isClickPlay()) {
             setupMenu.setActive(false);
+            organisms.setSpeciesName(setupMenu.getName());
             organisms.setSkin(setupMenu.getOption());
             state = States.Play;
         }
