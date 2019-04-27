@@ -2,16 +2,11 @@ package evolith.entities;
 
 import evolith.game.Game;
 import evolith.menus.Hover;
-import evolith.game.Item;
 import evolith.helpers.SwarmMovement;
-import evolith.helpers.Time;
-import evolith.engine.Assets;
 import evolith.helpers.Commons;
 import evolith.menus.MutationPanel;
 
 import evolith.menus.OrganismPanel;
-
-import java.awt.Color;
 
 import java.awt.Graphics;
 import java.awt.Point;
