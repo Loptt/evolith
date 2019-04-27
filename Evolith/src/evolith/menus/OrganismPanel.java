@@ -156,18 +156,22 @@ public class OrganismPanel extends Menu implements Commons {
         if (!active) {
             return;
         }
+
         timeOpen++;
-            
-            if (game.getG().getFontMetrics().stringWidth(inputReader.getSpeciesName()) > 150) {
-                inputReader.setOnlyDelete(true);
-            }
-            else {
-                inputReader.setOnlyDelete(false);
-            }
-            
-            inputReader.readInput();
-            
-            organism.setName(inputReader.getSpeciesName());
+        if (this.organism.getName() != null || this.organism.getName() != "") {
+            inputReader = new InputReader(this.organism.getName(), game);
+        } else {
+            inputReader = new InputReader(game);
+        }
+        if (game.getG().getFontMetrics().stringWidth(inputReader.getSpeciesName()) > 150) {
+            inputReader.setOnlyDelete(true);
+        } else {
+            inputReader.setOnlyDelete(false);
+        }
+
+        inputReader.readInput();
+
+        organism.setName(inputReader.getSpeciesName());
         //Checks the mouse positon relative to the button
         for (int i = 0; i < buttons.size(); i++) {
             if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
@@ -323,11 +327,11 @@ public class OrganismPanel extends Menu implements Commons {
 
             tickToWrite = !tickToWrite;
         }
-        g.drawString(organism.getName(), x + 40, y + 57);
+        g.drawString(organism.getName(), x + 70, y + height-50);
         int width = g.getFontMetrics().stringWidth(organism.getName());
 
         if (tickToWrite && !inputReader.isOnlyDelete()) {
-            g.drawString("l", x + 70 + width, y + height-50);
+            g.drawString("l", x + 80 + width, y + height - 50);
         }
 
     }
