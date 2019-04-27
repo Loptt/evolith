@@ -50,6 +50,7 @@ PRIMARY KEY (resources_id)
 CREATE TABLE Player(
 player_id INT NOT NULL AUTO_INCREMENT,
 player_name  VARCHAR(20)
+PRIMARY KEY (player_id )
 );
 
 COMMIT;

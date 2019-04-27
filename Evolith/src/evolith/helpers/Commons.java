@@ -81,6 +81,8 @@ public interface Commons {
     public static final Color ORANGE_COLOR = new Color(239, 186, 1);
     public static final Color PINK_COLOR = new Color(255, 111, 199);
     
+    public static final Color FONT_COLOR = new Color(9, 255, 200);
+    
     public static final int CONSUMING_RATE = 1;
     
     public static final int DAY_CYCLE_DURATION_SECONDS = 60;

@@ -37,6 +37,7 @@ public class OrganismManager implements Commons {
 
     private int panelIndex;
     private int idCounter;
+    private String speciesName;
     
     private boolean updatedNight;
 
@@ -60,6 +61,7 @@ public class OrganismManager implements Commons {
         mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
         
         updatedNight = false;
+        speciesName = "";
     }
 
     /**
@@ -950,4 +952,37 @@ public class OrganismManager implements Commons {
     public MutationPanel getMutPanel() {
         return mutPanel;
     }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public int getIdCounter() {
+        return idCounter;
+    }
+
+    public void setIdCounter(int idCounter) {
+        this.idCounter = idCounter;
+    }
+
+    public String getSpeciesName() {
+        return speciesName;
+    }
+
+    public void setSpeciesName(String speciesName) {
+        this.speciesName = speciesName;
+    }
+
+    public boolean isUpdatedNight() {
+        return updatedNight;
+    }
+
+    public void setUpdatedNight(boolean updatedNight) {
+        this.updatedNight = updatedNight;
+    }
+    
 }

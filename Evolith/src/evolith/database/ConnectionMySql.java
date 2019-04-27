@@ -46,6 +46,10 @@ public class ConnectionMySql {
     }
     public void getEnemy() throws SQLException {
         myResult = ConnectionMySql.myStatement.executeQuery("Select * from Enemy;");
+        while(myResult.next())
+        {
+         System.out.println( "Enemy id: "+  myResult.getString("enemy_id")+" Position x" + myResult.getString("enemy_position_x")+" Position y" + myResult.getString("enemy_position_y"));
+        }
     }
     public void getOrganism() throws SQLException {
         myResult = ConnectionMySql.myStatement.executeQuery("Select * from Organism;");

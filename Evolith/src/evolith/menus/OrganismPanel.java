@@ -34,6 +34,8 @@ public class OrganismPanel extends Menu implements Commons {
     private boolean searchPrev;             //Searches the previous reproductable Species
     private boolean reproduce;              //Determines if the reproduce button is pressed
     private int index;                      //Actual index of the organism in the organism manager
+    private int timeOpen;
+    private boolean tickToWrite;
 
     /**
      * Constructor of the panel initializes the reader and font
@@ -91,9 +93,15 @@ public class OrganismPanel extends Menu implements Commons {
         // Arrow prev
         buttons.add(new Button(this.x - 100, this.y + PANEL_HEIGHT / 2, 50, 50, Assets.prevArrow));
         // Reproduce button 
-        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 400, 300, 75, Assets.organismPanel_reproduceButton_ON,Assets.organismPanel_reproduceButton_OFF));
+        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 400, 300, 75, Assets.organismPanel_reproduceButton_ON, Assets.organismPanel_reproduceButton_OFF));
 
-        inputReader = new InputReader(game);
+        if (this.organism.getName() != null || this.organism.getName() != "") {
+            inputReader = new InputReader(this.organism.getName(), game);
+        } else {
+            inputReader = new InputReader(game);
+        }
+        this.timeOpen = 0;
+        this.tickToWrite = false;
     }
 
     /**
@@ -143,11 +151,23 @@ public class OrganismPanel extends Menu implements Commons {
             active = false;
         }*/
         //Reads the input
-        inputReader.readInput();
+
         //If the panel is not active, do nothing
         if (!active) {
             return;
         }
+        timeOpen++;
+            
+            if (game.getG().getFontMetrics().stringWidth(inputReader.getSpeciesName()) > 150) {
+                inputReader.setOnlyDelete(true);
+            }
+            else {
+                inputReader.setOnlyDelete(false);
+            }
+            
+            inputReader.readInput();
+            
+            organism.setName(inputReader.getSpeciesName());
         //Checks the mouse positon relative to the button
         for (int i = 0; i < buttons.size(); i++) {
             if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
@@ -243,60 +263,71 @@ public class OrganismPanel extends Menu implements Commons {
     @Override
     public void render(Graphics g) {
 
-        if (active) {
+        if (!active) {
+            return;
+        }
 
-            g.drawImage(Assets.organismPanel_menu, x, y, width, height, null);
+        g.drawImage(Assets.organismPanel_menu, x, y, width, height, null);
 
-            g.drawImage(Assets.orgColors.get(organism.getSkin()), x + 83, y + 70, 196, 196, null);
+        g.drawImage(Assets.orgColors.get(organism.getSkin()), x + 83, y + 70, 196, 196, null);
 
-            for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
-                for (int j = 0; j < organism.getOrgMutations().getMutations().get(i).size(); j++) {
-                    if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
-                        g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getSprite(), x + 83, y + 70,
-                                (int) 196*organism.getOrgMutations().getMutations().get(i).get(j).getWidth()/organism.getCurrentSize(),
-                                (int) 196*organism.getOrgMutations().getMutations().get(i).get(j).getHeight()/organism.getCurrentSize(), null);
-                    }
+        for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
+            for (int j = 0; j < organism.getOrgMutations().getMutations().get(i).size(); j++) {
+                if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
+                    g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getSprite(), x + 83, y + 70,
+                            (int) 196 * organism.getOrgMutations().getMutations().get(i).get(j).getWidth() / organism.getCurrentSize(),
+                            (int) 196 * organism.getOrgMutations().getMutations().get(i).get(j).getHeight() / organism.getCurrentSize(), null);
                 }
             }
+        }
 
-            g.drawImage(Assets.organismPanel_close, x + width - 20, y - 20, BUTTON_CLOSE_DIMENSION, BUTTON_CLOSE_DIMENSION, null);
-            //Stealth
-            g.setColor(Color.ORANGE);
-            g.fillRect(x + 473, y + 113, (int) 68 * organism.getSpeed() / MAX_SPEED, 20);
-            //Max Health
-            g.setColor(Color.CYAN);
-            g.fillRect(x + 474, y + 165, (int) 68 * organism.getSize() / MAX_SIZE, 20);
-            //maturity
-            g.setColor(Color.YELLOW);
-            g.fillRect(x + 474, y + 219, (int) 68 * organism.getStrength() / MAX_STRENGTH, 20);
-            //speed
-            g.setColor(Color.MAGENTA);
-            g.fillRect(x + 369, y + 113, (int) 68 * organism.getStealth() / MAX_STEALTH, 20);
-            //size
-            g.setColor(Color.WHITE);
-            g.fillRect(x + 369, y + 165, (int) 68 * organism.getMaxHealth() / MAX_SIZE, 20);
-            //strength
-            g.setColor(Color.LIGHT_GRAY);
-            g.fillRect(x + 369, y + 219, (int) 68 * organism.getMaturity() / MAX_MATURITY, 20);
+        g.drawImage(Assets.organismPanel_close, x + width - 20, y - 20, BUTTON_CLOSE_DIMENSION, BUTTON_CLOSE_DIMENSION, null);
+        //Stealth
+        g.setColor(Color.ORANGE);
+        g.fillRect(x + 473, y + 113, (int) 68 * organism.getSpeed() / MAX_SPEED, 20);
+        //Max Health
+        g.setColor(Color.CYAN);
+        g.fillRect(x + 474, y + 165, (int) 68 * organism.getSize() / MAX_SIZE, 20);
+        //maturity
+        g.setColor(Color.YELLOW);
+        g.fillRect(x + 474, y + 219, (int) 68 * organism.getStrength() / MAX_STRENGTH, 20);
+        //speed
+        g.setColor(Color.MAGENTA);
+        g.fillRect(x + 369, y + 113, (int) 68 * organism.getStealth() / MAX_STEALTH, 20);
+        //size
+        g.setColor(Color.WHITE);
+        g.fillRect(x + 369, y + 165, (int) 68 * organism.getMaxHealth() / MAX_SIZE, 20);
+        //strength
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(x + 369, y + 219, (int) 68 * organism.getMaturity() / MAX_MATURITY, 20);
 
-            // Edit
-            g.setColor(Color.WHITE);
-            g.setFont(fontEvolve);
-            g.drawString(Integer.toString(organism.getGeneration()), x + 474, y + 270);
-            g.drawString(Double.toString(organism.getTime().getSeconds()), x + 458, y + 294);
+        // Edit
+        g.setColor(Color.WHITE);
+        g.setFont(fontEvolve);
+        g.drawString(Integer.toString(organism.getGeneration()), x + 474, y + 270);
+        g.drawString(Double.toString(organism.getTime().getSeconds()), x + 458, y + 294);
 
-            g.setColor(Color.WHITE);
-            g.setFont(fontEvolve);
-            g.drawString(organism.getName(), x + 196, y + 281);
+        g.setColor(Color.WHITE);
+        g.setFont(fontEvolve);
 
-            for (int i = 0; i < buttons.size(); i++) {
+        for (int i = 0; i < buttons.size(); i++) {
 
-                if (i != 4 || organism.isNeedOffspring()) {
-                    buttons.get(i).render(g);
-                }
-
+            if (i != 4 || organism.isNeedOffspring()) {
+                buttons.get(i).render(g);
             }
 
+        }
+
+        if (timeOpen % 60 == 0) {
+            timeOpen = 0;
+
+            tickToWrite = !tickToWrite;
+        }
+        g.drawString(organism.getName(), x + 40, y + 57);
+        int width = g.getFontMetrics().stringWidth(organism.getName());
+
+        if (tickToWrite && !inputReader.isOnlyDelete()) {
+            g.drawString("l", x + 70 + width, y + height-50);
         }
 
     }

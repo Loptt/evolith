@@ -1,6 +1,6 @@
-
 package evolith.game;
 
+import evolith.database.ConnectionMySql;
 import evolith.menus.MainMenu;
 import evolith.menus.SetupMenu;
 import evolith.menus.ButtonBarMenu;
@@ -17,6 +17,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -49,7 +51,7 @@ public class Game implements Runnable, Commons {
     //private Plants plants;                      // resources of plants in the game
     //private Waters waters;
     private ResourceManager resources;
-    
+
     private PredatorManager predators;
 
     private enum States {
@@ -65,11 +67,10 @@ public class Game implements Runnable, Commons {
     private InputReader inputReader;            //To read text from keyboard
     private Minimap minimap;
     private Selection selection;
-    
+
     private boolean night;
     private int prevSecDayCycleChange;
-    
-    
+
     /**
      * to create title, width and height and set the game is still not running
      *
@@ -81,18 +82,19 @@ public class Game implements Runnable, Commons {
         this.title = title;
         this.width = width;
         this.height = height;
-       keyManager = new KeyManager();
+        keyManager = new KeyManager();
         mouseManager = new MouseManager();
         camera = new Camera(INITIAL_POINT - width / 2, INITIAL_POINT - height / 2, width, height, this);
         mainMenu = new MainMenu(0, 0, width, height, this);
         inputKeyboard = new InputKeyboard();
-        minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
+        minimap = new Minimap(MINIMAP_X, MINIMAP_Y, MINIMAP_WIDTH, MINIMAP_HEIGHT, this);
 
         state = States.MainMenu;
         selection = new Selection(this);
-        
+
         night = false;
         prevSecDayCycleChange = 0;
+
     }
 
     /**
@@ -101,7 +103,6 @@ public class Game implements Runnable, Commons {
     @Override
     public void run() {
         init();
-        
         int fps = 60;//Current game requirements demand 60 fps
         double timeTick = 1000000000 / fps;
         double delta = 0;
@@ -148,6 +149,7 @@ public class Game implements Runnable, Commons {
         display.getJframe().addMouseMotionListener(mouseManager);
         display.getCanvas().addMouseListener(mouseManager);
         display.getCanvas().addMouseMotionListener(mouseManager);
+
     }
 
     /**
@@ -169,7 +171,7 @@ public class Game implements Runnable, Commons {
         }
 
     }
-    
+
     /**
      * Tick the main menu
      */
@@ -181,6 +183,7 @@ public class Game implements Runnable, Commons {
             state = States.SetupMenu;
         }
     }
+
     /**
      * Tick the setup menu
      */
@@ -191,10 +194,12 @@ public class Game implements Runnable, Commons {
 
         if (setupMenu.isClickPlay()) {
             setupMenu.setActive(false);
+            organisms.setSpeciesName(setupMenu.getName());
             organisms.setSkin(setupMenu.getOption());
             state = States.Play;
         }
     }
+
     /**
      * Tick the main game
      */
@@ -208,16 +213,16 @@ public class Game implements Runnable, Commons {
         buttonBar.tick();
         inputKeyboard.tick();
         selection.tick();
-        
+
         manageMouse();
-        
+
         if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
             night = !night;
             background.setNight(night);
             prevSecDayCycleChange = clock.getSeconds();
         }
     }
-    
+
     /**
      * Handle the mouse while in game
      */
@@ -225,24 +230,25 @@ public class Game implements Runnable, Commons {
         //Check for click
         if (mouseManager.isLeft()) {
             manageLeftClick();
-        } else if (mouseManager.isRight()){
+        } else if (mouseManager.isRight()) {
             manageRightClick();
         } else {
             selection.deactivate();
             //System.out.println("DEACTIVATING SELECTION");
         }
     }
-    
+
     public void manageLeftClick() {
         int mouseX = mouseManager.getX();
         int mouseY = mouseManager.getY();
-        
-        //System.out.println("LEFT CLICKED");
 
+        //System.out.println("LEFT CLICKED");
         /**
-         * This set of if-else statements allows for processing the mouse in the screen only once per frame
-         * This prevents the mouse triggering multiple events where elements in the screen may overlap
-         * For example, it prevents the organisms to move when the player clicks on the button bar
+         * This set of if-else statements allows for processing the mouse in the
+         * screen only once per frame This prevents the mouse triggering
+         * multiple events where elements in the screen may overlap For example,
+         * it prevents the organisms to move when the player clicks on the
+         * button bar
          */
         //First in hierarchy is the buttonbar
         if (organisms.isOrgPanelActive() || organisms.isMutPanelActive()) {
@@ -259,28 +265,27 @@ public class Game implements Runnable, Commons {
             organisms.setSelectedAggressiveness(buttonBar.isFightActive());
             organisms.emptySelectedTargets();
             mouseManager.setLeft(false);
-        //Second in hierarchy is the minimap
-        } else if(minimap.hasMouse(mouseX,mouseY)){
+            //Second in hierarchy is the minimap
+        } else if (minimap.hasMouse(mouseX, mouseY)) {
             minimap.applyMouse(mouseX, mouseY, camera);
             mouseManager.setLeft(false);
-        //Third in hierarchy is the background   
+            //Third in hierarchy is the background   
         } else {
             selection.activate(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
         }
     }
-    
+
     public void manageRightClick() {
         int mouseX = mouseManager.getX();
         int mouseY = mouseManager.getY();
-        
-        //System.out.println("RIGHT CLICKED");
 
+        //System.out.println("RIGHT CLICKED");
         if (buttonBar.hasMouse(mouseX, mouseY)) {
             mouseManager.setRight(false);
-        //Second in hierarchy is the minimap
-        } else if(minimap.hasMouse(mouseX,mouseY)){
+            //Second in hierarchy is the minimap
+        } else if (minimap.hasMouse(mouseX, mouseY)) {
             mouseManager.setRight(false);
-        //Third in hierarchy is the background   
+            //Third in hierarchy is the background   
         } else {
             selection.deactivate();
             Resource clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
@@ -307,18 +312,18 @@ public class Game implements Runnable, Commons {
                 organisms.setSelectedSearchWater(false);
             }
         }
-        
+
         mouseManager.setRight(false);
     }
-    
+
     public void checkEntitiesInteraction() {
-        
+
     }
-    
+
     public void checkOrganismsInSelection() {
         organisms.checkSelection(selection.getSel());
     }
-    
+
     /**
      * renders all objects in a frame
      */
@@ -341,27 +346,27 @@ public class Game implements Runnable, Commons {
                     break;
                 case Play:
                     g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
-                    
+
                     resources.render(g);
                     organisms.render(g);
                     predators.render(g);
-                    
+
                     if (night) {
                         g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
                     }
                     minimap.render(g);
                     buttonBar.render(g);
-                    
+
                     if (selection.isActive()) {
                         selection.render(g);
                     }
-                    
+
                     if (organisms.isOrgPanelActive()) {
                         organisms.getOrgPanel().render(g);
                     } else if (organisms.isMutPanelActive()) {
                         organisms.getMutPanel().render(g);
                     }
-                    
+
                     break;
             }
             /*g.drawString(Integer.toString(camera.getAbsX(mouseManager.getX())), 30, 650);
@@ -370,7 +375,7 @@ public class Game implements Runnable, Commons {
             g.dispose();
         }
     }
-    
+
     /**
      * Saves current game status into a text file Each important variable to
      * define the current status of the game is stored in the file in a specific
@@ -450,7 +455,7 @@ public class Game implements Runnable, Commons {
      */
     public InputKeyboard getInputKeyboard() {
         return inputKeyboard;
-    } 
+    }
 
     /**
      * to get input of the keyboard in the setup menu
@@ -460,7 +465,7 @@ public class Game implements Runnable, Commons {
     public InputReader getInputReader() {
         return inputReader;
     }
-    
+
     /**
      * to get the skin of the organism
      *
@@ -469,22 +474,20 @@ public class Game implements Runnable, Commons {
     public int getOrganismsSkin() {
         return organisms.getSkin();
     }
-    
+
     /**
      * to get the organisms
      *
      * @return organisms
      */
-    
-    public PredatorManager getPredators(){
+    public PredatorManager getPredators() {
         return predators;
     }
 
     public Graphics getG() {
         return g;
     }
-    
-    
+
     public OrganismManager getOrganisms() {
         return organisms;
     }
@@ -500,17 +503,15 @@ public class Game implements Runnable, Commons {
     public void setSelection(Selection selection) {
         this.selection = selection;
     }
-    
-    
-    public ButtonBarMenu getButtonBar(){
+
+    public ButtonBarMenu getButtonBar() {
         return buttonBar;
     }
 
     public boolean isNight() {
         return night;
     }
-    
-    
+
     /**
      * start game
      */
@@ -535,4 +536,5 @@ public class Game implements Runnable, Commons {
             }
         }
     }
+    
 }
