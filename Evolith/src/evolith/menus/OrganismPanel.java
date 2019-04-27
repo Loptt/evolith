@@ -218,6 +218,8 @@ public class OrganismPanel extends Menu implements Commons {
                     reproduce = true;
                     buttons.get(4).setPressed(true);
                 }
+                
+                active = false;
             }
 
         }

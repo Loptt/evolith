@@ -104,6 +104,7 @@ public class MutationPanel extends Menu implements Commons {
             }
             if (buttons.get(1).isPressed()) {
                 active = false;
+                organism.setEgg(false);
             }
             if (buttons.get(2).isPressed() && !organism.getOrgMutations().getMutations().get(0).get(organism.getOrgMutations().getMutations().get(0).size() -1).isActive()) {
                 selection = 1;
@@ -157,6 +158,8 @@ public class MutationPanel extends Menu implements Commons {
                 buttons.get(0).setPressed(false);
                 selection = 0;
                 active = false;
+                organism.setEgg(false);
+                organism.setLife(organism.getCurrentMaxHealth());
             }
 
         }

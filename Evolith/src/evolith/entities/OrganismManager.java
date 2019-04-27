@@ -12,6 +12,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  *
@@ -50,12 +51,15 @@ public class OrganismManager implements Commons {
         panelIndex = 0;
         this.game = game;
         organisms = new ArrayList<>();
-        amount = 10;
+        amount = 1;
         idCounter = 1;
 
         for (int i = 0; i < amount; i++) {
             organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++));
         }
+        
+        organisms.get(0).setEgg(false);
+        organisms.get(0).setBorn(true);
 
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
         mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
@@ -70,6 +74,7 @@ public class OrganismManager implements Commons {
     public void tick() {
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).tick();
+            checkNeedMutation(organisms.get(i));
             checkKill(organisms.get(i));
         }
         
@@ -248,7 +253,7 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < organisms.size(); i++) {
             //if mouse is countained in a certain organism
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
-                    game.getCamera().getAbsY(game.getMouseManager().getY()))) {
+                    game.getCamera().getAbsY(game.getMouseManager().getY())) && !organisms.get(i).isEgg()) {
                 //sets new hover panel with that organism's location and information
                 h = new Hover(game.getMouseManager().getX(), game.getMouseManager().getY(), 170, 220,
                         organisms.get(i).getHunger(), organisms.get(i).getThirst(), organisms.get(i).getLife(), organisms.get(i).getCurrentMaxHealth(),
@@ -273,7 +278,7 @@ public class OrganismManager implements Commons {
     public boolean checkPanel() {
         for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
-                    game.getCamera().getAbsY(game.getMouseManager().getY()))) {
+                    game.getCamera().getAbsY(game.getMouseManager().getY())) && !organisms.get(i).isEgg()) {
                 if (game.getMouseManager().isLeft()) { //Unnecessary if statement, but ok
                     orgPanel = new OrganismPanel(PANEL_X, PANEL_Y, PANEL_WIDTH, PANEL_HEIGHT, game, organisms.get(i));
                     orgPanel.setIndex(panelIndex);
@@ -304,13 +309,6 @@ public class OrganismManager implements Commons {
         //if it should not mutate
 
         offspring = org.cloneOrg();
-
-        //Check if there is a mutation
-        if (true || mutationChance == 1) {
-            mutPanel = new MutationPanel(offspring, MUTATION_PANEL_X, MUTATION_PANEL_Y, MUTATION_PANEL_WIDTH, MUTATION_PANEL_HEIGHT, game);
-            orgPanel.setActive(false);
-            mutPanel.setActive(true);
-        }
         
       //  if((orgPanel.isReproduce() && mutPanel.getButtons().get(0).isPressed()) || (orgPanel.isReproduce() && !mutPanel.isActive()) ){
         amount++;
@@ -318,8 +316,6 @@ public class OrganismManager implements Commons {
         offspring.setId(idCounter + 1);
         idCounter++;
         organisms.add(offspring);
-        organisms.get(organisms.size() - 1).setSearchFood(org.isSearchFood());
-        organisms.get(organisms.size() - 1).setSearchWater(org.isSearchWater());
         org.setNeedOffspring(false);
         
     }
@@ -335,6 +331,15 @@ public class OrganismManager implements Commons {
             amount--;
         }
     }
+    
+    private void checkNeedMutation(Organism org) {
+        if (org.isNeedMutation()) {
+            mutPanel = new MutationPanel(org, MUTATION_PANEL_X, MUTATION_PANEL_Y, MUTATION_PANEL_WIDTH, MUTATION_PANEL_HEIGHT, game);
+            orgPanel.setActive(false);
+            mutPanel.setActive(true);
+            org.setNeedMutation(false);
+        }
+    }
 
     /**
      * Check for predators nearby and act accordingly
@@ -348,7 +353,7 @@ public class OrganismManager implements Commons {
                 Predator pred = game.getPredators().getPredator(j);
 
                 //If predator is in the range of the organism
-                if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) + 150 < MAX_SIGHT_DISTANCE) {
+                if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) + 20 < MAX_SIGHT_DISTANCE) {
                     safeLeaveResource(org);
                     org.setBeingChased(true);
 
@@ -759,9 +764,23 @@ public class OrganismManager implements Commons {
      * @param g
      */
     public void render(Graphics g) {
+        
+        HashSet<Organism> eggs = new HashSet<>();
 
         for (int i = 0; i < organisms.size(); i++) {
-            organisms.get(i).render(g);
+            if (organisms.get(i).isEgg()) {
+                eggs.add(organisms.get(i));
+            }
+        }
+        
+        for (Organism org: eggs) {
+            org.render(g);
+        }
+        
+        for (int i = 0; i < organisms.size(); i++) {
+            if (!organisms.get(i).isEgg()) {
+                organisms.get(i).render(g);
+            }
         }
         //render the hover panel of an organism
 
