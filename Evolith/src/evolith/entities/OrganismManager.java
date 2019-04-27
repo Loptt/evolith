@@ -12,6 +12,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  *
@@ -761,9 +762,23 @@ public class OrganismManager implements Commons {
      * @param g
      */
     public void render(Graphics g) {
+        
+        HashSet<Organism> eggs = new HashSet<>();
 
         for (int i = 0; i < organisms.size(); i++) {
-            organisms.get(i).render(g);
+            if (organisms.get(i).isEgg()) {
+                eggs.add(organisms.get(i));
+            }
+        }
+        
+        for (Organism org: eggs) {
+            org.render(g);
+        }
+        
+        for (int i = 0; i < organisms.size(); i++) {
+            if (!organisms.get(i).isEgg()) {
+                organisms.get(i).render(g);
+            }
         }
         //render the hover panel of an organism
 
