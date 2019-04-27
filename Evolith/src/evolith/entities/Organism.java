@@ -75,6 +75,7 @@ public class Organism extends Item implements Commons {
 
     private boolean selected;       //If the organism is currently selected by the player
     private boolean godCommand;     //If the organism has received an explicit movement command from the player
+    private boolean wandering;
     
     private double damage;          //Amount of damage the organism deals to predators
     private int stealthRange;
@@ -137,6 +138,7 @@ public class Organism extends Item implements Commons {
         drinking = false;
         selected = false;
         godCommand = false;
+        wandering = false;
         
         damage = 0.05;
 
@@ -232,6 +234,14 @@ public class Organism extends Item implements Commons {
             thirst = 0;
             life -= 0.05;
         }
+        
+        if (hunger > 100) {
+            hunger = 100;
+        }
+        
+        if (thirst > 100) {
+            thirst = 100;
+        }
 
         //Increase maturity every x seconds defined in the commmons class
         if (time.getSeconds() >= prevMatInc + SECONDS_PER_MATURITY) {
@@ -312,7 +322,7 @@ public class Organism extends Item implements Commons {
         width = currentSize;
         height = currentSize;
         
-        stealthRange = MAX_SIGHT_DISTANCE - (stealth) * 5;
+        stealthRange = MAX_SIGHT_DISTANCE - (stealth) * 9;
         
         damage = strength * (0.05/20.0) + 0.05;
         
@@ -329,6 +339,7 @@ public class Organism extends Item implements Commons {
         org.setMaxVel(maxVel);
         org.setSize(size);
         org.setSpeed(speed);
+        org.setStealth(stealth);
         org.setStrength(strength);
         org.setMaxHealth(maxHealth);
         org.setLife(maxHealth*2+60);
@@ -354,7 +365,7 @@ public class Organism extends Item implements Commons {
         time.tick();
         handleTarget();
         checkMovement();
-        checkVitals();  
+        checkVitals(); 
     }
 
     /**
@@ -951,5 +962,21 @@ public class Organism extends Item implements Commons {
 
     public void setCurrentSize(int currentSize) {
         this.currentSize = currentSize;
+    }
+
+    public boolean isWandering() {
+        return wandering;
+    }
+
+    public void setWandering(boolean wandering) {
+        this.wandering = wandering;
+    }
+
+    public int getCurrentMaxHealth() {
+        return currentMaxHealth;
+    }
+
+    public void setCurrentMaxHealth(int currentMaxHealth) {
+        this.currentMaxHealth = currentMaxHealth;
     }
 }

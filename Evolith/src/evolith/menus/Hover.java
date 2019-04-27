@@ -21,6 +21,7 @@ public class Hover extends Item implements Commons {
     private int food;       // food of the organism
     private int water;      //  water of the organism
     private double life;        //maturity level of the organism
+    private int maxHealth;
     private int stealthX;
     private int stealthY;
     private int stealthRange;
@@ -37,12 +38,13 @@ public class Hover extends Item implements Commons {
      * @param mat
      * @param game
      */
-    public Hover(int x, int y, int width, int height, int food, int water, double life, Game game, Organism org) {
+    public Hover(int x, int y, int width, int height, int food, int water, double life, int maxHealth, Game game, Organism org) {
         super(x, y, width, height);
         this.game = game;
         this.food = food;
         this.water = water;
         this.life = life;
+        this.maxHealth = maxHealth;
         
         stealthRange = org.getStealthRange();
         
@@ -110,7 +112,7 @@ public class Hover extends Item implements Commons {
         //g.setColor(Color.red);
         //g.fillRect(x + 24, y + 174, (int) 121 * this.mat / MAX_MATURITY, 12);
         g.setColor(Color.red);
-        g.fillRect(x + 42, y + 167, (int) (87 * this.life / MAX_HEALTH), 20);
+        g.fillRect(x + 42, y + 167, (int) (87 * (this.life / maxHealth)), 20);
         
         g.setColor(new Color(88,241,252, 20));
         g.fillOval(game.getCamera().getRelX(stealthX) , game.getCamera().getRelY(stealthY), stealthRange*2, stealthRange*2);

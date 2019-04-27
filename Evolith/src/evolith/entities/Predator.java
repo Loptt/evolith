@@ -39,6 +39,8 @@ public class Predator extends Item implements Commons {
     private int prevThirstRed;  //Time in seconds at which hunger was previously reduced
 
     private boolean dead;
+    
+    private int size;
 
     private boolean moving;
     private boolean inPlant;
@@ -85,7 +87,7 @@ public class Predator extends Item implements Commons {
         super(x, y, width, height);
         this.game = game;
         point = new Point(x, y);
-        maxVel = 3;
+        maxVel = 2;
         xVel = 0;
         yVel = 0;
         acc = 0.1;
@@ -124,6 +126,8 @@ public class Predator extends Item implements Commons {
         prevPointGeneratedSec = 0;
         mode = Mode.Roaming;
         prevMode = Mode.Roaming;
+        
+        applyVariances();
     }
 
     /**
@@ -174,6 +178,42 @@ public class Predator extends Item implements Commons {
                 targetResource = null;
                 assignNewPoint();
             }
+        }
+    }
+    
+    private void applyVariances() {
+        int chance = (int) (Math.random() * 10);
+        
+        if (chance < 4) {
+            //Small
+            width = PREDATOR_SIZE - 20;
+            height = PREDATOR_SIZE - 20;
+            
+            damage = 0.07;
+            
+            absMaxVel = 3;
+            
+            maxHealth = 100;
+            life = 100;
+        } else if (chance  < 8) {
+            //Medium
+            width = PREDATOR_SIZE;
+            height = PREDATOR_SIZE;
+            
+            damage = 0.2;
+            
+            absMaxVel = 2;
+        } else {
+            //Big *scary*
+            width = PREDATOR_SIZE + 20;
+            height = PREDATOR_SIZE + 20;
+            
+            damage = 0.3;
+            
+            absMaxVel = 2;
+            
+            maxHealth = 150;
+            life = maxHealth;
         }
     }
     
@@ -501,15 +541,18 @@ public class Predator extends Item implements Commons {
     public void render(Graphics g) {
         g.drawImage(Assets.predator, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
         
+        double barOffX = 0.03;
+        double barOffY = 0.87;
+        
         g.setColor(Color.RED);
-        g.fillRect(game.getCamera().getRelX(x)+3, game.getCamera().getRelY(y) + 70, (int) (80 * this.life / maxHealth), 5);
+        g.fillRect(game.getCamera().getRelX(x)+ (int) (width * barOffX), game.getCamera().getRelY(y) + (int) (height * barOffY), (int) ((int)(width) * this.life / maxHealth), 5);
         g.setColor(Color.white);
-        g.drawRect(game.getCamera().getRelX(x)+2, game.getCamera().getRelY(y) + 70, 80, 6);
+        g.drawRect(game.getCamera().getRelX(x)+ (int) (width * barOffX) - 1, game.getCamera().getRelY(y) + (int) (height * barOffY), (int)(width), 6);
         
         g.setColor(Color.YELLOW);
-        g.fillRect(game.getCamera().getRelX(x)+3, game.getCamera().getRelY(y) + 76, (int) (80 * this.stamina / MAX_STAMINA), 5);
+        g.fillRect(game.getCamera().getRelX(x)+(int) (width * barOffX), game.getCamera().getRelY(y) + (int) (height * barOffY) + 6, (int) ((int)(width) * this.stamina / MAX_STAMINA), 5);
         g.setColor(Color.white);
-        g.drawRect(game.getCamera().getRelX(x)+2, game.getCamera().getRelY(y) + 76, 80, 6);
+        g.drawRect(game.getCamera().getRelX(x)+(int) (width * barOffX) -1, game.getCamera().getRelY(y) + (int) (height * barOffY) + 6 - 1, (int)(width), 6);
     }
 
     /**
