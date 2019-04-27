@@ -70,6 +70,7 @@ public class Assets {
     public static BufferedImage prevArrow;
     
     public static BufferedImage glow;
+    public static BufferedImage egg;
 
     /**
      * Initalizes the assets and links to the image folder
@@ -181,6 +182,7 @@ public class Assets {
         nextArrow = ImageLoader.loadImage("/images/panel/next.png");
         prevArrow = ImageLoader.loadImage("/images/panel/prev.png");
         
+        egg = ImageLoader.loadImage("/images/organisms/egg.png");
     }
     
     /**

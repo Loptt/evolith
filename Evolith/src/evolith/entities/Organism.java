@@ -82,6 +82,8 @@ public class Organism extends Item implements Commons {
     
     private int currentMaxHealth;
     private int currentSize;
+    
+    private boolean egg;
 
     /**
      * Constructor of the organism
@@ -146,6 +148,8 @@ public class Organism extends Item implements Commons {
         name = "";
 
         orgMutations = new MutationManager(this, game);
+        
+        egg = true;
     }
 
     /**
@@ -353,6 +357,8 @@ public class Organism extends Item implements Commons {
             }
         }
         
+        org.updateStats();
+        
         return org;
     }
     
@@ -375,29 +381,33 @@ public class Organism extends Item implements Commons {
      */
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
-        
-        //Warning that the organism can reproduce
-        if(isNeedOffspring()){
-            g.setColor(Color.BLACK);
-            g.fillOval(game.getCamera().getRelX(getX() - width / 2), game.getCamera().getRelY(getY() - width / 2), currentSize / 2, currentSize / 2);
-        }
-        
-        orgMutations.render(g);
-        
-        double barOffX = 0.05;
-        double barOffY = 1.1;
+        if (egg) {
+            g.drawImage(Assets.egg, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width - 10, height - 10, null);
+        } else {
+            g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
 
-        g.setColor(Color.RED);
-        g.fillRect(game.getCamera().getRelX(x) + (int) (currentSize * barOffX) ,
-                game.getCamera().getRelY(y) + (int) (currentSize * barOffY), (int) (currentSize * this.life / currentMaxHealth), 3);
-        
-        g.setColor(Color.white);
-        g.drawRect(game.getCamera().getRelX(x) + (int) (currentSize * barOffX) -1,
-                game.getCamera().getRelY(y) + (int) (currentSize * barOffY), currentSize, 4);
-      
-        if (selected) {
-             g.drawImage(Assets.glow, game.getCamera().getRelX(x) - 6, game.getCamera().getRelY(y) - 6, width + 12, height + 12, null);
+            //Warning that the organism can reproduce
+            if(isNeedOffspring()){
+                g.setColor(Color.BLACK);
+                g.fillOval(game.getCamera().getRelX(getX() - width / 2), game.getCamera().getRelY(getY() - width / 2), currentSize / 2, currentSize / 2);
+            }
+
+            orgMutations.render(g);
+
+            double barOffX = 0.05;
+            double barOffY = 1.1;
+
+            g.setColor(Color.RED);
+            g.fillRect(game.getCamera().getRelX(x) + (int) (currentSize * barOffX) ,
+                    game.getCamera().getRelY(y) + (int) (currentSize * barOffY), (int) (currentSize * this.life / currentMaxHealth), 3);
+
+            g.setColor(Color.white);
+            g.drawRect(game.getCamera().getRelX(x) + (int) (currentSize * barOffX) -1,
+                    game.getCamera().getRelY(y) + (int) (currentSize * barOffY), currentSize, 4);
+
+            if (selected) {
+                 g.drawImage(Assets.glow, game.getCamera().getRelX(x) - 6, game.getCamera().getRelY(y) - 6, width + 12, height + 12, null);
+            }
         }
         
        
