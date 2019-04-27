@@ -2,16 +2,11 @@ package evolith.entities;
 
 import evolith.game.Game;
 import evolith.menus.Hover;
-import evolith.game.Item;
 import evolith.helpers.SwarmMovement;
-import evolith.helpers.Time;
-import evolith.engine.Assets;
 import evolith.helpers.Commons;
 import evolith.menus.MutationPanel;
 
 import evolith.menus.OrganismPanel;
-
-import java.awt.Color;
 
 import java.awt.Graphics;
 import java.awt.Point;
@@ -254,7 +249,8 @@ public class OrganismManager implements Commons {
                     game.getCamera().getAbsY(game.getMouseManager().getY()))) {
                 //sets new hover panel with that organism's location and information
                 h = new Hover(game.getMouseManager().getX(), game.getMouseManager().getY(), 170, 220,
-                        organisms.get(i).getHunger(), organisms.get(i).getThirst(), organisms.get(i).getLife(), game, organisms.get(i));
+                        organisms.get(i).getHunger(), organisms.get(i).getThirst(), organisms.get(i).getLife(), organisms.get(i).getCurrentMaxHealth(),
+                        game, organisms.get(i));
                 //activates the hover
                 setHover(true);
                 break;
@@ -350,7 +346,7 @@ public class OrganismManager implements Commons {
                 Predator pred = game.getPredators().getPredator(j);
 
                 //If predator is in the range of the organism
-                if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) + 150 < org.getStealthRange()) {
+                if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) + 150 < MAX_SIGHT_DISTANCE) {
                     safeLeaveResource(org);
                     org.setBeingChased(true);
 
