@@ -168,6 +168,9 @@ public class Game implements Runnable, Commons {
             case Play:
                 playTick();
                 break;
+            case Paused:
+                pausedTick();
+                break;
         }
 
     }
@@ -220,6 +223,26 @@ public class Game implements Runnable, Commons {
             night = !night;
             background.setNight(night);
             prevSecDayCycleChange = clock.getSeconds();
+        }
+        
+        if (keyManager.p) {
+            state = States.Paused;
+        }
+        
+        if (keyManager.esc) {
+            state = States.Paused;
+        }
+    }
+    
+    private void pausedTick() {
+        keyManager.tick();
+        
+        if (keyManager.p) {
+            state = States.Play;
+        }
+        
+        if (keyManager.esc) {
+            state = States.Play;
         }
     }
 
@@ -344,6 +367,8 @@ public class Game implements Runnable, Commons {
                 case SetupMenu:
                     setupMenu.render(g);
                     break;
+                case Paused:
+                    g.drawString("PAUSED", 100, 100);
                 case Play:
                     g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
 
