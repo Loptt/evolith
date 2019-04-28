@@ -72,6 +72,17 @@ public class KeyManager implements KeyListener {
         s = keys[KeyEvent.VK_S];
         d = keys[KeyEvent.VK_D];
         
+        if (keys[KeyEvent.VK_ESCAPE]) {
+            if (!prevesc) {
+                esc = true;
+                prevesc = true;
+            } else {
+                esc = false;
+            }
+        } else {
+            prevesc = false;
+        }
+        
         if (keys[KeyEvent.VK_P]) {
             if (!prevp) {
                 p = true;
