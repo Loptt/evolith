@@ -118,19 +118,19 @@ public class Minimap extends Menu implements Commons{
         g.drawImage(game.getBackground().getCurrentFullBackground(), MINIMAP_X, MINIMAP_Y, MINIMAP_WIDTH, MINIMAP_HEIGHT, null);
         
         switch(game.getOrganismsSkin()) {
-            case '0':
+            case 0:
                 organismsColor = PINK_COLOR;
                 
                 break;
-            case '1':
+            case 1:
                 organismsColor = PURPLE_COLOR;
                 
                 break;
-            case '2':
+            case 2:
                 organismsColor = BLUE_GREEN_COLOR;
                 
                 break;
-            case '3':
+            case 3:
                 
                 organismsColor = ORANGE_COLOR;
                 
@@ -142,9 +142,17 @@ public class Minimap extends Menu implements Commons{
         for (int i = 0; i < game.getOrganisms().getOrganismsPositions().size(); i++) {
             int organismPosX = (int) game.getOrganisms().getOrganismsPositions().get(i).getX() / 30;
             int organismPosY = (int) game.getOrganisms().getOrganismsPositions().get(i).getY() / 30;
+            
+            if (game.getOrganisms().getOrganism(i).isEgg()) {
+                g.setColor(Color.WHITE);
+            } else {
+                g.setColor(organismsColor);
+            }
 
-            g.fillOval(MINIMAP_X + organismPosX, MINIMAP_Y + organismPosY, 30 / 10, 30 / 10);
+            g.fillOval(MINIMAP_X + organismPosX, MINIMAP_Y + organismPosY, 4, 4);
         }
+        
+        g.setColor(Color.BLACK);
         
         for (int i = 0; i < game.getPredators().getPredatorAmount(); i++) {
             int predX = (int) game.getPredators().getPredator(i).getX() / 30;
@@ -152,13 +160,12 @@ public class Minimap extends Menu implements Commons{
             
             g.fillOval(MINIMAP_X + predX, MINIMAP_Y + predY, 30 / 10, 30 / 10);
         }
-        
+        g.setColor(Color.BLACK);
         g.drawRect(MINIMAP_X + game.getCamera().getX() / 30, MINIMAP_Y + game.getCamera().getY() / 30, game.getWidth() / 30 + 2, game.getHeight() / 30 + 2);
         g.drawImage(Assets.minimapFrame, MINIMAP_X, MINIMAP_Y, null);
     }
 
     @Override
     public void tick() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

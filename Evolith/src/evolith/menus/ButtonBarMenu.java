@@ -37,14 +37,15 @@ public class ButtonBarMenu extends Menu {
     }
     // organism's behaviour when Water button is active
     public void activateWater(){
-        
+        waterActive = true;
     }
     // organism's behaviour when Food button is active 
     public void activateFood(){
-        
+        foodActive = true;
     }
     // organism's behaviour when Fight button is active
     public void activateFight(){
+        fightActive = true;
     }
 
     @Override
@@ -91,5 +92,17 @@ public class ButtonBarMenu extends Menu {
 
     public boolean isFightActive() {
         return fightActive;
+    }
+
+    public void setFoodActive(boolean foodActive) {
+        this.foodActive = foodActive;
+    }
+
+    public void setWaterActive(boolean waterActive) {
+        this.waterActive = waterActive;
+    }
+
+    public void setFightActive(boolean fightActive) {
+        this.fightActive = fightActive;
     }
 }

@@ -209,7 +209,6 @@ public class Game implements Runnable, Commons {
      */
     private void playTick() {
         clock.tick();
-        keyManager.tick();
         camera.tick();
         organisms.tick();
         resources.tick();
@@ -217,21 +216,16 @@ public class Game implements Runnable, Commons {
         buttonBar.tick();
         inputKeyboard.tick();
         selection.tick();
+        
+        keyManager.tick();
 
         manageMouse();
+        manageKeyboard();
 
         if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
             night = !night;
             background.setNight(night);
             prevSecDayCycleChange = clock.getSeconds();
-        }
-        
-        if (keyManager.p) {
-            state = States.Paused;
-        }
-        
-        if (keyManager.esc) {
-            state = States.Paused;
         }
     }
     
@@ -258,7 +252,46 @@ public class Game implements Runnable, Commons {
             manageRightClick();
         } else {
             selection.deactivate();
-            //System.out.println("DEACTIVATING SELECTION");
+        }
+    }
+    
+    private void manageKeyboard() {
+        if (!organisms.getOrgPanel().isActive()) {
+            if (keyManager.esc) {
+                state = States.Paused;
+            }
+        } else {
+            if (keyManager.esc) {
+                organisms.getOrgPanel().setActive(false);
+            }
+        }
+        
+        if (keyManager.p) {
+            state = States.Paused;
+        }
+        
+        if (keyManager.num1) {
+            buttonBar.setWaterActive(!buttonBar.isWaterActive());
+            organisms.setSelectedSearchFood(buttonBar.isFoodActive());
+            organisms.setSelectedSearchWater(buttonBar.isWaterActive());
+            organisms.setSelectedAggressiveness(buttonBar.isFightActive());
+            organisms.emptySelectedTargets();
+        }
+        
+        if (keyManager.num2) {
+            buttonBar.setFoodActive(!buttonBar.isFoodActive());
+            organisms.setSelectedSearchFood(buttonBar.isFoodActive());
+            organisms.setSelectedSearchWater(buttonBar.isWaterActive());
+            organisms.setSelectedAggressiveness(buttonBar.isFightActive());
+            organisms.emptySelectedTargets();
+        }
+        
+        if (keyManager.num3) {
+            buttonBar.setFightActive(!buttonBar.isFightActive());
+            organisms.setSelectedSearchFood(buttonBar.isFoodActive());
+            organisms.setSelectedSearchWater(buttonBar.isWaterActive());
+            organisms.setSelectedAggressiveness(buttonBar.isFightActive());
+            organisms.emptySelectedTargets();
         }
     }
 
@@ -266,7 +299,6 @@ public class Game implements Runnable, Commons {
         int mouseX = mouseManager.getX();
         int mouseY = mouseManager.getY();
 
-        //System.out.println("LEFT CLICKED");
         /**
          * This set of if-else statements allows for processing the mouse in the
          * screen only once per frame This prevents the mouse triggering
@@ -303,7 +335,6 @@ public class Game implements Runnable, Commons {
         int mouseX = mouseManager.getX();
         int mouseY = mouseManager.getY();
 
-        //System.out.println("RIGHT CLICKED");
         if (buttonBar.hasMouse(mouseX, mouseY)) {
             mouseManager.setRight(false);
             //Second in hierarchy is the minimap
@@ -352,7 +383,7 @@ public class Game implements Runnable, Commons {
      * renders all objects in a frame
      */
     private void render() {
-        //Toolkit.getDefaultToolkit().sync(); //Linux
+        Toolkit.getDefaultToolkit().sync(); //Linux
         bs = display.getCanvas().getBufferStrategy();
 
         if (bs == null) {
