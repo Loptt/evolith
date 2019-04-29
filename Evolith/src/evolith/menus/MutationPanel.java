@@ -179,17 +179,26 @@ public class MutationPanel extends Menu implements Commons {
             g.drawImage(Assets.mutation_menu, x, y, width, height, null);
             
             g.drawImage(Assets.orgColors.get(organism.getSkin()), x + 71, y + 188, 140, 140, null);
-/*
+            
+            int prevSize = organism.getCurrentSize();
+            int prevX = organism.getX();
+            int prevY = organism.getY();
+            
+            organism.setCurrentSize(140);
+            organism.setX(game.getCamera().getAbsX(x + 71));
+            organism.setY(game.getCamera().getAbsY(y + 188));
+
             for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
                 for (int j = 0; j < organism.getOrgMutations().getMutations().get(i).size(); j++) {
                     if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
-                        g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getSprite(),
-                                x + 71, y + 188,(int) 140*organism.getOrgMutations().getMutations().get(i).get(j).getWidth()/organism.getCurrentSize(),
-                                (int)140*organism.getOrgMutations().getMutations().get(i).get(j).getHeight()/organism.getCurrentSize(), null);
+                        organism.getOrgMutations().getMutations().get(i).get(j).render(g);
                     }
                 }
             }
-       */     
+
+            organism.setCurrentSize(prevSize);
+            organism.setX(prevX);
+            organism.setY(prevY);
 
             for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
 
