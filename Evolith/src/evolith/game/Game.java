@@ -208,7 +208,6 @@ public class Game implements Runnable, Commons {
      */
     private void playTick() {
         clock.tick();
-        keyManager.tick();
         camera.tick();
         organisms.tick();
         resources.tick();
@@ -216,6 +215,8 @@ public class Game implements Runnable, Commons {
         buttonBar.tick();
         inputKeyboard.tick();
         selection.tick();
+        
+        keyManager.tick();
 
         manageMouse();
 
@@ -225,13 +226,21 @@ public class Game implements Runnable, Commons {
             prevSecDayCycleChange = clock.getSeconds();
         }
         
+        if (!organisms.getOrgPanel().isActive()) {
+            if (keyManager.esc) {
+                state = States.Paused;
+            }
+        } else {
+            if (keyManager.esc) {
+                organisms.getOrgPanel().setActive(false);
+            }
+        }
+        
         if (keyManager.p) {
             state = States.Paused;
         }
         
-        if (keyManager.esc) {
-            state = States.Paused;
-        }
+        
     }
     
     private void pausedTick() {
@@ -257,7 +266,6 @@ public class Game implements Runnable, Commons {
             manageRightClick();
         } else {
             selection.deactivate();
-            //System.out.println("DEACTIVATING SELECTION");
         }
     }
 
@@ -265,7 +273,6 @@ public class Game implements Runnable, Commons {
         int mouseX = mouseManager.getX();
         int mouseY = mouseManager.getY();
 
-        //System.out.println("LEFT CLICKED");
         /**
          * This set of if-else statements allows for processing the mouse in the
          * screen only once per frame This prevents the mouse triggering
@@ -302,7 +309,6 @@ public class Game implements Runnable, Commons {
         int mouseX = mouseManager.getX();
         int mouseY = mouseManager.getY();
 
-        //System.out.println("RIGHT CLICKED");
         if (buttonBar.hasMouse(mouseX, mouseY)) {
             mouseManager.setRight(false);
             //Second in hierarchy is the minimap
@@ -351,7 +357,7 @@ public class Game implements Runnable, Commons {
      * renders all objects in a frame
      */
     private void render() {
-        //Toolkit.getDefaultToolkit().sync(); //Linux
+        Toolkit.getDefaultToolkit().sync(); //Linux
         bs = display.getCanvas().getBufferStrategy();
 
         if (bs == null) {
