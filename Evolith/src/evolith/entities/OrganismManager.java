@@ -354,7 +354,7 @@ public class OrganismManager implements Commons {
 
                 //If predator is in the range of the organism
                 if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) + 20 < MAX_SIGHT_DISTANCE) {
-                    safeLeaveResource(org);
+                    org.safeLeaveResource();
                     org.setBeingChased(true);
 
                     if (!org.isAggressive()) {
@@ -453,7 +453,7 @@ public class OrganismManager implements Commons {
                 if ((target.isFull() && !target.hasParasite(org)) || target.isOver()) {
                     //System.out.println("HEHE CHANGE RESOURCE");
 
-                    safeLeaveResource(org);
+                    org.safeLeaveResource();
                     autoLookTarget(org);
                     org.setEating(false);
                     org.setDrinking(false);
@@ -461,7 +461,7 @@ public class OrganismManager implements Commons {
             //If organism is full of that resource, leave it
             } else if (target != null && (target.getType() == Resource.ResourceType.Plant && org.getHunger() == 100) 
                     && target.getType() == Resource.ResourceType.Water && org.getThirst() == 100){
-                safeLeaveResource(org);
+                org.safeLeaveResource();
                 org.setEating(false);
                 org.setDrinking(false);
                 autoLookTarget(org);
@@ -514,7 +514,6 @@ public class OrganismManager implements Commons {
                 } else {
                     org.setTarget(water);
                 }
-                org.setWandering(false);
             } else if (org.isSearchFood()) {
                 //System.out.println("FINDING FOOD ONLY");
                 if (org.getHunger() > 90) {
@@ -523,7 +522,6 @@ public class OrganismManager implements Commons {
                 }
                 
                 org.setTarget(plant);
-                org.setWandering(false);
             } else if (org.isSearchWater()) {
                 //System.out.println("FINDING WATER ONLY");
                 if (org.getThirst() > 90) {
@@ -531,9 +529,7 @@ public class OrganismManager implements Commons {
                     return;
                 }
                 org.setTarget(water);
-                org.setWandering(false);
             } else {
-                org.setWandering(true);
                 org.setTarget(null);
             }
         } else {
@@ -665,7 +661,7 @@ public class OrganismManager implements Commons {
     public void emptyTargets() {
         for (int i = 0; i < organisms.size(); i++) {
             Organism org = organisms.get(i);
-            safeLeaveResource(org);
+            org.safeLeaveResource();
         }
     }
 
@@ -676,27 +672,8 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSelected()) {
                 Organism org = organisms.get(i);
-                safeLeaveResource(org);
+                org.safeLeaveResource();
             }
-        }
-    }
-
-    /**
-     * leave a resource safely, meaning, remove the organism parasite form the
-     * resource and set the target to null
-     *
-     * @param org organism
-     */
-    private void safeLeaveResource(Organism org) {
-        Resource target = org.getTarget();
-        if (target != null) {
-            if (target.hasParasite(org)) {
-                target.removeParasite(org, org.getId() + 5000);
-            }
-            
-            org.setEating(false);
-            org.setDrinking(false);
-            org.setTarget(null);
         }
     }
 

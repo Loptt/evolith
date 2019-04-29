@@ -57,11 +57,6 @@ public class Organism extends Item implements Commons {
     private boolean beingChased;    //Value wether it is being chased or not
     private String name;            //Name of the organism
 
-    private boolean moving;         //Value if it is moving
-    private boolean inPlant;        //Value if it is on a plant
-    private boolean inWater;        //Value if it is in a water srource
-    private boolean inResource;     //Value if it is on a resource
-
     private Resource target;        //Its current resource target
 
     private boolean searchFood;     //Value if it is actively looking for food
@@ -75,7 +70,6 @@ public class Organism extends Item implements Commons {
 
     private boolean selected;       //If the organism is currently selected by the player
     private boolean godCommand;     //If the organism has received an explicit movement command from the player
-    private boolean wandering;
     
     private double damage;          //Amount of damage the organism deals to predators
     private int stealthRange;
@@ -130,9 +124,6 @@ public class Organism extends Item implements Commons {
 
         needOffspring = false;
         dead = false;
-        inPlant = false;
-        inWater = false;
-        inResource = false;
 
         searchFood = false;
         searchWater = false;
@@ -142,7 +133,6 @@ public class Organism extends Item implements Commons {
         drinking = false;
         selected = false;
         godCommand = false;
-        wandering = false;
         
         damage = 0.05;
 
@@ -166,21 +156,17 @@ public class Organism extends Item implements Commons {
             if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 15) {
                 // if the organism is less than 5 units reduce velocity
                 if (Math.abs((int) point.getX() - x) < 5 && Math.abs((int) point.getY() - y) < 5) {
-                    moving = false;
                     maxVel = 0;
                     if (godCommand) {
                         godCommand = false;
                     }
                 } else {
-                    moving = true;
                     maxVel = 1;
                 }
             } else {
-                moving = true;
                 maxVel = absMaxVel / 2;
             }
         } else {
-            moving = true;
             maxVel = absMaxVel;
         }
 
@@ -318,8 +304,8 @@ public class Organism extends Item implements Commons {
      */
     public void kill() {
         dead = true;
-        if (target != null && isConsuming()) {
-            target.removeParasite(this, id);
+        if (target != null && target.hasParasite(this)) {
+            target.removeParasite(this);
         }
     }
     
@@ -385,6 +371,25 @@ public class Organism extends Item implements Commons {
         org.updateStats();
         
         return org;
+    }
+    
+    
+    /**
+     * leave a resource safely, meaning, remove the organism parasite form the
+     * resource and set the target to null
+     *
+     * @param org organism
+     */
+    public void safeLeaveResource() {
+        if (target != null) {
+            if (target.hasParasite(this)) {
+                target.removeParasite(this);
+            }
+            
+            eating = false;
+            drinking = false;
+            target = null;
+        }
     }
     
     /**
@@ -457,15 +462,12 @@ public class Organism extends Item implements Commons {
                  g.drawImage(Assets.glow, game.getCamera().getRelX(x) - 6, game.getCamera().getRelY(y) - 6, width + 12, height + 12, null);
             }
         }
-        
-       
-        
-        //g.setColor(Color.BLACK);
-        //g.drawString(Integer.toString(id), game.getCamera().getRelX(x)-20, game.getCamera().getRelY(y) + 70);
     }
     
     /**
-     * GETTERS AND SETTERS
+     * ======================================
+     *          GETTERS AND SETTERS
+     * ======================================
      */
     
     /**
@@ -696,70 +698,6 @@ public class Organism extends Item implements Commons {
      */
     public void setDead(boolean dead) {
         this.dead = dead;
-    }
-
-    /**
-     * to get moving
-     * @return moving
-     */
-    public boolean isMoving() {
-        return moving;
-    }
-
-    /**
-     * to set moving
-     * @param moving
-     */
-    public void setMoving(boolean moving) {
-        this.moving = moving;
-    }
-
-    /**
-     * to get inPlant
-     * @return inPlant
-     */
-    public boolean isInPlant() {
-        return inPlant;
-    }
-
-    /**
-     * to set inPlant
-     * @param inPlant
-     */
-    public void setInPlant(boolean inPlant) {
-        this.inPlant = inPlant;
-    }
-
-    /**
-     * to get inWater
-     * @return inWater
-     */
-    public boolean isInWater() {
-        return inWater;
-    }
-
-    /**
-     * to set inWater
-     * @param inWater
-     */
-    public void setInWater(boolean inWater) {
-        this.inWater = inWater;
-    }
-
-    /**
-     * to get inResource
-     * @return inResource
-     */
-    public boolean isInResource() {
-        return inResource;
-    }
-
-    /**
-     * to set inResource
-     * @param inResource
-     */
-    public void setInResource(boolean inResource) {
-        this.inResource = inResource;
     }
 
     /**
@@ -1020,14 +958,6 @@ public class Organism extends Item implements Commons {
 
     public void setCurrentSize(int currentSize) {
         this.currentSize = currentSize;
-    }
-
-    public boolean isWandering() {
-        return wandering;
-    }
-
-    public void setWandering(boolean wandering) {
-        this.wandering = wandering;
     }
 
     public int getCurrentMaxHealth() {
