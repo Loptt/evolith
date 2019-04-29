@@ -1,56 +1,41 @@
 BEGIN;
-SET DATE DMY;
-CREATE TABLE Game (
+CREATE TABLE player(
+player_id INT NOT NULL AUTO_INCREMENT,
+player_name  VARCHAR(20),
+PRIMARY KEY (player_id)
+);
+CREATE TABLE game (
 game_id INT NOT NULL AUTO_INCREMENT,
-game_date_created DATE NOT NULL,
-game_duration INT NOT NULL,
+game_duration INT,
 game_score INT NOT NULL,
-PRIMARY KEY (game_id)
+player_id INT NOT NULL,
+PRIMARY KEY (game_id),
+FOREIGN KEY(player_id) REFERENCES player(player_id)
 );
-CREATE TABLE Enemy(
-enemy_id INT NOT NULL AUTO_INCREMENT,
-enemy_position_x INT NOT NULL,
-enemy_position_y INT NOT NULL,
-enemy_size INT,
-PRIMARY KEY (enemy_id)
-);
-CREATE TABLE Species(
+CREATE TABLE species(
 species_id INT NOT NULL AUTO_INCREMENT,
 species_color VARCHAR(20),
 species_name VARCHAR(20),
-PRIMARY KEY (species_id)
+game_id INT NOT NULL,
+PRIMARY KEY (species_id),
+FOREIGN KEY(game_id) REFERENCES game(game_id)
 );
-CREATE TABLE Organism(
+CREATE TABLE organism(
 organism_id INT NOT NULL AUTO_INCREMENT,
-organism_name VARCHAR(20),
-organism_alive BOOL,
+organism_alive INT(1),
 organism_generation INT,
-organism_position_x INT,
-organism_position_y INT,
-organism_parent_id INT,
+organism_kills INT,
+organism_lifespan INT,
+species_id INT NOT NULL,
 PRIMARY KEY (organism_id),
-FOREIGN KEY(organism_parent_id) REFERENCES Organism(organism_id)
+FOREIGN KEY(species_id) REFERENCES species(species_id)
 );
-CREATE TABLE Mutation(
+CREATE TABLE mutation(
 mutation_id INT NOT NULL AUTO_INCREMENT,
-strength INT,
-size INT,
-stealth INT,
-speed INT,
 mutation_name VARCHAR(20),
-PRIMARY KEY (mutation_id)
+mutation_value INT,
+organism_id INT NOT NULL,
+PRIMARY KEY (mutation_id),
+FOREIGN KEY(organism_id) REFERENCES organism(organism_id)
 );
-CREATE TABLE Resources(
-resources_id INT NOT NULL AUTO_INCREMENT,
-resources_position_x INT NOT NULL,
-resources_position_y INT NOT NULL,
-resources_quantity INT,
-PRIMARY KEY (resources_id)
-);
-CREATE TABLE Player(
-player_id INT NOT NULL AUTO_INCREMENT,
-player_name  VARCHAR(20)
-PRIMARY KEY (player_id )
-);
-
 COMMIT;
