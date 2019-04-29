@@ -27,29 +27,31 @@ public class MutationManager implements Commons{
         mutations = new ArrayList<ArrayList<Mutation>>();
         this.org = org;
         
+        // name, strength, speed, health, stealth, active, tier, int x, int y, int width, int height, Game game, Organism org
+        
         ArrayList<Mutation> m1 = new ArrayList<Mutation>();
-        m1.add(new Mutation("Spine",20,0,0,0,false,1,org.getX(),org.getY(),org.getWidth(),org.getWidth(),game, org));
-        m1.add(new Mutation("Sting",20,-20,0,20,false,2,org.getX(),org.getY(),org.getWidth(),102*org.getWidth()/77, game, org));
-        m1.add(new Mutation("Claws",20,-20,0,0,false,3,org.getX(),org.getY(),org.getWidth(),108*org.getWidth()/265, game, org));
-        m1.add(new Mutation("Horns",20,-20,0,-40,false,4,org.getX(),org.getY(),org.getWidth(),79*org.getWidth()/248, game, org));
+        m1.add(new Mutation("Spine",20,0,0,0,false,1,-0.34,-0.35,1.72,1.72,game, org)); // Finished
+        m1.add(new Mutation("Sting",20,-20,0,20,false,2,-0.1,0.95,0.8,0.8, game, org)); // Finished
+        m1.add(new Mutation("Claws",20,-20,0,0,false,3,-0.3,1,0.9,0.9, game, org));     // Asset must be changed
+        m1.add(new Mutation("Horns",20,-20,0,-40,false,4,-0.5,-0.5,2,1, game, org));    // Finished
         mutations.add(m1);
-    
+
         ArrayList<Mutation> m2 = new ArrayList<Mutation>();
-        m2.add(new Mutation("2 legs",0,20,0,0,false,1,org.getX(),org.getY() + org.getHeight()/2,org.getWidth(), 44*org.getWidth()/367, game, org));
-        m2.add(new Mutation("4 legs",0,20,0,0,false,2,org.getX(),org.getY() + org.getHeight()/2 ,org.getWidth(), 146*org.getWidth()/380, game, org));
-        m2.add(new Mutation("6 legs",0,20,-20,0,false,3,org.getX(),org.getY() + org.getHeight()/2,org.getWidth(), 146*org.getWidth()/392,game, org));
-        m2.add(new Mutation("Wings",-20,20,-40,20,false,4,org.getX(),org.getY(),org.getWidth(), 182*org.getWidth()/473,game, org));
+        m2.add(new Mutation("2 legs",0,20,0,0,false,1,-0.4,0.6,1.8,0.2, game, org));    // Finished 
+        m2.add(new Mutation("4 legs",0,20,0,0,false,2,-0.3,0.2,1.6,0.65, game, org));   // Finished
+        m2.add(new Mutation("6 legs",0,20,-20,0,false,3,-0.3,0.2,1.6,0.7,game, org));   // Finished
+        m2.add(new Mutation("Wings",-20,20,-40,20,false,4,-0.5,0,2,1,game, org));       // Finished
         mutations.add(m2);
         
         ArrayList<Mutation> m3 = new ArrayList<Mutation>();
-        m3.add(new Mutation("Medium Size",0,0,20,0,false,1,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game, org));
-        m3.add(new Mutation("Big Size",20,-20,20,-20,false,2,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game, org));
-        m3.add(new Mutation("Shell",-20 ,-40,40,0,false,3,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game, org));
+        m3.add(new Mutation("Medium Size",0,0,20,0,false,1,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game, org));   // Finished
+        m3.add(new Mutation("Big Size",20,-20,20,-20,false,2,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game, org)); // Finished
+        m3.add(new Mutation("Shell",-20 ,-40,40,0,false,3,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game, org));    // Finished
         mutations.add(m3);
         
         ArrayList<Mutation> m4 = new ArrayList<Mutation>();
-        m4.add(new Mutation("Ears",0,0,0,20,false,1,org.getX(),org.getY(),org.getWidth(),org.getWidth()/3, game, org));
-        m4.add(new Mutation("Stripes",0,0,0,20,false,2,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game, org));
+        m4.add(new Mutation("Ears",0,0,0,20,false,1,0,-0.02,1.05,0.35, game, org));     // Finished
+        m4.add(new Mutation("Stripes",0,0,0,20,false,2,0,0,1,1, game, org));            // Finished
         mutations.add(m4);
         
         for(int i=0; i<4; i++){
