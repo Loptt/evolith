@@ -276,16 +276,26 @@ public class OrganismPanel extends Menu implements Commons {
         g.drawImage(Assets.organismPanel_menu, x, y, width, height, null);
 
         g.drawImage(Assets.orgColors.get(organism.getSkin()), x + 83, y + 70, 196, 196, null);
+        
+        int prevSize = organism.getCurrentSize();
+        int prevX = organism.getX();
+        int prevY = organism.getY();
+        organism.setCurrentSize(196);
+        organism.setX(game.getCamera().getAbsX(x + 83));
+        organism.setY(game.getCamera().getAbsY(y + 70));
 
         for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
             for (int j = 0; j < organism.getOrgMutations().getMutations().get(i).size(); j++) {
                 if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
-                    g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getSprite(), x + 83, y + 70,
-                            (int) 196 * organism.getOrgMutations().getMutations().get(i).get(j).getWidth() / organism.getCurrentSize(),
-                            (int) 196 * organism.getOrgMutations().getMutations().get(i).get(j).getHeight() / organism.getCurrentSize(), null);
+                    organism.getOrgMutations().getMutations().get(i).get(j).render(g);
                 }
             }
         }
+        
+        organism.setCurrentSize(prevSize);
+        
+        organism.setX(prevX);
+        organism.setY(prevY);
 
         g.drawImage(Assets.organismPanel_close, x + width - 20, y - 20, BUTTON_CLOSE_DIMENSION, BUTTON_CLOSE_DIMENSION, null);
         //Stealth

@@ -223,7 +223,7 @@ public class Organism extends Item implements Commons {
     private void checkVitals() {
         //Reduce hunger every x seconds defined in the commmons class
         if (egg) {
-            if (time.getSeconds() > 10 && !born) {
+            if (time.getSeconds() > BORN_TIME && !born) {
                 born();
             }
             
@@ -290,7 +290,7 @@ public class Organism extends Item implements Commons {
     private void born() {        
         born = true;
         //Check if a mutation will occur. Chance is 1/4 now
-        if ((int) (Math.random() * 4) == 0) {
+        if (born) {
             needMutation = true;
         } else {
             egg = false;

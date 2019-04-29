@@ -179,7 +179,7 @@ public class MutationPanel extends Menu implements Commons {
             g.drawImage(Assets.mutation_menu, x, y, width, height, null);
             
             g.drawImage(Assets.orgColors.get(organism.getSkin()), x + 71, y + 188, 140, 140, null);
-
+/*
             for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
                 for (int j = 0; j < organism.getOrgMutations().getMutations().get(i).size(); j++) {
                     if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
@@ -189,7 +189,7 @@ public class MutationPanel extends Menu implements Commons {
                     }
                 }
             }
-            
+       */     
 
             for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
 
