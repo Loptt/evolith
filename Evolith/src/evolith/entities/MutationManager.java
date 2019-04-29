@@ -37,7 +37,7 @@ public class MutationManager implements Commons{
         mutations.add(m1);
 
         ArrayList<Mutation> m2 = new ArrayList<Mutation>();
-        m2.add(new Mutation("2 legs",0,20,0,0,false,1,-0.4,0.6,1.8,0.2, game, org));    // Finished 
+        m2.add(new Mutation("2 legs",0,20,0,0,false,1,-0.34,0.6,1.7,0.2, game, org));    // Finished 
         m2.add(new Mutation("4 legs",0,20,0,0,false,2,-0.3,0.2,1.6,0.65, game, org));   // Finished
         m2.add(new Mutation("6 legs",0,20,-20,0,false,3,-0.3,0.2,1.6,0.7,game, org));   // Finished
         m2.add(new Mutation("Wings",-20,20,-40,20,false,4,-0.5,0,2,1,game, org));       // Finished
