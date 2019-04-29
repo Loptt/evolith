@@ -152,6 +152,8 @@ public class Minimap extends Menu implements Commons{
             g.fillOval(MINIMAP_X + organismPosX, MINIMAP_Y + organismPosY, 4, 4);
         }
         
+        g.setColor(Color.BLACK);
+        
         for (int i = 0; i < game.getPredators().getPredatorAmount(); i++) {
             int predX = (int) game.getPredators().getPredator(i).getX() / 30;
             int predY = (int) game.getPredators().getPredator(i).getY() / 30;

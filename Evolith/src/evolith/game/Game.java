@@ -219,28 +219,13 @@ public class Game implements Runnable, Commons {
         keyManager.tick();
 
         manageMouse();
+        manageKeyboard();
 
         if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
             night = !night;
             background.setNight(night);
             prevSecDayCycleChange = clock.getSeconds();
         }
-        
-        if (!organisms.getOrgPanel().isActive()) {
-            if (keyManager.esc) {
-                state = States.Paused;
-            }
-        } else {
-            if (keyManager.esc) {
-                organisms.getOrgPanel().setActive(false);
-            }
-        }
-        
-        if (keyManager.p) {
-            state = States.Paused;
-        }
-        
-        
     }
     
     private void pausedTick() {
@@ -266,6 +251,46 @@ public class Game implements Runnable, Commons {
             manageRightClick();
         } else {
             selection.deactivate();
+        }
+    }
+    
+    private void manageKeyboard() {
+        if (!organisms.getOrgPanel().isActive()) {
+            if (keyManager.esc) {
+                state = States.Paused;
+            }
+        } else {
+            if (keyManager.esc) {
+                organisms.getOrgPanel().setActive(false);
+            }
+        }
+        
+        if (keyManager.p) {
+            state = States.Paused;
+        }
+        
+        if (keyManager.num1) {
+            buttonBar.setWaterActive(!buttonBar.isWaterActive());
+            organisms.setSelectedSearchFood(buttonBar.isFoodActive());
+            organisms.setSelectedSearchWater(buttonBar.isWaterActive());
+            organisms.setSelectedAggressiveness(buttonBar.isFightActive());
+            organisms.emptySelectedTargets();
+        }
+        
+        if (keyManager.num2) {
+            buttonBar.setFoodActive(!buttonBar.isFoodActive());
+            organisms.setSelectedSearchFood(buttonBar.isFoodActive());
+            organisms.setSelectedSearchWater(buttonBar.isWaterActive());
+            organisms.setSelectedAggressiveness(buttonBar.isFightActive());
+            organisms.emptySelectedTargets();
+        }
+        
+        if (keyManager.num3) {
+            buttonBar.setFightActive(!buttonBar.isFightActive());
+            organisms.setSelectedSearchFood(buttonBar.isFoodActive());
+            organisms.setSelectedSearchWater(buttonBar.isWaterActive());
+            organisms.setSelectedAggressiveness(buttonBar.isFightActive());
+            organisms.emptySelectedTargets();
         }
     }
 
