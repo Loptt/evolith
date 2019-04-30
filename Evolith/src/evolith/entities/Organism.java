@@ -9,6 +9,8 @@ import evolith.engine.Assets;
 import evolith.game.Game;
 import evolith.game.Item;
 import evolith.helpers.Commons;
+import static evolith.helpers.Commons.MAX_SIGHT_DISTANCE;
+import evolith.helpers.SwarmMovement;
 import evolith.helpers.Time;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -144,6 +146,27 @@ public class Organism extends Item implements Commons {
         egg = true;
         born = false;
         needMutation = false;
+    }
+    
+        
+    /**
+     * To tick the organism
+     */
+    @Override
+    public void tick() {
+        //to determine the lifespan of the organism
+        time.tick();
+        if (egg) {
+            checkVitals();
+            return;
+        }
+        
+        checkPredators();
+        checkTargetStatus();
+        checkArrivalOnTarget();
+        handleTarget();
+        checkMovement();
+        checkVitals(); 
     }
 
     /**
@@ -392,20 +415,203 @@ public class Organism extends Item implements Commons {
         }
     }
     
-    /**
-     * To tick the organism
+        /**
+     * Check for predators nearby and act accordingly
      */
-    @Override
-    public void tick() {
-        //to determine the lifespan of the organism
-        time.tick();
-        if (egg) {
-            checkVitals();
-            return;
+    private void checkPredators() {
+        PredatorManager predators = game.getPredators();
+        
+        //Check for every predator
+        for (int j = 0; j < predators.getPredatorAmount(); j++) {
+            Predator pred = predators.getPredator(j);
+
+            //If predator is in the range of the organism
+            if (SwarmMovement.distanceBetweenTwoPoints(x, y, pred.getX(), pred.getY()) + 20 < stealthRange) {
+                safeLeaveResource();
+                beingChased = true;
+
+                if (!aggressive) {
+                    //Escape
+
+                    //If god command is active, organisms shouldn't generate a new point
+                    if (!godCommand) {
+                        Point generatedPoint = generateEscapePoint(pred);
+                        point = generatedPoint;
+                    }
+                } else {
+                    if (!godCommand) {
+                        int randX = SwarmMovement.generateRandomness(100);
+                        int randY = SwarmMovement.generateRandomness(100);
+                        point = new Point(pred.getX() + 30 + randX, pred.getY() + 30 + randY);
+                    }
+                }
+            } else {
+                if (SwarmMovement.distanceBetweenTwoPoints(x, y, pred.getX(), pred.getY()) - 150 < stealthRange) {
+                    beingChased = false;
+                }
+            }
         }
-        handleTarget();
-        checkMovement();
-        checkVitals(); 
+    }
+    
+     /**
+     * Generate a point to run when an organism is being chased by a predator
+     *
+     * @param pred the predator to check
+     * @param org the organism to check
+     * @return the generated point
+     */
+    public Point generateEscapePoint(Predator pred) {
+
+        Point generatedPoint = new Point(x, y);
+
+        generatedPoint.x = x + (x - pred.getX()) + SwarmMovement.generateRandomness(50);
+        generatedPoint.y = y + (y - pred.getY()) + SwarmMovement.generateRandomness(50);
+
+        if (generatedPoint.x <= 0) {
+            generatedPoint.x = 100;
+        }
+
+        if (generatedPoint.x >= BACKGROUND_WIDTH) {
+            generatedPoint.x = BACKGROUND_WIDTH - 100;
+        }
+
+        if (generatedPoint.y <= 0) {
+            generatedPoint.y = 100;
+        }
+
+        if (generatedPoint.y >= BACKGROUND_HEIGHT) {
+            generatedPoint.y = BACKGROUND_HEIGHT - 100;
+        }
+        //System.out.println("generating point: (" + generatedPoint.x + "," + generatedPoint.y+")");
+
+        return generatedPoint;
+    }
+    
+        /**
+     * Checks if the target resource for each organism is still valid (has qty
+     * and is not full) if not, leave and look for another target resource
+     */
+    public void checkTargetStatus() {
+        //Check if target exists
+        if (target != null) {
+            //Check if the current target is already full and target does not have organism
+            if ((target.isFull() && !target.hasParasite(this)) || target.isOver()) {
+                //System.out.println("HEHE CHANGE RESOURCE");
+
+                safeLeaveResource();
+                autoLookTarget();
+                eating = false;
+                drinking = false;
+            }
+        //If organism is full of that resource, leave it
+        } else if (target != null && (target.getType() == Resource.ResourceType.Plant && hunger == 100) 
+                && target.getType() == Resource.ResourceType.Water && thirst == 100){
+            safeLeaveResource();
+            eating = false;
+            drinking = false;
+            autoLookTarget();
+        //Else, look for something
+        } else {
+            eating = false;
+            drinking = false;
+            autoLookTarget();
+        }
+    }
+    
+        /**
+     * Check if the organism has arrived to resource, if so, assign it to it
+     */
+    public void checkArrivalOnTarget() {
+        if (target != null) {
+            if (target.intersects(this)) {
+                if (!target.isFull()) {
+                    if (!target.hasParasite(this)) {
+                        target.addParasite(this);
+                        //Check the resource type
+                        if (target.getType() == Resource.ResourceType.Plant) {
+                            eating = true;
+                            drinking = false;
+                        } else {
+                            drinking = true;
+                            eating = false;
+                        }
+                    } else {
+                        //System.out.println("ORG ALREADY IN TARGET");
+                    }
+                } else {
+                   if (!target.hasParasite(this)) {
+                        autoLookTarget();
+                   }
+                }
+            }
+        }
+    }
+    
+        /**
+     * Look for a new resource according to what the organism is looking for
+     *
+     * @param org organism
+     */
+    public void autoLookTarget() {
+        //If the organism is not already
+        if (!isConsuming() && !beingChased) {
+            Resource plant = findNearestValidFood(org);
+            Resource water = findNearestValidWater(org);
+            Organism friend = findNearestOrganism(org);
+            if (searchFood && searchWater) {
+                //Find closest of both
+                //System.out.println("FINDING BOTH");
+                
+                if (hunger > 90 && thirst > 90) {
+                    goWithAFriend(org, friend);
+                    return;
+                }
+                
+                if (hunger > 90) {
+                    target = water;
+                    return;
+                }
+                
+                if (thirst > 90) {
+                    target = plant;
+                    return;
+                }
+                
+                double distPlant = Math.sqrt(Math.pow(x - plant.getX(), 2)
+                        + Math.pow(y- plant.getY(), 2));
+                double distWater = Math.sqrt(Math.pow(x- water.getX(), 2)
+                        + Math.pow(y - water.getY(), 2));
+
+                if (distPlant < distWater) {
+                    target = plant;
+                } else {
+                    target = water;
+                }
+            } else if (searchFood) {
+                //System.out.println("FINDING FOOD ONLY");
+                if (hunger > 90) {
+                    goWithAFriend(org, friend);
+                    return;
+                }
+                
+                target = plant;
+            } else if (searchWater) {
+                //System.out.println("FINDING WATER ONLY");
+                if (thirst > 90) {
+                    goWithAFriend(org, friend);
+                    return;
+                }
+                target = water;
+            } else {
+                target = null;
+            }
+        } else {
+            //DO NOTHING
+            if (beingChased) {
+                safeLeaveResource();
+                target = null;
+            }
+        }
     }
 
     /**
