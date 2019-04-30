@@ -83,6 +83,8 @@ public class Organism extends Item implements Commons {
     private boolean egg;
     private boolean born;
     private boolean needMutation;
+    
+    private Predator pred;
 
     /**
      * Constructor of the organism
@@ -148,6 +150,8 @@ public class Organism extends Item implements Commons {
         egg = true;
         born = false;
         needMutation = false;
+        
+        pred = null;
     }
     
         
@@ -164,11 +168,21 @@ public class Organism extends Item implements Commons {
         }
         
         checkPredators();
-        checkTargetStatus();
-        checkArrivalOnTarget();
         handleTarget();
         checkMovement();
         checkVitals(); 
+        
+        if (beingChased) {
+            escapeOrFight();
+        } else {
+            checkTargetStatus();
+            checkArrivalOnTarget();
+        }
+        
+        
+        if (!beingChased && !isConsuming()) {
+            autoLookTarget();
+        }
     }
 
     /**
@@ -298,6 +312,23 @@ public class Organism extends Item implements Commons {
         }
     }
     
+    private void escapeOrFight() {
+        if (!aggressive) {
+            //Escape
+
+            //If god command is active, organisms shouldn't generate a new point
+            if (!godCommand) {
+                point = generateEscapePoint();
+            }
+        } else {
+            if (!godCommand) {
+                int randX = SwarmMovement.generateRandomness(100);
+                int randY = SwarmMovement.generateRandomness(100);
+                point = new Point(pred.getX() + 30 + randX, pred.getY() + 30 + randY);
+            }
+        }
+    }
+    
     private void born() {        
         born = true;
         //Check if a mutation will occur. Chance is 1/4 now
@@ -422,36 +453,19 @@ public class Organism extends Item implements Commons {
     private void checkPredators() {
         PredatorManager predators = game.getPredators();
         
+        beingChased = false;
+        
         //Check for every predator
         for (int j = 0; j < predators.getPredatorAmount(); j++) {
-            Predator pred = predators.getPredator(j);
+            Predator p = predators.getPredator(j);
 
             //If predator is in the range of the organism
-            if (SwarmMovement.distanceBetweenTwoPoints(x, y, pred.getX(), pred.getY()) < stealthRange) {
+            if (SwarmMovement.distanceBetweenTwoPoints(x, y, p.getX(), p.getY()) < stealthRange) {
                 safeLeaveResource();
                 beingChased = true;
-
-                if (!aggressive) {
-                    //Escape
-
-                    //If god command is active, organisms shouldn't generate a new point
-                    if (!godCommand) {
-                        if (time.getSeconds() > prevPointGenerated + 1) {
-                            prevPointGenerated = (int) time.getSeconds();
-                            point = generateEscapePoint(pred);
-                        }
-                    }
-                } else {
-                    if (!godCommand) {
-                        int randX = SwarmMovement.generateRandomness(100);
-                        int randY = SwarmMovement.generateRandomness(100);
-                        point = new Point(pred.getX() + 30 + randX, pred.getY() + 30 + randY);
-                    }
-                }
+                pred = p;
             } else {
-                if (SwarmMovement.distanceBetweenTwoPoints(x, y, pred.getX(), pred.getY()) - 150 < stealthRange) {
-                    beingChased = false;
-                }
+                //Nothing
             }
         }
     }
@@ -462,12 +476,16 @@ public class Organism extends Item implements Commons {
      * @param pred the predator to check
      * @return the generated point
      */
-    public Point generateEscapePoint(Predator pred) {
+    public Point generateEscapePoint() {
 
         Point generatedPoint = new Point(x, y);
+        
+        if (SwarmMovement.distanceBetweenTwoPoints(x, y, pred.getX(), pred.getY()) < 20) {
+            generatedPoint = new Point(findNearestOrganism().getX(), findNearestOrganism().getY());
+        }
 
-        generatedPoint.x = x + (x - pred.getX());
-        generatedPoint.y = y + (y - pred.getY());
+        generatedPoint.x = x + (x - pred.getX()) + SwarmMovement.generateRandomness(100);
+        generatedPoint.y = y + (y - pred.getY()) + SwarmMovement.generateRandomness(100);
 
         if (generatedPoint.x <= 0) {
             generatedPoint.x = 100;
@@ -501,7 +519,6 @@ public class Organism extends Item implements Commons {
                 //System.out.println("HEHE CHANGE RESOURCE");
 
                 safeLeaveResource();
-                autoLookTarget();
                 eating = false;
                 drinking = false;
             }
@@ -511,12 +528,10 @@ public class Organism extends Item implements Commons {
             safeLeaveResource();
             eating = false;
             drinking = false;
-            autoLookTarget();
         //Else, look for something
         } else {
             eating = false;
             drinking = false;
-            autoLookTarget();
         }
     }
     
@@ -555,64 +570,55 @@ public class Organism extends Item implements Commons {
      * @param org organism
      */
     public void autoLookTarget() {
-        //If the organism is not already
-        if (!isConsuming() && !beingChased) {
-            Resource plant = findNearestValidFood();
-            Resource water = findNearestValidWater();
-            Organism friend = findNearestOrganism();
-            if (searchFood && searchWater) {
-                //Find closest of both
-                //System.out.println("FINDING BOTH");
-                
-                if (hunger > 90 && thirst > 90) {
-                    goWithAFriend(friend);
-                    return;
-                }
-                
-                if (hunger > 90) {
-                    target = water;
-                    return;
-                }
-                
-                if (thirst > 90) {
-                    target = plant;
-                    return;
-                }
-                
-                double distPlant = Math.sqrt(Math.pow(x - plant.getX(), 2)
-                        + Math.pow(y- plant.getY(), 2));
-                double distWater = Math.sqrt(Math.pow(x- water.getX(), 2)
-                        + Math.pow(y - water.getY(), 2));
+        Resource plant = findNearestValidFood();
+        Resource water = findNearestValidWater();
+        Organism friend = findNearestOrganism();
+        if (searchFood && searchWater) {
+            //Find closest of both
+            //System.out.println("FINDING BOTH");
 
-                if (distPlant < distWater) {
-                    target = plant;
-                } else {
-                    target = water;
-                }
-            } else if (searchFood) {
-                //System.out.println("FINDING FOOD ONLY");
-                if (hunger > 90) {
-                    goWithAFriend(friend);
-                    return;
-                }
-                
-                target = plant;
-            } else if (searchWater) {
-                //System.out.println("FINDING WATER ONLY");
-                if (thirst > 90) {
-                    goWithAFriend(friend);
-                    return;
-                }
+            if (hunger > 90 && thirst > 90) {
+                goWithAFriend(friend);
+                return;
+            }
+
+            if (hunger > 90) {
                 target = water;
+                return;
+            }
+
+            if (thirst > 90) {
+                target = plant;
+                return;
+            }
+
+            double distPlant = Math.sqrt(Math.pow(x - plant.getX(), 2)
+                    + Math.pow(y- plant.getY(), 2));
+            double distWater = Math.sqrt(Math.pow(x- water.getX(), 2)
+                    + Math.pow(y - water.getY(), 2));
+
+            if (distPlant < distWater) {
+                target = plant;
             } else {
-                target = null;
+                target = water;
             }
+        } else if (searchFood) {
+            //System.out.println("FINDING FOOD ONLY");
+            if (hunger > 90) {
+                goWithAFriend(friend);
+                return;
+            }
+
+            target = plant;
+        } else if (searchWater) {
+            //System.out.println("FINDING WATER ONLY");
+            if (thirst > 90) {
+                goWithAFriend(friend);
+                return;
+            }
+            target = water;
         } else {
-            //DO NOTHING
-            if (beingChased) {
-                safeLeaveResource();
-                target = null;
-            }
+            target = null;
         }
     }
     
@@ -741,8 +747,6 @@ public class Organism extends Item implements Commons {
 
             orgMutations.render(g);
 
-            
-
             g.setColor(Color.RED);
             g.fillRect(game.getCamera().getRelX(x) + (int) (currentSize * barOffX) ,
                     game.getCamera().getRelY(y) + (int) (currentSize * barOffY), (int) (currentSize * this.life / currentMaxHealth), 3);
@@ -753,6 +757,11 @@ public class Organism extends Item implements Commons {
 
             if (selected) {
                  g.drawImage(Assets.glow, game.getCamera().getRelX(x) - 6, game.getCamera().getRelY(y) - 6, width + 12, height + 12, null);
+            }
+            
+            if (beingChased) {
+                g.setColor(Color.RED);
+                g.fillOval(game.getCamera().getRelX(getX() - width / 2 + 50), game.getCamera().getRelY(getY() - width / 2 + 50), currentSize / 2, currentSize / 2);
             }
         }
     }

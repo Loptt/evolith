@@ -415,7 +415,7 @@ public class Predator extends Item implements Commons {
             }
             
             setTargetResource(null);
-            setStamina(getStamina() - 0.3);
+            //setStamina(getStamina() - 0.3);
         } else {
             if (mode == Mode.Attacking) {
                 assignNewPoint();
