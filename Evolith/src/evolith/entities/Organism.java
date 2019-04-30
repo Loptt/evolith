@@ -460,7 +460,6 @@ public class Organism extends Item implements Commons {
      * Generate a point to run when an organism is being chased by a predator
      *
      * @param pred the predator to check
-     * @param org the organism to check
      * @return the generated point
      */
     public Point generateEscapePoint(Predator pred) {
