@@ -332,7 +332,7 @@ public class Organism extends Item implements Commons {
     private void born() {        
         born = true;
         //Check if a mutation will occur. Chance is 1/4 now
-        if (born) {
+        if ((int) (Math.random() * 10) == 0) {
             needMutation = true;
         } else {
             egg = false;
@@ -760,6 +760,7 @@ public class Organism extends Item implements Commons {
             }
             
             if (beingChased) {
+                //g.drawString(Integer.toString((int) point.getX())  + "-" + point.getY(), game.getCamera().getRelX(x), game.getCamera().getRelY(y));
                 g.setColor(Color.RED);
                 g.fillOval(game.getCamera().getRelX(getX() - width / 2 + 50), game.getCamera().getRelY(getY() - width / 2 + 50), currentSize / 2, currentSize / 2);
             }
