@@ -73,7 +73,7 @@ public class Assets {
     public static BufferedImage egg;
 
     /**
-     * Initalizes the assets and links to the image folder
+     * Initializes the assets and links to the image folder
      */
     public static void init() {
         backgroundDay = ImageLoader.loadImage("/images/backgrounds/backgroundday.png");
