@@ -75,6 +75,8 @@ public class Predator extends Item implements Commons {
     private enum Mode {Water, Roaming, Attacking};
     private Mode mode;
     private Mode prevMode;
+    
+    private boolean visible;
 
     /**
      * Constructor of the organism
@@ -131,6 +133,7 @@ public class Predator extends Item implements Commons {
         prevMode = Mode.Roaming;
         
         applyVariances();
+        visible = false;
     }
 
     /**
@@ -580,6 +583,10 @@ public class Predator extends Item implements Commons {
      */
     @Override
     public void render(Graphics g) {
+        if (!visible) {
+            return;
+        }
+        
         g.drawImage(Assets.predator, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
         
         double barOffX = 0.03;
@@ -766,5 +773,13 @@ public class Predator extends Item implements Commons {
 
     public void setLeaving(boolean leaving) {
         this.leaving = leaving;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

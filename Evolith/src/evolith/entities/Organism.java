@@ -487,6 +487,7 @@ public class Organism extends Item implements Commons {
         //Check for every predator
         for (int j = 0; j < predators.getPredatorAmount(); j++) {
             Predator p = predators.getPredator(j);
+            
 
             //If predator is in the range of the organism
             if (SwarmMovement.distanceBetweenTwoPoints(x, y, p.getX(), p.getY()) < MAX_SIGHT_DISTANCE) {
@@ -494,7 +495,7 @@ public class Organism extends Item implements Commons {
                 beingChased = true;
                 pred = p;
             } else {
-                //Nothing
+
             }
         }
     }

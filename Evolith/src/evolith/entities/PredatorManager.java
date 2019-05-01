@@ -2,6 +2,8 @@ package evolith.entities;
 
 import evolith.game.Game;
 import evolith.helpers.Commons;
+import static evolith.helpers.Commons.MAX_SIGHT_DISTANCE;
+import evolith.helpers.SwarmMovement;
 
 import java.awt.Graphics;
 import java.awt.Point;
@@ -152,9 +154,14 @@ public class PredatorManager implements Commons {
     
     private void checkWithOrganisms(Predator pred) {
         //Check status with every organism
+        pred.setVisible(false);
         for (int j = 0; j < game.getOrganisms().getOrganismsAmount(); j++) {
             Organism org = game.getOrganisms().getOrganism(j);
             //Check if the predator is touching an organism
+            if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) < MAX_SIGHT_DISTANCE + 350) {
+                pred.setVisible(true);
+            }
+            
             if (pred.intersects(org)) {
                 //Get current life
                 double acutalLife = org.getLife();
