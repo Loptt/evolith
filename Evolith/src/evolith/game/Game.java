@@ -189,11 +189,12 @@ public class Game implements Runnable, Commons {
      * Tick the main menu
      */
     private void mainMenuTick() {
-        mainMenu.tick();
         mainMenu.setActive(true);
+        mainMenu.tick();
         if (mainMenu.isClickPlay()) {
             mainMenu.setActive(false);
             state = States.SetupMenu;
+            mainMenu.setClickPlay(false);
         }
     }
 
@@ -206,10 +207,11 @@ public class Game implements Runnable, Commons {
         inputKeyboard.tick();
 
         if (setupMenu.isClickPlay()) {
-            setupMenu.setActive(false);
             organisms.setSpeciesName(setupMenu.getName());
+            setupMenu.setName("");
             organisms.setSkin(setupMenu.getOption());
             state = States.Play;
+            setupMenu.setClickPlay(false);
         }
     }
 
@@ -259,6 +261,22 @@ public class Game implements Runnable, Commons {
         if (!pauseMenu.isMainMenuDisplayed()) {
             state = States.Play;
         }
+        
+        if (pauseMenu.isClickSave()) {
+            saveGame();
+            pauseMenu.setClickSave(false);
+        }
+        
+        if (pauseMenu.isClickLoad()) {
+            loadGame();
+            pauseMenu.setClickLoad(false);
+        }
+        
+        if (pauseMenu.isClickExit()) {
+            pauseMenu.setClickExit(false);
+            state = States.MainMenu;
+            resetGame();
+        }
     }
     
     private void overTick() {
@@ -282,6 +300,7 @@ public class Game implements Runnable, Commons {
     private void manageKeyboard() {
         if (!organisms.getOrgPanel().isActive()) {
             if (keyManager.esc) {
+                pauseMenu.setMainMenuDisplayed(true);
                 state = States.Paused;
             }
         } else {
@@ -293,14 +312,6 @@ public class Game implements Runnable, Commons {
         if (keyManager.p) {
             pauseMenu.setMainMenuDisplayed(true);
             state = States.Paused;
-        }
-        
-        if (keyManager.g) {
-            saveGame();
-        }
-        
-        if (keyManager.c) {
-            loadGame();
         }
         
         if (keyManager.num1) {
@@ -592,6 +603,14 @@ public class Game implements Runnable, Commons {
     }
 
     public void resetGame() {
+        camera.setX(INITIAL_POINT - width / 2);
+        camera.setY(INITIAL_POINT - height / 2);
+        
+        clock.setTicker(0);
+        
+        organisms.reset();
+        predators.reset();
+        resources.reset();
     }
 
     /**

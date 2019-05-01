@@ -196,6 +196,19 @@ public class PredatorManager implements Commons {
         }
     }
     
+    public void reset() {
+        predators.clear();
+        idCounter = 0;
+        int separation = BACKGROUND_WIDTH / (PREDATORS_AMOUNT / 4);
+        
+        for (int i = 0; i < PREDATORS_AMOUNT / 4; i++) {
+            predators.add(new Predator(separation * i, -1000, PREDATOR_SIZE, PREDATOR_SIZE, game, ++idCounter));
+            predators.add(new Predator(separation * i, BACKGROUND_HEIGHT+1000, PREDATOR_SIZE, PREDATOR_SIZE, game, ++idCounter));
+            predators.add(new Predator(-1000, separation*i, PREDATOR_SIZE, PREDATOR_SIZE, game, ++idCounter));
+            predators.add(new Predator(BACKGROUND_WIDTH + 1000, separation*i, PREDATOR_SIZE, PREDATOR_SIZE, game, ++idCounter));
+        }
+    }
+    
     /**
      * To render the organisms
      *

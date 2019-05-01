@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package evolith.menus;
 
 import evolith.game.Game;
@@ -29,6 +24,9 @@ public class PauseMenu extends Menu {
     private Button instructions = new Button(300,350);
      */
     private boolean clickPlay;
+    private boolean clickSave;
+    private boolean clickLoad;
+    private boolean clickExit;
     private int option;
 
     private String fontPath;
@@ -41,6 +39,9 @@ public class PauseMenu extends Menu {
         super(x, y, width, height, game);
         active = true;
         clickPlay = false;
+        clickSave = false;
+        clickLoad = false;
+        clickExit = false;
         
         mainMenuDisplayed = false;
         
@@ -79,6 +80,30 @@ public class PauseMenu extends Menu {
         this.clickPlay = clickPlay;
     }
 
+    public boolean isClickSave() {
+        return clickSave;
+    }
+
+    public void setClickSave(boolean clickSave) {
+        this.clickSave = clickSave;
+    }
+
+    public boolean isClickLoad() {
+        return clickLoad;
+    }
+
+    public void setClickLoad(boolean clickLoad) {
+        this.clickLoad = clickLoad;
+    }
+
+    public boolean isClickExit() {
+        return clickExit;
+    }
+
+    public void setClickExit(boolean clickExit) {
+        this.clickExit = clickExit;
+    }
+
     public int getOption() {
         return option;
     }
@@ -109,15 +134,24 @@ public class PauseMenu extends Menu {
         }
         
         if (buttons.get(1).isPressed()) { // Save button
-            
+            clickSave = true;
+            setMainMenuDisplayed(false);
+            buttons.get(1).setPressed(false);
+            buttons.get(1).setActive(false);
         }
         
         if (buttons.get(2).isPressed()) { // Load button
-            
+            clickLoad = true;
+            setMainMenuDisplayed(false);
+            buttons.get(2).setPressed(false);
+            buttons.get(2).setActive(false);
         }
         
         if (buttons.get(3).isPressed()) { // Main Menu button
-            
+            clickExit = true;
+            setMainMenuDisplayed(false);
+            buttons.get(3).setPressed(false);
+            buttons.get(3).setActive(false);
         }
 
         for (int i = 0; i < buttons.size(); i++) {
@@ -128,10 +162,6 @@ public class PauseMenu extends Menu {
                 if (game.getMouseManager().isLeft()) {
                     buttons.get(i).setPressed(true);
                     game.getMouseManager().setLeft(false);
-
-                    if (i != 0) {
-                        option = i - 1;
-                    }
 
                     for (int j = 0; j < buttons.size(); j++) {
                         if (i != j) {

@@ -481,6 +481,22 @@ public class OrganismManager implements Commons {
             organisms.get(i).load(br);
         }
     }
+    
+    public void reset() {
+        organisms.clear();
+        
+        idCounter = 1;
+        organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++));
+        
+        organisms.get(0).setEgg(false);
+        organisms.get(0).setBorn(true);
+
+        orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
+        mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
+        
+        updatedNight = false;
+        speciesName = "";
+    }
 
     /**
      * To render the organisms

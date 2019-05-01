@@ -191,6 +191,13 @@ public class ResourceManager implements Commons {
         }
     }
     
+    public void reset() {
+        plants.clear();
+        waters.clear();
+        
+        generateResources();
+    }
+    
     public int getPlantAmount() {
         return plants.size();
     }

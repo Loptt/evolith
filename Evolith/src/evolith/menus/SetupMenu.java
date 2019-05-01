@@ -169,6 +169,12 @@ public class SetupMenu extends Menu {
                 if(buttons.get(0).isPressed()){
                     setClickPlay(true);
                     setActive(false);
+                    buttons.get(0).setPressed(false);
+                    buttons.get(1).setPressed(false);
+                    buttons.get(2).setPressed(false);
+                    buttons.get(3).setPressed(false);
+                    buttons.get(4).setPressed(false);
+                    buttons.get(5).setPressed(false);
                 }
             
         }
