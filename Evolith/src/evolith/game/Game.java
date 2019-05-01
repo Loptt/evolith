@@ -90,7 +90,7 @@ public class Game implements Runnable, Commons {
         inputKeyboard = new InputKeyboard();
         minimap = new Minimap(MINIMAP_X, MINIMAP_Y, MINIMAP_WIDTH, MINIMAP_HEIGHT, this);
 
-        state = States.Play;
+        state = States.MainMenu;
         selection = new Selection(this);
 
         night = false;
@@ -209,7 +209,7 @@ public class Game implements Runnable, Commons {
      */
     private void playTick() {
         clock.tick();
-        camera.tick();
+        
         organisms.tick();
         resources.tick();
         predators.tick();
@@ -218,6 +218,10 @@ public class Game implements Runnable, Commons {
         selection.tick();
         
         keyManager.tick();
+        
+        if (!organisms.getOrgPanel().isInputActive()) {
+            camera.tick();
+        }
 
         manageMouse();
         manageKeyboard();

@@ -36,6 +36,7 @@ public class OrganismPanel extends Menu implements Commons {
     private int index;                      //Actual index of the organism in the organism manager
     private int timeOpen;
     private boolean tickToWrite;
+    private boolean inputActive;
 
     /**
      * Constructor of the panel initializes the reader and font
@@ -60,6 +61,7 @@ public class OrganismPanel extends Menu implements Commons {
             Logger.getLogger(OrganismPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         inputReader = new InputReader(game);
+        inputActive = false;
     }
 
     /**
@@ -95,7 +97,7 @@ public class OrganismPanel extends Menu implements Commons {
         // Reproduce button 
         buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 400, 300, 75, Assets.organismPanel_reproduceButton_ON, Assets.organismPanel_reproduceButton_OFF));
         //Name button
-        buttons.add(new Button(this.x + 120, this.y + 305, 183, 24));
+        buttons.add(new Button(this.x + 110, this.y + 300, 193, 27));
 
         if (this.organism.getName() != null || this.organism.getName() != "") {
             inputReader = new InputReader(this.organism.getName(), game);
@@ -104,6 +106,7 @@ public class OrganismPanel extends Menu implements Commons {
         }
         this.timeOpen = 0;
         this.tickToWrite = false;
+        inputActive = false;
     }
 
     /**
@@ -224,6 +227,7 @@ public class OrganismPanel extends Menu implements Commons {
         }
 
         if (buttons.get(5).isPressed()) {
+            inputActive = true;
             timeOpen++;
             if (this.organism.getName() != null || this.organism.getName() != "") {
                 inputReader = new InputReader(this.organism.getName(), game);
@@ -237,6 +241,8 @@ public class OrganismPanel extends Menu implements Commons {
             }
 
             inputReader.readInput();
+        } else {
+            inputActive = false;
         }
     }
 
@@ -279,6 +285,10 @@ public class OrganismPanel extends Menu implements Commons {
 
     public void setButtons(ArrayList<Button> buttons) {
         this.buttons = buttons;
+    }
+    
+    public boolean isInputActive() {
+        return inputActive;
     }
 
     @Override
