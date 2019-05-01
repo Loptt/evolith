@@ -238,6 +238,10 @@ public class Game implements Runnable, Commons {
         if (keyManager.esc) {
             state = States.Play;
         }
+        
+        if (!pauseMenu.isMainMenuDisplayed()) {
+            state = States.Play;
+        }
     }
 
     /**
@@ -266,6 +270,7 @@ public class Game implements Runnable, Commons {
         }
         
         if (keyManager.p) {
+            pauseMenu.setMainMenuDisplayed(true);
             state = States.Paused;
         }
         
@@ -420,6 +425,7 @@ public class Game implements Runnable, Commons {
                     } else if (organisms.isMutPanelActive()) {
                         organisms.getMutPanel().render(g);
                     }
+                    
                     pauseMenu.render(g);
                     break;
                 case Play:

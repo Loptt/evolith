@@ -87,6 +87,14 @@ public class PauseMenu extends Menu {
         this.option = option;
     }
 
+    public boolean isMainMenuDisplayed() {
+        return mainMenuDisplayed;
+    }
+
+    public void setMainMenuDisplayed(boolean mainMenuDisplayed) {
+        this.mainMenuDisplayed = mainMenuDisplayed;
+    }
+
     @Override
     public void tick() {
 
@@ -95,7 +103,9 @@ public class PauseMenu extends Menu {
         }
         
         if (buttons.get(0).isPressed()) { // Resume button
-            
+            setMainMenuDisplayed(false);
+            buttons.get(0).setPressed(false);
+            buttons.get(0).setActive(false);
         }
         
         if (buttons.get(1).isPressed()) { // Save button
@@ -132,12 +142,6 @@ public class PauseMenu extends Menu {
             } else {
                 buttons.get(i).setActive(false);
             }
-
-            if (buttons.get(0).isPressed()) {
-                setClickPlay(true);
-                setActive(false);
-            }
-
         }
     }
 
