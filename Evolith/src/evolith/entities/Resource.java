@@ -86,7 +86,7 @@ public class Resource extends Item implements Commons{
         }
     }
 
-    public void removeParasite(Organism org, int i) {
+    public void removeParasite(Organism org) {
         if (map.containsKey(org)) {
             //System.out.println("AMOUNT  :" + map.size());
             map.remove(org);
@@ -96,7 +96,7 @@ public class Resource extends Item implements Commons{
             }
             //System.out.println("PARASITE REMOVED  ID:  " + i);
         } else {
-            System.out.println("ERROR, ORGANISM NOT IN RESOURCE  ID:  " + i);
+            System.out.println("ERROR, ORGANISM NOT IN RESOURCE");
         }
         
         //System.out.println("END OF REMOVEPAR FUNCTION:  ID:   " + i);

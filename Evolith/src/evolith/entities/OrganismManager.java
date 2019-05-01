@@ -79,10 +79,6 @@ public class OrganismManager implements Commons {
         }
         
         checkNight();
-        checkPredators();
-        checkArrivalOnResource();
-        checkOrganismResourceStatus();
-        
         updateMenuPanels();
     }
 
@@ -342,80 +338,6 @@ public class OrganismManager implements Commons {
     }
 
     /**
-     * Check for predators nearby and act accordingly
-     */
-    private void checkPredators() {
-        //Check every organism
-        for (int i = 0; i < organisms.size(); i++) {
-            Organism org = organisms.get(i);
-            //Check for every predator
-            for (int j = 0; j < game.getPredators().getPredatorAmount(); j++) {
-                Predator pred = game.getPredators().getPredator(j);
-
-                //If predator is in the range of the organism
-                if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) + 20 < MAX_SIGHT_DISTANCE) {
-                    safeLeaveResource(org);
-                    org.setBeingChased(true);
-
-                    if (!org.isAggressive()) {
-                        //Escape
-
-                        //If god command is active, organisms shouldn't generate a new point
-                        if (!org.isGodCommand()) {
-                            Point generatedPoint = generateEscapePoint(pred, org);
-                            org.setPoint(generatedPoint);
-                        }
-                    } else {
-                        if (!org.isGodCommand()) {
-                            int randX = SwarmMovement.generateRandomness(100);
-                            int randY = SwarmMovement.generateRandomness(100);
-                            org.setPoint(new Point(pred.getX() + 30 + randX, pred.getY() + 30 + randY));
-                        }
-                    }
-                } else {
-                    if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) - 150 < org.getStealthRange()) {
-                        org.setBeingChased(false);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Generate a point to run when an organism is being chased by a predator
-     *
-     * @param pred the predator to check
-     * @param org the organism to check
-     * @return the generated point
-     */
-    public Point generateEscapePoint(Predator pred, Organism org) {
-
-        Point generatedPoint = new Point(org.getX(), org.getY());
-
-        generatedPoint.x = org.getX() + (org.getX() - pred.getX()) + SwarmMovement.generateRandomness(50);
-        generatedPoint.y = org.getY() + (org.getY() - pred.getY()) + SwarmMovement.generateRandomness(50);;
-
-        if (generatedPoint.x <= 0) {
-            generatedPoint.x = 100;
-        }
-
-        if (generatedPoint.x >= BACKGROUND_WIDTH) {
-            generatedPoint.x = BACKGROUND_WIDTH - 100;
-        }
-
-        if (generatedPoint.y <= 0) {
-            generatedPoint.y = 100;
-        }
-
-        if (generatedPoint.y >= BACKGROUND_HEIGHT) {
-            generatedPoint.y = BACKGROUND_HEIGHT - 100;
-        }
-        //System.out.println("generating point: (" + generatedPoint.x + "," + generatedPoint.y+")");
-
-        return generatedPoint;
-    }
-
-    /**
      * sets a resource for all organisms (deprecated)
      *
      * @param resource
@@ -440,232 +362,12 @@ public class OrganismManager implements Commons {
     }
 
     /**
-     * Checks if the target resource for each organism is still valid (has qty
-     * and is not full) if not, leave and look for another target resource
-     */
-    public void checkOrganismResourceStatus() {
-        for (int i = 0; i < organisms.size(); i++) {
-            Organism org = organisms.get(i);
-            Resource target = organisms.get(i).getTarget();
-            //Check if target exists
-            if (target != null) {
-                //Check if the current target is already full and target does not have organism
-                if ((target.isFull() && !target.hasParasite(org)) || target.isOver()) {
-                    //System.out.println("HEHE CHANGE RESOURCE");
-
-                    safeLeaveResource(org);
-                    autoLookTarget(org);
-                    org.setEating(false);
-                    org.setDrinking(false);
-                }
-            //If organism is full of that resource, leave it
-            } else if (target != null && (target.getType() == Resource.ResourceType.Plant && org.getHunger() == 100) 
-                    && target.getType() == Resource.ResourceType.Water && org.getThirst() == 100){
-                safeLeaveResource(org);
-                org.setEating(false);
-                org.setDrinking(false);
-                autoLookTarget(org);
-            //Else, look for something
-            } else {
-                org.setEating(false);
-                org.setDrinking(false);
-                autoLookTarget(org);
-            }
-        }
-    }
-
-    /**
-     * Look for a new resource according to what the organism is looking for
-     *
-     * @param org organism
-     */
-    public void autoLookTarget(Organism org) {
-        //If the organism is not already
-        if (!org.isConsuming() && !org.isBeingChased()) {
-            Resource plant = findNearestValidFood(org);
-            Resource water = findNearestValidWater(org);
-            Organism friend = findNearestOrganism(org);
-            if (org.isSearchFood() && org.isSearchWater()) {
-                //Find closest of both
-                //System.out.println("FINDING BOTH");
-                
-                if (org.getHunger() > 90 && org.getThirst() > 90) {
-                    goWithAFriend(org, friend);
-                    return;
-                }
-                
-                if (org.getHunger() > 90) {
-                    org.setTarget(water);
-                    return;
-                }
-                
-                if (org.getThirst() > 90) {
-                    org.setTarget(plant);
-                    return;
-                }
-                
-                double distPlant = Math.sqrt(Math.pow(org.getX() - plant.getX(), 2)
-                        + Math.pow(org.getY() - plant.getY(), 2));
-                double distWater = Math.sqrt(Math.pow(org.getX() - water.getX(), 2)
-                        + Math.pow(org.getY() - water.getY(), 2));
-
-                if (distPlant < distWater) {
-                    org.setTarget(plant);
-                } else {
-                    org.setTarget(water);
-                }
-                org.setWandering(false);
-            } else if (org.isSearchFood()) {
-                //System.out.println("FINDING FOOD ONLY");
-                if (org.getHunger() > 90) {
-                    goWithAFriend(org, friend);
-                    return;
-                }
-                
-                org.setTarget(plant);
-                org.setWandering(false);
-            } else if (org.isSearchWater()) {
-                //System.out.println("FINDING WATER ONLY");
-                if (org.getThirst() > 90) {
-                    goWithAFriend(org, friend);
-                    return;
-                }
-                org.setTarget(water);
-                org.setWandering(false);
-            } else {
-                org.setWandering(true);
-                org.setTarget(null);
-            }
-        } else {
-            if (org.isBeingChased()) {
-                org.setTarget(null);
-            }
-        }
-    }
-    
-    public Organism findNearestOrganism(Organism org){
-        Organism closestOrganism = null; 
-        double closestDistanceBetweenPredatorAndOrganism = 1000000;
-
-        //Organism(int x, int y, int width, int height, Game game, int skin, int id)
-        for(int i = 0; i < game.getOrganisms().getOrganismsAmount(); i++){
-            double distanceBetweenPredatorAndOrganism = 7072;
-
-                distanceBetweenPredatorAndOrganism = Math.sqrt(Math.pow(org.getX()-game.getOrganisms().getOrganism(i).getX(),2)
-                        + Math.pow(org.getY()-game.getOrganisms().getOrganism(i).getY(),2) );
-
-            
-            if(distanceBetweenPredatorAndOrganism<closestDistanceBetweenPredatorAndOrganism){
-                closestDistanceBetweenPredatorAndOrganism = distanceBetweenPredatorAndOrganism;
-                closestOrganism = game.getOrganisms().getOrganism(i);
-            }
-        }
-        /*
-        if (closestDistanceBetweenPredatorAndOrganism > 100){
-            return null;
-        }
-        */
-        
-        return closestOrganism;
-    }
-
-    /**
-     * Finds the nearest valid (not empty and not full) source of food
-     *
-     * @param org organism
-     * @return the closest food
-     */
-    public Resource findNearestValidFood(Organism org) {
-        Resource closestPlant = null;
-        double closestDistanceBetweenPlantAndOrganism = 1000000;
-
-        for (int i = 0; i < game.getResources().getPlantAmount(); i++) {
-            double distanceBetweenPlantAndOrganism = 7072;
-            if (!game.getResources().getPlant(i).isFull() && !game.getResources().getPlant(i).isOver()) {
-                distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX() - game.getResources().getPlant(i).getX(), 2)
-                        + Math.pow(org.getY() - game.getResources().getPlant(i).getY(), 2));
-            }
-
-            if (distanceBetweenPlantAndOrganism < closestDistanceBetweenPlantAndOrganism) {
-                closestDistanceBetweenPlantAndOrganism = distanceBetweenPlantAndOrganism;
-                closestPlant = game.getResources().getPlant(i);
-            }
-        }
-
-        return closestPlant;
-    }
-
-    /**
-     * Finds the nearest valid (not empty and not full) source of water
-     *
-     * @param org organism
-     * @return the closest water
-     */
-    public Resource findNearestValidWater(Organism org) {
-        Resource closestWater = null;
-        double closestDistanceBetweenWaterAndOrganism = 1000000;
-
-        for (int i = 0; i < game.getResources().getWaterAmount(); i++) {
-            double distanceBetweenPlantAndOrganism = 7072;
-            if (!game.getResources().getWater(i).isFull() && !game.getResources().getWater(i).isOver()) {
-                distanceBetweenPlantAndOrganism = Math.sqrt(Math.pow(org.getX() - game.getResources().getWater(i).getX(), 2)
-                        + Math.pow(org.getY() - game.getResources().getWater(i).getY(), 2));
-            }
-
-            if (distanceBetweenPlantAndOrganism < closestDistanceBetweenWaterAndOrganism) {
-                closestDistanceBetweenWaterAndOrganism = distanceBetweenPlantAndOrganism;
-                closestWater = game.getResources().getWater(i);
-            }
-        }
-
-        return closestWater;
-    }
-    
-    private void goWithAFriend(Organism org, Organism friend) {
-        int randX = SwarmMovement.generateRandomness(120);
-        int randY = SwarmMovement.generateRandomness(120);
-        org.setTarget(null);
-        org.setPoint(new Point(friend.getX() + randX, friend.getY() + randY));
-    }
-
-    /**
-     * Check if the organism has arrived to resource, if so, assign it to it
-     */
-    public void checkArrivalOnResource() {
-        for (int i = 0; i < organisms.size(); i++) {
-            Organism org = organisms.get(i);
-            Resource target = organisms.get(i).getTarget();
-            if (target != null) {
-                if (target.intersects(org)) {
-                    if (!target.isFull()) {
-                        if (!target.hasParasite(org)) {
-                            target.addParasite(org);
-                            //Check the resource type
-                            if (target.getType() == Resource.ResourceType.Plant) {
-                                org.setEating(true);
-                            } else {
-                                org.setDrinking(true);
-                            }
-                        } else {
-                            //System.out.println("ORG ALREADY IN TARGET");
-                            autoLookTarget(org);
-                        }
-                    } else {
-                        //System.out.println("TARGET FULL");
-                        autoLookTarget(org);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * empty the resource target for all organisms
      */
     public void emptyTargets() {
         for (int i = 0; i < organisms.size(); i++) {
             Organism org = organisms.get(i);
-            safeLeaveResource(org);
+            org.safeLeaveResource();
         }
     }
 
@@ -676,27 +378,8 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSelected()) {
                 Organism org = organisms.get(i);
-                safeLeaveResource(org);
+                org.safeLeaveResource();
             }
-        }
-    }
-
-    /**
-     * leave a resource safely, meaning, remove the organism parasite form the
-     * resource and set the target to null
-     *
-     * @param org organism
-     */
-    private void safeLeaveResource(Organism org) {
-        Resource target = org.getTarget();
-        if (target != null) {
-            if (target.hasParasite(org)) {
-                target.removeParasite(org, org.getId() + 5000);
-            }
-            
-            org.setEating(false);
-            org.setDrinking(false);
-            org.setTarget(null);
         }
     }
 
