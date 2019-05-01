@@ -36,11 +36,11 @@ public class Organism extends Item implements Commons {
     /**
      * These are the five evolutionary traits
      */
-    private int size;
     private int speed;
     private int strength;
     private int stealth;
     private int maxHealth;
+    private int intelligence;
 
     private double life;           //Health points of the organism
     private int hunger;         //hunger of the organism
@@ -109,11 +109,11 @@ public class Organism extends Item implements Commons {
         acc = 1;
         
         //Initialize stats
-        size = 0;
         speed = 0;
         strength = 0;
         stealth = 0;
         maxHealth = 0;
+        intelligence = 0;
                 
         updateStats();
         
@@ -291,11 +291,11 @@ public class Organism extends Item implements Commons {
             prevMatInc = (int) time.getSeconds();
 
             //Reproduction happen at these two points in maturity
-            if (maturity == 3) {
+            if (maturity == 120) {
                 needOffspring = true;
             }
 
-            if (maturity == 10) {
+            if (maturity == 150) {
                 needOffspring = true;
             }
             
@@ -303,7 +303,7 @@ public class Organism extends Item implements Commons {
 
         //Once the organisms reaches max maturity, kill it
         if (maturity >= MAX_MATURITY) {
-            //kill();
+            kill();
         }
         
         if (life <= 0) {
@@ -407,7 +407,6 @@ public class Organism extends Item implements Commons {
         Organism org = new Organism(x,y,width, height, game, skin, id);
         org.setPoint((Point) point.clone());
         org.setMaxVel(maxVel);
-        org.setSize(size);
         org.setSpeed(speed);
         org.setStealth(stealth);
         org.setStrength(strength);
@@ -789,14 +788,6 @@ public class Organism extends Item implements Commons {
     }
     
     /**
-     * to get the size
-     * @return size
-     */
-    public int getSize() {
-        return size;
-    }
-    
-    /**
      * to get the speed
      * @return speed
      */
@@ -826,6 +817,14 @@ public class Organism extends Item implements Commons {
      */
     public int getMaxHealth() {
         return maxHealth;
+    }
+    
+    /**
+     * to get intelligence
+     * @return 
+     */
+    public int getIntelligence() {
+        return intelligence;
     }
     
     /**
@@ -917,14 +916,6 @@ public class Organism extends Item implements Commons {
     }
 
     /**
-     * to set size
-     * @param size
-     */
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    /**
      * to set strength
      * @param strength
      */
@@ -938,6 +929,14 @@ public class Organism extends Item implements Commons {
      */
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
+    }
+    
+    /**
+     * to set intelligence
+     * @param intelligence 
+     */
+    public void setIntelligence(int intelligence) {
+        this.intelligence = intelligence;
     }
 
     /**

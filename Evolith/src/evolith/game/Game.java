@@ -209,7 +209,7 @@ public class Game implements Runnable, Commons {
      */
     private void playTick() {
         clock.tick();
-        camera.tick();
+        
         organisms.tick();
         resources.tick();
         predators.tick();
@@ -218,6 +218,10 @@ public class Game implements Runnable, Commons {
         selection.tick();
         
         keyManager.tick();
+        
+        if (!organisms.getOrgPanel().isInputActive()) {
+            camera.tick();
+        }
 
         manageMouse();
         manageKeyboard();
