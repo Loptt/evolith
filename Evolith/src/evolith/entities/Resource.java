@@ -15,6 +15,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +36,7 @@ public class Resource extends Item implements Commons{
     private boolean over;
     private int parasiteAmount;
     private int predatorAmount;
-    private final ArrayList<Point> positions;
+    private ArrayList<Point> positions;
     private HashMap<Organism, Integer> map;
     private Time time;
 
@@ -64,6 +66,10 @@ public class Resource extends Item implements Commons{
         this.type = type;
         
         predator = null;
+    }
+    
+    public void updatePositions() {
+        positions = SwarmMovement.getPositions(x + PLANT_SIZE / 2, y + PLANT_SIZE / 2, 6, 1);
     }
     
     public void addParasite(Organism org) {
@@ -113,6 +119,17 @@ public class Resource extends Item implements Commons{
         
         //Type
         pw.println(Integer.toString(type == ResourceType.Plant ? 1 : 0));
+    }
+    
+    public void load(BufferedReader br) throws IOException {
+        x = Integer.parseInt(br.readLine());
+        y = Integer.parseInt(br.readLine());
+        
+        updatePositions();
+        
+        quantity = Integer.parseInt(br.readLine());
+        
+        int b = Integer.parseInt(br.readLine());
     }
     
     public void removeParasites() {

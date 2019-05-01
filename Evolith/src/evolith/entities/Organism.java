@@ -14,6 +14,8 @@ import evolith.helpers.Time;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
@@ -152,6 +154,7 @@ public class Organism extends Item implements Commons {
         needMutation = false;
         
         pred = null;
+        target = null;
     }
     
         
@@ -384,6 +387,30 @@ public class Organism extends Item implements Commons {
         setStealth(currStealth > 0 ? currStealth : 0);
         
         updateStats();
+    }
+    
+    public void updateMutations() {
+        for (int i = 0; i < orgMutations.getMutations().size(); i++) {
+            int newStr = 0;
+            int newSpeed = 0;
+            int newHealth = 0;
+            int newStealth = 0;
+            
+            for (int j = 0; j < orgMutations.getMutations().get(i).size(); j++) {
+                newStr += orgMutations.getMutations().get(i).get(j).getStrength();
+                newSpeed += orgMutations.getMutations().get(i).get(j).getSpeed();
+                newHealth += orgMutations.getMutations().get(i).get(j).getMaxHealth();
+                newStealth += orgMutations.getMutations().get(i).get(j).getStealth();
+                
+                if (orgMutations.getMutations().get(i).get(j).isActive()) {
+                    strength = newStr;
+                    speed = newSpeed;
+                    maxHealth = newHealth;
+                    stealth = newStealth;
+                    break;
+                }
+            }
+        }
     }
     
     private void updateStats() {
@@ -710,11 +737,18 @@ public class Organism extends Item implements Commons {
     }
     
     public void save(PrintWriter pw) {
+        //Save id
+        pw.println(Integer.toString(id));
+        
         //Save position and speed
         pw.println(Integer.toString(x));
         pw.println(Integer.toString(y));
         pw.println(Integer.toString(xVel));
         pw.println(Integer.toString(yVel));
+        
+        //save point
+        pw.println(Integer.toString(point.x));
+        pw.println(Integer.toString(point.y));
 
         //Save vitals
         pw.println(Integer.toString((int) life));
@@ -726,6 +760,9 @@ public class Organism extends Item implements Commons {
         pw.println(Integer.toString(searchFood ? 1 : 0));
         pw.println(Integer.toString(searchWater ? 1 : 0));
         pw.println(Integer.toString(aggressive ? 1 : 0));
+        
+        //Egg state
+        pw.println(Integer.toString(egg ? 1 : 0));
 
         //Save generation and time
         pw.println(Integer.toString(generation));
@@ -733,6 +770,40 @@ public class Organism extends Item implements Commons {
         
         //Save mutations
         orgMutations.save(pw);
+    }
+    
+    public void load(BufferedReader br) throws IOException {
+        id = Integer.parseInt(br.readLine());
+        
+        x = Integer.parseInt(br.readLine());
+        y = Integer.parseInt(br.readLine());
+        
+        xVel = Integer.parseInt(br.readLine());
+        yVel = Integer.parseInt(br.readLine());
+        
+        int px = Integer.parseInt(br.readLine());
+        int py = Integer.parseInt(br.readLine());
+        
+        point = new Point(px, py);
+        
+        life = Integer.parseInt(br.readLine());
+        hunger = Integer.parseInt(br.readLine());
+        thirst = Integer.parseInt(br.readLine());
+        maturity = Integer.parseInt(br.readLine());
+        
+        searchFood = Integer.parseInt(br.readLine()) == 1;
+        searchWater = Integer.parseInt(br.readLine()) == 1;
+        aggressive = Integer.parseInt(br.readLine()) == 1;
+        
+        egg = Integer.parseInt(br.readLine()) == 1;
+        
+        generation = Integer.parseInt(br.readLine());
+        time.setTicker(Integer.parseInt(br.readLine()));
+        
+        orgMutations.load(br);
+        
+        updateMutations();
+        updateStats();
     }
 
     /**

@@ -14,6 +14,8 @@ import evolith.helpers.Time;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
@@ -534,15 +536,41 @@ public class Predator extends Item implements Commons {
     }
     
     public void save(PrintWriter pw) {
+        pw.println(Integer.toString(id));
+        
         //Save positions
         pw.println(Integer.toString(x));
         pw.println(Integer.toString(y));
         pw.println(Integer.toString((int) xVel));
         pw.println(Integer.toString((int) yVel));
         
+        pw.println(Integer.toString(width));
+        pw.println(Integer.toString(absMaxVel));
+        pw.println(Double.toString(damage));
+        pw.println(Integer.toString(maxHealth));
+        
         //Save vitals
         pw.println(Integer.toString((int) life));
         pw.println(Integer.toString((int) stamina));
+    }
+    
+    public void load(BufferedReader br) throws IOException {
+        id = Integer.parseInt(br.readLine());
+        
+        x = Integer.parseInt(br.readLine());
+        y = Integer.parseInt(br.readLine());
+        xVel = Integer.parseInt(br.readLine());
+        yVel = Integer.parseInt(br.readLine());
+        
+        width = Integer.parseInt(br.readLine());
+        height = width;
+        
+        absMaxVel = Integer.parseInt(br.readLine());
+        damage = Double.parseDouble(br.readLine());
+        maxHealth = Integer.parseInt(br.readLine());
+        
+        life = Integer.parseInt(br.readLine());
+        stamina = Integer.parseInt(br.readLine());
     }
 
     /**

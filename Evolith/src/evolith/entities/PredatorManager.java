@@ -5,6 +5,8 @@ import evolith.helpers.Commons;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -181,6 +183,16 @@ public class PredatorManager implements Commons {
         
         for (int i = 0; i < predators.size(); i++) {
             predators.get(i).save(pw);
+        }
+    }
+    
+    public void load(BufferedReader br) throws IOException {
+        int am = Integer.parseInt(br.readLine());
+        predators.clear();
+        
+        for (int i = 0; i < am; i++) {
+            predators.add(new Predator(0,0,PREDATOR_SIZE, PREDATOR_SIZE, game, 0));
+            predators.get(i).load(br);
         }
     }
     

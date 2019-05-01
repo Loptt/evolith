@@ -286,8 +286,15 @@ public class Game implements Runnable, Commons {
         }
         
         if (keyManager.p) {
-            saveGame();
             state = States.Paused;
+        }
+        
+        if (keyManager.g) {
+            saveGame();
+        }
+        
+        if (keyManager.c) {
+            loadGame();
         }
         
         if (keyManager.num1) {
@@ -543,6 +550,10 @@ public class Game implements Runnable, Commons {
             clock.setTicker(Integer.parseInt(br.readLine()));
             
             organisms.load(br);
+            
+            resources.load(br);
+            
+            predators.load(br);
 
            
         } catch (IOException e) {
