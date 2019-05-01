@@ -411,6 +411,7 @@ public class Organism extends Item implements Commons {
         org.setStealth(stealth);
         org.setStrength(strength);
         org.setMaxHealth(maxHealth);
+        org.setIntelligence(intelligence);
         org.setLife(maxHealth*2+60);
         org.setGeneration(generation+1);
         
@@ -458,7 +459,7 @@ public class Organism extends Item implements Commons {
             Predator p = predators.getPredator(j);
 
             //If predator is in the range of the organism
-            if (SwarmMovement.distanceBetweenTwoPoints(x, y, p.getX(), p.getY()) < stealthRange) {
+            if (SwarmMovement.distanceBetweenTwoPoints(x, y, p.getX(), p.getY()) < MAX_SIGHT_DISTANCE) {
                 safeLeaveResource();
                 beingChased = true;
                 pred = p;

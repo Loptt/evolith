@@ -314,6 +314,7 @@ public class OrganismManager implements Commons {
         organisms.add(offspring);
         offspring.setSearchFood(org.isSearchFood());
         offspring.setSearchWater(org.isSearchWater());
+        offspring.setIntelligence(offspring.getIntelligence() + 5);
         org.setNeedOffspring(false);
         
     }
@@ -440,6 +441,16 @@ public class OrganismManager implements Commons {
             }
         }
 
+        return false;
+    }
+    
+    public boolean isMaxIntelligence() {
+        for (int i = 0; i < organisms.size(); i++) {
+            if (organisms.get(i).getIntelligence() >= MAX_INTELLIGENCE) {
+                return true;
+            }
+        }
+        
         return false;
     }
 
