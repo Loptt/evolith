@@ -10,6 +10,8 @@ import java.awt.Color;
  * @author Moisés Fernández
  */
 public interface Commons {
+    public static final int MAX_INTELLIGENCE = 1000;        //This marks the end of a game
+    
     public static final int ORGANISM_SIZE_STAT = 20;            // organism size
     public static final int MAX_ORGANISM_AMOUNT = 256;      // maximum organism amount
     public static final int PLANT_SIZE = 100;               // plant quanitity per unit
