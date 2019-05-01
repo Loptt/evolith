@@ -9,7 +9,6 @@ import evolith.engine.Assets;
 import evolith.game.Game;
 import evolith.game.Item;
 import evolith.helpers.Commons;
-import static evolith.helpers.Commons.MAX_SIGHT_DISTANCE;
 import evolith.helpers.SwarmMovement;
 import evolith.helpers.Time;
 import java.awt.Color;
