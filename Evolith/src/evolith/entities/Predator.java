@@ -14,6 +14,7 @@ import evolith.helpers.Time;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.PrintWriter;
 
 /**
  *
@@ -530,6 +531,18 @@ public class Predator extends Item implements Commons {
      */
     public void kill() {
         dead = true;
+    }
+    
+    public void save(PrintWriter pw) {
+        //Save positions
+        pw.println(Integer.toString(x));
+        pw.println(Integer.toString(y));
+        pw.println(Integer.toString((int) xVel));
+        pw.println(Integer.toString((int) yVel));
+        
+        //Save vitals
+        pw.println(Integer.toString((int) life));
+        pw.println(Integer.toString((int) stamina));
     }
 
     /**

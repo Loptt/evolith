@@ -14,6 +14,7 @@ import evolith.helpers.Time;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.PrintWriter;
 
 /**
  *
@@ -254,6 +255,8 @@ public class Organism extends Item implements Commons {
             if (life <= 0) {
                 dead = true;
             }
+            
+            return;
         }
         
         if (time.getSeconds() >= prevHungerRed + SECONDS_PER_HUNGER && !eating) {
@@ -704,6 +707,32 @@ public class Organism extends Item implements Commons {
         */
         
         return closestOrganism;
+    }
+    
+    public void save(PrintWriter pw) {
+        //Save position and speed
+        pw.println(Integer.toString(x));
+        pw.println(Integer.toString(y));
+        pw.println(Integer.toString(xVel));
+        pw.println(Integer.toString(yVel));
+
+        //Save vitals
+        pw.println(Integer.toString((int) life));
+        pw.println(Integer.toString((int) hunger));
+        pw.println(Integer.toString((int) thirst));
+        pw.println(Integer.toString(maturity));
+
+        //Save Activities
+        pw.println(Integer.toString(searchFood ? 1 : 0));
+        pw.println(Integer.toString(searchWater ? 1 : 0));
+        pw.println(Integer.toString(aggressive ? 1 : 0));
+
+        //Save generation and time
+        pw.println(Integer.toString(generation));
+        pw.println(Integer.toString(time.getTicker()));
+        
+        //Save mutations
+        orgMutations.save(pw);
     }
 
     /**

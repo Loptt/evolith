@@ -5,6 +5,7 @@ import evolith.helpers.Commons;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -172,6 +173,14 @@ public class PredatorManager implements Commons {
         if (pred.isDead()) {
             predators.remove(pred);
             amount--;
+        }
+    }
+    
+    public void save(PrintWriter pw) {
+        pw.println(Integer.toString(predators.size()));
+        
+        for (int i = 0; i < predators.size(); i++) {
+            predators.get(i).save(pw);
         }
     }
     

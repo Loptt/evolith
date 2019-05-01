@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.*;
@@ -100,6 +101,18 @@ public class Resource extends Item implements Commons{
         }
         
         //System.out.println("END OF REMOVEPAR FUNCTION:  ID:   " + i);
+    }
+    
+    public void save(PrintWriter pw) {
+        //Save positions
+        pw.println(Integer.toString(x));
+        pw.println(Integer.toString(y));
+        
+        //Quantity
+        pw.println(Integer.toString(quantity));
+        
+        //Type
+        pw.println(Integer.toString(type == ResourceType.Plant ? 1 : 0));
     }
     
     public void removeParasites() {

@@ -10,6 +10,7 @@ import evolith.game.Game;
 import evolith.helpers.Commons;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
@@ -64,6 +65,15 @@ public class MutationManager implements Commons{
 
     public ArrayList<ArrayList<Mutation>> getMutations() {
         return mutations;
+    }
+    
+    public void save(PrintWriter pw) {
+        //Save the state of each mutation
+        for (int i = 0; i < mutations.size(); i++) {
+            for (int j = 0; j < mutations.get(i).size(); j++) {
+                pw.println(Integer.toString(mutations.get(i).get(j).isActive() ? 1 : 0));
+            }
+        }
     }
 
     /*

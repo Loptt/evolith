@@ -26,6 +26,14 @@ public class Clock extends Item implements Commons {
         super(x, y, width, height);
         this.time = new Time();
     }
+    
+    public int getTicker() {
+        return time.getTicker();
+    }
+    
+    public void setTicker(int tick) {
+        time.setTicker(tick);
+    }
 
     /**
      * To tick the ticker per number of frames

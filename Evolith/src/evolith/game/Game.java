@@ -18,6 +18,11 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -281,6 +286,7 @@ public class Game implements Runnable, Commons {
         }
         
         if (keyManager.p) {
+            saveGame();
             state = States.Paused;
         }
         
@@ -491,7 +497,33 @@ public class Game implements Runnable, Commons {
      * order
      */
     private void saveGame() {
-        
+        try {
+            //Open text file
+            PrintWriter pw = new PrintWriter(new FileWriter("game.txt"));
+            
+            //Save camera position
+            pw.println(Integer.toString(camera.getX()));
+            pw.println(Integer.toString(camera.getY()));
+            
+            //Save time
+            pw.println(Integer.toString(clock.getTicker()));
+            
+            //Save organisms
+            organisms.save(pw);
+            
+            //Save resources
+            resources.save(pw);
+            
+            //Save predators
+            predators.save(pw);
+            
+            pw.close();
+            
+            System.out.println("SAVED!");
+        } catch(IOException e) {
+            System.out.println("BEEP BEEP");
+            System.out.println(e.toString());
+        }
     }
 
     /**
@@ -499,6 +531,24 @@ public class Game implements Runnable, Commons {
      * reads its contents and assigns them to their designated variables
      */
     private void loadGame() {
+        try {
+            //Open file to load game
+            BufferedReader br = new BufferedReader(new FileReader("game.txt"));
+            
+            //Load camera positions
+            camera.setX(Integer.parseInt(br.readLine()));
+            camera.setY(Integer.parseInt(br.readLine()));
+            
+            //Load time
+            clock.setTicker(Integer.parseInt(br.readLine()));
+            
+            organisms.load(br);
+
+           
+        } catch (IOException e) {
+            System.out.println("BEEP BEEP");
+            System.out.println(e.toString());
+        }
     }
 
     public void resetGame() {

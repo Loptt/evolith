@@ -11,6 +11,7 @@ import evolith.menus.OrganismPanel;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -452,6 +453,16 @@ public class OrganismManager implements Commons {
         }
         
         return false;
+    }
+    
+    public void save(PrintWriter pw) {
+        //Save amount
+        pw.println(Integer.toString(organisms.size()));
+        
+        //Save each organism
+        for (int i = 0; i < organisms.size(); i++) {
+            organisms.get(i).save(pw);
+        }
     }
 
     /**

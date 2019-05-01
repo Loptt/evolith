@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -156,6 +157,18 @@ public class ResourceManager implements Commons {
         for (int i = 0; i < waters.size()-1; i++) {
             waters.get(i).removeParasites();
         } 
+    }
+    
+    public void save(PrintWriter pw) {
+        pw.println(Integer.toString(plants.size()));
+        for (int i = 0; i < plants.size(); i++) {
+            plants.get(i).save(pw);
+        }
+        
+        pw.println(Integer.toString(waters.size()));
+        for (int i = 0; i < waters.size(); i++) {
+            waters.get(i).save(pw);
+        }
     }
     
     public int getPlantAmount() {
