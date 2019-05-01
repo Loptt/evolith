@@ -90,7 +90,7 @@ public class Game implements Runnable, Commons {
         inputKeyboard = new InputKeyboard();
         minimap = new Minimap(MINIMAP_X, MINIMAP_Y, MINIMAP_WIDTH, MINIMAP_HEIGHT, this);
 
-        state = States.MainMenu;
+        state = States.Play;
         selection = new Selection(this);
 
         night = false;

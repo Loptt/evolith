@@ -298,30 +298,36 @@ public class OrganismPanel extends Menu implements Commons {
         organism.setY(prevY);
 
         g.drawImage(Assets.organismPanel_close, x + width - 20, y - 20, BUTTON_CLOSE_DIMENSION, BUTTON_CLOSE_DIMENSION, null);
-        //Stealth
-        g.setColor(Color.ORANGE);
-        g.fillRect(x + 473, y + 113, (int) 68 * organism.getSpeed() / MAX_SPEED, 20);
-        //Max Health
+        
         g.setColor(Color.CYAN);
-        g.fillRect(x + 474, y + 165, (int) 68 * organism.getSize() / MAX_SIZE, 20);
-        //maturity
-        g.setColor(Color.YELLOW);
-        g.fillRect(x + 474, y + 219, (int) 68 * organism.getStrength() / MAX_STRENGTH, 20);
-        //speed
-        g.setColor(Color.MAGENTA);
-        g.fillRect(x + 369, y + 113, (int) 68 * organism.getStealth() / MAX_STEALTH, 20);
-        //size
-        g.setColor(Color.WHITE);
-        g.fillRect(x + 369, y + 165, (int) 68 * organism.getMaxHealth() / MAX_SIZE, 20);
+        //Speed
+        //g.setColor(Color.ORANGE);
+        g.fillRect(x + 464, y + 97, (int) 68 * organism.getSpeed() / MAX_SPEED, 20);
+        //Max Health
+        //g.setColor(Color.CYAN);
+        g.fillRect(x + 464, y + 146, (int) 68 * organism.getMaxHealth()/ MAX_SIZE, 20);
         //strength
+        //g.setColor(Color.YELLOW);
+        g.fillRect(x + 464, y + 197, (int) 68 * organism.getStrength() / MAX_STRENGTH, 20);
+        //Stealth
+       // g.setColor(Color.MAGENTA);
+        g.fillRect(x + 369, y + 97, (int) 68 * organism.getStealth() / MAX_STEALTH, 20);
+        //size
+        //g.setColor(Color.WHITE);
+        g.fillRect(x + 369, y + 146, (int) 68 * organism.getMaxHealth() / MAX_SIZE, 20);
+        //maturity
         g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(x + 369, y + 219, (int) 68 * organism.getMaturity() / MAX_MATURITY, 20);
-
+        g.fillRect(x + 369, y + 197, (int) 68 * organism.getMaturity() / MAX_MATURITY, 20);
+        
+        //intelligence
+        g.setColor(new Color(255,215,0));
+        g.fillRect(x + 375, y + 244, (int) 151 * organism.getIntelligence() / MAX_INTELLIGENCE, 19);
+        
         // Edit
         g.setColor(Color.WHITE);
         g.setFont(fontEvolve);
-        g.drawString(Integer.toString(organism.getGeneration()), x + 474, y + 270);
-        g.drawString(Double.toString(organism.getTime().getSeconds()), x + 458, y + 294);
+        g.drawString(Integer.toString(organism.getGeneration()), x + 474, y + 286);
+        g.drawString(Double.toString(organism.getTime().getSeconds()), x + 458, y + 313);
 
         g.setColor(Color.WHITE);
         g.setFont(fontEvolve);
