@@ -94,6 +94,8 @@ public class OrganismPanel extends Menu implements Commons {
         buttons.add(new Button(this.x - 100, this.y + PANEL_HEIGHT / 2, 50, 50, Assets.prevArrow));
         // Reproduce button 
         buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 400, 300, 75, Assets.organismPanel_reproduceButton_ON, Assets.organismPanel_reproduceButton_OFF));
+        //Name button
+        buttons.add(new Button(this.x + 120, this.y + 305, 183, 24));
 
         if (this.organism.getName() != null || this.organism.getName() != "") {
             inputReader = new InputReader(this.organism.getName(), game);
@@ -157,20 +159,6 @@ public class OrganismPanel extends Menu implements Commons {
             return;
         }
 
-        timeOpen++;
-        if (this.organism.getName() != null || this.organism.getName() != "") {
-            inputReader = new InputReader(this.organism.getName(), game);
-        } else {
-            inputReader = new InputReader(game);
-        }
-        if (game.getG().getFontMetrics().stringWidth(inputReader.getSpeciesName()) > 150) {
-            inputReader.setOnlyDelete(true);
-        } else {
-            inputReader.setOnlyDelete(false);
-        }
-
-        inputReader.readInput();
-
         organism.setName(inputReader.getSpeciesName());
         //Checks the mouse positon relative to the button
         for (int i = 0; i < buttons.size(); i++) {
@@ -181,47 +169,74 @@ public class OrganismPanel extends Menu implements Commons {
                 if (game.getMouseManager().isLeft()) {
                     //Sets the button to the pressed status
                     buttons.get(i).setPressed(true);
+                    for (int j = 0; j < buttons.size(); j++) {
+                        if (i != j) {
+                            buttons.get(j).setPressed(false);
+                        }
+                    }
                     //Turns off mouse 
                     game.getMouseManager().setLeft(false);
+                    break;
                 }
             } else {
                 //Sets the button to false if the button is hovered
                 buttons.get(i).setActive(false);
             }
-            //Closes the 
-            if (buttons.get(0).isPressed()) {
-                active = false;
+        }
+        
+        //Closes the 
+        if (buttons.get(0).isPressed()) {
+            active = false;
+        }
+        //next
+        if (buttons.get(2).isPressed()) {
+            if (searchNext) {
+                buttons.get(2).setPressed(false);
+            } else {
+                searchNext = true;
             }
-            //next
-            if (buttons.get(2).isPressed()) {
-                if (searchNext) {
-                    buttons.get(2).setPressed(false);
-                } else {
-                    searchNext = true;
-                }
+        }
+        //prev
+        if (buttons.get(3).isPressed()) {
+            if (searchPrev) {
+                buttons.get(3).setPressed(false);
+            } else {
+                searchPrev = true;
             }
-            //prev
-            if (buttons.get(3).isPressed()) {
-                if (searchPrev) {
-                    buttons.get(3).setPressed(false);
-                } else {
-                    searchPrev = true;
-                }
-            }
-            //reproduce
-            if (buttons.get(4).isPressed() && organism.isNeedOffspring()) {
+        }
+        //reproduce
+        if (buttons.get(4).isPressed() && organism.isNeedOffspring()) {
 
-                if (reproduce) {
-                    buttons.get(4).setPressed(false);
-                    reproduce = false;
-                } else {
-                    reproduce = true;
-                    buttons.get(4).setPressed(true);
-                }
-                
-                active = false;
+            if (reproduce) {
+                buttons.get(4).setPressed(false);
+                reproduce = false;
+            } else {
+                reproduce = true;
+                buttons.get(4).setPressed(true);
             }
 
+            active = false;
+        }
+        
+        if (game.getMouseManager().isLeft()) {
+            buttons.get(5).setPressed(false);
+            game.getMouseManager().setLeft(false);
+        }
+
+        if (buttons.get(5).isPressed()) {
+            timeOpen++;
+            if (this.organism.getName() != null || this.organism.getName() != "") {
+                inputReader = new InputReader(this.organism.getName(), game);
+            } else {
+                inputReader = new InputReader(game);
+            }
+            if (game.getG().getFontMetrics().stringWidth(inputReader.getSpeciesName()) > 200) {
+                inputReader.setOnlyDelete(true);
+            } else {
+                inputReader.setOnlyDelete(false);
+            }
+
+            inputReader.readInput();
         }
     }
 
@@ -345,11 +360,11 @@ public class OrganismPanel extends Menu implements Commons {
 
             tickToWrite = !tickToWrite;
         }
-        g.drawString(organism.getName(), x + 70, y + height-50);
+        g.drawString(organism.getName(), x + 125, y + height-45);
         int width = g.getFontMetrics().stringWidth(organism.getName());
 
-        if (tickToWrite && !inputReader.isOnlyDelete()) {
-            g.drawString("l", x + 80 + width, y + height - 50);
+        if (tickToWrite && !inputReader.isOnlyDelete() && buttons.get(5).isPressed()) {
+            g.drawString("l", x + 125 + width, y + height - 45);
         }
 
     }
