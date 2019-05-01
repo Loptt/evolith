@@ -40,6 +40,7 @@ public class Game implements Runnable, Commons {
     private KeyManager keyManager;              // manages the keyboard 
     private MouseManager mouseManager;          // manages the mouse
     private InputKeyboard inputKeyboard;        // manages the input of the keyboard of the setup menu
+    private MusicManager musicManager;
 
     private Background background;              // background of the game engine
     private Camera camera;                      // camera of the game engine
@@ -136,6 +137,7 @@ public class Game implements Runnable, Commons {
         buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
         setupMenu = new SetupMenu(0, 0, width, height, this);
         pauseMenu = new PauseMenu(width / 2 - 250 / 2, height / 2 - 300 / 2, 250, 300, this);
+        musicManager = new MusicManager();
         //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
         organisms = new OrganismManager(this);
         predators = new PredatorManager(this);
@@ -199,6 +201,7 @@ public class Game implements Runnable, Commons {
             organisms.setSpeciesName(setupMenu.getName());
             organisms.setSkin(setupMenu.getOption());
             state = States.Play;
+            musicManager.play();
         }
     }
 
@@ -216,6 +219,7 @@ public class Game implements Runnable, Commons {
         selection.tick();
         
         keyManager.tick();
+        musicManager.tick();
 
         manageMouse();
         manageKeyboard();
