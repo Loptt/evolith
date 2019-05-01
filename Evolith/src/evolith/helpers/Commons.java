@@ -20,7 +20,7 @@ public interface Commons {
 
     public static final int MAX_THIRST = 100;               // maximum water level of organism
     public static final int MAX_HUNGER = 100;               // maximum hunger level of organism
-    public static final int MAX_MATURITY = 100;              // maximum maturity level of organism
+    public static final int MAX_MATURITY = 180;              // maximum maturity level of organism
     public static final int MAX_SPEED = 100;              // maximum maturity level of organism
     public static final int MAX_SIZE = 100;              // maximum maturity level of organism
     public static final int MAX_STRENGTH = 100;              // maximum maturity level of organism
@@ -33,7 +33,7 @@ public interface Commons {
     
     public static final int PLANTS_AMOUNT = 50;              // number of plants
     public static final int WATERS_AMOUNT = 50;
-    public static final int PREDATORS_AMOUNT = 6;
+    public static final int PREDATORS_AMOUNT = 4;
     public static final int WATER_SIZE = 100;
     public static final int SWARM_SEPARATION = ORGANISM_SIZE_STAT+30;
     
@@ -92,5 +92,5 @@ public interface Commons {
     public static final int PREDATOR_SECONDS_IN_RESOURCE = 7;
     public static final int PREDATOR_SECONDS_TO_ROAM = 10;
     
-    public static final int BORN_TIME = 1;
+    public static final int BORN_TIME = 20;
 }
