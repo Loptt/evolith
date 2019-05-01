@@ -8,6 +8,7 @@ package evolith.game;
 import evolith.engine.Assets;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  *
@@ -19,9 +20,10 @@ import java.awt.image.BufferedImage;
 public class Weather {
     
     private enum State {
-        Clear, Rain, Hail, Snow, Dry, Storm
+        Clear, Dry, Rain, Hail, Snow, Storm
     }
     private State state;
+    private ArrayList<ArrayList<State>>states;
     
     //private BufferedImage imageClear;
     private BufferedImage imageRain;
@@ -29,13 +31,13 @@ public class Weather {
     private BufferedImage imageDry;
     private BufferedImage imageStorm;
     
+    
     private WeatherInstance clear = new WeatherInstance(imageRain, imageRain, 0, true);
     private WeatherInstance rain = new WeatherInstance(imageRain, imageRain, 0, false);
     private WeatherInstance dry = new WeatherInstance(imageDry, imageDry, 0, false);
     
-    private int cameraWidth, cameraHeight;
     private int width, height;
-    private boolean night;
+
 
     /**
      *
@@ -45,11 +47,24 @@ public class Weather {
      * @param cameraWidth
      * @param cameraHeight
      */
-    public Weather(int width, int height, int cameraWidth, int cameraHeight) {
+    public Weather(int width, int height) {
         this.width = width;
         this.height = height;
-        this.cameraWidth = cameraWidth;
-        this.cameraHeight = cameraHeight;
+        
+        //Clear
+        states.get(0).add(State.Clear);
+        states.get(0).add(State.Rain);
+        states.get(0).add(State.Dry);
+        states.get(0).add(State.Hail);
+        
+        //Dry
+        states.get(1).add(State.Dry);
+        states.get(1).add(State.Rain);
+        
+        //Rain
+        states.get(2).add(State.Rain);
+        states.get(2).add(State.Clear);
+        states.get(2).add(State.Storm);
     }
 
     /**
@@ -77,10 +92,13 @@ public class Weather {
     public int getHeight() {
         return height;
     }
-    
 
-    public void setNight(boolean night) {
-        this.night = night;
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public State getState() {
+        return state;
     }
     
     public void render(Graphics g){
