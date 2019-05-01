@@ -28,6 +28,10 @@ public class Weather {
     private BufferedImage imageSnow;
     private BufferedImage imageDry;
     private BufferedImage imageStorm;
+    
+    private WeatherInstance clear = new WeatherInstance(imageRain, imageRain, 0, true);
+    private WeatherInstance rain = new WeatherInstance(imageRain, imageRain, 0, false);
+    private WeatherInstance dry = new WeatherInstance(imageDry, imageDry, 0, false);
 
     
 
@@ -57,13 +61,6 @@ public class Weather {
      * @param y
      * @return
      */
-    public BufferedImage getBackground(int x, int y) {
-        if (!night) { 
-            return imageDay.getSubimage(x, y, cameraWidth, cameraHeight);
-        } else {
-            return imageNight.getSubimage(x, y, cameraWidth, cameraHeight);
-        }
-    }
 
     /**
      * To get the width of the background
@@ -83,13 +80,6 @@ public class Weather {
         return height;
     }
     
-    public BufferedImage getCurrentFullBackground() {
-        if (!night) {
-            return imageDay;
-        } else {
-            return imageNight;
-        }
-    }
 
     public void setNight(boolean night) {
         this.night = night;
