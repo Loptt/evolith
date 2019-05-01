@@ -312,6 +312,8 @@ public class OrganismManager implements Commons {
         offspring.setId(idCounter + 1);
         idCounter++;
         organisms.add(offspring);
+        offspring.setSearchFood(org.isSearchFood());
+        offspring.setSearchWater(org.isSearchWater());
         org.setNeedOffspring(false);
         
     }

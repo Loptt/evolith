@@ -37,8 +37,8 @@ public interface Commons {
     public static final int WATER_SIZE = 100;
     public static final int SWARM_SEPARATION = ORGANISM_SIZE_STAT+30;
     
-    public static final int SECONDS_PER_HUNGER = 3;
-    public static final int SECONDS_PER_THIRST = 3;
+    public static final int SECONDS_PER_HUNGER = 5;
+    public static final int SECONDS_PER_THIRST = 5;
     public static final int SECONDS_PER_MATURITY = 1;
     
     public static final int BUTTON_PLAY_X = 340;
