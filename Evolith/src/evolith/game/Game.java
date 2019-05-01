@@ -1,7 +1,5 @@
 package evolith.game;
 
-import evolith.database.ConnectionMySql;
-import evolith.database.PlayerDB;
 import evolith.menus.MainMenu;
 import evolith.menus.SetupMenu;
 import evolith.menus.ButtonBarMenu;
@@ -14,8 +12,8 @@ import evolith.engine.*;
 import evolith.entities.Resource;
 import evolith.helpers.InputReader;
 import evolith.helpers.Selection;
+import evolith.menus.PauseMenu;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.io.BufferedReader;
@@ -68,6 +66,7 @@ public class Game implements Runnable, Commons {
     private MainMenu mainMenu;                  // main menu
     private ButtonBarMenu buttonBar;
     private SetupMenu setupMenu;
+    private PauseMenu pauseMenu;
 
     private Clock clock;                        // the time of the game
     private InputReader inputReader;            //To read text from keyboard
@@ -145,6 +144,7 @@ public class Game implements Runnable, Commons {
         background = new Background(5000, 5000, width, height);
         buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
         setupMenu = new SetupMenu(0, 0, width, height, this);
+        pauseMenu = new PauseMenu(width / 2 - 250 / 2, height / 2 - 300 / 2, 250, 300, this);
         //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
         organisms = new OrganismManager(this);
         predators = new PredatorManager(this);
@@ -245,6 +245,7 @@ public class Game implements Runnable, Commons {
     }
     
     private void pausedTick() {
+        pauseMenu.tick();
         keyManager.tick();
         
         if (keyManager.p) {
@@ -252,6 +253,10 @@ public class Game implements Runnable, Commons {
         }
         
         if (keyManager.esc) {
+            state = States.Play;
+        }
+        
+        if (!pauseMenu.isMainMenuDisplayed()) {
             state = States.Play;
         }
     }
@@ -286,6 +291,7 @@ public class Game implements Runnable, Commons {
         }
         
         if (keyManager.p) {
+            pauseMenu.setMainMenuDisplayed(true);
             state = States.Paused;
         }
         
@@ -435,7 +441,30 @@ public class Game implements Runnable, Commons {
                     setupMenu.render(g);
                     break;
                 case Paused:
-                    g.drawString("PAUSED", 100, 100);
+                    g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
+
+                    resources.render(g);
+                    organisms.render(g);
+                    predators.render(g);
+
+                    if (night) {
+                        g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
+                    }
+                    minimap.render(g);
+                    buttonBar.render(g);
+
+                    if (selection.isActive()) {
+                        selection.render(g);
+                    }
+
+                    if (organisms.isOrgPanelActive()) {
+                        organisms.getOrgPanel().render(g);
+                    } else if (organisms.isMutPanelActive()) {
+                        organisms.getMutPanel().render(g);
+                    }
+                    
+                    pauseMenu.render(g);
+                    break;
                 case Play:
                     g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
 

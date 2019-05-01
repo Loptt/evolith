@@ -71,11 +71,33 @@ public class Assets {
     
     public static BufferedImage glow;
     public static BufferedImage egg;
+    
+    // Pause Menu
+    public static BufferedImage PMLoadButtonOff;
+    public static BufferedImage PMLoadButtonOn;
+    public static BufferedImage PMMainMenuButtonOff;
+    public static BufferedImage PMMainMenuButtonOn;
+    public static BufferedImage PMPauseMenu;
+    public static BufferedImage PMResumeButtonOff;
+    public static BufferedImage PMResumeButtonOn;
+    public static BufferedImage PMSaveButtonOff;
+    public static BufferedImage PMSaveButtonOn;
 
     /**
-     * Initalizes the assets and links to the image folder
+     * Initializes the assets and links to the image folder
      */
     public static void init() {
+        // Pause Menu
+        PMLoadButtonOff = ImageLoader.loadImage("/images/pausemenu/loadbutton.png");
+        PMLoadButtonOn = ImageLoader.loadImage("/images/pausemenu/loadbuttonon.png");
+        PMMainMenuButtonOff = ImageLoader.loadImage("/images/pausemenu/mainmenubutton.png");
+        PMMainMenuButtonOn = ImageLoader.loadImage("/images/pausemenu/mainmenubuttonon.png");
+        PMPauseMenu = ImageLoader.loadImage("/images/pausemenu/pausemenu.png");
+        PMResumeButtonOff = ImageLoader.loadImage("/images/pausemenu/resumebutton.png");
+        PMResumeButtonOn = ImageLoader.loadImage("/images/pausemenu/resumebuttonon.png");
+        PMSaveButtonOff = ImageLoader.loadImage("/images/pausemenu/savebutton.png");
+        PMSaveButtonOn = ImageLoader.loadImage("/images/pausemenu/savebuttonon.png");
+        
         backgroundDay = ImageLoader.loadImage("/images/backgrounds/backgroundday.png");
         backgroundNight = ImageLoader.loadImage("/images/backgrounds/backgroundnight.png");
         backgroundFilter = ImageLoader.loadImage("/images/backgrounds/nightmode.png");
