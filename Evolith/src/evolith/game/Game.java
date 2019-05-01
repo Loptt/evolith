@@ -16,6 +16,13 @@ import evolith.menus.PauseMenu;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -52,7 +59,7 @@ public class Game implements Runnable, Commons {
     private PredatorManager predators;
 
     private enum States {
-        MainMenu, Paused, GameOver, Play, Instructions, SetupMenu
+        MainMenu, Paused, GameOver, Play, Instructions, SetupMenu,
     } // status of the flow of the game once running
     private States state;
 
@@ -68,6 +75,8 @@ public class Game implements Runnable, Commons {
 
     private boolean night;
     private int prevSecDayCycleChange;
+    
+    private boolean win;
 
     /**
      * to create title, width and height and set the game is still not running
@@ -92,7 +101,7 @@ public class Game implements Runnable, Commons {
 
         night = false;
         prevSecDayCycleChange = 0;
-
+        win = false;
     }
 
     /**
@@ -170,6 +179,8 @@ public class Game implements Runnable, Commons {
             case Paused:
                 pausedTick();
                 break;
+            case GameOver:
+                overTick();
         }
 
     }
@@ -207,7 +218,7 @@ public class Game implements Runnable, Commons {
      */
     private void playTick() {
         clock.tick();
-        camera.tick();
+        
         organisms.tick();
         resources.tick();
         predators.tick();
@@ -216,6 +227,10 @@ public class Game implements Runnable, Commons {
         selection.tick();
         
         keyManager.tick();
+        
+        if (!organisms.getOrgPanel().isInputActive()) {
+            camera.tick();
+        }
 
         manageMouse();
         manageKeyboard();
@@ -225,6 +240,8 @@ public class Game implements Runnable, Commons {
             background.setNight(night);
             prevSecDayCycleChange = clock.getSeconds();
         }
+        
+        checkGameOver();
     }
     
     private void pausedTick() {
@@ -242,6 +259,10 @@ public class Game implements Runnable, Commons {
         if (!pauseMenu.isMainMenuDisplayed()) {
             state = States.Play;
         }
+    }
+    
+    private void overTick() {
+        
     }
 
     /**
@@ -272,6 +293,14 @@ public class Game implements Runnable, Commons {
         if (keyManager.p) {
             pauseMenu.setMainMenuDisplayed(true);
             state = States.Paused;
+        }
+        
+        if (keyManager.g) {
+            saveGame();
+        }
+        
+        if (keyManager.c) {
+            loadGame();
         }
         
         if (keyManager.num1) {
@@ -374,9 +403,17 @@ public class Game implements Runnable, Commons {
 
         mouseManager.setRight(false);
     }
-
-    public void checkEntitiesInteraction() {
-
+    
+    public void checkGameOver() {
+        if (organisms.getAmount() <= 0) {
+            state = States.GameOver;
+            win = false;
+        }
+        
+        if (organisms.isMaxIntelligence()) {
+            state = States.GameOver;
+            win = true;
+        }
     }
 
     public void checkOrganismsInSelection() {
@@ -452,6 +489,36 @@ public class Game implements Runnable, Commons {
                     }
 
                     break;
+                case GameOver:
+                    g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
+
+                    resources.render(g);
+                    organisms.render(g);
+                    predators.render(g);
+
+                    if (night) {
+                        g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
+                    }
+                    minimap.render(g);
+                    buttonBar.render(g);
+
+                    if (selection.isActive()) {
+                        selection.render(g);
+                    }
+
+                    if (organisms.isOrgPanelActive()) {
+                        organisms.getOrgPanel().render(g);
+                    } else if (organisms.isMutPanelActive()) {
+                        organisms.getMutPanel().render(g);
+                    }
+                    
+                    if (win) {
+                        g.drawImage(Assets.egg, 100, 100, 500, 500, null);
+                    } else {
+                        g.drawImage(Assets.egg, 100, 100, 100, 100, null);
+                    }
+
+                    break;
             }
             /*g.drawString(Integer.toString(camera.getAbsX(mouseManager.getX())), 30, 650);
             g.drawString(Integer.toString(camera.getAbsY(mouseManager.getY())), 80, 650);*/
@@ -466,6 +533,33 @@ public class Game implements Runnable, Commons {
      * order
      */
     private void saveGame() {
+        try {
+            //Open text file
+            PrintWriter pw = new PrintWriter(new FileWriter("game.txt"));
+            
+            //Save camera position
+            pw.println(Integer.toString(camera.getX()));
+            pw.println(Integer.toString(camera.getY()));
+            
+            //Save time
+            pw.println(Integer.toString(clock.getTicker()));
+            
+            //Save organisms
+            organisms.save(pw);
+            
+            //Save resources
+            resources.save(pw);
+            
+            //Save predators
+            predators.save(pw);
+            
+            pw.close();
+            
+            System.out.println("SAVED!");
+        } catch(IOException e) {
+            System.out.println("BEEP BEEP");
+            System.out.println(e.toString());
+        }
     }
 
     /**
@@ -473,6 +567,28 @@ public class Game implements Runnable, Commons {
      * reads its contents and assigns them to their designated variables
      */
     private void loadGame() {
+        try {
+            //Open file to load game
+            BufferedReader br = new BufferedReader(new FileReader("game.txt"));
+            
+            //Load camera positions
+            camera.setX(Integer.parseInt(br.readLine()));
+            camera.setY(Integer.parseInt(br.readLine()));
+            
+            //Load time
+            clock.setTicker(Integer.parseInt(br.readLine()));
+            
+            organisms.load(br);
+            
+            resources.load(br);
+            
+            predators.load(br);
+
+           
+        } catch (IOException e) {
+            System.out.println("BEEP BEEP");
+            System.out.println(e.toString());
+        }
     }
 
     public void resetGame() {

@@ -127,7 +127,7 @@ public class Assets {
         hoverImage = ImageLoader.loadImage("/images/playgraphics/hover_bar.png");
         
         organismPanel_close = ImageLoader.loadImage("/images/panel/closedetails.png");
-        organismPanel_menu = ImageLoader.loadImage("/images/panel/detailsmenu2.png");   
+        organismPanel_menu = ImageLoader.loadImage("/images/panel/detailsintname.png");   
         organismPanel_prevArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
         organismPanel_nextArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
         organismPanel_reproduceButton_ON = ImageLoader.loadImage("/images/panel/reproduceon.png");
