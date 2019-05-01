@@ -32,9 +32,7 @@ public class Weather {
     private WeatherInstance clear = new WeatherInstance(imageRain, imageRain, 0, true);
     private WeatherInstance rain = new WeatherInstance(imageRain, imageRain, 0, false);
     private WeatherInstance dry = new WeatherInstance(imageDry, imageDry, 0, false);
-
     
-
     private int cameraWidth, cameraHeight;
     private int width, height;
     private boolean night;
