@@ -243,4 +243,21 @@ public class Assets {
 
         return rotated;
     }
+    
+    public static BufferedImage setAlpha(byte alpha, BufferedImage img) {       
+        alpha %= 0xff; 
+        for (int cx=0;cx<img.getWidth();cx++) {          
+            for (int cy=0;cy<img.getHeight();cy++) {
+                int color = img.getRGB(cx, cy);
+
+                int mc = (alpha << 24) | 0x00ffffff;
+                int newcolor = color & mc;
+                img.setRGB(cx, cy, newcolor);            
+
+            }
+
+        }
+        
+        return img;
+    }
 }

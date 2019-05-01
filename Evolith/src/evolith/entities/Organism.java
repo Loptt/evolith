@@ -11,6 +11,7 @@ import evolith.game.Item;
 import evolith.helpers.Commons;
 import evolith.helpers.SwarmMovement;
 import evolith.helpers.Time;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
