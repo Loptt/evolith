@@ -28,7 +28,7 @@ public class InstructionMenu extends Menu {
         over = false;
         images = new ArrayList<>();
         
-        buttons.add(new Button(200, 200, 200, 200, Assets.nextArrow)); //Next
+        buttons.add(new Button(820, 640, 50, 45, Assets.nextArrow, Assets.nextArrow)); //Next
     }
 
     public boolean isOver() {
@@ -46,22 +46,21 @@ public class InstructionMenu extends Menu {
             buttons.get(0).setActive(true);
 
             if (game.getMouseManager().isLeft()) {
-                buttons.get(0).setPressed(true);
                 game.getMouseManager().setLeft(false);
                 currentImage++;
             }
         } else {
             buttons.get(0).setActive(false);
         }
-        
+        /*
         if (currentImage >= images.size()) {
             over = true;
-        }
+        }*/
     }
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(images.get(currentImage), x, y, width, height, null);
+        //g.drawImage(images.get(currentImage), x, y, width, height, null);
         
         buttons.get(0).render(g);
     }
