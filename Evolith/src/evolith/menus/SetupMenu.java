@@ -126,57 +126,55 @@ public class SetupMenu extends Menu {
         }
         timeOpen++;
             
-            if (game.getG().getFontMetrics().stringWidth(inputReader.getSpeciesName()) > 383) {
-                inputReader.setOnlyDelete(true);
-            }
-            else {
-                inputReader.setOnlyDelete(false);
-            }
-            
-            inputReader.readInput();
-            name = inputReader.getSpeciesName();
-            
-            for(int i=0; i<buttons.size(); i++){
-                if(buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())){
-                    //if the mouse is over the button
-                    buttons.get(i).setActive(true);
-                    
-                    if(game.getMouseManager().isLeft()){
-                        buttons.get(i).setPressed(true);
-                        game.getMouseManager().setLeft(false);
-                        
-                        if (i != 0) {   
-                            option = i-1;
-                        }
-                        
-                        for (int j = 0; j < buttons.size(); j++) {
-                            if (i != j) {
-                                buttons.get(j).setPressed(false);
-                            }
+        if (game.getG().getFontMetrics().stringWidth(inputReader.getSpeciesName()) > 383) {
+            inputReader.setOnlyDelete(true);
+        }
+        else {
+            inputReader.setOnlyDelete(false);
+        }
+
+        inputReader.readInput();
+        name = inputReader.getSpeciesName();
+
+        for(int i=0; i<buttons.size(); i++){
+            if(buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())){
+                //if the mouse is over the button
+                buttons.get(i).setActive(true);
+
+                if(game.getMouseManager().isLeft()){
+                    buttons.get(i).setPressed(true);
+                    game.getMouseManager().setLeft(false);
+
+                    if (i != 0) {   
+                        option = i-1;
+                    }
+
+                    for (int j = 0; j < buttons.size(); j++) {
+                        if (i != j) {
+                            buttons.get(j).setPressed(false);
                         }
                     }
                 }
-                else {
-                    buttons.get(i).setActive(false);
-                }
-                
-                /****Check if we really want this
-                if(!buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY()) && game.getMouseManager().isIzquierdo()){
-                    buttons.get(i).setActive(false);
-                    buttons.get(i).setPressed(false);
-                }*/
-                
-                if(buttons.get(0).isPressed()){
-                    setClickPlay(true);
-                    setActive(false);
-                    buttons.get(0).setPressed(false);
-                    buttons.get(1).setPressed(false);
-                    buttons.get(2).setPressed(false);
-                    buttons.get(3).setPressed(false);
-                    buttons.get(4).setPressed(false);
-                    buttons.get(5).setPressed(false);
-                }
+            }
+            else {
+                buttons.get(i).setActive(false);
+            }
+
+        }
+        
+        if (option >= 4) {
+            option = 3;
+        } 
             
+        if(buttons.get(0).isPressed()){
+            setClickPlay(true);
+            setActive(false);
+            buttons.get(0).setPressed(false);
+            buttons.get(1).setPressed(false);
+            buttons.get(2).setPressed(false);
+            buttons.get(3).setPressed(false);
+            buttons.get(4).setPressed(false);
+            buttons.get(5).setPressed(false);
         }
     }
 

@@ -16,6 +16,7 @@ public class MainMenu extends Menu implements Commons {
 
     private boolean active;
     private boolean clickPlay;
+    private boolean clickIns;
 
     /**
      * Constructor of the main menu
@@ -30,6 +31,7 @@ public class MainMenu extends Menu implements Commons {
         super(x, y, width, height, game);
         active = true;
         clickPlay = false;
+        clickIns = false;
 
         buttons.add(new Button(BUTTON_PLAY_X, BUTTON_PLAY_Y, BUTTON_PLAY_WIDTH, BUTTON_PLAY_HEIGHT)); // Play button
         buttons.add(new Button(BUTTON_INSTRUCTIONS_X, BUTTON_INSTRUCTIONS_Y, BUTTON_INSTRUCTIONS_WIDTH, BUTTON_INSTRUCTIONS_HEIGHT)); // Instructions button
@@ -71,6 +73,14 @@ public class MainMenu extends Menu implements Commons {
         this.clickPlay = clickPlay;
     }
 
+    public boolean isClickIns() {
+        return clickIns;
+    }
+
+    public void setClickIns(boolean clickIns) {
+        this.clickIns = clickIns;
+    }
+
     /**
      * To tick the buttons on the main menu
      */
@@ -91,12 +101,21 @@ public class MainMenu extends Menu implements Commons {
                 } else {
                     buttons.get(i).setActive(false);
                 }
-                if (buttons.get(0).isPressed()) {
-                    setClickPlay(true);
-                    setActive(false);
-                    buttons.get(0).setPressed(false);
-                    buttons.get(1).setPressed(false);
-                }
+                
+            }
+            
+            if (buttons.get(0).isPressed()) {
+                setClickPlay(true);
+                setActive(false);
+                buttons.get(0).setPressed(false);
+                buttons.get(1).setPressed(false);
+            }
+            
+            if (buttons.get(1).isPressed()) {
+                setClickIns(true);
+                setActive(false);
+                buttons.get(0).setPressed(false);
+                buttons.get(1).setPressed(false);
             }
         }
     }

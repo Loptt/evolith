@@ -12,6 +12,7 @@ import evolith.engine.*;
 import evolith.entities.Resource;
 import evolith.helpers.InputReader;
 import evolith.helpers.Selection;
+import evolith.menus.InstructionMenu;
 import evolith.menus.OverMenu;
 import evolith.menus.PauseMenu;
 import java.awt.Graphics;
@@ -70,6 +71,7 @@ public class Game implements Runnable, Commons {
     private SetupMenu setupMenu;
     private PauseMenu pauseMenu;
     private OverMenu overMenu;
+    private InstructionMenu instructionMenu;
 
     private Clock clock;                        // the time of the game
     private InputReader inputReader;            //To read text from keyboard
@@ -148,6 +150,7 @@ public class Game implements Runnable, Commons {
         buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
         setupMenu = new SetupMenu(0, 0, width, height, this);
         pauseMenu = new PauseMenu(width / 2 - 250 / 2, height / 2 - 300 / 2, 250, 300, this);
+        
         musicManager = new MusicManager();
         //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
         organisms = new OrganismManager(this);
@@ -174,6 +177,9 @@ public class Game implements Runnable, Commons {
             case MainMenu:
                 mainMenuTick();
                 break;
+            case Instructions:
+                instructionsTick();
+                break;
             case SetupMenu:
                 setupMenuTick();
                 break;
@@ -199,6 +205,21 @@ public class Game implements Runnable, Commons {
             mainMenu.setActive(false);
             state = States.SetupMenu;
             mainMenu.setClickPlay(false);
+        }
+        
+        if (mainMenu.isClickIns()) {
+            instructionMenu = new InstructionMenu(0, 0, width, height, this);
+            mainMenu.setActive(false);
+            state = States.Instructions;
+            mainMenu.setClickIns(false);
+        }
+    }
+    
+    private void instructionsTick() {
+        instructionMenu.tick();
+        
+        if (instructionMenu.isOver()) {
+            state = States.MainMenu;
         }
     }
 
@@ -466,6 +487,9 @@ public class Game implements Runnable, Commons {
             switch (state) {
                 case MainMenu:
                     mainMenu.render(g);
+                    break;
+                case Instructions:
+                    instructionMenu.render(g);
                     break;
                 case SetupMenu:
                     setupMenu.render(g);
