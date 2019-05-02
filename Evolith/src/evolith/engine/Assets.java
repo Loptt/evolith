@@ -98,7 +98,7 @@ public class Assets {
      */
     public static void init() {
         ricardomilos = new SoundClip("/sounds/ricardomilos.wav"); 
-        ricardomilos = new SoundClip("/sounds/fatrat.wav"); 
+        fatrat = new SoundClip("/sounds/fatrat.wav"); 
         
         // Pause Menu
         PMLoadButtonOff = ImageLoader.loadImage("/images/pausemenu/loadbutton.png");
