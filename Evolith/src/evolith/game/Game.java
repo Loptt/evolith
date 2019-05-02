@@ -12,6 +12,7 @@ import evolith.engine.*;
 import evolith.entities.Resource;
 import evolith.helpers.InputReader;
 import evolith.helpers.Selection;
+import evolith.menus.OverMenu;
 import evolith.menus.PauseMenu;
 import java.awt.Graphics;
 import java.awt.Toolkit;
@@ -67,6 +68,7 @@ public class Game implements Runnable, Commons {
     private ButtonBarMenu buttonBar;
     private SetupMenu setupMenu;
     private PauseMenu pauseMenu;
+    private OverMenu overMenu;
 
     private Clock clock;                        // the time of the game
     private InputReader inputReader;            //To read text from keyboard
@@ -280,7 +282,18 @@ public class Game implements Runnable, Commons {
     }
     
     private void overTick() {
+        overMenu.tick();
         
+        if (overMenu.isMainMenu()) {
+            overMenu.setMainMenu(false);
+            resetGame();
+            state = States.MainMenu;
+        }
+        
+        if (overMenu.isStats()) {
+            overMenu.setStats(false);
+            System.out.println("STATS NOT READY");
+        }
     }
 
     /**
@@ -419,11 +432,13 @@ public class Game implements Runnable, Commons {
         if (organisms.getAmount() <= 0) {
             state = States.GameOver;
             win = false;
+            overMenu = new OverMenu(0, 0, width, height, this, win);
         }
         
         if (organisms.isMaxIntelligence()) {
             state = States.GameOver;
             win = true;
+            overMenu = new OverMenu(0, 0, width, height, this, win);
         }
     }
 
@@ -510,24 +525,8 @@ public class Game implements Runnable, Commons {
                     if (night) {
                         g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
                     }
-                    minimap.render(g);
-                    buttonBar.render(g);
-
-                    if (selection.isActive()) {
-                        selection.render(g);
-                    }
-
-                    if (organisms.isOrgPanelActive()) {
-                        organisms.getOrgPanel().render(g);
-                    } else if (organisms.isMutPanelActive()) {
-                        organisms.getMutPanel().render(g);
-                    }
                     
-                    if (win) {
-                        g.drawImage(Assets.egg, 100, 100, 500, 500, null);
-                    } else {
-                        g.drawImage(Assets.egg, 100, 100, 100, 100, null);
-                    }
+                    overMenu.render(g);
 
                     break;
             }

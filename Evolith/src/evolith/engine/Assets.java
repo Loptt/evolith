@@ -82,6 +82,14 @@ public class Assets {
     public static BufferedImage PMResumeButtonOn;
     public static BufferedImage PMSaveButtonOff;
     public static BufferedImage PMSaveButtonOn;
+    
+    public static BufferedImage overWin;
+    public static BufferedImage overLose;
+    
+    public static BufferedImage overMenuButtonOn;
+    public static BufferedImage overMenuButtonOff;
+    public static BufferedImage statsMenuButtonOn;
+    public static BufferedImage statsMenuButtonOff;
 
     /**
      * Initializes the assets and links to the image folder
@@ -205,6 +213,13 @@ public class Assets {
         prevArrow = ImageLoader.loadImage("/images/panel/prev.png");
         
         egg = ImageLoader.loadImage("/images/organisms/egg.png");
+        
+        overWin = ImageLoader.loadImage("/images/over/winscreen.png");
+        overLose = ImageLoader.loadImage("/images/over/gameover.png");
+        overMenuButtonOn = ImageLoader.loadImage("/images/over/endmainbuttonon.png");
+        overMenuButtonOff = ImageLoader.loadImage("/images/over/endmainbuttonoff.png");
+        statsMenuButtonOn = ImageLoader.loadImage("/images/over/statisticsbuttonon.png");
+        statsMenuButtonOff = ImageLoader.loadImage("/images/over/statisticsbuttonoff.png");
     }
     
     /**
