@@ -1,3 +1,5 @@
+EVOLITH
+
 Recomendation:
 Upon running the game, click on instructions to get a general overview of what the game is about, main controls, and objective of the game.
 
@@ -37,4 +39,5 @@ Not Working yet:
 -When loading a save file, quantity of resources is not accurate.
 -When entering a name for the organism, the keyboard might lag and get stuck on a key
 -Sometimes when choosing a color in the setup species menu, the game may crash under special circumstances when not selecting a color
+-After losing the game and starting a new game, the organisms do not respond properly to commands
 

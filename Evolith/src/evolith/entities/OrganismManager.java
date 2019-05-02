@@ -316,7 +316,7 @@ public class OrganismManager implements Commons {
         organisms.add(offspring);
         offspring.setSearchFood(org.isSearchFood());
         offspring.setSearchWater(org.isSearchWater());
-        offspring.setIntelligence(offspring.getIntelligence() + 5);
+        offspring.setIntelligence(offspring.getIntelligence() + 500);
         org.setNeedOffspring(false);
         
     }
@@ -712,7 +712,7 @@ public class OrganismManager implements Commons {
     }
 
     public int getAmount() {
-        return amount;
+        return organisms.size();
     }
 
     public void setAmount(int amount) {

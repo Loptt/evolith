@@ -311,8 +311,8 @@ public class Game implements Runnable, Commons {
         
         if (overMenu.isMainMenu()) {
             overMenu.setMainMenu(false);
-            resetGame();
             state = States.MainMenu;
+            resetGame();
         }
         
         if (overMenu.isStats()) {
@@ -457,6 +457,7 @@ public class Game implements Runnable, Commons {
         if (organisms.getAmount() <= 0) {
             state = States.GameOver;
             win = false;
+            System.out.println("OVER");
             overMenu = new OverMenu(0, 0, width, height, this, win);
         }
         
