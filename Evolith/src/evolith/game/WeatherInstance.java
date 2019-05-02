@@ -13,15 +13,18 @@ import java.awt.image.BufferedImage;
  * @author USUARIO
  */
 public class WeatherInstance {
-    private BufferedImage ground;
+    private BufferedImage day;
+    private BufferedImage night;
+
     private BufferedImage topLayer;
     
     private boolean active;
     
     private int animation;
     
-    public WeatherInstance(BufferedImage ground, BufferedImage topLayer, int animation, boolean active){
-        this.ground = ground;
+    public WeatherInstance(BufferedImage day, BufferedImage night, BufferedImage topLayer, int animation, boolean active){
+        this.day = day;
+        this.night = night;
         this.topLayer = topLayer;
         this.animation = animation;
         this.active = active;
@@ -31,9 +34,6 @@ public class WeatherInstance {
         return animation;
     }
 
-    public BufferedImage getGround() {
-        return ground;
-    }
 
     public BufferedImage getTopLayer() {
         return topLayer;
@@ -43,9 +43,23 @@ public class WeatherInstance {
         this.animation = animation;
     }
 
-    public void setGround(BufferedImage ground) {
-        this.ground = ground;
+    public BufferedImage getDay() {
+        return day;
     }
+
+    public BufferedImage getNight() {
+        return night;
+    }
+
+    public void setDay(BufferedImage day) {
+        this.day = day;
+    }
+
+    public void setNight(BufferedImage night) {
+        this.night = night;
+    }
+
+    
 
     public void setTopLayer(BufferedImage topLayer) {
         this.topLayer = topLayer;

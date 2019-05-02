@@ -81,6 +81,15 @@ public class Background {
     public void setNight(boolean night) {
         this.night = night;
     }
+
+    public void setImageDay(BufferedImage imageDay) {
+        this.imageDay = imageDay;
+    }
+
+    public void setImageNight(BufferedImage imageNight) {
+        this.imageNight = imageNight;
+    }
+    
     
     
 }

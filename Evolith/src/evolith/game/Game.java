@@ -68,6 +68,9 @@ public class Game implements Runnable, Commons {
     
     private boolean night;
     private int prevSecDayCycleChange;
+    private int prevWeatherChange;
+    
+    private Weather weather;
     
     
     /**
@@ -81,7 +84,7 @@ public class Game implements Runnable, Commons {
         this.title = title;
         this.width = width;
         this.height = height;
-       keyManager = new KeyManager();
+        keyManager = new KeyManager();
         mouseManager = new MouseManager();
         camera = new Camera(INITIAL_POINT - width / 2, INITIAL_POINT - height / 2, width, height, this);
         mainMenu = new MainMenu(0, 0, width, height, this);
@@ -93,6 +96,8 @@ public class Game implements Runnable, Commons {
         
         night = false;
         prevSecDayCycleChange = 0;
+        prevWeatherChange = 0;
+        
     }
 
     /**
@@ -148,6 +153,8 @@ public class Game implements Runnable, Commons {
         display.getJframe().addMouseMotionListener(mouseManager);
         display.getCanvas().addMouseListener(mouseManager);
         display.getCanvas().addMouseMotionListener(mouseManager);
+        weather = new Weather(width, height, background);
+
     }
 
     /**
@@ -155,7 +162,6 @@ public class Game implements Runnable, Commons {
      */
     private void tick() {
         //Every single case is separated in its own function
-
         switch (state) {
             case MainMenu:
                 mainMenuTick();
@@ -210,6 +216,10 @@ public class Game implements Runnable, Commons {
         selection.tick();
         
         manageMouse();
+        if (clock.getSeconds() >= prevWeatherChange + 10) {
+            weather.changeWeather();
+            prevWeatherChange = clock.getSeconds();
+        }
         
         if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
             night = !night;
@@ -348,6 +358,9 @@ public class Game implements Runnable, Commons {
                     
                     if (night) {
                         g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
+                    }
+                    else{
+                        weather.render(g);
                     }
                     minimap.render(g);
                     buttonBar.render(g);

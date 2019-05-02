@@ -70,6 +70,14 @@ public class Assets {
     public static BufferedImage prevArrow;
     
     public static BufferedImage glow;
+    
+    public static BufferedImage coldLayer;
+    public static BufferedImage noBackground;
+    public static BufferedImage dryLayer;
+    public static BufferedImage dryBackground;
+    public static BufferedImage dryBackgroundNight;
+    public static BufferedImage backgroundRainNight;
+    public static BufferedImage backgroundRain;
 
     /**
      * Initalizes the assets and links to the image folder
@@ -181,6 +189,14 @@ public class Assets {
         nextArrow = ImageLoader.loadImage("/images/panel/next.png");
         prevArrow = ImageLoader.loadImage("/images/panel/prev.png");
         
+        coldLayer = ImageLoader.loadImage("/images/backgrounds/whitelayer.png");
+        noBackground = ImageLoader.loadImage("/images/backgrounds/nolayer.png");
+        dryLayer = ImageLoader.loadImage("/images/backgrounds/drylayer.png");
+        dryBackground = ImageLoader.loadImage("/images/backgrounds/drybackground.png");
+        dryBackgroundNight = ImageLoader.loadImage("/images/backgrounds/drybackgroundnight.png");
+        backgroundRainNight = ImageLoader.loadImage("/images/backgrounds/rainbackground.png");
+        backgroundRain = ImageLoader.loadImage("/images/backgrounds/backgroundrainday.png");
+
     }
     
     /**
