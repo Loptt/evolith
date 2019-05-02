@@ -60,6 +60,7 @@ public class OrganismManager implements Commons {
             organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++));
             organisms.get(i).setEgg(false);
             organisms.get(i).setBorn(true);
+            organisms.get(i).setMaturity(50);
         }
 
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
@@ -486,6 +487,7 @@ public class OrganismManager implements Commons {
         
         organisms.get(0).setEgg(false);
         organisms.get(0).setBorn(true);
+        organisms.get(0).setMaturity(50);
 
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
         mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
