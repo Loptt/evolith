@@ -11,6 +11,9 @@ import evolith.menus.OrganismPanel;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -56,10 +59,9 @@ public class OrganismManager implements Commons {
 
         for (int i = 0; i < amount; i++) {
             organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++));
+            organisms.get(i).setEgg(false);
+            organisms.get(i).setBorn(true);
         }
-        
-        organisms.get(0).setEgg(false);
-        organisms.get(0).setBorn(true);
 
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
         mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
@@ -312,6 +314,9 @@ public class OrganismManager implements Commons {
         offspring.setId(idCounter + 1);
         idCounter++;
         organisms.add(offspring);
+        offspring.setSearchFood(org.isSearchFood());
+        offspring.setSearchWater(org.isSearchWater());
+        offspring.setIntelligence(offspring.getIntelligence() + 5);
         org.setNeedOffspring(false);
         
     }
@@ -439,6 +444,57 @@ public class OrganismManager implements Commons {
         }
 
         return false;
+    }
+    
+    public boolean isMaxIntelligence() {
+        for (int i = 0; i < organisms.size(); i++) {
+            if (organisms.get(i).getIntelligence() >= MAX_INTELLIGENCE) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public void save(PrintWriter pw) {
+        //Save amount
+        pw.println(Integer.toString(organisms.size()));
+        
+        //Skin
+        pw.println(Integer.toString(skin));
+        
+        //Save each organism
+        for (int i = 0; i < organisms.size(); i++) {
+            organisms.get(i).save(pw);
+        }
+    }
+    
+    public void load(BufferedReader br) throws IOException {
+        int am = Integer.parseInt(br.readLine());
+        organisms.clear();
+        
+        skin = Integer.parseInt(br.readLine());
+        
+        for (int i = 0; i < am; i++) {
+            organisms.add(new Organism(0,0, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, skin, 0));
+            organisms.get(i).load(br);
+        }
+    }
+    
+    public void reset() {
+        organisms.clear();
+        
+        idCounter = 1;
+        organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++));
+        
+        organisms.get(0).setEgg(false);
+        organisms.get(0).setBorn(true);
+
+        orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
+        mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
+        
+        updatedNight = false;
+        speciesName = "";
     }
 
     /**

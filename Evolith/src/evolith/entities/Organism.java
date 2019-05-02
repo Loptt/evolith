@@ -11,9 +11,13 @@ import evolith.game.Item;
 import evolith.helpers.Commons;
 import evolith.helpers.SwarmMovement;
 import evolith.helpers.Time;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  *
@@ -151,6 +155,7 @@ public class Organism extends Item implements Commons {
         needMutation = false;
         
         pred = null;
+        target = null;
     }
     
         
@@ -254,6 +259,8 @@ public class Organism extends Item implements Commons {
             if (life <= 0) {
                 dead = true;
             }
+            
+            return;
         }
         
         if (time.getSeconds() >= prevHungerRed + SECONDS_PER_HUNGER && !eating) {
@@ -291,11 +298,11 @@ public class Organism extends Item implements Commons {
             prevMatInc = (int) time.getSeconds();
 
             //Reproduction happen at these two points in maturity
-            if (maturity == 120) {
+            if (maturity == 100) {
                 needOffspring = true;
             }
 
-            if (maturity == 150) {
+            if (maturity == 135) {
                 needOffspring = true;
             }
             
@@ -383,6 +390,30 @@ public class Organism extends Item implements Commons {
         updateStats();
     }
     
+    public void updateMutations() {
+        for (int i = 0; i < orgMutations.getMutations().size(); i++) {
+            int newStr = 0;
+            int newSpeed = 0;
+            int newHealth = 0;
+            int newStealth = 0;
+            
+            for (int j = 0; j < orgMutations.getMutations().get(i).size(); j++) {
+                newStr += orgMutations.getMutations().get(i).get(j).getStrength();
+                newSpeed += orgMutations.getMutations().get(i).get(j).getSpeed();
+                newHealth += orgMutations.getMutations().get(i).get(j).getMaxHealth();
+                newStealth += orgMutations.getMutations().get(i).get(j).getStealth();
+                
+                if (orgMutations.getMutations().get(i).get(j).isActive()) {
+                    strength = newStr;
+                    speed = newSpeed;
+                    maxHealth = newHealth;
+                    stealth = newStealth;
+                    break;
+                }
+            }
+        }
+    }
+    
     private void updateStats() {
         //Transform stat numbers to useful numbers
         currentMaxHealth = maxHealth * 2 + 100;
@@ -411,6 +442,7 @@ public class Organism extends Item implements Commons {
         org.setStealth(stealth);
         org.setStrength(strength);
         org.setMaxHealth(maxHealth);
+        org.setIntelligence(intelligence);
         org.setLife(maxHealth*2+60);
         org.setGeneration(generation+1);
         
@@ -456,14 +488,15 @@ public class Organism extends Item implements Commons {
         //Check for every predator
         for (int j = 0; j < predators.getPredatorAmount(); j++) {
             Predator p = predators.getPredator(j);
+            
 
             //If predator is in the range of the organism
-            if (SwarmMovement.distanceBetweenTwoPoints(x, y, p.getX(), p.getY()) < stealthRange) {
+            if (SwarmMovement.distanceBetweenTwoPoints(x, y, p.getX(), p.getY()) < MAX_SIGHT_DISTANCE) {
                 safeLeaveResource();
                 beingChased = true;
                 pred = p;
             } else {
-                //Nothing
+
             }
         }
     }
@@ -703,6 +736,76 @@ public class Organism extends Item implements Commons {
         */
         
         return closestOrganism;
+    }
+    
+    public void save(PrintWriter pw) {
+        //Save id
+        pw.println(Integer.toString(id));
+        
+        //Save position and speed
+        pw.println(Integer.toString(x));
+        pw.println(Integer.toString(y));
+        pw.println(Integer.toString(xVel));
+        pw.println(Integer.toString(yVel));
+        
+        //save point
+        pw.println(Integer.toString(point.x));
+        pw.println(Integer.toString(point.y));
+
+        //Save vitals
+        pw.println(Integer.toString((int) life));
+        pw.println(Integer.toString((int) hunger));
+        pw.println(Integer.toString((int) thirst));
+        pw.println(Integer.toString(maturity));
+
+        //Save Activities
+        pw.println(Integer.toString(searchFood ? 1 : 0));
+        pw.println(Integer.toString(searchWater ? 1 : 0));
+        pw.println(Integer.toString(aggressive ? 1 : 0));
+        
+        //Egg state
+        pw.println(Integer.toString(egg ? 1 : 0));
+
+        //Save generation and time
+        pw.println(Integer.toString(generation));
+        pw.println(Integer.toString(time.getTicker()));
+        
+        //Save mutations
+        orgMutations.save(pw);
+    }
+    
+    public void load(BufferedReader br) throws IOException {
+        id = Integer.parseInt(br.readLine());
+        
+        x = Integer.parseInt(br.readLine());
+        y = Integer.parseInt(br.readLine());
+        
+        xVel = Integer.parseInt(br.readLine());
+        yVel = Integer.parseInt(br.readLine());
+        
+        int px = Integer.parseInt(br.readLine());
+        int py = Integer.parseInt(br.readLine());
+        
+        point = new Point(px, py);
+        
+        life = Integer.parseInt(br.readLine());
+        hunger = Integer.parseInt(br.readLine());
+        thirst = Integer.parseInt(br.readLine());
+        maturity = Integer.parseInt(br.readLine());
+        
+        searchFood = Integer.parseInt(br.readLine()) == 1;
+        searchWater = Integer.parseInt(br.readLine()) == 1;
+        aggressive = Integer.parseInt(br.readLine()) == 1;
+        
+        egg = Integer.parseInt(br.readLine()) == 1;
+        
+        generation = Integer.parseInt(br.readLine());
+        time.setTicker(Integer.parseInt(br.readLine()));
+        
+        orgMutations.load(br);
+        
+        updateMutations();
+        updateStats();
     }
 
     /**
