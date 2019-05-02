@@ -92,4 +92,5 @@ public interface Commons {
     
     public static final int BORN_TIME = 1;
     public static final int STATISTICS_DIMENSION = 400;
+    public static final int STATISTICS_POINT_DIMENSION = 20;
 }

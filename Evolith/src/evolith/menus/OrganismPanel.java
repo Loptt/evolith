@@ -218,7 +218,7 @@ public class OrganismPanel extends Menu implements Commons {
                     reproduce = true;
                     buttons.get(4).setPressed(true);
                 }
-                
+
                 active = false;
             }
 
@@ -276,7 +276,7 @@ public class OrganismPanel extends Menu implements Commons {
         g.drawImage(Assets.organismPanel_menu, x, y, width, height, null);
 
         g.drawImage(Assets.orgColors.get(organism.getSkin()), x + 83, y + 70, 196, 196, null);
-        
+
         int prevSize = organism.getCurrentSize();
         int prevX = organism.getX();
         int prevY = organism.getY();
@@ -291,9 +291,9 @@ public class OrganismPanel extends Menu implements Commons {
                 }
             }
         }
-        
+
         organism.setCurrentSize(prevSize);
-        
+
         organism.setX(prevX);
         organism.setY(prevY);
 
@@ -339,7 +339,7 @@ public class OrganismPanel extends Menu implements Commons {
 
             tickToWrite = !tickToWrite;
         }
-        g.drawString(organism.getName(), x + 70, y + height-50);
+        g.drawString(organism.getName(), x + 70, y + height - 50);
         int width = g.getFontMetrics().stringWidth(organism.getName());
 
         if (tickToWrite && !inputReader.isOnlyDelete()) {

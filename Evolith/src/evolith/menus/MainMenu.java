@@ -1,6 +1,7 @@
 package evolith.menus;
 
 import evolith.database.GameP;
+import evolith.database.JDBC;
 import evolith.database.Ranking2P;
 import evolith.game.Game;
 import evolith.engine.Assets;
@@ -8,7 +9,10 @@ import evolith.helpers.Commons;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.math.BigInteger;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -27,6 +31,7 @@ public class MainMenu extends Menu implements Commons {
     private boolean active;
     private boolean clickPlay;
     private RankingPanel rankpanel;
+    private StatisticsPanel stats;
     /**
      * Constructor of the main menu
      *
@@ -36,13 +41,14 @@ public class MainMenu extends Menu implements Commons {
      * @param height
      * @param game
      */
-    public MainMenu(int x, int y, int width, int height, Game game) {
+    public MainMenu(int x, int y, int width, int height, Game game) throws SQLException {
         super(x, y, width, height, game);
         active = true;
         clickPlay = false;
         buttons.add(new Button(BUTTON_PLAY_X, BUTTON_PLAY_Y, BUTTON_PLAY_WIDTH, BUTTON_PLAY_HEIGHT)); // Play button
         buttons.add(new Button(BUTTON_INSTRUCTIONS_X, BUTTON_INSTRUCTIONS_Y, BUTTON_INSTRUCTIONS_WIDTH, BUTTON_INSTRUCTIONS_HEIGHT)); // Instructions button
         rankpanel = new RankingPanel(0,0,0,0,null);
+        //stats = new StatisticsPanel(200,200,0,0,null);
     }
 
     /**
@@ -114,11 +120,9 @@ public class MainMenu extends Menu implements Commons {
      *
      * @param g
      */
-
     @Override
     public void render(Graphics g) {
 
-        
         // if the main menu is active
         if (active && !buttons.get(0).isActive() && !buttons.get(1).isActive()) {
             g.drawImage(Assets.start, 0, 0, 1000, 700, null);
@@ -127,14 +131,10 @@ public class MainMenu extends Menu implements Commons {
         } else if (active && buttons.get(1).isActive()) {
             g.drawImage(Assets.startInstructions, 0, 0, 1000, 700, null);
         }
-        //rankpanel.render(g);
-                g.setColor(BLUE_GREEN_COLOR );
-        g.drawRect(x, y, STATISTICS_DIMENSION, STATISTICS_DIMENSION);
-        g.fillOval(x, y, 5, 5);  
-        g.fillOval(x+STATISTICS_DIMENSION, y, 5, 5);  
-        g.fillOval(x, y+STATISTICS_DIMENSION, 5, 5);  
-        g.fillOval(x+STATISTICS_DIMENSION, y+STATISTICS_DIMENSION, 5, 5);  
-        
-       
-    }
+        rankpanel.render(g);
+
+        g.setColor(BLUE_GREEN_COLOR);
+        //stats.render(g);
+}
+    
 }
