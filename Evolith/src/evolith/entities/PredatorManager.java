@@ -73,6 +73,8 @@ public class PredatorManager implements Commons {
             predators.add(new Predator(-1000, separation*i, PREDATOR_SIZE, PREDATOR_SIZE, game, ++idCounter));
             predators.add(new Predator(BACKGROUND_WIDTH + 1000, separation*i, PREDATOR_SIZE, PREDATOR_SIZE, game, ++idCounter));
         }
+        
+        predators.add(new Predator(INITIAL_POINT, INITIAL_POINT, PREDATOR_SIZE, PREDATOR_SIZE, game, 0));
     }
 
     /**

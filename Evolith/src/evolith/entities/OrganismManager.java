@@ -27,7 +27,6 @@ import java.util.HashSet;
 public class OrganismManager implements Commons {
 
     private ArrayList<Organism> organisms;  //array of all organisms
-    private int amount;         //max organism amount
 
     private Game game;          // game instance
 
@@ -54,7 +53,7 @@ public class OrganismManager implements Commons {
         panelIndex = 0;
         this.game = game;
         organisms = new ArrayList<>();
-        amount = 1;
+        int amount = 1;
         idCounter = 1;
 
         for (int i = 0; i < amount; i++) {
@@ -124,7 +123,7 @@ public class OrganismManager implements Commons {
         ArrayList<Point> points;
         //if left clicked move the organisms to determined point
 
-        points = SwarmMovement.getPositions(x - ORGANISM_SIZE_STAT / 2, y - ORGANISM_SIZE_STAT / 2, amount, obj);
+        points = SwarmMovement.getPositions(x - ORGANISM_SIZE_STAT / 2, y - ORGANISM_SIZE_STAT / 2, organisms.size(), obj);
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setPoint(points.get(i));
         }
@@ -172,7 +171,7 @@ public class OrganismManager implements Commons {
     public void moveSwarmToPoint(int x, int y, int obj) {
         Point p = new Point(x, y);
 
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setPoint(p);
         }
     }
@@ -309,7 +308,6 @@ public class OrganismManager implements Commons {
         offspring = org.cloneOrg();
         
       //  if((orgPanel.isReproduce() && mutPanel.getButtons().get(0).isPressed()) || (orgPanel.isReproduce() && !mutPanel.isActive()) ){
-        amount++;
         orgPanel.setReproduce(false);
         offspring.setId(idCounter + 1);
         idCounter++;
@@ -329,7 +327,6 @@ public class OrganismManager implements Commons {
     private void checkKill(Organism org) {
         if (org.isDead()) {
             organisms.remove(org);
-            amount--;
         }
     }
     
@@ -359,7 +356,7 @@ public class OrganismManager implements Commons {
      * @param resource
      */
     public void setSelectedResource(Resource resource) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSelected()) {
                 organisms.get(i).setTarget(resource);
             }
@@ -394,7 +391,7 @@ public class OrganismManager implements Commons {
      * @param value
      */
     public void setSelectedGodCommand(boolean value) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSelected()) {
                 organisms.get(i).setGodCommand(value);
             }
@@ -594,7 +591,7 @@ public class OrganismManager implements Commons {
      * @param val boolean to be assigned
      */
     public void setSearchFood(boolean val) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setSearchFood(val);
         }
     }
@@ -605,7 +602,7 @@ public class OrganismManager implements Commons {
      * @param val boolean to be assigned
      */
     public void setSelectedSearchFood(boolean val) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSelected()) {
                 organisms.get(i).setSearchFood(val);
             }
@@ -618,7 +615,7 @@ public class OrganismManager implements Commons {
      * @param val boolean to be assigned
      */
     public void setSearchWater(boolean val) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setSearchWater(val);
         }
     }
@@ -629,7 +626,7 @@ public class OrganismManager implements Commons {
      * @param val boolean to be assigned
      */
     public void setSelectedSearchWater(boolean val) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSelected()) {
                 organisms.get(i).setSearchWater(val);
             }
@@ -642,7 +639,7 @@ public class OrganismManager implements Commons {
      * @param val boolean to be assigned
      */
     public void setAggressiveness(boolean val) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setAggressive(val);
         }
     }
@@ -653,7 +650,7 @@ public class OrganismManager implements Commons {
      * @param val boolean to be assigned
      */
     public void setSelectedAggressiveness(boolean val) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSelected()) {
                 organisms.get(i).setAggressive(val);
             }
@@ -713,10 +710,6 @@ public class OrganismManager implements Commons {
 
     public int getAmount() {
         return organisms.size();
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
     }
 
     public int getIdCounter() {
