@@ -127,7 +127,13 @@ public class MainMenu extends Menu implements Commons {
         } else if (active && buttons.get(1).isActive()) {
             g.drawImage(Assets.startInstructions, 0, 0, 1000, 700, null);
         }
-        rankpanel.render(g);
+        //rankpanel.render(g);
+                g.setColor(BLUE_GREEN_COLOR );
+        g.drawRect(x, y, STATISTICS_DIMENSION, STATISTICS_DIMENSION);
+        g.fillOval(x, y, 5, 5);  
+        g.fillOval(x+STATISTICS_DIMENSION, y, 5, 5);  
+        g.fillOval(x, y+STATISTICS_DIMENSION, 5, 5);  
+        g.fillOval(x+STATISTICS_DIMENSION, y+STATISTICS_DIMENSION, 5, 5);  
         
        
     }

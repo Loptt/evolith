@@ -27,9 +27,12 @@ import javax.persistence.Query;
 public class RankingPanel extends Menu implements Commons {
     private boolean connected;
     private FontLoader f;
+    
     private Ranking2P rank;
     private List<Ranking2P> ranking;
     private Game game;
+    
+    
     public RankingPanel(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
             try{

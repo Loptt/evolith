@@ -91,4 +91,5 @@ public interface Commons {
     public static final int PREDATOR_SECONDS_TO_ROAM = 10;
     
     public static final int BORN_TIME = 1;
+    public static final int STATISTICS_DIMENSION = 400;
 }
