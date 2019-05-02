@@ -2,9 +2,14 @@ package evolith.entities;
 
 import evolith.game.Game;
 import evolith.helpers.Commons;
+import static evolith.helpers.Commons.MAX_SIGHT_DISTANCE;
+import evolith.helpers.SwarmMovement;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -149,9 +154,14 @@ public class PredatorManager implements Commons {
     
     private void checkWithOrganisms(Predator pred) {
         //Check status with every organism
+        pred.setVisible(false);
         for (int j = 0; j < game.getOrganisms().getOrganismsAmount(); j++) {
             Organism org = game.getOrganisms().getOrganism(j);
             //Check if the predator is touching an organism
+            if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) < MAX_SIGHT_DISTANCE + 350) {
+                pred.setVisible(true);
+            }
+            
             if (pred.intersects(org)) {
                 //Get current life
                 double acutalLife = org.getLife();
@@ -172,6 +182,37 @@ public class PredatorManager implements Commons {
         if (pred.isDead()) {
             predators.remove(pred);
             amount--;
+        }
+    }
+    
+    public void save(PrintWriter pw) {
+        pw.println(Integer.toString(predators.size()));
+        
+        for (int i = 0; i < predators.size(); i++) {
+            predators.get(i).save(pw);
+        }
+    }
+    
+    public void load(BufferedReader br) throws IOException {
+        int am = Integer.parseInt(br.readLine());
+        predators.clear();
+        
+        for (int i = 0; i < am; i++) {
+            predators.add(new Predator(0,0,PREDATOR_SIZE, PREDATOR_SIZE, game, 0));
+            predators.get(i).load(br);
+        }
+    }
+    
+    public void reset() {
+        predators.clear();
+        idCounter = 0;
+        int separation = BACKGROUND_WIDTH / (PREDATORS_AMOUNT / 4);
+        
+        for (int i = 0; i < PREDATORS_AMOUNT / 4; i++) {
+            predators.add(new Predator(separation * i, -1000, PREDATOR_SIZE, PREDATOR_SIZE, game, ++idCounter));
+            predators.add(new Predator(separation * i, BACKGROUND_HEIGHT+1000, PREDATOR_SIZE, PREDATOR_SIZE, game, ++idCounter));
+            predators.add(new Predator(-1000, separation*i, PREDATOR_SIZE, PREDATOR_SIZE, game, ++idCounter));
+            predators.add(new Predator(BACKGROUND_WIDTH + 1000, separation*i, PREDATOR_SIZE, PREDATOR_SIZE, game, ++idCounter));
         }
     }
     

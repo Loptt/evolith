@@ -83,6 +83,14 @@ public class Assets {
     public static BufferedImage PMResumeButtonOn;
     public static BufferedImage PMSaveButtonOff;
     public static BufferedImage PMSaveButtonOn;
+    
+    public static BufferedImage overWin;
+    public static BufferedImage overLose;
+    
+    public static BufferedImage overMenuButtonOn;
+    public static BufferedImage overMenuButtonOff;
+    public static BufferedImage statsMenuButtonOn;
+    public static BufferedImage statsMenuButtonOff;
 
     /**
      * Initializes the assets and links to the image folder
@@ -130,7 +138,7 @@ public class Assets {
         hoverImage = ImageLoader.loadImage("/images/playgraphics/hover_bar.png");
         
         organismPanel_close = ImageLoader.loadImage("/images/panel/closedetails.png");
-        organismPanel_menu = ImageLoader.loadImage("/images/panel/detailsmenu2.png");   
+        organismPanel_menu = ImageLoader.loadImage("/images/panel/detailsintname.png");   
         organismPanel_prevArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
         organismPanel_nextArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
         organismPanel_reproduceButton_ON = ImageLoader.loadImage("/images/panel/reproduceon.png");
@@ -208,6 +216,13 @@ public class Assets {
         prevArrow = ImageLoader.loadImage("/images/panel/prev.png");
         
         egg = ImageLoader.loadImage("/images/organisms/egg.png");
+        
+        overWin = ImageLoader.loadImage("/images/over/winscreen.png");
+        overLose = ImageLoader.loadImage("/images/over/gameover.png");
+        overMenuButtonOn = ImageLoader.loadImage("/images/over/endmainbuttonon.png");
+        overMenuButtonOff = ImageLoader.loadImage("/images/over/endmainbuttonoff.png");
+        statsMenuButtonOn = ImageLoader.loadImage("/images/over/statisticsbuttonon.png");
+        statsMenuButtonOff = ImageLoader.loadImage("/images/over/statisticsbuttonoff.png");
     }
     
     /**
@@ -245,5 +260,22 @@ public class Assets {
         g2d.dispose();
 
         return rotated;
+    }
+    
+    public static BufferedImage setAlpha(byte alpha, BufferedImage img) {       
+        alpha %= 0xff; 
+        for (int cx=0;cx<img.getWidth();cx++) {          
+            for (int cy=0;cy<img.getHeight();cy++) {
+                int color = img.getRGB(cx, cy);
+
+                int mc = (alpha << 24) | 0x00ffffff;
+                int newcolor = color & mc;
+                img.setRGB(cx, cy, newcolor);            
+
+            }
+
+        }
+        
+        return img;
     }
 }

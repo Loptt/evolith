@@ -15,6 +15,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.*;
@@ -33,7 +36,7 @@ public class Resource extends Item implements Commons{
     private boolean over;
     private int parasiteAmount;
     private int predatorAmount;
-    private final ArrayList<Point> positions;
+    private ArrayList<Point> positions;
     private HashMap<Organism, Integer> map;
     private Time time;
 
@@ -65,6 +68,10 @@ public class Resource extends Item implements Commons{
         predator = null;
     }
     
+    public void updatePositions() {
+        positions = SwarmMovement.getPositions(x + PLANT_SIZE / 2, y + PLANT_SIZE / 2, 6, 1);
+    }
+    
     public void addParasite(Organism org) {
         if (!full) {
             for (int i = 0; i < 6; i++) {
@@ -86,7 +93,7 @@ public class Resource extends Item implements Commons{
         }
     }
 
-    public void removeParasite(Organism org, int i) {
+    public void removeParasite(Organism org) {
         if (map.containsKey(org)) {
             //System.out.println("AMOUNT  :" + map.size());
             map.remove(org);
@@ -96,10 +103,33 @@ public class Resource extends Item implements Commons{
             }
             //System.out.println("PARASITE REMOVED  ID:  " + i);
         } else {
-            System.out.println("ERROR, ORGANISM NOT IN RESOURCE  ID:  " + i);
+            System.out.println("ERROR, ORGANISM NOT IN RESOURCE");
         }
         
         //System.out.println("END OF REMOVEPAR FUNCTION:  ID:   " + i);
+    }
+    
+    public void save(PrintWriter pw) {
+        //Save positions
+        pw.println(Integer.toString(x));
+        pw.println(Integer.toString(y));
+        
+        //Quantity
+        pw.println(Integer.toString(quantity));
+        
+        //Type
+        pw.println(Integer.toString(type == ResourceType.Plant ? 1 : 0));
+    }
+    
+    public void load(BufferedReader br) throws IOException {
+        x = Integer.parseInt(br.readLine());
+        y = Integer.parseInt(br.readLine());
+        
+        updatePositions();
+        
+        quantity = Integer.parseInt(br.readLine());
+        
+        int b = Integer.parseInt(br.readLine());
     }
     
     public void removeParasites() {

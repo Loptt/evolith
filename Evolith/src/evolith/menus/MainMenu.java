@@ -94,6 +94,8 @@ public class MainMenu extends Menu implements Commons {
                 if (buttons.get(0).isPressed()) {
                     setClickPlay(true);
                     setActive(false);
+                    buttons.get(0).setPressed(false);
+                    buttons.get(1).setPressed(false);
                 }
             }
         }
