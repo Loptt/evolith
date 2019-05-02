@@ -41,8 +41,8 @@ public interface Commons {
     public static final int SECONDS_PER_THIRST = 5;
     public static final int SECONDS_PER_MATURITY = 1;
     
-    public static final int BUTTON_PLAY_X = 340;
-    public static final int BUTTON_PLAY_Y = 390;
+    public static final int BUTTON_PLAY_X = 330;
+    public static final int BUTTON_PLAY_Y = 370;
       
     public static final int PANEL_X = 190;
     public static final int PANEL_Y = 150;
@@ -57,14 +57,14 @@ public interface Commons {
     public static final int MUTATION_BUTTON_CLOSE_DIMENSION = 40;
     
     
-    public static final int BUTTON_INSTRUCTIONS_Y = 530;
-    public static final int BUTTON_INSTRUCTIONS_X = 340;
+    public static final int BUTTON_INSTRUCTIONS_Y = 500;
+    public static final int BUTTON_INSTRUCTIONS_X = 330;
     
     public static final int BUTTON_PLAY_WIDTH = 350;
-    public static final int BUTTON_PLAY_HEIGHT = 110;
+    public static final int BUTTON_PLAY_HEIGHT = 95;
     
     public static final int BUTTON_INSTRUCTIONS_WIDTH = 350;
-    public static final int BUTTON_INSTRUCTIONS_HEIGHT = 110;
+    public static final int BUTTON_INSTRUCTIONS_HEIGHT = 95;
 
     public static final int MINIMAP_X = 810;
     public static final int MINIMAP_Y = 20;

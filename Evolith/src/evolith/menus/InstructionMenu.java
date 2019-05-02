@@ -28,7 +28,7 @@ public class InstructionMenu extends Menu {
         over = false;
         images = new ArrayList<>();
         
-        buttons.add(new Button(820, 640, 50, 45, Assets.nextArrow, Assets.nextArrow)); //Next
+        buttons.add(new Button(920, 640, 50, 45, Assets.nextArrow, Assets.nextArrow)); //Next
     }
 
     public boolean isOver() {
