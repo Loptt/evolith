@@ -15,6 +15,7 @@ import java.util.ArrayList;
  * @author Moisés Fernández
  */
 public class Assets {
+    public static SoundClip ricardomilos;
 
     public static BufferedImage backgroundDay; //background image
     public static BufferedImage backgroundNight; //background image
@@ -95,6 +96,8 @@ public class Assets {
      * Initializes the assets and links to the image folder
      */
     public static void init() {
+        ricardomilos = new SoundClip("/sounds/ricardomilos.wav"); 
+        
         // Pause Menu
         PMLoadButtonOff = ImageLoader.loadImage("/images/pausemenu/loadbutton.png");
         PMLoadButtonOn = ImageLoader.loadImage("/images/pausemenu/loadbuttonon.png");
