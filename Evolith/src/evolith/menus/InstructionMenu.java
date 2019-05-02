@@ -28,7 +28,14 @@ public class InstructionMenu extends Menu {
         over = false;
         images = new ArrayList<>();
         
-        buttons.add(new Button(920, 640, 50, 45, Assets.nextArrow, Assets.nextArrow)); //Next
+        images.add(Assets.instructions.get(0));
+        images.add(Assets.instructions.get(1));
+        images.add(Assets.instructions.get(2));
+        images.add(Assets.instructions.get(3));
+        images.add(Assets.instructions.get(4));
+        images.add(Assets.instructions.get(5));
+        
+        buttons.add(new Button(920, 625, 55, 50, Assets.nextArrow, Assets.nextArrow)); //Next
     }
 
     public boolean isOver() {
@@ -52,15 +59,15 @@ public class InstructionMenu extends Menu {
         } else {
             buttons.get(0).setActive(false);
         }
-        /*
+        
         if (currentImage >= images.size()) {
             over = true;
-        }*/
+        }
     }
 
     @Override
     public void render(Graphics g) {
-        //g.drawImage(images.get(currentImage), x, y, width, height, null);
+        g.drawImage(images.get(currentImage), x, y, width, height, null);
         
         buttons.get(0).render(g);
     }

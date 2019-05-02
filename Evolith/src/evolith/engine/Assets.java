@@ -92,6 +92,8 @@ public class Assets {
     public static BufferedImage overMenuButtonOff;
     public static BufferedImage statsMenuButtonOn;
     public static BufferedImage statsMenuButtonOff;
+    
+    public static ArrayList<BufferedImage> instructions;
 
     /**
      * Initializes the assets and links to the image folder
@@ -145,9 +147,6 @@ public class Assets {
         organismPanel_nextArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
         organismPanel_reproduceButton_ON = ImageLoader.loadImage("/images/panel/reproduceon.png");
         organismPanel_reproduceButton_OFF = ImageLoader.loadImage("/images/panel/reproduceoff.png");
-        
-        
-        
 
         mutation_menu = ImageLoader.loadImage("/images/panel/mutationmenu.png");
         mutation_max_tier = ImageLoader.loadImage("/images/panel/maxtier.png");
@@ -225,6 +224,15 @@ public class Assets {
         overMenuButtonOff = ImageLoader.loadImage("/images/over/endmainbuttonoff.png");
         statsMenuButtonOn = ImageLoader.loadImage("/images/over/statisticsbuttonon.png");
         statsMenuButtonOff = ImageLoader.loadImage("/images/over/statisticsbuttonoff.png");
+        
+        instructions = new ArrayList<>();
+        
+        instructions.add(ImageLoader.loadImage("/images/instructions/instructions1.png"));
+        instructions.add(ImageLoader.loadImage("/images/instructions/instructions2.png"));
+        instructions.add(ImageLoader.loadImage("/images/instructions/instructions3.png"));
+        instructions.add(ImageLoader.loadImage("/images/instructions/instructions4.png"));
+        instructions.add(ImageLoader.loadImage("/images/instructions/instructions5.png"));
+        instructions.add(ImageLoader.loadImage("/images/instructions/instructions6.png"));
     }
     
     /**
