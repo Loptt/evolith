@@ -40,6 +40,7 @@ public interface Commons {
     public static final int SECONDS_PER_HUNGER = 5;
     public static final int SECONDS_PER_THIRST = 5;
     public static final int SECONDS_PER_MATURITY = 1;
+    public static final int SECONDS_PER_FULL_RES_INTEL = 2;
     
     public static final int BUTTON_PLAY_X = 330;
     public static final int BUTTON_PLAY_Y = 370;

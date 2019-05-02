@@ -57,6 +57,7 @@ public class Organism extends Item implements Commons {
     private int prevThirstRed;  //Time in seconds at which hunger was previously reduced
     private int prevMatInc;     //Time in seconds at which maturity was previously increased
     private int prevPointGenerated;
+    private int prevIntelResInc;
 
     private boolean needOffspring;  //Value indicating if the organisms needs to reproduce
     private boolean dead;           //Whether the organism is dead or not
@@ -130,6 +131,7 @@ public class Organism extends Item implements Commons {
         prevThirstRed = 0;
         prevMatInc = 0;
         prevPointGenerated = 0;
+        prevIntelResInc = 0;
 
         needOffspring = false;
         dead = false;
@@ -272,6 +274,11 @@ public class Organism extends Item implements Commons {
         if (time.getSeconds() >= prevThirstRed + SECONDS_PER_THIRST && !drinking) {
             thirst--;
             prevThirstRed = (int) time.getSeconds();
+        }
+        
+        if ((hunger >= 90 || thirst >= 90) && time.getSeconds() >= prevIntelResInc + SECONDS_PER_FULL_RES_INTEL) {
+            intelligence++;
+            prevIntelResInc = (int) time.getSeconds();
         }
         
         if (hunger <= 0) {
@@ -1032,6 +1039,14 @@ public class Organism extends Item implements Commons {
      */
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
+    }
+    
+    /**
+     * to set maturity
+     * @param maturity 
+     */
+    public void setMaturity(int maturity) {
+        this.maturity = maturity;
     }
     
     /**
