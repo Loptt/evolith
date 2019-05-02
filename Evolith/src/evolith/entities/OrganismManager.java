@@ -54,7 +54,7 @@ public class OrganismManager implements Commons {
         panelIndex = 0;
         this.game = game;
         organisms = new ArrayList<>();
-        amount = 0;
+        amount = 1;
         idCounter = 1;
 
         for (int i = 0; i < amount; i++) {
