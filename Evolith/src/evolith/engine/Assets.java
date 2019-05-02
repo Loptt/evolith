@@ -16,6 +16,7 @@ import java.util.ArrayList;
  */
 public class Assets {
     public static SoundClip ricardomilos;
+    public static SoundClip fatrat;
 
     public static BufferedImage backgroundDay; //background image
     public static BufferedImage backgroundNight; //background image
@@ -97,6 +98,7 @@ public class Assets {
      */
     public static void init() {
         ricardomilos = new SoundClip("/sounds/ricardomilos.wav"); 
+        ricardomilos = new SoundClip("/sounds/fatrat.wav"); 
         
         // Pause Menu
         PMLoadButtonOff = ImageLoader.loadImage("/images/pausemenu/loadbutton.png");

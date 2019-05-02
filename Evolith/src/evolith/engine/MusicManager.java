@@ -21,6 +21,7 @@ public class MusicManager {
     public MusicManager() {
         time = new Time();
         songs = new ArrayList<Song>();     
+        songs.add(new Song(Assets.fatrat, 190));
         songs.add(new Song(Assets.ricardomilos, 256));
     }
     
