@@ -11,8 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Persistence;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -34,11 +31,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "species", catalog = "Evolith", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SpeciesDB.findAll", query = "SELECT s FROM SpeciesDB s")
-    , @NamedQuery(name = "SpeciesDB.findBySpeciesId", query = "SELECT s FROM SpeciesDB s WHERE s.speciesId = :speciesId")
-    , @NamedQuery(name = "SpeciesDB.findBySpeciesColor", query = "SELECT s FROM SpeciesDB s WHERE s.speciesColor = :speciesColor")
-    , @NamedQuery(name = "SpeciesDB.findBySpeciesName", query = "SELECT s FROM SpeciesDB s WHERE s.speciesName = :speciesName")})
-public class SpeciesDB implements Serializable {
+    @NamedQuery(name = "SpeciesP.findAll", query = "SELECT s FROM SpeciesP s")
+    , @NamedQuery(name = "SpeciesP.findBySpeciesId", query = "SELECT s FROM SpeciesP s WHERE s.speciesId = :speciesId")
+    , @NamedQuery(name = "SpeciesP.findBySpeciesColor", query = "SELECT s FROM SpeciesP s WHERE s.speciesColor = :speciesColor")
+    , @NamedQuery(name = "SpeciesP.findBySpeciesName", query = "SELECT s FROM SpeciesP s WHERE s.speciesName = :speciesName")})
+public class SpeciesP implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,15 +48,15 @@ public class SpeciesDB implements Serializable {
     @Column(name = "species_name", length = 20)
     private String speciesName;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "speciesId")
-    private Collection<OrganismDB> organismDBCollection;
+    private Collection<OrganismP> organismPCollection;
     @JoinColumn(name = "game_id", referencedColumnName = "game_id", nullable = false)
     @ManyToOne(optional = false)
-    private GameDB gameId;
+    private GameP gameId;
 
-    public SpeciesDB() {
+    public SpeciesP() {
     }
 
-    public SpeciesDB(Integer speciesId) {
+    public SpeciesP(Integer speciesId) {
         this.speciesId = speciesId;
     }
 
@@ -88,19 +85,19 @@ public class SpeciesDB implements Serializable {
     }
 
     @XmlTransient
-    public Collection<OrganismDB> getOrganismDBCollection() {
-        return organismDBCollection;
+    public Collection<OrganismP> getOrganismPCollection() {
+        return organismPCollection;
     }
 
-    public void setOrganismDBCollection(Collection<OrganismDB> organismDBCollection) {
-        this.organismDBCollection = organismDBCollection;
+    public void setOrganismPCollection(Collection<OrganismP> organismPCollection) {
+        this.organismPCollection = organismPCollection;
     }
 
-    public GameDB getGameId() {
+    public GameP getGameId() {
         return gameId;
     }
 
-    public void setGameId(GameDB gameId) {
+    public void setGameId(GameP gameId) {
         this.gameId = gameId;
     }
 
@@ -114,10 +111,10 @@ public class SpeciesDB implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SpeciesDB)) {
+        if (!(object instanceof SpeciesP)) {
             return false;
         }
-        SpeciesDB other = (SpeciesDB) object;
+        SpeciesP other = (SpeciesP) object;
         if ((this.speciesId == null && other.speciesId != null) || (this.speciesId != null && !this.speciesId.equals(other.speciesId))) {
             return false;
         }
@@ -126,23 +123,7 @@ public class SpeciesDB implements Serializable {
 
     @Override
     public String toString() {
-        return "evolith.database.SpeciesDB[ speciesId=" + speciesId + " ]";
+        return "evolith.database.SpeciesP[ speciesId=" + speciesId + " ]";
     }
-
-    public void persist(Object object) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("EvolithPU");
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        try {
-            em.persist(object);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            em.getTransaction().rollback();
-        } finally {
-            em.close();
-        }
-    }
-    
     
 }

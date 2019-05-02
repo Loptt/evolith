@@ -2,16 +2,17 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="EvolithPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>evolith.database.MutationDB</class>
-    <class>evolith.database.OrganismDB</class>
-    <class>evolith.database.PlayerDB</class>
-    <class>evolith.database.SpeciesDB</class>
-    <class>evolith.database.GameDB</class>
+    <class>evolith.database.SpeciesP</class>
+    <class>evolith.database.Ranking2P</class>
+    <class>evolith.database.OrganismP</class>
+    <class>evolith.database.MutationP</class>
+    <class>evolith.database.PlayerP</class>
+    <class>evolith.database.GameP</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://SG-Evolith-496-master.servers.mongodirector.com:3306/Evolith"/>
-      <property name="javax.persistence.jdbc.user" value="sgroot"/>
+      <property name="javax.persistence.jdbc.user" value="evadmin"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.password" value="a6yaRypnDU-29cBS"/>
+      <property name="javax.persistence.jdbc.password" value="Evoadmin1$"/>
     </properties>
   </persistence-unit>
 </persistence>

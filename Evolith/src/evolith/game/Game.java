@@ -1,7 +1,5 @@
 package evolith.game;
 
-import evolith.database.ConnectionMySql;
-import evolith.database.PlayerDB;
 import evolith.menus.MainMenu;
 import evolith.menus.SetupMenu;
 import evolith.menus.ButtonBarMenu;

@@ -18,8 +18,8 @@ public class ConnectionMySql {
     public static void connect() throws SQLException {
 
         url = "jdbc:mysql://SG-Evolith-496-master.servers.mongodirector.com:3306/Evolith";
-        user = "sgroot";
-        password = "a6yaRypnDU-29cBS";
+        user = "evadmin";
+        password = "Evoadmin1$";
         try {
             myConnection = DriverManager.getConnection(url, user, password);
             System.out.println("Connection made of user: " + user + " with password " + password);
@@ -29,6 +29,14 @@ public class ConnectionMySql {
 
         try {
             myStatement = myConnection.createStatement();
+            myResult = ConnectionMySql.myStatement.executeQuery("SELECT player_name, species_name, game_duration, game_score,SUM(organism_alive), MAX(organism_generation), SUM(organism_kills), MAX(organism_lifespan) FROM player P JOIN game G ON P.player_id = G.player_id JOIN species S ON S.game_id = G.game_id JOIN organism O ON O.species_id = S.species_id GROUP BY O.species_id ORDER BY G.game_score DESC LIMIT 10;");
+            while(myResult.next())
+            {
+                
+                
+                
+                
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -36,23 +44,7 @@ public class ConnectionMySql {
     }
 
     public void getMutation() throws SQLException {
-        myResult = ConnectionMySql.myStatement.executeQuery("Select * from Mutation;");
-    }
-    public void getSpecies() throws SQLException {
-        myResult = ConnectionMySql.myStatement.executeQuery("Select * from Species;");
-    }
-    public void getGame() throws SQLException {
-        myResult = ConnectionMySql.myStatement.executeQuery("Select * from Game;");
-    }
-    public void getEnemy() throws SQLException {
-        myResult = ConnectionMySql.myStatement.executeQuery("Select * from Enemy;");
-        while(myResult.next())
-        {
-         System.out.println( "Enemy id: "+  myResult.getString("enemy_id")+" Position x" + myResult.getString("enemy_position_x")+" Position y" + myResult.getString("enemy_position_y"));
-        }
-    }
-    public void getOrganism() throws SQLException {
-        myResult = ConnectionMySql.myStatement.executeQuery("Select * from Organism;");
+        myResult = ConnectionMySql.myStatement.executeQuery("SELECT player_name, species_name, game_duration, game_score,SUM(organism_alive), MAX(organism_generation), SUM(organism_kills), MAX(organism_lifespan) FROM player P JOIN game G ON P.player_id = G.player_id JOIN species S ON S.game_id = G.game_id JOIN organism O ON O.species_id = S.species_id GROUP BY O.species_id ORDER BY G.game_score DESC LIMIT 10;");
     }
 
 }
