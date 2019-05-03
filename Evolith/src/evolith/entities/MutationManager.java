@@ -113,6 +113,46 @@ public class MutationManager implements Commons{
         return tier;
     }
     
+    public void setStrengthTier(int tier) {
+        for (int i = 0; i < mutations.get(0).size(); i++) {
+            if (i + 1 == tier) {
+                mutations.get(0).get(i).setActive(true);
+            } else {
+                mutations.get(0).get(i).setActive(false);
+            }
+        }
+    }
+    
+    public void setSpeedTier(int tier) {
+        for (int i = 0; i < mutations.get(1).size(); i++) {
+            if (i + 1 == tier) {
+                mutations.get(1).get(i).setActive(true);
+            } else {
+                mutations.get(1).get(i).setActive(false);
+            }
+        }
+    }
+    
+    public void setHealthTier(int tier) {
+        for (int i = 0; i < mutations.get(2).size(); i++) {
+            if (i + 1 == tier) {
+                mutations.get(2).get(i).setActive(true);
+            } else {
+                mutations.get(2).get(i).setActive(false);
+            }
+        }
+    }
+    
+    public void setStealthTier(int tier) {
+        for (int i = 0; i < mutations.get(3).size(); i++) {
+            if (i + 1 == tier) {
+                mutations.get(3).get(i).setActive(true);
+            } else {
+                mutations.get(3).get(i).setActive(false);
+            }
+        }
+    }
+    
     public void save(PrintWriter pw) {
         //Save the state of each mutation
         for (int i = 0; i < mutations.size(); i++) {

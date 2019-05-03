@@ -13,21 +13,14 @@ import evolith.helpers.Commons;
  * @author charles
  */
 public class NetworkData implements Commons {
-    private byte[] data;
-    private int byteAmount;
-    private OrganismManager orgs;
+    private static int constructedByteAmount;
     
-    public NetworkData(OrganismManager orgs) {
-        this.orgs = orgs;
-        byteAmount = orgs.getAmount() * ORG_DATA_SIZE + 1;
+    public static byte[] constructData(OrganismManager orgs) {
+        byte[] data;
+        constructedByteAmount = orgs.getAmount() * ORG_DATA_SIZE + 1;
+        data = new byte[constructedByteAmount];
         
-        constructData();
-    }
-    
-    private void constructData() {
-        data = new byte[byteAmount];
-        
-        for (int i = 0; i < byteAmount; i++) {
+        for (int i = 0; i < constructedByteAmount; i++) {
             data[i] = 0;
         }
         
@@ -57,9 +50,38 @@ public class NetworkData implements Commons {
             //Extra info
             data[index++] = addExtraInfo(org);
         }
+        
+        return data;
     }
     
-    private byte convertMutations(MutationManager muts) {
+    public static void parseBytes(OrganismManager orgs, byte[] data) {
+        int index = 1;
+        int x;
+        int y;
+        
+        double life;
+        int hunger;
+        int thirst;
+        
+        for (int i = 0; i < orgs.getAmount(); i++) {
+            Organism org = orgs.getOrganism(i);
+            
+            x = data[index++] * 256 + data[index++];
+            y = data[index++] * 256 + data[index++];
+            
+            org.setX(x);
+            org.setY(y);
+            
+            life = (double) ((int) (data[index++]));
+            hunger = data[index++];
+            thirst = data[index++];
+            
+            parseMutations(org.getOrgMutations(), data, index++);
+            getExtraInfo(org, data, index++);
+        }
+    }
+    
+    private static byte convertMutations(MutationManager muts) {
         byte result = 0;
         int tier;
         
@@ -84,7 +106,29 @@ public class NetworkData implements Commons {
         return result;
     }
     
-    private byte addExtraInfo(Organism org) {
+    private static void parseMutations(MutationManager muts, byte[] data, int index) {
+        int tier;
+        
+        // 10 01 11 00
+        
+        //Strength
+        tier = (data[index] >> 6) & 0xfc;
+        muts.setStrengthTier(tier);
+        
+        //Speed
+        tier = (data[index] >> 4) & 0xfc;
+        muts.setSpeedTier(tier);
+        
+        //Health
+        tier = (data[index] >> 2) & 0xfc;
+        muts.setHealthTier(tier);
+        
+        //Stealth
+        tier = (data[index]) & 0xfc;
+        muts.setStrengthTier(tier);
+    }
+    
+    private static byte addExtraInfo(Organism org) {
         byte result = 0; 
         
         if (org.isEgg()) {
@@ -98,8 +142,13 @@ public class NetworkData implements Commons {
         return result;
     }
     
-    private byte[] getData() {
-        return data;
+    private static void getExtraInfo(Organism org, byte[] data, int index) {
+        if ((data[index] ^ 2) == 0) {
+            
+        }
     }
-
+    
+    public static int getConstructedByteAmount() {
+        return constructedByteAmount;
+    }
 }

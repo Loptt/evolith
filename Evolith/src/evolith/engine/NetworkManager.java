@@ -5,6 +5,7 @@
  */
 package evolith.engine;
 
+import evolith.entities.OrganismManager;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -26,10 +27,10 @@ public class NetworkManager implements Runnable {
 
     private boolean server;
     
-    private NetworkData receivedData;
+    private OrganismManager orgs;
     
-    public NetworkManager(boolean isServer) {
-        receivedData = new NetworkData();
+    public NetworkManager(boolean isServer, OrganismManager orgs) {
+        this.orgs = orgs;
         server = isServer;
         port = 0;
     }
@@ -59,17 +60,19 @@ public class NetworkManager implements Runnable {
     
     /**
      *
+     * @param orgs
      * @param data
      */
-    public void sendData(NetworkData data) {
+    public void sendData(OrganismManager orgs) {
         if (port == 0) {
             //No address specified
             //beep beep bop
             return;
         }
         
-        String message = gson.toJson(data, NetworkData.class);
-        packet = new DatagramPacket(message.getBytes(), message.getBytes().length, address, port);
+        byte[] data = NetworkData.constructData(orgs);
+        
+        packet = new DatagramPacket(data, NetworkData.getConstructedByteAmount(), address, port);
         
         try { 
             socket.send(packet);
@@ -83,8 +86,8 @@ public class NetworkManager implements Runnable {
             //If port is 0, address and port have not been specified
             //So define them
             
-            byte[] buff = new byte[/*(int) ObjectSizeFetcher.getObjectSize(receivedData)*/ 256];
-            packet = new DatagramPacket(buff, buff.length);
+            byte[] receivedData = new byte[/*(int) ObjectSizeFetcher.getObjectSize(receivedData)*/ 2304];
+            packet = new DatagramPacket(receivedData, receivedData.length);
             socket.receive(packet);
             
             if (port == 0) {
@@ -92,9 +95,7 @@ public class NetworkManager implements Runnable {
                 address = packet.getAddress();
             }
             
-            String message = new String(buff).trim();
-            //System.out.println(message);
-            receivedData = gson.fromJson(message, NetworkData.class);
+            NetworkData.parseBytes(orgs, receivedData);
         } catch (IOException e) {
             System.out.println(e);
         }
@@ -105,9 +106,5 @@ public class NetworkManager implements Runnable {
         while (true) {
             receiveData();
         }
-    }
-
-    public NetworkData getReceivedData() {
-        return receivedData;
     }
 }
