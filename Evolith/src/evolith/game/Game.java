@@ -55,14 +55,14 @@ public class Game implements Runnable, Commons {
     private Camera camera;                      // camera of the game engine
 
     private OrganismManager organisms;                //organisms in the game
-    //private Plants plants;                      // resources of plants in the game
-    //private Waters waters;
+    private OrganismManager otherOrganisms;
+    
     private ResourceManager resources;
 
     private PredatorManager predators;
 
     private enum States {
-        MainMenu, Paused, GameOver, Play, Instructions, SetupMenu,
+        MainMenu, Paused, GameOver, Play, Instructions, SetupMenu, Multi
     } // status of the flow of the game once running
     private States state;
 
@@ -154,6 +154,7 @@ public class Game implements Runnable, Commons {
         musicManager = new MusicManager();
         //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
         organisms = new OrganismManager(this);
+        otherOrganisms = new OrganismManager(this);
         predators = new PredatorManager(this);
         //plants = new Plants(this);
         //waters = new Waters(this);
@@ -186,6 +187,8 @@ public class Game implements Runnable, Commons {
             case Play:
                 playTick();
                 break;
+            case Multi:
+                multiTick();
             case Paused:
                 pausedTick();
                 break;
@@ -273,6 +276,10 @@ public class Game implements Runnable, Commons {
         checkGameOver();
     }
     
+    private void multiTick() {
+        
+    }
+    
     private void pausedTick() {
         pauseMenu.tick();
         keyManager.tick();
@@ -319,6 +326,10 @@ public class Game implements Runnable, Commons {
             overMenu.setStats(false);
             System.out.println("STATS NOT READY");
         }
+    }
+    
+    private void mutliInit() {
+        
     }
 
     /**
