@@ -27,10 +27,10 @@ public class NetworkManager implements Runnable {
 
     private boolean server;
     
-    private OrganismManager orgs;
+    private OrganismManager otherorgs;
     
-    public NetworkManager(boolean isServer, OrganismManager orgs) {
-        this.orgs = orgs;
+    public NetworkManager(boolean isServer, OrganismManager otherorgs) {
+        this.otherorgs = otherorgs;
         server = isServer;
         port = 0;
     }
@@ -52,7 +52,7 @@ public class NetworkManager implements Runnable {
     
     public void initServer() {
         try {  
-            socket = new DatagramSocket(6000);
+            socket = new DatagramSocket(5000);
         } catch (SocketException e) {
             e.printStackTrace();
         }
@@ -95,7 +95,7 @@ public class NetworkManager implements Runnable {
                 address = packet.getAddress();
             }
             
-            NetworkData.parseBytes(orgs, receivedData);
+            NetworkData.parseBytes(otherorgs, receivedData);
         } catch (IOException e) {
             System.out.println(e);
         }

@@ -77,7 +77,6 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).tick();
             checkNeedMutation(organisms.get(i));
-            checkKill(organisms.get(i));
         }
         
         checkNight();
@@ -323,11 +322,14 @@ public class OrganismManager implements Commons {
     /**
      * Check if an organism needs to be killed
      *
-     * @param org
      */
-    private void checkKill(Organism org) {
-        if (org.isDead()) {
-            organisms.remove(org);
+    public void checkKill() {
+        for (int i = 0; i < organisms.size(); i++) {
+            Organism org = organisms.get(i);
+            if (org.isDead()) {
+                organisms.remove(org);
+            }
+            
         }
     }
     

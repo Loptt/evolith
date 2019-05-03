@@ -23,6 +23,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,6 +51,7 @@ public class Game implements Runnable, Commons {
     private MouseManager mouseManager;          // manages the mouse
     private InputKeyboard inputKeyboard;        // manages the input of the keyboard of the setup menu
     private MusicManager musicManager;
+    private NetworkManager network;
 
     private Background background;              // background of the game engine
     private Camera camera;                      // camera of the game engine
@@ -101,7 +103,7 @@ public class Game implements Runnable, Commons {
         inputKeyboard = new InputKeyboard();
         minimap = new Minimap(MINIMAP_X, MINIMAP_Y, MINIMAP_WIDTH, MINIMAP_HEIGHT, this);
 
-        state = States.MainMenu;
+        state = States.Multi;
         selection = new Selection(this);
 
         night = false;
@@ -165,7 +167,12 @@ public class Game implements Runnable, Commons {
         display.getJframe().addMouseMotionListener(mouseManager);
         display.getCanvas().addMouseListener(mouseManager);
         display.getCanvas().addMouseMotionListener(mouseManager);
-
+        
+        mutliInit();
+        
+        Thread myThread = new Thread(network);
+        
+        myThread.start();
     }
 
     /**
@@ -189,6 +196,7 @@ public class Game implements Runnable, Commons {
                 break;
             case Multi:
                 multiTick();
+                break;
             case Paused:
                 pausedTick();
                 break;
@@ -273,11 +281,40 @@ public class Game implements Runnable, Commons {
             prevSecDayCycleChange = clock.getSeconds();
         }
         
+        organisms.checkKill();
         checkGameOver();
     }
     
     private void multiTick() {
+        clock.tick();
+        organisms.tick();
+        otherOrganisms.tick();
+        resources.tick();
+        buttonBar.tick();
+        inputKeyboard.tick();
+        selection.tick();
         
+        network.sendData(organisms);
+        
+        keyManager.tick();
+        musicManager.tick();
+        
+        if (!organisms.getOrgPanel().isInputActive()) {
+            camera.tick();
+        }
+
+        manageMouse();
+        manageKeyboard();
+
+        if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
+            night = !night;
+            background.setNight(night);
+            prevSecDayCycleChange = clock.getSeconds();
+        }
+        
+        organisms.checkKill();
+        
+        checkGameOver();
     }
     
     private void pausedTick() {
@@ -329,7 +366,18 @@ public class Game implements Runnable, Commons {
     }
     
     private void mutliInit() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("SERVER?:  ");
+        int i = sc.nextInt();
+        boolean server = i == 1;
         
+        if (server) {
+            network = new NetworkManager(true, otherOrganisms);
+            network.initServer();
+        } else {
+            network = new NetworkManager(false, otherOrganisms);
+            network.initClient("localhost", 5000);
+        }
     }
 
     /**
@@ -430,7 +478,7 @@ public class Game implements Runnable, Commons {
 
         if (buttonBar.hasMouse(mouseX, mouseY)) {
             mouseManager.setRight(false);
-            //Second in hierarchy is the minimap
+            //Second in hierarchy is the m6000inimap
         } else if (minimap.hasMouse(mouseX, mouseY)) {
             mouseManager.setRight(false);
             //Third in hierarchy is the background   
@@ -536,6 +584,32 @@ public class Game implements Runnable, Commons {
 
                     resources.render(g);
                     organisms.render(g);
+                    predators.render(g);
+
+                    if (night) {
+                        g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
+                    }
+                    minimap.render(g);
+                    buttonBar.render(g);
+
+                    if (selection.isActive()) {
+                        selection.render(g);
+                    }
+
+                    if (organisms.isOrgPanelActive()) {
+                        organisms.getOrgPanel().render(g);
+                    } else if (organisms.isMutPanelActive()) {
+                        organisms.getMutPanel().render(g);
+                    }
+
+                    break;
+                    
+                case Multi:
+                    g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
+
+                    resources.render(g);
+                    organisms.render(g);
+                    otherOrganisms.render(g);
                     predators.render(g);
 
                     if (night) {
