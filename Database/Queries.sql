@@ -18,7 +18,7 @@ BEGIN;
     GROUP BY O.species_id
     ORDER BY G.game_score DESC
     LIMIT 10;
-    
+
 
     SELECT 'Top Ranking Basic';
     SELECT player_name, species_name, game_duration, game_score
@@ -26,3 +26,6 @@ BEGIN;
     WHERE P.player_id = G.player_id AND S.game_id = G.game_id
     ORDER BY G.game_score DESC
     LIMIT 10;
+
+
+    
