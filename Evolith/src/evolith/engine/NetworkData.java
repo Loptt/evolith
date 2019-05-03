@@ -143,8 +143,16 @@ public class NetworkData implements Commons {
     }
     
     private static void getExtraInfo(Organism org, byte[] data, int index) {
-        if ((data[index] ^ 2) == 0) {
-            
+        if ((data[index] & 128) == 128) {
+            org.setEgg(true);
+        } else {
+            org.setEgg(false);
+        }
+        
+        if ((data[index] & 64) == 64) {
+            org.setDead(true);
+        } else {
+            org.setDead(false);
         }
     }
     
