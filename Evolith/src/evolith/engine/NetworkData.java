@@ -7,6 +7,7 @@ package evolith.engine;
 
 import evolith.entities.*;
 import evolith.helpers.Commons;
+import java.awt.Point;
 
 /**
  *
@@ -72,8 +73,9 @@ public class NetworkData implements Commons {
             System.out.print("X :  " + x);
             System.out.println(" --  Y :  " + y);
             
-            org.setX(x);
-            org.setY(y);
+            org.setPoint(new Point(x, y));
+            /*org.setX(x);
+            org.setY(y);*/
             
             life = (double) ((int) (data[index++]));
             hunger = data[index++];
