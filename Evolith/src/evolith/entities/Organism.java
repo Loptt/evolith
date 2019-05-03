@@ -87,6 +87,7 @@ public class Organism extends Item implements Commons {
     private boolean egg;
     private boolean born;
     private boolean needMutation;
+    private boolean add;
     
     private Predator pred;
 
@@ -155,6 +156,7 @@ public class Organism extends Item implements Commons {
         egg = true;
         born = false;
         needMutation = false;
+        add = false;
         
         pred = null;
         target = null;
@@ -1409,5 +1411,13 @@ public class Organism extends Item implements Commons {
 
     public void setBorn(boolean born) {
         this.born = born;
+    }
+
+    public boolean isAdd() {
+        return add;
+    }
+
+    public void setAdd(boolean add) {
+        this.add = add;
     }
 }
