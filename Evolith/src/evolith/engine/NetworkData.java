@@ -69,6 +69,9 @@ public class NetworkData implements Commons {
             x = data[index++] * 256 + data[index++];
             y = data[index++] * 256 + data[index++];
             
+            System.out.print("X :  " + x);
+            System.out.println(" --  Y :  " + y);
+            
             org.setX(x);
             org.setY(y);
             

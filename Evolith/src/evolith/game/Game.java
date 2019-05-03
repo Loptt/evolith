@@ -169,10 +169,6 @@ public class Game implements Runnable, Commons {
         display.getCanvas().addMouseMotionListener(mouseManager);
         
         mutliInit();
-        
-        Thread myThread = new Thread(network);
-        
-        myThread.start();
     }
 
     /**
@@ -378,6 +374,10 @@ public class Game implements Runnable, Commons {
             network = new NetworkManager(false, otherOrganisms);
             network.initClient("localhost", 5000);
         }
+        
+        Thread myThread = new Thread(network);
+        
+        myThread.start();
     }
 
     /**
