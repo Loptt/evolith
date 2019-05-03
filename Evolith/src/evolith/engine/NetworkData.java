@@ -64,6 +64,8 @@ public class NetworkData implements Commons {
         int hunger;
         int thirst;
         
+        int addAmount = (int) (data[0] & 0xff) - orgs.getAmount();
+        
         for (int i = 0; i < orgs.getAmount(); i++) {
             Organism org = orgs.getOrganism(i);
             
@@ -71,15 +73,31 @@ public class NetworkData implements Commons {
             y = data[index++] * 256 + (int) (data[index++] & 0xff);
 
             org.setPoint(new Point(x, y));
-            /*org.setX(x);
-            org.setY(y);*/
             
             life = (double) ((int) (data[index++]));
             hunger = data[index++];
             thirst = data[index++];
             
             parseMutations(org.getOrgMutations(), data, index++);
-            getExtraInfo(org, data, index++);
+            getExtraInfo(org, orgs, data, index++);
+        }
+        
+        for (int i = 0; i < addAmount; i++) {
+            
+            x = data[index++] * 256 + (int) (data[index++] & 0xff);
+            y = data[index++] * 256 + (int) (data[index++] & 0xff);
+            Organism org = new Organism(x, y, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, orgs.getGame(), orgs.getSkin(), orgs.getIdCounter());
+            org.setPoint(new Point(x, y));
+            
+            life = (double) ((int) (data[index++]));
+            hunger = data[index++];
+            thirst = data[index++];
+            
+            parseMutations(org.getOrgMutations(), data, index++);
+            org.setEgg(true);
+            org.setBorn(false);
+            
+            orgs.addOrganism(org);
         }
     }
     
@@ -149,7 +167,7 @@ public class NetworkData implements Commons {
         return result;
     }
     
-    private static void getExtraInfo(Organism org, byte[] data, int index) {
+    private static void getExtraInfo(Organism org, OrganismManager orgs, byte[] data, int index) {
         if ((data[index] & 128) == -1) {
             org.setEgg(true);
         } else {
@@ -160,10 +178,6 @@ public class NetworkData implements Commons {
             org.setDead(true);
         } else {
             org.setDead(false);
-        }
-        
-        if ((data[index] & 32) == 32) {
-            
         }
     }
     

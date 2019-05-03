@@ -168,6 +168,8 @@ public class Game implements Runnable, Commons {
         display.getCanvas().addMouseListener(mouseManager);
         display.getCanvas().addMouseMotionListener(mouseManager);
         
+        otherOrganisms.setSkin(2);
+        
         mutliInit();
     }
 

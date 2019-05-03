@@ -458,6 +458,10 @@ public class OrganismManager implements Commons {
         return false;
     }
     
+    public void addOrganism(Organism org) {
+        organisms.add(org);
+    }
+    
     public void save(PrintWriter pw) {
         //Save amount
         pw.println(Integer.toString(organisms.size()));
@@ -741,5 +745,8 @@ public class OrganismManager implements Commons {
     public void setUpdatedNight(boolean updatedNight) {
         this.updatedNight = updatedNight;
     }
-    
+
+    public Game getGame() {
+        return game;
+    }
 }
