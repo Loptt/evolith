@@ -153,13 +153,13 @@ public class Minimap extends Menu implements Commons{
         }
         
         g.setColor(Color.BLACK);
-        
+        /*
         for (int i = 0; i < game.getPredators().getPredatorAmount(); i++) {
             int predX = (int) game.getPredators().getPredator(i).getX() / 30;
             int predY = (int) game.getPredators().getPredator(i).getY() / 30;
             
             g.fillOval(MINIMAP_X + predX, MINIMAP_Y + predY, 30 / 10, 30 / 10);
-        }
+        }*/
         g.setColor(Color.BLACK);
         g.drawRect(MINIMAP_X + game.getCamera().getX() / 30, MINIMAP_Y + game.getCamera().getY() / 30, game.getWidth() / 30 + 2, game.getHeight() / 30 + 2);
         g.drawImage(Assets.minimapFrame, MINIMAP_X, MINIMAP_Y, null);

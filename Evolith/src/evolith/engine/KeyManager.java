@@ -23,6 +23,8 @@ public class KeyManager implements KeyListener {
     public boolean s;
     public boolean d;
     public boolean p;
+    public boolean g;
+    public boolean c;
     public boolean esc;
     
     public boolean num1;
@@ -34,6 +36,8 @@ public class KeyManager implements KeyListener {
     public boolean prevnum1;
     public boolean prevnum2;
     public boolean prevnum3;
+    public boolean prevg;
+    public boolean prevc;
 
     protected boolean keys[];
 
@@ -132,6 +136,28 @@ public class KeyManager implements KeyListener {
             }
         } else {
             prevnum3 = false;
+        }
+        
+        if (keys[KeyEvent.VK_G]) {
+            if (!prevg) {
+                g = true;
+                prevg = true;
+            } else {
+                g = false;
+            }
+        } else {
+            prevg = false;
+        }
+        
+        if (keys[KeyEvent.VK_C]) {
+            if (!prevc) {
+                c = true;
+                prevc = true;
+            } else {
+                c = false;
+            }
+        } else {
+            prevc = false;
         }
     }
 }
