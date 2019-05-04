@@ -408,6 +408,11 @@ public class Organism extends Item implements Commons {
     }
     
     public void updateMutations() {
+        strength = 0;
+        speed = 0;
+        maxHealth = 0;
+        stealth = 0;
+
         for (int i = 0; i < orgMutations.getMutations().size(); i++) {
             int newStr = 0;
             int newSpeed = 0;
@@ -421,14 +426,16 @@ public class Organism extends Item implements Commons {
                 newStealth += orgMutations.getMutations().get(i).get(j).getStealth();
                 
                 if (orgMutations.getMutations().get(i).get(j).isActive()) {
-                    strength = newStr;
-                    speed = newSpeed;
-                    maxHealth = newHealth;
-                    stealth = newStealth;
+                    strength += newStr;
+                    speed += newSpeed;
+                    maxHealth += newHealth;
+                    stealth += newStealth;
                     break;
                 }
             }
         }
+        
+        updateStats();
     }
     
     private void updateStats() {

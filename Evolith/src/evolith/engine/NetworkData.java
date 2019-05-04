@@ -47,9 +47,9 @@ public class NetworkData implements Commons {
             
             //Get mutations
             data[index++] = convertMutations(org.getOrgMutations());
+            data[index++] = addExtraInfo(org, org.getOrgMutations());
             
             //Extra info
-            data[index++] = addExtraInfo(org);
         }
         
         return data;
@@ -94,6 +94,7 @@ public class NetworkData implements Commons {
             thirst = data[index++];
             
             parseMutations(org.getOrgMutations(), data, index++);
+            getExtraInfo(org, orgs, data, index++);
             org.setEgg(true);
             org.setBorn(false);
             
@@ -110,6 +111,8 @@ public class NetworkData implements Commons {
         //Strength
         tier = muts.getStrengthTier() << 6;
         result = (byte) (result | tier);
+        
+        System.out.println("RES TO SEND: " + result);
         
         //Speed
         tier = muts.getSpeedTier() << 4;
@@ -129,26 +132,28 @@ public class NetworkData implements Commons {
     private static void parseMutations(MutationManager muts, byte[] data, int index) {
         int tier;
         
-        // 10 01 11 00
+        // 01 01 01 01
         
         //Strength
-        tier = (data[index] >> 6) & 0xfc;
+        tier = ((data[index] >> 6) & 0x3);
+        System.out.println("RES RECEIVED:  " + unsignByte(data[index]));
+        System.out.println("TIER TO APPLY:  " + tier);
         muts.setStrengthTier(tier);
         
         //Speed
-        tier = (data[index] >> 4) & 0xfc;
+        tier = (data[index] >> 4) & 0x3;
         muts.setSpeedTier(tier);
         
         //Health
-        tier = (data[index] >> 2) & 0xfc;
+        tier = (data[index] >> 2) & 0x3;
         muts.setHealthTier(tier);
         
         //Stealth
-        tier = (data[index]) & 0xfc;
-        muts.setStrengthTier(tier);
+        tier = (data[index]) & 0x3;
+        muts.setStealthTier(tier);
     }
     
-    private static byte addExtraInfo(Organism org) {
+    private static byte addExtraInfo(Organism org, MutationManager muts) {
         byte result = 0; 
         
         if (org.isEgg()) {
@@ -157,6 +162,22 @@ public class NetworkData implements Commons {
         
         if (org.isDead()) {
             result = (byte) (result | 64);
+        }
+        
+        if (muts.getStrengthTier() > 3) {
+            result = (byte) (result | 8);
+        }
+        
+        if (muts.getSpeedTier() > 3) {
+            result = (byte) (result | 4);
+        }
+        
+        if (muts.getHealthTier() > 2) {
+            result = (byte) (result | 2);
+        }
+        
+        if (muts.getStealthTier() > 1) {
+            result = (byte) (result | 1);
         }
         
         return result;
@@ -174,6 +195,24 @@ public class NetworkData implements Commons {
         } else {
             org.setDead(false);
         }
+        
+        if ((data[index] & 8) == 8) {
+            org.getOrgMutations().setStrengthTier(4);
+        }
+        
+        if ((data[index] & 4) == 4) {
+            org.getOrgMutations().setSpeedTier(4);
+        }
+        
+        if ((data[index] & 2) == 2) {
+            org.getOrgMutations().setHealthTier(3);
+        }
+        
+        if ((data[index] & 1) == 1) {
+            org.getOrgMutations().setStealthTier(2);
+        }
+        
+        org.updateMutations();
     }
     
     public static int getConstructedByteAmount() {
