@@ -86,7 +86,7 @@ public class NetworkData implements Commons {
             
             x = data[index++] * 256 + (int) (data[index++] & 0xff);
             y = data[index++] * 256 + (int) (data[index++] & 0xff);
-            Organism org = new Organism(x, y, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, orgs.getGame(), orgs.getSkin(), orgs.getIdCounter());
+            Organism org = new Organism(x, y, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, orgs.getGame(), orgs.getSkin(), orgs.getIdCounter(), true);
             org.setPoint(new Point(x, y));
             
             life = (double) ((int) (data[index++]));
@@ -157,11 +157,6 @@ public class NetworkData implements Commons {
         
         if (org.isDead()) {
             result = (byte) (result | 64);
-        }
-        
-        if (org.isAdd()) {
-            result = (byte) (result | 32);
-            org.setAdd(false);
         }
         
         return result;

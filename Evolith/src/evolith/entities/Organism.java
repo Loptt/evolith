@@ -83,11 +83,12 @@ public class Organism extends Item implements Commons {
     
     private int currentMaxHealth;
     private int currentSize;
+    private int hatchTime;
     
     private boolean egg;
     private boolean born;
     private boolean needMutation;
-    private boolean add;
+    private boolean other;
     
     private Predator pred;
 
@@ -102,11 +103,12 @@ public class Organism extends Item implements Commons {
      * @param skin the id of the selected skin
      * @param id the unique identifier
      */
-    public Organism(int x, int y, int width, int height, Game game, int skin, int id) {
+    public Organism(int x, int y, int width, int height, Game game, int skin, int id, boolean other) {
         super(x, y, width, height);
         this.game = game;
         this.skin = skin;
         this.id = id;
+        this.other = other;
         point = new Point(x, y);
         maxVel = 2;
         absMaxVel = 2;
@@ -156,10 +158,11 @@ public class Organism extends Item implements Commons {
         egg = true;
         born = false;
         needMutation = false;
-        add = false;
-        
+
         pred = null;
         target = null;
+        
+        hatchTime = 0;
     }
     
         
@@ -256,6 +259,7 @@ public class Organism extends Item implements Commons {
     private void checkVitals() {
         //Reduce hunger every x seconds defined in the commmons class
         if (egg) {
+            hatchTime = (int) time.getSeconds();
             if (time.getSeconds() > BORN_TIME && !born) {
                 born();
             }
@@ -347,7 +351,7 @@ public class Organism extends Item implements Commons {
     private void born() {        
         born = true;
         //Check if a mutation will occur. Chance is 1/4 now
-        if ((int) (Math.random() * 10) == 0) {
+        if ((int) (Math.random() * 10) == 0 && !other) {
             needMutation = true;
         } else {
             egg = false;
@@ -444,7 +448,7 @@ public class Organism extends Item implements Commons {
      * @return new organism
      */
     public Organism cloneOrg(){
-        Organism org = new Organism(x,y,width, height, game, skin, id);
+        Organism org = new Organism(x,y,width, height, game, skin, id, other);
         org.setPoint((Point) point.clone());
         org.setMaxVel(maxVel);
         org.setSpeed(speed);
@@ -840,7 +844,7 @@ public class Organism extends Item implements Commons {
             
             g.setColor(Color.YELLOW);
             g.fillRect(game.getCamera().getRelX(x) + (int) ((currentSize - 10) * barOffX) ,
-                    game.getCamera().getRelY(y) + (int) ((currentSize - 10) * barOffY) + 5, (int) ((currentSize - 10) * time.getSeconds() / BORN_TIME), 3);
+                    game.getCamera().getRelY(y) + (int) ((currentSize - 10) * barOffY) + 5, (int) ((currentSize - 10) * hatchTime / BORN_TIME), 3);
             
             g.setColor(Color.white);
             g.drawRect(game.getCamera().getRelX(x) + (int) ((currentSize - 10) * barOffX) -1,
@@ -1413,11 +1417,11 @@ public class Organism extends Item implements Commons {
         this.born = born;
     }
 
-    public boolean isAdd() {
-        return add;
+    public boolean isOther() {
+        return other;
     }
 
-    public void setAdd(boolean add) {
-        this.add = add;
+    public void setOther(boolean other) {
+        this.other = other;
     }
 }

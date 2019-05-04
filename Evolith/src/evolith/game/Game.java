@@ -155,8 +155,8 @@ public class Game implements Runnable, Commons {
         
         musicManager = new MusicManager();
         //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
-        organisms = new OrganismManager(this);
-        otherOrganisms = new OrganismManager(this);
+        organisms = new OrganismManager(this, false);
+        otherOrganisms = new OrganismManager(this, true);
         predators = new PredatorManager(this);
         //plants = new Plants(this);
         //waters = new Waters(this);
