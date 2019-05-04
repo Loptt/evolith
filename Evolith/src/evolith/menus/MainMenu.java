@@ -137,5 +137,4 @@ public class MainMenu extends Menu implements Commons {
             g.drawImage(Assets.startInstructions, 0, 0, 1000, 700, null);
         }
     }
-
 }
