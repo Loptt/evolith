@@ -309,6 +309,7 @@ public class Game implements Runnable, Commons {
         }
         
         organisms.checkKill();
+        otherOrganisms.checkKill();
         
         checkGameOver();
     }
