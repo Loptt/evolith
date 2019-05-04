@@ -539,7 +539,6 @@ public class Organism extends Item implements Commons {
             if (SwarmMovement.distanceBetweenTwoPoints(x, y, o.getX(), o.getY()) < o.getStealthRange()) {
                 safeLeaveResource();
                 beingChased = true;
-                System.out.println("CHASED");
                 pred = o;
             } else {
 
