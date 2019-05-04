@@ -15,6 +15,8 @@ import java.util.ArrayList;
  * @author Moisés Fernández
  */
 public class Assets {
+    public static SoundClip ricardomilos;
+    public static SoundClip fatrat;
 
     public static BufferedImage backgroundDay; //background image
     public static BufferedImage backgroundNight; //background image
@@ -71,11 +73,46 @@ public class Assets {
     
     public static BufferedImage glow;
     public static BufferedImage egg;
+    
+    // Pause Menu
+    public static BufferedImage PMLoadButtonOff;
+    public static BufferedImage PMLoadButtonOn;
+    public static BufferedImage PMMainMenuButtonOff;
+    public static BufferedImage PMMainMenuButtonOn;
+    public static BufferedImage PMPauseMenu;
+    public static BufferedImage PMResumeButtonOff;
+    public static BufferedImage PMResumeButtonOn;
+    public static BufferedImage PMSaveButtonOff;
+    public static BufferedImage PMSaveButtonOn;
+    
+    public static BufferedImage overWin;
+    public static BufferedImage overLose;
+    
+    public static BufferedImage overMenuButtonOn;
+    public static BufferedImage overMenuButtonOff;
+    public static BufferedImage statsMenuButtonOn;
+    public static BufferedImage statsMenuButtonOff;
+    
+    public static ArrayList<BufferedImage> instructions;
 
     /**
-     * Initalizes the assets and links to the image folder
+     * Initializes the assets and links to the image folder
      */
     public static void init() {
+        ricardomilos = new SoundClip("/sounds/ricardomilos.wav"); 
+        fatrat = new SoundClip("/sounds/fatrat.wav"); 
+        
+        // Pause Menu
+        PMLoadButtonOff = ImageLoader.loadImage("/images/pausemenu/loadbutton.png");
+        PMLoadButtonOn = ImageLoader.loadImage("/images/pausemenu/loadbuttonon.png");
+        PMMainMenuButtonOff = ImageLoader.loadImage("/images/pausemenu/mainmenubutton.png");
+        PMMainMenuButtonOn = ImageLoader.loadImage("/images/pausemenu/mainmenubuttonon.png");
+        PMPauseMenu = ImageLoader.loadImage("/images/pausemenu/pausemenu.png");
+        PMResumeButtonOff = ImageLoader.loadImage("/images/pausemenu/resumebutton.png");
+        PMResumeButtonOn = ImageLoader.loadImage("/images/pausemenu/resumebuttonon.png");
+        PMSaveButtonOff = ImageLoader.loadImage("/images/pausemenu/savebutton.png");
+        PMSaveButtonOn = ImageLoader.loadImage("/images/pausemenu/savebuttonon.png");
+        
         backgroundDay = ImageLoader.loadImage("/images/backgrounds/backgroundday.png");
         backgroundNight = ImageLoader.loadImage("/images/backgrounds/backgroundnight.png");
         backgroundFilter = ImageLoader.loadImage("/images/backgrounds/nightmode.png");
@@ -105,14 +142,11 @@ public class Assets {
         hoverImage = ImageLoader.loadImage("/images/playgraphics/hover_bar.png");
         
         organismPanel_close = ImageLoader.loadImage("/images/panel/closedetails.png");
-        organismPanel_menu = ImageLoader.loadImage("/images/panel/detailsmenu2.png");   
+        organismPanel_menu = ImageLoader.loadImage("/images/panel/detailsintname.png");   
         organismPanel_prevArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
         organismPanel_nextArrow = ImageLoader.loadImage("/images/setupmenu/orangeone.png");
         organismPanel_reproduceButton_ON = ImageLoader.loadImage("/images/panel/reproduceon.png");
         organismPanel_reproduceButton_OFF = ImageLoader.loadImage("/images/panel/reproduceoff.png");
-        
-        
-        
 
         mutation_menu = ImageLoader.loadImage("/images/panel/mutationmenu.png");
         mutation_max_tier = ImageLoader.loadImage("/images/panel/maxtier.png");
@@ -183,6 +217,22 @@ public class Assets {
         prevArrow = ImageLoader.loadImage("/images/panel/prev.png");
         
         egg = ImageLoader.loadImage("/images/organisms/egg.png");
+        
+        overWin = ImageLoader.loadImage("/images/over/winscreen.png");
+        overLose = ImageLoader.loadImage("/images/over/gameover.png");
+        overMenuButtonOn = ImageLoader.loadImage("/images/over/endmainbuttonon.png");
+        overMenuButtonOff = ImageLoader.loadImage("/images/over/endmainbuttonoff.png");
+        statsMenuButtonOn = ImageLoader.loadImage("/images/over/statisticsbuttonon.png");
+        statsMenuButtonOff = ImageLoader.loadImage("/images/over/statisticsbuttonoff.png");
+        
+        instructions = new ArrayList<>();
+        
+        instructions.add(ImageLoader.loadImage("/images/instructions/instructions1.png"));
+        instructions.add(ImageLoader.loadImage("/images/instructions/instructions2.png"));
+        instructions.add(ImageLoader.loadImage("/images/instructions/instructions3.png"));
+        instructions.add(ImageLoader.loadImage("/images/instructions/instructions4.png"));
+        instructions.add(ImageLoader.loadImage("/images/instructions/instructions5.png"));
+        instructions.add(ImageLoader.loadImage("/images/instructions/instructions6.png"));
     }
     
     /**
@@ -220,5 +270,22 @@ public class Assets {
         g2d.dispose();
 
         return rotated;
+    }
+    
+    public static BufferedImage setAlpha(byte alpha, BufferedImage img) {       
+        alpha %= 0xff; 
+        for (int cx=0;cx<img.getWidth();cx++) {          
+            for (int cy=0;cy<img.getHeight();cy++) {
+                int color = img.getRGB(cx, cy);
+
+                int mc = (alpha << 24) | 0x00ffffff;
+                int newcolor = color & mc;
+                img.setRGB(cx, cy, newcolor);            
+
+            }
+
+        }
+        
+        return img;
     }
 }

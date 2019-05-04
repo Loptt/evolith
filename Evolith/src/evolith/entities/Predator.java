@@ -14,6 +14,9 @@ import evolith.helpers.Time;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  *
@@ -72,6 +75,8 @@ public class Predator extends Item implements Commons {
     private enum Mode {Water, Roaming, Attacking};
     private Mode mode;
     private Mode prevMode;
+    
+    private boolean visible;
 
     /**
      * Constructor of the organism
@@ -128,6 +133,7 @@ public class Predator extends Item implements Commons {
         prevMode = Mode.Roaming;
         
         applyVariances();
+        visible = false;
     }
 
     /**
@@ -415,7 +421,7 @@ public class Predator extends Item implements Commons {
             }
             
             setTargetResource(null);
-            //setStamina(getStamina() - 0.3);
+            setStamina(getStamina() - 0.3);
         } else {
             if (mode == Mode.Attacking) {
                 assignNewPoint();
@@ -531,6 +537,44 @@ public class Predator extends Item implements Commons {
     public void kill() {
         dead = true;
     }
+    
+    public void save(PrintWriter pw) {
+        pw.println(Integer.toString(id));
+        
+        //Save positions
+        pw.println(Integer.toString(x));
+        pw.println(Integer.toString(y));
+        pw.println(Integer.toString((int) xVel));
+        pw.println(Integer.toString((int) yVel));
+        
+        pw.println(Integer.toString(width));
+        pw.println(Integer.toString(absMaxVel));
+        pw.println(Double.toString(damage));
+        pw.println(Integer.toString(maxHealth));
+        
+        //Save vitals
+        pw.println(Integer.toString((int) life));
+        pw.println(Integer.toString((int) stamina));
+    }
+    
+    public void load(BufferedReader br) throws IOException {
+        id = Integer.parseInt(br.readLine());
+        
+        x = Integer.parseInt(br.readLine());
+        y = Integer.parseInt(br.readLine());
+        xVel = Integer.parseInt(br.readLine());
+        yVel = Integer.parseInt(br.readLine());
+        
+        width = Integer.parseInt(br.readLine());
+        height = width;
+        
+        absMaxVel = Integer.parseInt(br.readLine());
+        damage = Double.parseDouble(br.readLine());
+        maxHealth = Integer.parseInt(br.readLine());
+        
+        life = Integer.parseInt(br.readLine());
+        stamina = Integer.parseInt(br.readLine());
+    }
 
     /**
      * Renders the organisms relative to the camera
@@ -539,6 +583,10 @@ public class Predator extends Item implements Commons {
      */
     @Override
     public void render(Graphics g) {
+        if (!visible) {
+            return;
+        }
+        
         g.drawImage(Assets.predator, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
         
         double barOffX = 0.03;
@@ -725,5 +773,13 @@ public class Predator extends Item implements Commons {
 
     public void setLeaving(boolean leaving) {
         this.leaving = leaving;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

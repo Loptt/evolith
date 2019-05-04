@@ -11,6 +11,9 @@ import evolith.menus.OrganismPanel;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -24,7 +27,6 @@ import java.util.HashSet;
 public class OrganismManager implements Commons {
 
     private ArrayList<Organism> organisms;  //array of all organisms
-    private int amount;         //max organism amount
 
     private Game game;          // game instance
 
@@ -51,15 +53,15 @@ public class OrganismManager implements Commons {
         panelIndex = 0;
         this.game = game;
         organisms = new ArrayList<>();
-        amount = 1;
+        int amount = 1;
         idCounter = 1;
 
         for (int i = 0; i < amount; i++) {
             organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++));
+            organisms.get(i).setEgg(false);
+            organisms.get(i).setBorn(true);
+            organisms.get(i).setMaturity(50);
         }
-        
-        organisms.get(0).setEgg(false);
-        organisms.get(0).setBorn(true);
 
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
         mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
@@ -122,7 +124,7 @@ public class OrganismManager implements Commons {
         ArrayList<Point> points;
         //if left clicked move the organisms to determined point
 
-        points = SwarmMovement.getPositions(x - ORGANISM_SIZE_STAT / 2, y - ORGANISM_SIZE_STAT / 2, amount, obj);
+        points = SwarmMovement.getPositions(x - ORGANISM_SIZE_STAT / 2, y - ORGANISM_SIZE_STAT / 2, organisms.size(), obj);
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setPoint(points.get(i));
         }
@@ -170,7 +172,7 @@ public class OrganismManager implements Commons {
     public void moveSwarmToPoint(int x, int y, int obj) {
         Point p = new Point(x, y);
 
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setPoint(p);
         }
     }
@@ -307,11 +309,13 @@ public class OrganismManager implements Commons {
         offspring = org.cloneOrg();
         
       //  if((orgPanel.isReproduce() && mutPanel.getButtons().get(0).isPressed()) || (orgPanel.isReproduce() && !mutPanel.isActive()) ){
-        amount++;
         orgPanel.setReproduce(false);
         offspring.setId(idCounter + 1);
         idCounter++;
         organisms.add(offspring);
+        offspring.setSearchFood(org.isSearchFood());
+        offspring.setSearchWater(org.isSearchWater());
+        offspring.setIntelligence(offspring.getIntelligence() + 15);
         org.setNeedOffspring(false);
         
     }
@@ -324,7 +328,6 @@ public class OrganismManager implements Commons {
     private void checkKill(Organism org) {
         if (org.isDead()) {
             organisms.remove(org);
-            amount--;
         }
     }
     
@@ -354,7 +357,7 @@ public class OrganismManager implements Commons {
      * @param resource
      */
     public void setSelectedResource(Resource resource) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSelected()) {
                 organisms.get(i).setTarget(resource);
             }
@@ -389,7 +392,7 @@ public class OrganismManager implements Commons {
      * @param value
      */
     public void setSelectedGodCommand(boolean value) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSelected()) {
                 organisms.get(i).setGodCommand(value);
             }
@@ -439,6 +442,58 @@ public class OrganismManager implements Commons {
         }
 
         return false;
+    }
+    
+    public boolean isMaxIntelligence() {
+        for (int i = 0; i < organisms.size(); i++) {
+            if (organisms.get(i).getIntelligence() >= MAX_INTELLIGENCE) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public void save(PrintWriter pw) {
+        //Save amount
+        pw.println(Integer.toString(organisms.size()));
+        
+        //Skin
+        pw.println(Integer.toString(skin));
+        
+        //Save each organism
+        for (int i = 0; i < organisms.size(); i++) {
+            organisms.get(i).save(pw);
+        }
+    }
+    
+    public void load(BufferedReader br) throws IOException {
+        int am = Integer.parseInt(br.readLine());
+        organisms.clear();
+        
+        skin = Integer.parseInt(br.readLine());
+        
+        for (int i = 0; i < am; i++) {
+            organisms.add(new Organism(0,0, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, skin, 0));
+            organisms.get(i).load(br);
+        }
+    }
+    
+    public void reset() {
+        organisms.clear();
+        
+        idCounter = 1;
+        organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++));
+        
+        organisms.get(0).setEgg(false);
+        organisms.get(0).setBorn(true);
+        organisms.get(0).setMaturity(50);
+
+        orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
+        mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
+        
+        updatedNight = false;
+        speciesName = "";
     }
 
     /**
@@ -538,7 +593,7 @@ public class OrganismManager implements Commons {
      * @param val boolean to be assigned
      */
     public void setSearchFood(boolean val) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setSearchFood(val);
         }
     }
@@ -549,7 +604,7 @@ public class OrganismManager implements Commons {
      * @param val boolean to be assigned
      */
     public void setSelectedSearchFood(boolean val) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSelected()) {
                 organisms.get(i).setSearchFood(val);
             }
@@ -562,7 +617,7 @@ public class OrganismManager implements Commons {
      * @param val boolean to be assigned
      */
     public void setSearchWater(boolean val) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setSearchWater(val);
         }
     }
@@ -573,7 +628,7 @@ public class OrganismManager implements Commons {
      * @param val boolean to be assigned
      */
     public void setSelectedSearchWater(boolean val) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSelected()) {
                 organisms.get(i).setSearchWater(val);
             }
@@ -586,7 +641,7 @@ public class OrganismManager implements Commons {
      * @param val boolean to be assigned
      */
     public void setAggressiveness(boolean val) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setAggressive(val);
         }
     }
@@ -597,7 +652,7 @@ public class OrganismManager implements Commons {
      * @param val boolean to be assigned
      */
     public void setSelectedAggressiveness(boolean val) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSelected()) {
                 organisms.get(i).setAggressive(val);
             }
@@ -656,11 +711,7 @@ public class OrganismManager implements Commons {
     }
 
     public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
+        return organisms.size();
     }
 
     public int getIdCounter() {
