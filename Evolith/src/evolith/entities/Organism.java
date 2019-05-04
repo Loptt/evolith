@@ -90,7 +90,7 @@ public class Organism extends Item implements Commons {
     private boolean needMutation;
     private boolean other;
     
-    private Predator pred;
+    private Item pred;
 
     /**
      * Constructor of the organism
@@ -178,7 +178,11 @@ public class Organism extends Item implements Commons {
             return;
         }
         
-        checkPredators();
+        if (!other) {
+            checkPredators();
+            checkOthers();
+        }
+        
         handleTarget();
         checkMovement();
         checkVitals(); 
@@ -341,7 +345,7 @@ public class Organism extends Item implements Commons {
 
             //If god command is active, organisms shouldn't generate a new point
             if (!godCommand) {
-                point = generateEscapePoint();
+                point = generateEscapePointPred();
             }
         } else {
             if (!godCommand) {
@@ -525,13 +529,31 @@ public class Organism extends Item implements Commons {
         }
     }
     
+    private void checkOthers() {
+        OrganismManager others = game.getOtherOrganisms();
+        
+        for (int i = 0; i < others.getAmount(); i++) {
+            Organism o = others.getOrganism(i);
+
+            //If predator is in the range of the organism
+            if (SwarmMovement.distanceBetweenTwoPoints(x, y, o.getX(), o.getY()) < o.getStealthRange()) {
+                safeLeaveResource();
+                beingChased = true;
+                System.out.println("CHASED");
+                pred = o;
+            } else {
+
+            }
+        }
+    }
+    
      /**
      * Generate a point to run when an organism is being chased by a predator
      *
      * @param pred the predator to check
      * @return the generated point
      */
-    public Point generateEscapePoint() {
+    public Point generateEscapePointPred() {
 
         Point generatedPoint = new Point(x, y);
         

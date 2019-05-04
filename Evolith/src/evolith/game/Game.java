@@ -872,6 +872,10 @@ public class Game implements Runnable, Commons {
         return night;
     }
 
+    public OrganismManager getOtherOrganisms() {
+        return otherOrganisms;
+    }
+
     /**
      * start game
      */

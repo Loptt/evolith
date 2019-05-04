@@ -75,7 +75,6 @@ public class NetworkData implements Commons {
         data[0] = (byte) 2;
         
         data[1] = (byte) amountPlant;
-        System.out.println("AMOUNT TO SEND:  " + amountPlant);
         
         int index = 2;
         
@@ -93,7 +92,6 @@ public class NetworkData implements Commons {
                 data[index++] = (byte) (reso.getY());
                 
                 data[index++] = (byte) reso.getQuantity();
-                System.out.println("QTY SEND:  " + reso.getQuantity());
                 
                 res.getPlant(i).setAdd(false);
             }
@@ -136,7 +134,6 @@ public class NetworkData implements Commons {
                 data[index++] = (byte) (reso.getY());
                 
                 data[index++] = (byte) reso.getQuantity();
-                System.out.println("QTY SEND:  " + reso.getQuantity());
                 
                 reso.setAdd(false);
             }
@@ -215,7 +212,6 @@ public class NetworkData implements Commons {
             
             if (ind == i) {
                 if (getFlags(data, index++)) {
-                    System.out.println("REMOVING");
                     removeIndices.add(i);
                 }
                 
