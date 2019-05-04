@@ -69,8 +69,8 @@ public class NetworkData implements Commons {
         for (int i = 0; i < orgs.getAmount(); i++) {
             Organism org = orgs.getOrganism(i);
             
-            x = data[index++] * 256 + (int) (data[index++] & 0xff);
-            y = data[index++] * 256 + (int) (data[index++] & 0xff);
+            x = data[index++] * 256 + unsignByte(data[index++]);
+            y = data[index++] * 256 + unsignByte(data[index++]);
 
             org.setPoint(new Point(x, y));
             
@@ -84,8 +84,8 @@ public class NetworkData implements Commons {
         
         for (int i = 0; i < addAmount; i++) {
             
-            x = data[index++] * 256 + (int) (data[index++] & 0xff);
-            y = data[index++] * 256 + (int) (data[index++] & 0xff);
+            x = data[index++] * 256 + unsignByte(data[index++]);
+            y = data[index++] * 256 + unsignByte(data[index++]);
             Organism org = new Organism(x, y, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, orgs.getGame(), orgs.getSkin(), orgs.getIdCounter(), true);
             org.setPoint(new Point(x, y));
             
@@ -163,11 +163,11 @@ public class NetworkData implements Commons {
     }
     
     private static void getExtraInfo(Organism org, OrganismManager orgs, byte[] data, int index) {
-        /*if ((data[index] & 128) == -1) {
+        if ((unsignByte(data[index++]) & 128) == 128) {
             org.setEgg(true);
         } else {
             org.setEgg(false);
-        }*/
+        }
         
         if ((data[index] & 64) == 64) {
             org.setDead(true);
@@ -178,5 +178,9 @@ public class NetworkData implements Commons {
     
     public static int getConstructedByteAmount() {
         return constructedByteAmount;
+    }
+    
+    public static int unsignByte(byte b) {
+        return (int) (b & 0xff);
     }
 }
