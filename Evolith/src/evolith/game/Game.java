@@ -214,6 +214,7 @@ public class Game implements Runnable, Commons {
         buttonBar.tick();
         inputKeyboard.tick();
         selection.tick();
+        weather.tick();
         
         manageMouse();
         if (clock.getSeconds() >= prevWeatherChange + 10) {
@@ -301,9 +302,11 @@ public class Game implements Runnable, Commons {
                 //Set the resource to the selected organisms
                 organisms.setSelectedResource(clickedResource);
                 if (clickedResource.getType() == Resource.ResourceType.Plant) {
+                    Assets.grasssound.play();
                     organisms.setSelectedSearchFood(true);
                     organisms.setSelectedSearchWater(false);
                 } else {
+                    Assets.watersound.play();
                     organisms.setSelectedSearchWater(true);
                     organisms.setSearchFood(false);
                 }
@@ -362,6 +365,7 @@ public class Game implements Runnable, Commons {
                     else{
                         weather.render(g);
                     }
+                    
                     minimap.render(g);
                     buttonBar.render(g);
                     

@@ -5,6 +5,7 @@
  */
 package evolith.game;
 
+import evolith.engine.Animation;
 import evolith.engine.Assets;
 import evolith.helpers.Clock;
 import static evolith.helpers.Commons.DAY_CYCLE_DURATION_SECONDS;
@@ -32,7 +33,7 @@ public class Weather {
     private WeatherInstance dry = new WeatherInstance(Assets.dryBackground, Assets.dryBackgroundNight, Assets.dryLayer, 0, false);
     private WeatherInstance hail = new WeatherInstance(Assets.backgroundDay, Assets.backgroundRainNight, Assets.coldLayer, 0, false);
     private WeatherInstance storm = new WeatherInstance(Assets.backgroundDay, Assets.backgroundRainNight, Assets.backgroundFilter, 0, false);
-    //private WeatherInstance snow = new WeatherInstance()
+    private WeatherInstance snow = new WeatherInstance(Assets.backgroundSnow, Assets.backgroundSnowNight, Assets.coldLayer, 0, false);
     
     private int width, height;
     
@@ -41,6 +42,8 @@ public class Weather {
     private Background background;
     private int prevWeather;
     
+    private Animation raindrops;
+    private Animation snowhail;
 
     /**
      *
@@ -63,17 +66,24 @@ public class Weather {
         states = new ArrayList<ArrayList<State>>();
         ArrayList<State>ClearList = new ArrayList<State>();
         states.add(ClearList);
-        ArrayList<State>RainList = new ArrayList<State>();
-        states.add(RainList);
         ArrayList<State>DryList = new ArrayList<State>();
         states.add(DryList);
+        ArrayList<State>RainList = new ArrayList<State>();
+        states.add(RainList);
+        ArrayList<State>StormList = new ArrayList<State>();
+        states.add(StormList);
+        ArrayList<State>HailList = new ArrayList<State>();
+        states.add(HailList);
+        ArrayList<State>SnowList = new ArrayList<State>();
+        states.add(SnowList);
 
 
         //Clear
         states.get(0).add(State.Clear);
         states.get(0).add(State.Rain);
         states.get(0).add(State.Dry);
-        //states.get(0).add(State.Hail);
+        
+        states.get(0).add(State.Hail);
         
         //Dry
         states.get(1).add(State.Dry);
@@ -82,7 +92,23 @@ public class Weather {
         //Rain
         states.get(2).add(State.Rain);
         states.get(2).add(State.Clear);
-        //states.get(2).add(State.Storm);
+        
+        states.get(2).add(State.Storm);
+        
+        //Storm
+        states.get(3).add(State.Clear);
+        
+        //Hail
+        states.get(4).add(State.Hail);
+        states.get(4).add(State.Clear);
+        states.get(4).add(State.Snow);
+        
+        //Snow
+        states.get(5).add(State.Clear);
+        
+        raindrops = new Animation(Assets.rainanimation, 60);
+        snowhail = new Animation(Assets.snowanimation, 60);
+        
     }
 
     /**
@@ -120,7 +146,8 @@ public class Weather {
     }
     
     public void tick(){
-        
+        raindrops.tick();
+        snowhail.tick();
     }
     
     
@@ -133,7 +160,6 @@ public class Weather {
             case Clear:
                 state = State.Clear;
                 clear.setActive(true);
-                
                 System.out.println("clear");
                 prevWeather = 0;
                 background.setImageDay(clear.getDay());
@@ -155,8 +181,32 @@ public class Weather {
                 prevWeather = 2;
                 background.setImageDay(rain.getDay());
                 background.setImageNight(rain.getNight());
-                
                 break;
+            case Storm:
+                state = State.Storm;
+                storm.setActive(true);
+                System.out.println("storm");
+                prevWeather = 3;
+                background.setImageDay(storm.getDay());
+                background.setImageNight(storm.getNight());
+                break;
+            case Hail:
+                state = State.Hail;
+                hail.setActive(true);
+                System.out.println("hail");
+                prevWeather = 4;
+                background.setImageDay(hail.getDay());
+                background.setImageNight(hail.getNight());
+                break;
+            case Snow:
+                state = State.Snow;
+                snow.setActive(true);
+                System.out.println("snow");
+                prevWeather = 5;
+                background.setImageDay(snow.getDay());
+                background.setImageNight(snow.getNight());
+                break;
+                
         }
     }
     
@@ -165,6 +215,9 @@ public class Weather {
         clear.setActive(false);
         rain.setActive(false);
         dry.setActive(false);
+        storm.setActive(false);
+        hail.setActive(false);
+        snow.setActive(false);
     }
     
     public void render(Graphics g){
@@ -176,7 +229,19 @@ public class Weather {
                 g.drawImage(dry.getTopLayer(), 0, 0, width, height, null);
                 break;
             case Rain:
+                g.drawImage(raindrops.getCurrentFrame(), 0, 0, width, height, null);
                 g.drawImage(rain.getTopLayer(), 0, 0,width, height, null);
+                break;
+            case Storm:
+                g.drawImage(storm.getTopLayer(), 0, 0, width, height, null);
+                break;
+            case Hail:
+                g.drawImage(snowhail.getCurrentFrame(), 0, 0, width, height, null);
+                g.drawImage(hail.getTopLayer(), 0, 0, width, height, null);
+                break;
+            case Snow:
+                g.drawImage(snowhail.getCurrentFrame(), 0, 0, width, height, null);
+                g.drawImage(snow.getTopLayer(), 0, 0, width, height, null);
                 break;
         }
     }
