@@ -14,6 +14,9 @@ import evolith.helpers.Time;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  *
@@ -39,6 +42,8 @@ public class Predator extends Item implements Commons {
     private int prevThirstRed;  //Time in seconds at which hunger was previously reduced
 
     private boolean dead;
+    
+    private int size;
 
     private boolean moving;
     private boolean inPlant;
@@ -70,6 +75,8 @@ public class Predator extends Item implements Commons {
     private enum Mode {Water, Roaming, Attacking};
     private Mode mode;
     private Mode prevMode;
+    
+    private boolean visible;
 
     /**
      * Constructor of the organism
@@ -85,7 +92,7 @@ public class Predator extends Item implements Commons {
         super(x, y, width, height);
         this.game = game;
         point = new Point(x, y);
-        maxVel = 3;
+        maxVel = 2;
         xVel = 0;
         yVel = 0;
         acc = 0.1;
@@ -124,6 +131,9 @@ public class Predator extends Item implements Commons {
         prevPointGeneratedSec = 0;
         mode = Mode.Roaming;
         prevMode = Mode.Roaming;
+        
+        applyVariances();
+        visible = false;
     }
 
     /**
@@ -174,6 +184,42 @@ public class Predator extends Item implements Commons {
                 targetResource = null;
                 assignNewPoint();
             }
+        }
+    }
+    
+    private void applyVariances() {
+        int chance = (int) (Math.random() * 10);
+        
+        if (chance < 4) {
+            //Small
+            width = PREDATOR_SIZE - 20;
+            height = PREDATOR_SIZE - 20;
+            
+            damage = 0.07;
+            
+            absMaxVel = 3;
+            
+            maxHealth = 100;
+            life = 100;
+        } else if (chance  < 8) {
+            //Medium
+            width = PREDATOR_SIZE;
+            height = PREDATOR_SIZE;
+            
+            damage = 0.2;
+            
+            absMaxVel = 2;
+        } else {
+            //Big *scary*
+            width = PREDATOR_SIZE + 20;
+            height = PREDATOR_SIZE + 20;
+            
+            damage = 0.3;
+            
+            absMaxVel = 2;
+            
+            maxHealth = 150;
+            life = maxHealth;
         }
     }
     
@@ -491,6 +537,44 @@ public class Predator extends Item implements Commons {
     public void kill() {
         dead = true;
     }
+    
+    public void save(PrintWriter pw) {
+        pw.println(Integer.toString(id));
+        
+        //Save positions
+        pw.println(Integer.toString(x));
+        pw.println(Integer.toString(y));
+        pw.println(Integer.toString((int) xVel));
+        pw.println(Integer.toString((int) yVel));
+        
+        pw.println(Integer.toString(width));
+        pw.println(Integer.toString(absMaxVel));
+        pw.println(Double.toString(damage));
+        pw.println(Integer.toString(maxHealth));
+        
+        //Save vitals
+        pw.println(Integer.toString((int) life));
+        pw.println(Integer.toString((int) stamina));
+    }
+    
+    public void load(BufferedReader br) throws IOException {
+        id = Integer.parseInt(br.readLine());
+        
+        x = Integer.parseInt(br.readLine());
+        y = Integer.parseInt(br.readLine());
+        xVel = Integer.parseInt(br.readLine());
+        yVel = Integer.parseInt(br.readLine());
+        
+        width = Integer.parseInt(br.readLine());
+        height = width;
+        
+        absMaxVel = Integer.parseInt(br.readLine());
+        damage = Double.parseDouble(br.readLine());
+        maxHealth = Integer.parseInt(br.readLine());
+        
+        life = Integer.parseInt(br.readLine());
+        stamina = Integer.parseInt(br.readLine());
+    }
 
     /**
      * Renders the organisms relative to the camera
@@ -499,17 +583,24 @@ public class Predator extends Item implements Commons {
      */
     @Override
     public void render(Graphics g) {
+        if (!visible) {
+            return;
+        }
+        
         g.drawImage(Assets.predator, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
         
+        double barOffX = 0.03;
+        double barOffY = 0.87;
+        
         g.setColor(Color.RED);
-        g.fillRect(game.getCamera().getRelX(x)+3, game.getCamera().getRelY(y) + 70, (int) (80 * this.life / maxHealth), 5);
+        g.fillRect(game.getCamera().getRelX(x)+ (int) (width * barOffX), game.getCamera().getRelY(y) + (int) (height * barOffY), (int) ((int)(width) * this.life / maxHealth), 5);
         g.setColor(Color.white);
-        g.drawRect(game.getCamera().getRelX(x)+2, game.getCamera().getRelY(y) + 70, 80, 6);
+        g.drawRect(game.getCamera().getRelX(x)+ (int) (width * barOffX) - 1, game.getCamera().getRelY(y) + (int) (height * barOffY), (int)(width), 6);
         
         g.setColor(Color.YELLOW);
-        g.fillRect(game.getCamera().getRelX(x)+3, game.getCamera().getRelY(y) + 76, (int) (80 * this.stamina / MAX_STAMINA), 5);
+        g.fillRect(game.getCamera().getRelX(x)+(int) (width * barOffX), game.getCamera().getRelY(y) + (int) (height * barOffY) + 6, (int) ((int)(width) * this.stamina / MAX_STAMINA), 5);
         g.setColor(Color.white);
-        g.drawRect(game.getCamera().getRelX(x)+2, game.getCamera().getRelY(y) + 76, 80, 6);
+        g.drawRect(game.getCamera().getRelX(x)+(int) (width * barOffX) -1, game.getCamera().getRelY(y) + (int) (height * barOffY) + 6 - 1, (int)(width), 6);
     }
 
     /**
@@ -682,5 +773,13 @@ public class Predator extends Item implements Commons {
 
     public void setLeaving(boolean leaving) {
         this.leaving = leaving;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

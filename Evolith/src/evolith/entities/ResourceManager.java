@@ -9,6 +9,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -156,6 +159,43 @@ public class ResourceManager implements Commons {
         for (int i = 0; i < waters.size()-1; i++) {
             waters.get(i).removeParasites();
         } 
+    }
+    
+    public void save(PrintWriter pw) {
+        pw.println(Integer.toString(plants.size()));
+        for (int i = 0; i < plants.size(); i++) {
+            plants.get(i).save(pw);
+        }
+        
+        pw.println(Integer.toString(waters.size()));
+        for (int i = 0; i < waters.size(); i++) {
+            waters.get(i).save(pw);
+        }
+    }
+    
+    public void load(BufferedReader br) throws IOException {
+        int plantam = Integer.parseInt(br.readLine());
+        plants.clear();
+        
+        for (int i = 0; i < plantam; i++) {
+            plants.add(new Resource(0,0,PLANT_SIZE, PLANT_SIZE, game, Resource.ResourceType.Plant));
+            plants.get(i).load(br);
+        }
+        
+        int wateram = Integer.parseInt(br.readLine());
+        waters.clear();
+        
+        for (int i = 0; i < wateram; i++) {
+            waters.add(new Resource(0,0,WATER_SIZE, WATER_SIZE, game, Resource.ResourceType.Water));
+            waters.get(i).load(br);
+        }
+    }
+    
+    public void reset() {
+        plants.clear();
+        waters.clear();
+        
+        generateResources();
     }
     
     public int getPlantAmount() {

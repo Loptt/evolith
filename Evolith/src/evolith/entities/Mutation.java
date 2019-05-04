@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
  *
  * @author ErickFrank
  */
-public class Mutation extends Item implements Commons {
+public class Mutation implements Commons {
     
     private int maxHealth;
     private int speed;
@@ -23,6 +23,11 @@ public class Mutation extends Item implements Commons {
     private int stealth;
     private String name;
     private Game game;
+    
+    private double xOff;
+    private double yOff;
+    private double wOff;
+    private double hOff;
     
     private boolean active;
     
@@ -34,8 +39,8 @@ public class Mutation extends Item implements Commons {
         
     
 
-    public Mutation(String name, int strength,int speed,int health, int stealth, boolean active, int tier, int x, int y, int width, int height, Game game, Organism org) {
-        super(x, y, width, height);
+    public Mutation(String name, int strength,int speed,int health, int stealth, boolean active, int tier, double x, double y, double width, double height, Game game, Organism org) {
+        
         this.maxHealth = health;
         this.speed = speed;
         this.strength = strength; 
@@ -45,11 +50,11 @@ public class Mutation extends Item implements Commons {
         this.name = name;
         this.game = game;
         this.org  = org;
-    }
-    
-    @Override
-    public void tick() {
         
+        xOff = x;
+        yOff = y;
+        wOff = width;
+        hOff = height;
     }
 
     public int getMaxHealth() {
@@ -117,11 +122,9 @@ public class Mutation extends Item implements Commons {
         this.sprite = sprite;
     }
     
-    @Override
     public void render(Graphics g) {
         if(active){
-            g.drawImage(sprite, game.getCamera().getRelX(org.getX()), game.getCamera().getRelY(org.getY()), width, height, null);
+        g.drawImage(sprite, game.getCamera().getRelX((int) (org.getX()+org.getCurrentSize()*xOff)), game.getCamera().getRelY((int) (org.getY()+org.getCurrentSize()*yOff)), (int) (org.getCurrentSize()*wOff), (int) (org.getCurrentSize()*hOff), null);
         }
     }
-    
 }
