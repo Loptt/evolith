@@ -168,6 +168,7 @@ public class SetupMenu extends Menu {
             
         if(buttons.get(0).isPressed()){
             setClickPlay(true);
+            game.getMysql().insertSpecies(game.getGameID(), name);
             setActive(false);
             buttons.get(0).setPressed(false);
             buttons.get(1).setPressed(false);

@@ -10,8 +10,10 @@ import evolith.helpers.Commons;
 import static evolith.helpers.Commons.BLUE_GREEN_COLOR;
 import evolith.helpers.FontLoader;
 import evolith.menus.Menu;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -105,9 +107,10 @@ public class StatisticsPanel extends Menu implements Commons {
     @Override
     public void render(Graphics g) {
         
+        
         if(!active)
             return;
-//        
+         Graphics2D g2 = (Graphics2D) g;
 //               g.setColor(new Color(255,255,255,127));
 //        for(int i = 0; i < 50; i++)
 //         {
@@ -117,10 +120,11 @@ public class StatisticsPanel extends Menu implements Commons {
 //            
 //        }
 //         }
-        g.setColor(Color.WHITE);
-        g.drawOval(pMiddle.x- STATISTICS_DIMENSION / 2, pMiddle.y- STATISTICS_DIMENSION / 2, STATISTICS_DIMENSION, STATISTICS_DIMENSION);
+        g2.setColor(new Color(28,117,160));
+        g2.setStroke(new BasicStroke(2));
+        g2.drawOval(pMiddle.x- STATISTICS_DIMENSION / 2, pMiddle.y- STATISTICS_DIMENSION / 2, STATISTICS_DIMENSION, STATISTICS_DIMENSION);
         
-         g.setColor(new Color(255,255,255,100));
+        g.setColor(new Color(28,117,160,100));
         g.fillOval(pMiddle.x- STATISTICS_DIMENSION / 2, pMiddle.y- STATISTICS_DIMENSION / 2, STATISTICS_DIMENSION, STATISTICS_DIMENSION);
         
         
@@ -146,15 +150,17 @@ public class StatisticsPanel extends Menu implements Commons {
 //        g.drawLine((int) points.get(2).getX(), (int) points.get(2).getY(), (int) points.get(3).getX(), (int) points.get(3).getY());
 //        g.drawLine((int) points.get(3).getX(), (int) points.get(3).getY(), (int) points.get(0).getX(), (int) points.get(0).getY());
 
-        g.setColor(new Color(1,196,181, 127));
+       // g.setColor(new Color(1,196,181, 150));
+        g.setColor(new Color(9,255,200, 170));
         
         g.fillPolygon(pointsX, pointsY, 4);
         
-         g.setColor(BLUE_GREEN_COLOR);
-         g.drawLine(pointsX[0],pointsY[0],pointsX[1],pointsY[1]);
-         g.drawLine(pointsX[1],pointsY[1],pointsX[2],pointsY[2]);
-         g.drawLine(pointsX[2],pointsY[2],pointsX[3],pointsY[3]);
-         g.drawLine(pointsX[3],pointsY[3],pointsX[0],pointsY[0]);
+         g.setColor(new Color(9,255,200, 170));
+         g2.setStroke(new BasicStroke(2));
+         g2.drawLine(pointsX[0],pointsY[0],pointsX[1],pointsY[1]);
+         g2.drawLine(pointsX[1],pointsY[1],pointsX[2],pointsY[2]);
+         g2.drawLine(pointsX[2],pointsY[2],pointsX[3],pointsY[3]);
+         g2.drawLine(pointsX[3],pointsY[3],pointsX[0],pointsY[0]);
         
 //        //Right Top Speed
 //        g.setColor(Color.MAGENTA);

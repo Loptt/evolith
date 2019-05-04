@@ -34,9 +34,12 @@ BEGIN;
     SELECT game_id FROM game ORDER BY game_id DESC LIMIT 1;
 
 
-
+-----------UPDATES
     Update specific game id
     UPDATE game set game_duration = _newduration_, WHERE game_id = "";
     UPDATE game SET game_duration = 1, WHERE game_id = 1;
+
+-----------INSERTS
+INSERT INTO organism(organism_alive,organism_generation, organism_kills, organism_lifespan,species_id) VALUES
 
     */

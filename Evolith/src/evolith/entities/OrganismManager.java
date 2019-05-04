@@ -1,5 +1,6 @@
 package evolith.entities;
 
+import evolith.database.JDBC;
 import evolith.game.Game;
 import evolith.menus.Hover;
 import evolith.helpers.SwarmMovement;
@@ -7,6 +8,7 @@ import evolith.helpers.Commons;
 import evolith.menus.MutationPanel;
 
 import evolith.menus.OrganismPanel;
+import evolith.menus.StatisticsPanel;
 
 import java.awt.Graphics;
 import java.awt.Point;
@@ -37,13 +39,17 @@ public class OrganismManager implements Commons {
 
     private OrganismPanel orgPanel; //info panel 
     private MutationPanel mutPanel; //Mutation panel
+    private StatisticsPanel statsPanel; //Statistics panel
 
     private int panelIndex;
     private int idCounter;
     private String speciesName;
+    private int speciesID;
     
     private boolean updatedNight;
     private int avg[];
+    private JDBC mysql;
+    
 
     /**
      * Constructor of the organisms
@@ -70,6 +76,10 @@ public class OrganismManager implements Commons {
         updatedNight = false;
         speciesName = "";
         avg = new int[4];
+        this.mysql =  game.getMysql();
+        statsPanel = new StatisticsPanel(200,200,0,0,game,false);
+        this.speciesID = mysql.getSpeciesID( game.getGameID());
+        mysql.insertOrganism(speciesID,!organisms.get(0).isDead() ? 1 : 0,  organisms.get(0).getGeneration(), organisms.get(0).getSpeed(), organisms.get(0).getStealth(), organisms.get(0).getStrength(), organisms.get(0).getMaxHealth());
     }
     
     /**
@@ -125,12 +135,11 @@ public class OrganismManager implements Commons {
             avg[1] /= organisms.size();
             avg[2] /= organisms.size();
             avg[3] /=organisms.size();
-            
-            
-            
-            
-            
-     }
+            statsPanel.setSpeed(avg[0]);
+            statsPanel.setStealth(avg[1]);
+            statsPanel.setStrength(avg[2]);
+            statsPanel.setHealth(avg[3]);
+    }
     
     /**
      * to move the swarm to the specified coordinates given there is an object
@@ -337,9 +346,13 @@ public class OrganismManager implements Commons {
         offspring.setSearchWater(org.isSearchWater());
         offspring.setIntelligence(offspring.getIntelligence() + 15);
         org.setNeedOffspring(false);
-        
+        mysql.insertOrganism(speciesID,offspring.isDead() ? 1 : 0, offspring.getGeneration(), offspring.getSpeed(), offspring.getStealth(), offspring.getStrength(), offspring.getMaxHealth());   
     }
+private void updateOrganismsDB()
+{
 
+        mysql.updateOrganisms(this);
+}
     /**
      * Check if an organism needs to be killed
      *
@@ -348,6 +361,7 @@ public class OrganismManager implements Commons {
     private void checkKill(Organism org) {
         if (org.isDead()) {
             organisms.remove(org);
+           updateOrganismsDB();
         }
     }
     
@@ -756,6 +770,14 @@ public class OrganismManager implements Commons {
 
     public void setUpdatedNight(boolean updatedNight) {
         this.updatedNight = updatedNight;
+    }
+
+    public int getSpeciesID() {
+        return speciesID;
+    }
+
+    public void setSpeciesID(int speciesID) {
+        this.speciesID = speciesID;
     }
     
 }

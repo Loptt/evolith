@@ -1,5 +1,6 @@
 package evolith.game;
 
+import evolith.database.JDBC;
 import evolith.menus.MainMenu;
 import evolith.menus.SetupMenu;
 import evolith.menus.ButtonBarMenu;
@@ -83,6 +84,9 @@ public class Game implements Runnable, Commons {
     private int prevSecDayCycleChange;
     
     private boolean win;
+    
+    private int gameID;
+    private JDBC mysql;
 
     /**
      * to create title, width and height and set the game is still not running
@@ -108,6 +112,11 @@ public class Game implements Runnable, Commons {
         night = false;
         prevSecDayCycleChange = 0;
         win = false;
+        this.mysql = new JDBC();
+        
+        
+        this.gameID = mysql.getLastGameID() + 1;
+       
     }
 
     /**
@@ -165,6 +174,8 @@ public class Game implements Runnable, Commons {
         display.getJframe().addMouseMotionListener(mouseManager);
         display.getCanvas().addMouseListener(mouseManager);
         display.getCanvas().addMouseMotionListener(mouseManager);
+        
+        mysql.insertGame(gameID, clock.getTicker());
 
     }
 
@@ -173,6 +184,7 @@ public class Game implements Runnable, Commons {
      */
     private void tick() {
         //Every single case is separated in its own function
+        
 
         switch (state) {
             case MainMenu:
@@ -193,6 +205,8 @@ public class Game implements Runnable, Commons {
             case GameOver:
                 overTick();
         }
+        if(clock.getTicker() % 60 == 0)
+           mysql.updateTimeGame(gameID, clock.getSeconds());
 
     }
 
@@ -783,6 +797,22 @@ public class Game implements Runnable, Commons {
                 ie.printStackTrace();
             }
         }
+    }
+
+    public int getGameID() {
+        return gameID;
+    }
+
+    public void setGameID(int gameID) {
+        this.gameID = gameID;
+    }
+
+    public JDBC getMysql() {
+        return mysql;
+    }
+
+    public void setMysql(JDBC mysql) {
+        this.mysql = mysql;
     }
     
 }
