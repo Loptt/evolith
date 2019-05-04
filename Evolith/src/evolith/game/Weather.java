@@ -233,6 +233,7 @@ public class Weather {
                 g.drawImage(rain.getTopLayer(), 0, 0,width, height, null);
                 break;
             case Storm:
+                 g.drawImage(raindrops.getCurrentFrame(), 0, 0, width, height, null);
                 g.drawImage(storm.getTopLayer(), 0, 0, width, height, null);
                 break;
             case Hail:

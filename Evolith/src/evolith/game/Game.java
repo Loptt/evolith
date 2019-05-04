@@ -543,6 +543,7 @@ public class Game implements Runnable, Commons {
                     resources.render(g);
                     organisms.render(g);
                     predators.render(g);
+                    weather.render(g);
 
                     if (night) {
                         g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
