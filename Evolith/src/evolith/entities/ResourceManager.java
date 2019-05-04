@@ -49,6 +49,9 @@ public class ResourceManager implements Commons {
         plantsAmount = PLANTS_AMOUNT;
         deleteResources();
         respawnResources();
+    }
+    
+    public void init() {
         generateResources();
     }
     
@@ -105,8 +108,8 @@ public class ResourceManager implements Commons {
                 plants.remove(i);
             }
         }
-        
     }
+    
     public void generateResources(){
         Random randomGen = new Random();
         
@@ -214,6 +217,23 @@ public class ResourceManager implements Commons {
         return waters.get(i);
     }
     
+    public void addPlant(Resource res) {
+        plants.add(res);
+    }
+    
+    public void removePlant(Resource res) {
+        System.out.println("REMOVING IN remove");
+        plants.remove(res);
+    }
+    
+    public void addWater(Resource res) {
+        waters.add(res);
+    }
+    
+    public void removeWater(Resource res) {
+        waters.remove(res);
+    }
+    
     public void tick() {
         for (int i = 0; i < plants.size(); i++) {
             plants.get(i).tick();
@@ -222,9 +242,6 @@ public class ResourceManager implements Commons {
         for (int i = 0; i < waters.size(); i++) {
             waters.get(i).tick();
         }
-        
-        deleteResources();
-        respawnResources();
     }
         
     public void render(Graphics g) {
@@ -235,5 +252,9 @@ public class ResourceManager implements Commons {
         for (int i = 0; i < waters.size(); i++) {
             waters.get(i).render(g);
         }
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

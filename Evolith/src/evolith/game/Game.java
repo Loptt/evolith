@@ -84,6 +84,7 @@ public class Game implements Runnable, Commons {
     private int prevSecDayCycleChange;
     
     private boolean win;
+    private boolean server;
 
     /**
      * to create title, width and height and set the game is still not running
@@ -107,6 +108,7 @@ public class Game implements Runnable, Commons {
         selection = new Selection(this);
 
         night = false;
+        server = false;
         prevSecDayCycleChange = 0;
         win = false;
     }
@@ -239,11 +241,7 @@ public class Game implements Runnable, Commons {
         inputKeyboard.tick();
 
         if (setupMenu.isClickPlay()) {
-            organisms.setSpeciesName(setupMenu.getName());
-            setupMenu.setName("");
-            organisms.setSkin(setupMenu.getOption());
-            state = States.Play;
-            musicManager.play();
+            initSinglePlayer();
             setupMenu.setClickPlay(false);
         }
     }
@@ -281,6 +279,8 @@ public class Game implements Runnable, Commons {
         checkGameOver();
     }
     
+    
+    
     private void multiTick() {
         clock.tick();
         organisms.tick();
@@ -290,8 +290,15 @@ public class Game implements Runnable, Commons {
         inputKeyboard.tick();
         selection.tick();
         
-        network.sendData(organisms);
+        if (server) {
+            resources.respawnResources(); 
+        }
         
+        network.sendDataPlants(resources);
+        network.sendDataWaters(resources);
+        
+        network.sendData(organisms);
+
         keyManager.tick();
         musicManager.tick();
         
@@ -310,6 +317,10 @@ public class Game implements Runnable, Commons {
         
         organisms.checkKill();
         otherOrganisms.checkKill();
+        
+        if (server) {
+            resources.deleteResources();
+        }
         
         checkGameOver();
     }
@@ -362,19 +373,29 @@ public class Game implements Runnable, Commons {
         }
     }
     
+    private void initSinglePlayer() {
+        organisms.setSpeciesName(setupMenu.getName());
+        setupMenu.setName("");
+        organisms.setSkin(setupMenu.getOption());
+        state = States.Play;
+        musicManager.play();
+        resources.init();
+    }
+    
     private void mutliInit() {
         Scanner sc = new Scanner(System.in);
         System.out.print("SERVER?:  ");
         int i = sc.nextInt();
-        boolean server = i == 1;
+        server = i == 1;
         
         if (server) {
-            network = new NetworkManager(true, otherOrganisms);
+            network = new NetworkManager(true, otherOrganisms, resources);
             network.initServer();
             organisms.setSkin(0);
             otherOrganisms.setSkin(2);
+            resources.init();
         } else {
-            network = new NetworkManager(false, otherOrganisms);
+            network = new NetworkManager(false, otherOrganisms, resources);
             network.initClient("192.168.11.129", 5000);
             organisms.setSkin(2);
             otherOrganisms.setSkin(0);

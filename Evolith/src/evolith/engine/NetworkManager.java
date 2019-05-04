@@ -6,6 +6,7 @@
 package evolith.engine;
 
 import evolith.entities.OrganismManager;
+import evolith.entities.ResourceManager;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -28,9 +29,11 @@ public class NetworkManager implements Runnable {
     private boolean server;
     
     private OrganismManager otherorgs;
+    private ResourceManager resources;
     
-    public NetworkManager(boolean isServer, OrganismManager otherorgs) {
+    public NetworkManager(boolean isServer, OrganismManager otherorgs, ResourceManager resources) {
         this.otherorgs = otherorgs;
+        this.resources = resources;
         server = isServer;
         port = 0;
     }
@@ -81,6 +84,42 @@ public class NetworkManager implements Runnable {
         } 
     }
     
+    public void sendDataPlants(ResourceManager res) {
+        if (port == 0) {
+            //No address specified
+            //beep beep bop
+            return;
+        }
+        
+        byte[] data = NetworkData.constructDataPlants(res);
+        
+        packet = new DatagramPacket(data, NetworkData.getConstructedByteAmount(), address, port);
+        
+        try { 
+            socket.send(packet);
+        } catch (IOException ex) {
+            Logger.getLogger(NetworkManager.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }
+    
+    public void sendDataWaters(ResourceManager res) {
+        if (port == 0) {
+            //No address specified
+            //beep beep bop
+            return;
+        }
+        
+        byte[] data = NetworkData.constructDataWaters(res);
+        
+        packet = new DatagramPacket(data, NetworkData.getConstructedByteAmount(), address, port);
+        
+        try { 
+            socket.send(packet);
+        } catch (IOException ex) {
+            Logger.getLogger(NetworkManager.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }
+    
     public void receiveData() {
         try {
             //If port is 0, address and port have not been specified
@@ -95,7 +134,13 @@ public class NetworkManager implements Runnable {
                 address = packet.getAddress();
             }
             
-            NetworkData.parseBytes(otherorgs, receivedData);
+            if (receivedData[0] == 1) {
+                NetworkData.parseBytes(otherorgs, receivedData);
+            } else if (receivedData[0] == 2) {
+                NetworkData.parseBytesPlants(resources, receivedData, server);
+            } else if (receivedData[0] == 3) {
+                 NetworkData.parseBytesWaters(resources, receivedData, server);
+            }
         } catch (IOException e) {
             System.out.println(e);
         }

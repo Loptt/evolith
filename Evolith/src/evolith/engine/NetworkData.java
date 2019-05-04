@@ -8,6 +8,7 @@ package evolith.engine;
 import evolith.entities.*;
 import evolith.helpers.Commons;
 import java.awt.Point;
+import java.util.ArrayList;
 
 /**
  *
@@ -18,16 +19,18 @@ public class NetworkData implements Commons {
     
     public static byte[] constructData(OrganismManager orgs) {
         byte[] data;
-        constructedByteAmount = orgs.getAmount() * ORG_DATA_SIZE + 1;
+        constructedByteAmount = orgs.getAmount() * ORG_DATA_SIZE + 2;
         data = new byte[constructedByteAmount];
         
         for (int i = 0; i < constructedByteAmount; i++) {
             data[i] = 0;
         }
         
-        data[0] = (byte) orgs.getAmount();
+        //Type organisms
+        data[0] = (byte) 1;
+        data[1] = (byte) orgs.getAmount();
         
-        int index = 1;
+        int index = 2;
         
         for (int i = 0; i < orgs.getAmount(); i++) {
             Organism org = orgs.getOrganism(i);
@@ -47,16 +50,103 @@ public class NetworkData implements Commons {
             
             //Get mutations
             data[index++] = convertMutations(org.getOrgMutations());
+            //Extra info
             data[index++] = addExtraInfo(org, org.getOrgMutations());
             
-            //Extra info
+        }
+        
+        return data;
+    }
+    
+    public static byte[] constructDataPlants(ResourceManager res) {
+        byte[] data;
+        int amountPlant = 0;
+        
+        for (int i = 0; i < res.getPlantAmount(); i++) {
+            if (res.getPlant(i).isUpdate() || res.getPlant(i).isAdd()) {
+                amountPlant++;
+            }
+        }
+
+        constructedByteAmount = (amountPlant) * RES_DATA_SIZE + 3;
+        data = new byte[constructedByteAmount];
+        
+        //Type: plant info
+        data[0] = (byte) 2;
+        
+        data[1] = (byte) amountPlant;
+        System.out.println("AMOUNT TO SEND:  " + amountPlant);
+        
+        int index = 2;
+        
+        for (int i = 0; i < res.getPlantAmount(); i++) {
+            if (res.getPlant(i).isUpdate() || res.getPlant(i).isAdd()) {
+                Resource reso = res.getPlant(i);
+                data[index++] = (byte) i;
+                
+                data[index++] = addFlags(reso);
+                
+                data[index++] = (byte) (reso.getX() / 256);
+                data[index++] = (byte) (reso.getX());
+                
+                data[index++] = (byte) (reso.getY() / 256);
+                data[index++] = (byte) (reso.getY());
+                
+                data[index++] = (byte) reso.getQuantity();
+                System.out.println("QTY SEND:  " + reso.getQuantity());
+                
+                res.getPlant(i).setAdd(false);
+            }
+        }
+        
+        return data;
+    }
+    
+    public static byte[] constructDataWaters(ResourceManager res) {
+        byte[] data;
+        int amountWater = 0;
+        
+        for (int i = 0; i < res.getWaterAmount(); i++) {
+            if (res.getWater(i).isUpdate() || res.getWater(i).isAdd()) {
+                amountWater++;
+            }
+        }
+
+        constructedByteAmount = (amountWater) * RES_DATA_SIZE + 3;
+        data = new byte[constructedByteAmount];
+        
+        //Type: water info
+        data[0] = (byte) 3;
+        
+        data[1] = (byte) amountWater;
+        
+        int index = 2;
+        
+        for (int i = 0; i < res.getWaterAmount(); i++) {
+            if (res.getWater(i).isUpdate() || res.getWater(i).isAdd()) {
+                Resource reso = res.getWater(i);
+                data[index++] = (byte) i;
+                
+                data[index++] = addFlags(reso);
+                
+                data[index++] = (byte) (reso.getX() / 256);
+                data[index++] = (byte) (reso.getX());
+                
+                data[index++] = (byte) (reso.getY() / 256);
+                data[index++] = (byte) (reso.getY());
+                
+                data[index++] = (byte) reso.getQuantity();
+                System.out.println("QTY SEND:  " + reso.getQuantity());
+                
+                reso.setAdd(false);
+            }
         }
         
         return data;
     }
     
     public static void parseBytes(OrganismManager orgs, byte[] data) {
-        int index = 1;
+        int index = 2;
         int x;
         int y;
         
@@ -64,7 +154,7 @@ public class NetworkData implements Commons {
         int hunger;
         int thirst;
         
-        int addAmount = (int) (data[0] & 0xff) - orgs.getAmount();
+        int addAmount = (int) unsignByte(data[1]) - orgs.getAmount();
         
         for (int i = 0; i < orgs.getAmount(); i++) {
             Organism org = orgs.getOrganism(i);
@@ -102,6 +192,153 @@ public class NetworkData implements Commons {
         }
     }
     
+    public static void parseBytesPlants(ResourceManager res, byte[] data, boolean server) {
+        int index = 2;
+        int x;
+        int y;
+
+        int quantity;
+        
+        ArrayList<Integer> removeIndices = new ArrayList<>();
+        
+        int plantAmount = unsignByte(data[1]);
+        int plantsUpdated = 0;
+        
+        if (plantAmount == 0) {
+            return;
+        }
+        
+        //Update current plants
+        for (int i = 0; i < res.getPlantAmount(); i++) {
+            Resource plant;
+            int ind = unsignByte(data[index++]);
+            
+            if (ind == i) {
+                if (getFlags(data, index++)) {
+                    System.out.println("REMOVING");
+                    removeIndices.add(i);
+                }
+                
+                plant = res.getPlant(i);
+                x = data[index++] * 256 + unsignByte(data[index++]);
+                y = data[index++] * 256 + unsignByte(data[index++]);
+
+                plant.setX(x);
+                plant.setY(y);
+
+                quantity = unsignByte(data[index++]);
+                plant.setQuantity(quantity);
+
+                plantsUpdated++;
+            } else {
+                index--;
+            } 
+        }
+        
+        int plantRemaining = plantAmount - plantsUpdated;
+        
+        if (!server) {
+            //Add remaining plants
+            for (int i = 0; i < plantRemaining; i++) {
+                Resource plant = new Resource(0, 0, PLANT_SIZE, PLANT_SIZE, res.getGame(), Resource.ResourceType.Plant);
+                int ind = unsignByte(data[index++]);
+                boolean remove = getFlags(data, index++);
+
+                x = data[index++] * 256 + unsignByte(data[index++]);
+                y = data[index++] * 256 + unsignByte(data[index++]);
+
+                plant.setX(x);
+                plant.setY(y);
+
+                quantity = unsignByte(data[index++]);
+                plant.setQuantity(quantity);
+
+                plant.updatePositions();
+                plant.setAdd(false);
+                res.addPlant(plant);
+            }
+        }
+        
+        //Remove flagged plants
+        for (int i = 0; i < removeIndices.size(); i++) {
+            res.removePlant(res.getPlant(removeIndices.get(i)));
+        }
+    }
+    
+    public static void parseBytesWaters(ResourceManager res, byte[] data, boolean server) {
+        int index = 2;
+        int x;
+        int y;
+
+        int quantity;
+        
+        ArrayList<Integer> removeIndices = new ArrayList<>();
+        
+        int waterAmount = unsignByte(data[1]);
+        int watersUpdated = 0;
+        
+        if (waterAmount == 0)
+            return;
+        
+        //Update current plants
+        for (int i = 0; i < res.getWaterAmount(); i++) {
+            Resource water;
+            int ind = unsignByte(data[index++]);
+            
+            if (ind == i) {
+                if (getFlags(data, index++)) {
+                    removeIndices.add(i);
+                }
+                
+                water = res.getWater(i);
+                x = data[index++] * 256 + unsignByte(data[index++]);
+                y = data[index++] * 256 + unsignByte(data[index++]);
+                
+                if (!server) {
+                    water.setX(x);
+                    water.setY(y);
+                }
+
+                quantity = unsignByte(data[index++]);
+                water.setQuantity(quantity);
+
+                watersUpdated++;
+            } else {
+                index--;
+            } 
+        }
+        
+        int waterRemaining = waterAmount - watersUpdated;
+        
+        if (!server) {
+            //Add remaining plants
+            for (int i = 0; i < waterRemaining; i++) {
+                Resource water = new Resource(0, 0, WATER_SIZE, WATER_SIZE, res.getGame(), Resource.ResourceType.Water);
+                int ind = unsignByte(data[index++]);
+                boolean remove = getFlags(data, index++);
+
+                x = data[index++] * 256 + unsignByte(data[index++]);
+                y = data[index++] * 256 + unsignByte(data[index++]);
+
+                water.setX(x);
+                water.setY(y);
+
+                quantity = unsignByte(data[index++]);
+                water.setQuantity(quantity);
+
+                water.updatePositions();
+                water.setAdd(false);
+                res.addWater(water);
+            }
+            
+            //Remove flagged plants
+            for (int i = 0; i < removeIndices.size(); i++) {
+                res.removeWater(res.getWater(removeIndices.get(i)));
+            }
+        }
+        
+    }
+    
     private static byte convertMutations(MutationManager muts) {
         byte result = 0;
         int tier;
@@ -111,8 +348,6 @@ public class NetworkData implements Commons {
         //Strength
         tier = muts.getStrengthTier() << 6;
         result = (byte) (result | tier);
-        
-        System.out.println("RES TO SEND: " + result);
         
         //Speed
         tier = muts.getSpeedTier() << 4;
@@ -136,8 +371,6 @@ public class NetworkData implements Commons {
         
         //Strength
         tier = ((data[index] >> 6) & 0x3);
-        System.out.println("RES RECEIVED:  " + unsignByte(data[index]));
-        System.out.println("TIER TO APPLY:  " + tier);
         muts.setStrengthTier(tier);
         
         //Speed
@@ -181,6 +414,28 @@ public class NetworkData implements Commons {
         }
         
         return result;
+    }
+    
+    private static byte addFlags(Resource res) {
+        byte result = 0;
+        
+        if (res.isOver()) {
+            result = (byte) (result | 128);
+        }
+        
+        if (res.isPlant()) {
+            result = (byte) (result | 64);
+        }
+        
+        return result;
+    }
+    
+    private static boolean getFlags(byte[] data, int index) {
+        if ((unsignByte(data[index]) & 128) == 128) {
+            return true;
+        }
+        
+        return false;
     }
     
     private static void getExtraInfo(Organism org, OrganismManager orgs, byte[] data, int index) {

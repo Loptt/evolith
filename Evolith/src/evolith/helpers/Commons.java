@@ -96,4 +96,5 @@ public interface Commons {
     public static final int BORN_TIME = 20;
     
     public static final int ORG_DATA_SIZE = 9;
+    public static final int RES_DATA_SIZE = 7;
 }
