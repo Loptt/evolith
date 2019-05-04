@@ -6,23 +6,16 @@
 package evolith.database;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Persistence;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -32,10 +25,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "player", catalog = "Evolith", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PlayerDB.findAll", query = "SELECT p FROM PlayerDB p")
-    , @NamedQuery(name = "PlayerDB.findByPlayerId", query = "SELECT p FROM PlayerDB p WHERE p.playerId = :playerId")
-    , @NamedQuery(name = "PlayerDB.findByPlayerName", query = "SELECT p FROM PlayerDB p WHERE p.playerName = :playerName")})
-public class PlayerDB implements Serializable {
+    @NamedQuery(name = "PlayerP.findAll", query = "SELECT p FROM PlayerP p")
+    , @NamedQuery(name = "PlayerP.findByPlayerId", query = "SELECT p FROM PlayerP p WHERE p.playerId = :playerId")
+    , @NamedQuery(name = "PlayerP.findByPlayerName", query = "SELECT p FROM PlayerP p WHERE p.playerName = :playerName")})
+public class PlayerP implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -45,13 +38,11 @@ public class PlayerDB implements Serializable {
     private Integer playerId;
     @Column(name = "player_name", length = 20)
     private String playerName;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "playerId")
-    private Collection<GameDB> gameDBCollection;
 
-    public PlayerDB() {
+    public PlayerP() {
     }
 
-    public PlayerDB(Integer playerId) {
+    public PlayerP(Integer playerId) {
         this.playerId = playerId;
     }
 
@@ -71,15 +62,6 @@ public class PlayerDB implements Serializable {
         this.playerName = playerName;
     }
 
-    @XmlTransient
-    public Collection<GameDB> getGameDBCollection() {
-        return gameDBCollection;
-    }
-
-    public void setGameDBCollection(Collection<GameDB> gameDBCollection) {
-        this.gameDBCollection = gameDBCollection;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -90,10 +72,10 @@ public class PlayerDB implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PlayerDB)) {
+        if (!(object instanceof PlayerP)) {
             return false;
         }
-        PlayerDB other = (PlayerDB) object;
+        PlayerP other = (PlayerP) object;
         if ((this.playerId == null && other.playerId != null) || (this.playerId != null && !this.playerId.equals(other.playerId))) {
             return false;
         }
@@ -102,23 +84,7 @@ public class PlayerDB implements Serializable {
 
     @Override
     public String toString() {
-        return "evolith.database.PlayerDB[ playerId=" + playerId + " ]";
+        return "evolith.database.PlayerP[ playerId=" + playerId + " ]";
     }
-
-    public void persist(Object object) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("EvolithPU");
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        try {
-            em.persist(object);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            em.getTransaction().rollback();
-        } finally {
-            em.close();
-        }
-    }
-    
     
 }

@@ -23,6 +23,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -90,7 +91,7 @@ public class Game implements Runnable, Commons {
      * @param width to set the width of the window
      * @param height to set the height of the window
      */
-    public Game(String title, int width, int height) {
+    public Game(String title, int width, int height) throws SQLException {
         this.title = title;
         this.width = width;
         this.height = height;

@@ -11,8 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Persistence;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -34,11 +31,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "game", catalog = "Evolith", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "GameDB.findAll", query = "SELECT g FROM GameDB g")
-    , @NamedQuery(name = "GameDB.findByGameId", query = "SELECT g FROM GameDB g WHERE g.gameId = :gameId")
-    , @NamedQuery(name = "GameDB.findByGameDuration", query = "SELECT g FROM GameDB g WHERE g.gameDuration = :gameDuration")
-    , @NamedQuery(name = "GameDB.findByGameScore", query = "SELECT g FROM GameDB g WHERE g.gameScore = :gameScore")})
-public class GameDB implements Serializable {
+    @NamedQuery(name = "GameP.findAll", query = "SELECT g FROM GameP g")
+    , @NamedQuery(name = "GameP.findByGameId", query = "SELECT g FROM GameP g WHERE g.gameId = :gameId")
+    , @NamedQuery(name = "GameP.findByGameDuration", query = "SELECT g FROM GameP g WHERE g.gameDuration = :gameDuration")
+    , @NamedQuery(name = "GameP.findByGameScore", query = "SELECT g FROM GameP g WHERE g.gameScore = :gameScore")})
+public class GameP implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -53,18 +50,18 @@ public class GameDB implements Serializable {
     private int gameScore;
     @JoinColumn(name = "player_id", referencedColumnName = "player_id", nullable = false)
     @ManyToOne(optional = false)
-    private PlayerDB playerId;
+    private PlayerP playerId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "gameId")
-    private Collection<SpeciesDB> speciesDBCollection;
+    private Collection<SpeciesP> speciesPCollection;
 
-    public GameDB() {
+    public GameP() {
     }
 
-    public GameDB(Integer gameId) {
+    public GameP(Integer gameId) {
         this.gameId = gameId;
     }
 
-    public GameDB(Integer gameId, int gameScore) {
+    public GameP(Integer gameId, int gameScore) {
         this.gameId = gameId;
         this.gameScore = gameScore;
     }
@@ -93,21 +90,21 @@ public class GameDB implements Serializable {
         this.gameScore = gameScore;
     }
 
-    public PlayerDB getPlayerId() {
+    public PlayerP getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(PlayerDB playerId) {
+    public void setPlayerId(PlayerP playerId) {
         this.playerId = playerId;
     }
 
     @XmlTransient
-    public Collection<SpeciesDB> getSpeciesDBCollection() {
-        return speciesDBCollection;
+    public Collection<SpeciesP> getSpeciesPCollection() {
+        return speciesPCollection;
     }
 
-    public void setSpeciesDBCollection(Collection<SpeciesDB> speciesDBCollection) {
-        this.speciesDBCollection = speciesDBCollection;
+    public void setSpeciesPCollection(Collection<SpeciesP> speciesPCollection) {
+        this.speciesPCollection = speciesPCollection;
     }
 
     @Override
@@ -120,10 +117,10 @@ public class GameDB implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof GameDB)) {
+        if (!(object instanceof GameP)) {
             return false;
         }
-        GameDB other = (GameDB) object;
+        GameP other = (GameP) object;
         if ((this.gameId == null && other.gameId != null) || (this.gameId != null && !this.gameId.equals(other.gameId))) {
             return false;
         }
@@ -132,22 +129,7 @@ public class GameDB implements Serializable {
 
     @Override
     public String toString() {
-        return "evolith.database.GameDB[ gameId=" + gameId + " ]";
-    }
-
-    public void persist(Object object) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("EvolithPU");
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        try {
-            em.persist(object);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            em.getTransaction().rollback();
-        } finally {
-            em.close();
-        }
+        return "evolith.database.GameP[ gameId=" + gameId + " ]";
     }
     
 }

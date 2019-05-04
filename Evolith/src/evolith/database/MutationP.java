@@ -9,8 +9,6 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,7 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Persistence;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -30,11 +27,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "mutation", catalog = "Evolith", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "MutationDB.findAll", query = "SELECT m FROM MutationDB m")
-    , @NamedQuery(name = "MutationDB.findByMutationId", query = "SELECT m FROM MutationDB m WHERE m.mutationId = :mutationId")
-    , @NamedQuery(name = "MutationDB.findByMutationName", query = "SELECT m FROM MutationDB m WHERE m.mutationName = :mutationName")
-    , @NamedQuery(name = "MutationDB.findByMutationValue", query = "SELECT m FROM MutationDB m WHERE m.mutationValue = :mutationValue")})
-public class MutationDB implements Serializable {
+    @NamedQuery(name = "MutationP.findAll", query = "SELECT m FROM MutationP m")
+    , @NamedQuery(name = "MutationP.findByMutationId", query = "SELECT m FROM MutationP m WHERE m.mutationId = :mutationId")
+    , @NamedQuery(name = "MutationP.findByMutationName", query = "SELECT m FROM MutationP m WHERE m.mutationName = :mutationName")
+    , @NamedQuery(name = "MutationP.findByMutationValue", query = "SELECT m FROM MutationP m WHERE m.mutationValue = :mutationValue")})
+public class MutationP implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,12 +45,12 @@ public class MutationDB implements Serializable {
     private Integer mutationValue;
     @JoinColumn(name = "organism_id", referencedColumnName = "organism_id", nullable = false)
     @ManyToOne(optional = false)
-    private OrganismDB organismId;
+    private OrganismP organismId;
 
-    public MutationDB() {
+    public MutationP() {
     }
 
-    public MutationDB(Integer mutationId) {
+    public MutationP(Integer mutationId) {
         this.mutationId = mutationId;
     }
 
@@ -81,11 +78,11 @@ public class MutationDB implements Serializable {
         this.mutationValue = mutationValue;
     }
 
-    public OrganismDB getOrganismId() {
+    public OrganismP getOrganismId() {
         return organismId;
     }
 
-    public void setOrganismId(OrganismDB organismId) {
+    public void setOrganismId(OrganismP organismId) {
         this.organismId = organismId;
     }
 
@@ -99,10 +96,10 @@ public class MutationDB implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof MutationDB)) {
+        if (!(object instanceof MutationP)) {
             return false;
         }
-        MutationDB other = (MutationDB) object;
+        MutationP other = (MutationP) object;
         if ((this.mutationId == null && other.mutationId != null) || (this.mutationId != null && !this.mutationId.equals(other.mutationId))) {
             return false;
         }
@@ -111,23 +108,7 @@ public class MutationDB implements Serializable {
 
     @Override
     public String toString() {
-        return "evolith.database.MutationDB[ mutationId=" + mutationId + " ]";
+        return "evolith.database.MutationP[ mutationId=" + mutationId + " ]";
     }
-
-    public void persist(Object object) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("EvolithPU");
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        try {
-            em.persist(object);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            em.getTransaction().rollback();
-        } finally {
-            em.close();
-        }
-    }
-    
     
 }

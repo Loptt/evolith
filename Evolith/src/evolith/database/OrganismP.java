@@ -11,8 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Persistence;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -34,13 +31,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "organism", catalog = "Evolith", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "OrganismDB.findAll", query = "SELECT o FROM OrganismDB o")
-    , @NamedQuery(name = "OrganismDB.findByOrganismId", query = "SELECT o FROM OrganismDB o WHERE o.organismId = :organismId")
-    , @NamedQuery(name = "OrganismDB.findByOrganismAlive", query = "SELECT o FROM OrganismDB o WHERE o.organismAlive = :organismAlive")
-    , @NamedQuery(name = "OrganismDB.findByOrganismGeneration", query = "SELECT o FROM OrganismDB o WHERE o.organismGeneration = :organismGeneration")
-    , @NamedQuery(name = "OrganismDB.findByOrganismKills", query = "SELECT o FROM OrganismDB o WHERE o.organismKills = :organismKills")
-    , @NamedQuery(name = "OrganismDB.findByOrganismLifespan", query = "SELECT o FROM OrganismDB o WHERE o.organismLifespan = :organismLifespan")})
-public class OrganismDB implements Serializable {
+    @NamedQuery(name = "OrganismP.findAll", query = "SELECT o FROM OrganismP o")
+    , @NamedQuery(name = "OrganismP.findByOrganismId", query = "SELECT o FROM OrganismP o WHERE o.organismId = :organismId")
+    , @NamedQuery(name = "OrganismP.findByOrganismAlive", query = "SELECT o FROM OrganismP o WHERE o.organismAlive = :organismAlive")
+    , @NamedQuery(name = "OrganismP.findByOrganismGeneration", query = "SELECT o FROM OrganismP o WHERE o.organismGeneration = :organismGeneration")
+    , @NamedQuery(name = "OrganismP.findByOrganismKills", query = "SELECT o FROM OrganismP o WHERE o.organismKills = :organismKills")
+    , @NamedQuery(name = "OrganismP.findByOrganismLifespan", query = "SELECT o FROM OrganismP o WHERE o.organismLifespan = :organismLifespan")})
+public class OrganismP implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -57,15 +54,15 @@ public class OrganismDB implements Serializable {
     @Column(name = "organism_lifespan")
     private Integer organismLifespan;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "organismId")
-    private Collection<MutationDB> mutationDBCollection;
+    private Collection<MutationP> mutationPCollection;
     @JoinColumn(name = "species_id", referencedColumnName = "species_id", nullable = false)
     @ManyToOne(optional = false)
-    private SpeciesDB speciesId;
+    private SpeciesP speciesId;
 
-    public OrganismDB() {
+    public OrganismP() {
     }
 
-    public OrganismDB(Integer organismId) {
+    public OrganismP(Integer organismId) {
         this.organismId = organismId;
     }
 
@@ -110,19 +107,19 @@ public class OrganismDB implements Serializable {
     }
 
     @XmlTransient
-    public Collection<MutationDB> getMutationDBCollection() {
-        return mutationDBCollection;
+    public Collection<MutationP> getMutationPCollection() {
+        return mutationPCollection;
     }
 
-    public void setMutationDBCollection(Collection<MutationDB> mutationDBCollection) {
-        this.mutationDBCollection = mutationDBCollection;
+    public void setMutationPCollection(Collection<MutationP> mutationPCollection) {
+        this.mutationPCollection = mutationPCollection;
     }
 
-    public SpeciesDB getSpeciesId() {
+    public SpeciesP getSpeciesId() {
         return speciesId;
     }
 
-    public void setSpeciesId(SpeciesDB speciesId) {
+    public void setSpeciesId(SpeciesP speciesId) {
         this.speciesId = speciesId;
     }
 
@@ -136,10 +133,10 @@ public class OrganismDB implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof OrganismDB)) {
+        if (!(object instanceof OrganismP)) {
             return false;
         }
-        OrganismDB other = (OrganismDB) object;
+        OrganismP other = (OrganismP) object;
         if ((this.organismId == null && other.organismId != null) || (this.organismId != null && !this.organismId.equals(other.organismId))) {
             return false;
         }
@@ -148,23 +145,7 @@ public class OrganismDB implements Serializable {
 
     @Override
     public String toString() {
-        return "evolith.database.OrganismDB[ organismId=" + organismId + " ]";
+        return "evolith.database.OrganismP[ organismId=" + organismId + " ]";
     }
-
-    public void persist(Object object) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("EvolithPU");
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        try {
-            em.persist(object);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            em.getTransaction().rollback();
-        } finally {
-            em.close();
-        }
-    }
-    
     
 }
