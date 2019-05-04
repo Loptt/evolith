@@ -81,6 +81,9 @@ public class Game implements Runnable, Commons {
 
     private boolean night;
     private int prevSecDayCycleChange;
+    private int prevWeatherChange;
+    
+    private Weather weather;
     
     private boolean win;
 
@@ -108,6 +111,8 @@ public class Game implements Runnable, Commons {
         night = false;
         prevSecDayCycleChange = 0;
         win = false;
+        prevWeatherChange = 0;
+        
     }
 
     /**
@@ -165,6 +170,7 @@ public class Game implements Runnable, Commons {
         display.getJframe().addMouseMotionListener(mouseManager);
         display.getCanvas().addMouseListener(mouseManager);
         display.getCanvas().addMouseMotionListener(mouseManager);
+        weather = new Weather(width, height, background);
 
     }
 
@@ -173,7 +179,6 @@ public class Game implements Runnable, Commons {
      */
     private void tick() {
         //Every single case is separated in its own function
-
         switch (state) {
             case MainMenu:
                 mainMenuTick();
@@ -254,9 +259,14 @@ public class Game implements Runnable, Commons {
         buttonBar.tick();
         inputKeyboard.tick();
         selection.tick();
+        weather.tick();
         
         keyManager.tick();
         musicManager.tick();
+        if (clock.getSeconds() >= prevWeatherChange + 10) {
+            weather.changeWeather();
+            prevWeatherChange = clock.getSeconds();
+        }
         
         if (!organisms.getOrgPanel().isInputActive()) {
             camera.tick();
@@ -434,9 +444,11 @@ public class Game implements Runnable, Commons {
                 //Set the resource to the selected organisms
                 organisms.setSelectedResource(clickedResource);
                 if (clickedResource.getType() == Resource.ResourceType.Plant) {
+                    Assets.grasssound.play();
                     organisms.setSelectedSearchFood(true);
                     organisms.setSelectedSearchWater(false);
                 } else {
+                    Assets.watersound.play();
                     organisms.setSelectedSearchWater(true);
                     organisms.setSearchFood(false);
                 }
@@ -506,6 +518,10 @@ public class Game implements Runnable, Commons {
                     if (night) {
                         g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
                     }
+                    else{
+                        weather.render(g);
+                    }
+                    
                     minimap.render(g);
                     buttonBar.render(g);
 
