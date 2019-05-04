@@ -748,4 +748,8 @@ public class OrganismManager implements Commons {
     public Game getGame() {
         return game;
     }
+
+    public Hover getH() {
+        return h;
+    }
 }
