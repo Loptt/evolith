@@ -41,6 +41,7 @@ public class OrganismManager implements Commons {
     private String speciesName;
     
     private boolean updatedNight;
+    private int avg[];
 
     /**
      * Constructor of the organisms
@@ -66,8 +67,9 @@ public class OrganismManager implements Commons {
         
         updatedNight = false;
         speciesName = "";
+        avg = new int[4];
     }
-
+    
     /**
      * updates all organisms
      */
@@ -77,7 +79,7 @@ public class OrganismManager implements Commons {
             checkNeedMutation(organisms.get(i));
             checkKill(organisms.get(i));
         }
-        
+        calculateAverage();
         checkNight();
         updateMenuPanels();
     }
@@ -109,7 +111,25 @@ public class OrganismManager implements Commons {
             }
         }
     }
-
+    public void calculateAverage()
+    {
+            for (int i = 0; i < organisms.size(); i++) {
+                    avg[0] += organisms.get(i).getSpeed();
+                    avg[1] += organisms.get(i).getStealth();
+                    avg[2] += organisms.get(i).getStrength();
+                    avg[3] += organisms.get(i).getMaxHealth();
+            }
+            avg[0] /= organisms.size();
+            avg[1] /= organisms.size();
+            avg[2] /= organisms.size();
+            avg[3] /=organisms.size();
+            
+            
+            
+            
+            
+     }
+    
     /**
      * to move the swarm to the specified coordinates given there is an object
      * in the middle

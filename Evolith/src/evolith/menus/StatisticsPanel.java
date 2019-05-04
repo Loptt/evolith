@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 public class StatisticsPanel extends Menu implements Commons {
 
     private boolean connected;
+    private boolean active;
     private FontLoader f;
     ArrayList<Point> points;
     ArrayList<Point> pointsInner;
@@ -36,7 +38,7 @@ public class StatisticsPanel extends Menu implements Commons {
     private int strength;
     private Point pMiddle;
 
-    public StatisticsPanel(int x, int y, int width, int height, Game game) {
+    public StatisticsPanel(int x, int y, int width, int height, Game game, boolean active) {
         super(x, y, width, height, game);
         try {
             f = new FontLoader();
@@ -45,6 +47,7 @@ public class StatisticsPanel extends Menu implements Commons {
             this.connected = false;
             System.out.println("Statistics Panel Expection:" + e.getMessage());
         }
+        this.active = active;
         this.speed = 50;
         this.stealth = 40;
         this.health = 20;
@@ -84,10 +87,43 @@ public class StatisticsPanel extends Menu implements Commons {
 
     @Override
     public void tick() {
+          
+        this.pointsX[0] = (int) ((-STATISTICS_DIMENSION * speed / MAX_SPEED) / 2 + x + STATISTICS_DIMENSION / 2);
+        this.pointsX[1] = (int) ((STATISTICS_DIMENSION * stealth / MAX_STEALTH) / 2 + x + STATISTICS_DIMENSION / 2);
+        this.pointsX[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + x + STATISTICS_DIMENSION / 2);
+        this.pointsX[3] = (int) ((-STATISTICS_DIMENSION * health / MAX_HEALTH) / 2 + x + STATISTICS_DIMENSION / 2);
+
+        
+         this.pointsY[0] = (int) ((-STATISTICS_DIMENSION * speed / MAX_SPEED) / 2 + y + STATISTICS_DIMENSION / 2);
+        this.pointsY[1] = (int) ((-STATISTICS_DIMENSION * stealth / MAX_STEALTH) / 2 + y + STATISTICS_DIMENSION / 2);
+        this.pointsY[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + y + STATISTICS_DIMENSION / 2);
+        this.pointsY[3] = (int) ((STATISTICS_DIMENSION * health / MAX_HEALTH) / 2 + y + STATISTICS_DIMENSION / 2);
+        
+        
     }
 
     @Override
     public void render(Graphics g) {
+        
+        if(!active)
+            return;
+//        
+//               g.setColor(new Color(255,255,255,127));
+//        for(int i = 0; i < 50; i++)
+//         {
+//             for(int j = 0; j < 50; j++)
+//        {
+//             g.fillOval(x+10*i, y+10*j, 2, 2);
+//            
+//        }
+//         }
+        g.setColor(Color.WHITE);
+        g.drawOval(pMiddle.x- STATISTICS_DIMENSION / 2, pMiddle.y- STATISTICS_DIMENSION / 2, STATISTICS_DIMENSION, STATISTICS_DIMENSION);
+        
+         g.setColor(new Color(255,255,255,100));
+        g.fillOval(pMiddle.x- STATISTICS_DIMENSION / 2, pMiddle.y- STATISTICS_DIMENSION / 2, STATISTICS_DIMENSION, STATISTICS_DIMENSION);
+        
+        
 
         g.setColor(BLUE_GREEN_COLOR);
         g.setFont(f.getFontEvolve().deriveFont(20f));
@@ -100,41 +136,90 @@ public class StatisticsPanel extends Menu implements Commons {
         //g.fillOval( (int) points.get(2).getX(),(int)points.get(2).getY(), STATISTICS_POINT_DIMENSION,STATISTICS_POINT_DIMENSION);  
         //Left-Bottom
         //g.fillOval( (int) points.get(3).getX(),(int)points.get(3).getY(), STATISTICS_POINT_DIMENSION,STATISTICS_POINT_DIMENSION);  
-        for (int i = 0; i < 4; i++) {
-            g.fillOval((int) points.get(i).getX() - STATISTICS_POINT_DIMENSION / 2, (int) points.get(i).getY() - STATISTICS_POINT_DIMENSION / 2, STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
-        }
-        g.drawLine((int) points.get(0).getX(), (int) points.get(0).getY(), (int) points.get(1).getX(), (int) points.get(1).getY());
-        g.drawLine((int) points.get(1).getX(), (int) points.get(1).getY(), (int) points.get(2).getX(), (int) points.get(2).getY());
-        g.drawLine((int) points.get(2).getX(), (int) points.get(2).getY(), (int) points.get(3).getX(), (int) points.get(3).getY());
-        g.drawLine((int) points.get(3).getX(), (int) points.get(3).getY(), (int) points.get(0).getX(), (int) points.get(0).getY());
-
-        g.setColor(BLUE_GREEN_COLOR);
-
-        //g.fillPolygon(pointsX, pointsY, 4);
-
-
-
-        //Right Top Speed
-        g.setColor(Color.MAGENTA);
-        g.fillOval((int) pointsInner.get(0).getX(), (int) pointsInner.get(0).getY(), STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
-        g.drawLine(pMiddle.x, pMiddle.y, pointsX[0], pointsY[0]);
-        //Left-Top Stealth
-        g.setColor(Color.ORANGE);
-        g.fillOval((int) pointsInner.get(1).getX(), (int) pointsInner.get(1).getY(), STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
-         g.drawLine(pMiddle.x, pMiddle.y, pointsX[1], pointsY[1]);
-        //Right-Bottom Strength
-        g.setColor(Color.YELLOW);
-        g.fillOval((int) pointsInner.get(2).getX(), (int) pointsInner.get(2).getY(), STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
-         g.drawLine(pMiddle.x, pMiddle.y, pointsX[2], pointsY[2]);
-        //Left-Bottom Health
-        g.setColor(Color.RED);
-        g.fillOval((int) pointsInner.get(3).getX(), (int) pointsInner.get(3).getY(), STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
-         g.drawLine(pMiddle.x, pMiddle.y, pointsX[3], pointsY[3]);
-         
-                 g.setColor(Color.BLACK);
         
-        g.fillOval(pMiddle.x- STATISTICS_POINT_DIMENSION / 2, pMiddle.y- STATISTICS_POINT_DIMENSION / 2, STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
+//        for (int i = 0; i < 4; i++) {
+//            g.fillOval((int) points.get(i).getX() - STATISTICS_POINT_DIMENSION / 2, (int) points.get(i).getY() - STATISTICS_POINT_DIMENSION / 2, STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
+//        }
+        
+//        g.drawLine((int) points.get(0).getX(), (int) points.get(0).getY(), (int) points.get(1).getX(), (int) points.get(1).getY());
+//        g.drawLine((int) points.get(1).getX(), (int) points.get(1).getY(), (int) points.get(2).getX(), (int) points.get(2).getY());
+//        g.drawLine((int) points.get(2).getX(), (int) points.get(2).getY(), (int) points.get(3).getX(), (int) points.get(3).getY());
+//        g.drawLine((int) points.get(3).getX(), (int) points.get(3).getY(), (int) points.get(0).getX(), (int) points.get(0).getY());
 
+        g.setColor(new Color(1,196,181, 127));
+        
+        g.fillPolygon(pointsX, pointsY, 4);
+        
+         g.setColor(BLUE_GREEN_COLOR);
+         g.drawLine(pointsX[0],pointsY[0],pointsX[1],pointsY[1]);
+         g.drawLine(pointsX[1],pointsY[1],pointsX[2],pointsY[2]);
+         g.drawLine(pointsX[2],pointsY[2],pointsX[3],pointsY[3]);
+         g.drawLine(pointsX[3],pointsY[3],pointsX[0],pointsY[0]);
+        
+//        //Right Top Speed
+//        g.setColor(Color.MAGENTA);
+//        g.fillOval((int) pointsInner.get(0).getX(), (int) pointsInner.get(0).getY(), STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
+//        g.drawLine(pMiddle.x, pMiddle.y, pointsX[0], pointsY[0]);
+//        //Left-Top Stealth
+//        g.setColor(Color.ORANGE);
+//        g.fillOval((int) pointsInner.get(1).getX(), (int) pointsInner.get(1).getY(), STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
+//         g.drawLine(pMiddle.x, pMiddle.y, pointsX[1], pointsY[1]);
+//        //Right-Bottom Strength
+//        g.setColor(Color.YELLOW);
+//        g.fillOval((int) pointsInner.get(2).getX(), (int) pointsInner.get(2).getY(), STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
+//         g.drawLine(pMiddle.x, pMiddle.y, pointsX[2], pointsY[2]);
+//        //Left-Bottom Health
+//        g.setColor(Color.RED);
+//        g.fillOval((int) pointsInner.get(3).getX(), (int) pointsInner.get(3).getY(), STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
+//         g.drawLine(pMiddle.x, pMiddle.y, pointsX[3], pointsY[3]);
+         
+//        g.setColor(Color.BLACK);
+//        g.fillOval(pMiddle.x- STATISTICS_POINT_DIMENSION / 2, pMiddle.y- STATISTICS_POINT_DIMENSION / 2, STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
+//        
+
+        
     }
 
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public int getStealth() {
+        return stealth;
+    }
+
+    public void setStealth(int stealth) {
+        this.stealth = stealth;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+    
+
+    
 }

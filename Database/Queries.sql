@@ -28,4 +28,7 @@ BEGIN;
     LIMIT 10;
 
 
-    
+    /*
+    Get last record
+    SELECT * FROM Table ORDER BY ID DESC LIMIT 1;
+    */
