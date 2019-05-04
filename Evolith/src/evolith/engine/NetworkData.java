@@ -163,7 +163,7 @@ public class NetworkData implements Commons {
     }
     
     private static void getExtraInfo(Organism org, OrganismManager orgs, byte[] data, int index) {
-        if ((unsignByte(data[index++]) & 128) == 128) {
+        if ((unsignByte(data[index]) & 128) == 128) {
             org.setEgg(true);
         } else {
             org.setEgg(false);
