@@ -74,6 +74,8 @@ public interface Commons {
     public static final int BACKGROUND_HEIGHT = 5000;
     
     public static final int INITIAL_POINT = BACKGROUND_WIDTH / 2;           // inital point
+    public static final int INITIAL_POINT_HOST = 1000;                      // inital point host
+    public static final int INITIAL_POINT_CLIENT = 4000;                    // inital client
 
     
     public static final int MINIMAP_WIDTH = BACKGROUND_WIDTH / 30; // 166~

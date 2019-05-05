@@ -154,6 +154,46 @@ public class InputReader {
             if (game.getInputKeyboard().z) {
                 speciesName += 'z';
             }
+            
+            if (game.getInputKeyboard().num1) {
+                speciesName += '1';
+            }
+            
+            if (game.getInputKeyboard().num2) {
+                speciesName += '2';
+            }
+            
+            if (game.getInputKeyboard().num3) {
+                speciesName += '3';
+            }
+            
+            if (game.getInputKeyboard().num4) {
+                speciesName += '4';
+            }
+            
+            if (game.getInputKeyboard().num5) {
+                speciesName += '5';
+            }
+            if (game.getInputKeyboard().num6) {
+                speciesName += '6';
+            }
+            if (game.getInputKeyboard().num7) {
+                speciesName += '7';
+            }
+            if (game.getInputKeyboard().num8) {
+                speciesName += '8';
+            }
+            
+            if (game.getInputKeyboard().num9) {
+                speciesName += '9';
+            }
+            if (game.getInputKeyboard().num0) {
+                speciesName += '0';
+            }
+            if (game.getInputKeyboard().period) {
+                speciesName += '.';
+            }
+            
         }
 
         if (game.getInputKeyboard().delete && speciesName.length() > 0 && speciesName != null) {

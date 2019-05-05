@@ -490,7 +490,24 @@ public class OrganismManager implements Commons {
         organisms.clear();
         
         idCounter = 1;
-        organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
+        
+        if (game.getState() == Game.States.Multi) {
+            if (game.isServer() && !other) {
+                organisms.add(new Organism(INITIAL_POINT_HOST, INITIAL_POINT_HOST, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
+                organisms.get(0).setSkin(skin);
+            } else if (!game.isServer() && !other) {
+                organisms.add(new Organism(INITIAL_POINT_CLIENT, INITIAL_POINT_CLIENT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
+                organisms.get(0).setSkin(skin);
+            } else if (game.isServer() && other) {
+                organisms.add(new Organism(INITIAL_POINT_CLIENT, INITIAL_POINT_CLIENT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
+                organisms.get(0).setSkin(skin);
+            } else {
+                organisms.add(new Organism(INITIAL_POINT_HOST, INITIAL_POINT_HOST, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
+                organisms.get(0).setSkin(skin);
+            }
+        } else {
+            organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
+        }
         
         organisms.get(0).setEgg(false);
         organisms.get(0).setBorn(true);

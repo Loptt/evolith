@@ -212,6 +212,10 @@ public class NetworkData implements Commons {
         int hunger;
         int thirst;
         
+        if (orgs == null) {
+            return;
+        }
+        
         int addAmount = (int) unsignByte(data[1]) - orgs.getAmount();
         
         if (!orgs.getGame().isServer()) {

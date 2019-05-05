@@ -230,6 +230,14 @@ public class NetworkManager implements Runnable {
             System.out.println(e);
         }
     }
+    
+    public boolean isClientReady() {
+        return true;
+    }
+    
+    public boolean isServerReady() {
+        return true;
+    }
 
     public boolean isOtherWon() {
         return otherWon;

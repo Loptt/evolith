@@ -94,6 +94,20 @@ public class Assets {
     public static BufferedImage statsMenuButtonOff;
     
     public static ArrayList<BufferedImage> instructions;
+    
+    public static ArrayList<BufferedImage> modes;
+    public static BufferedImage singlePlayerOn;
+    public static BufferedImage singlePlayerOff;
+    public static BufferedImage loadModeOn;
+    public static BufferedImage loadModeOff;
+    public static BufferedImage multiplayerOn;
+    public static BufferedImage multiplayerOff;
+    public static BufferedImage backOn;
+    public static BufferedImage backOff;
+    public static BufferedImage hostOn;
+    public static BufferedImage hostOff;
+    public static BufferedImage joinOn;
+    public static BufferedImage joinOff;
 
     /**
      * Initializes the assets and links to the image folder
@@ -233,6 +247,26 @@ public class Assets {
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions4.png"));
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions5.png"));
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions6.png"));
+        
+        modes = new ArrayList<>();
+        modes.add(ImageLoader.loadImage("/images/multiplayer/modescreen.png"));
+        modes.add(ImageLoader.loadImage("/images/multiplayer/multiplayerscreen.png"));
+        modes.add(ImageLoader.loadImage("/images/multiplayer/hostingscreen.png"));
+        modes.add(ImageLoader.loadImage("/images/multiplayer/joingamescreen.png"));
+        
+        singlePlayerOn = ImageLoader.loadImage("/images/multiplayer/singleplayeron.png");
+        singlePlayerOff = ImageLoader.loadImage("/images/multiplayer/singleplayeroff.png");
+        loadModeOn = ImageLoader.loadImage("/images/multiplayer/loadgameon.png");
+        loadModeOff = ImageLoader.loadImage("/images/multiplayer/loadgameoff.png");
+        multiplayerOn = ImageLoader.loadImage("/images/multiplayer/multiplayeron.png");
+        multiplayerOff = ImageLoader.loadImage("/images/multiplayer/multiplayeroff.png");
+        backOn = ImageLoader.loadImage("/images/multiplayer/backon.png");
+        backOff = ImageLoader.loadImage("/images/multiplayer/backoff.png");
+        backOff = ImageLoader.loadImage("/images/multiplayer/backoff.png");
+        hostOn = ImageLoader.loadImage("/images/multiplayer/hostgameon.png");
+        hostOff = ImageLoader.loadImage("/images/multiplayer/hostgameoff.png");
+        joinOn = ImageLoader.loadImage("/images/multiplayer/joingameon.png");
+        joinOff = ImageLoader.loadImage("/images/multiplayer/joingameoff.png");
     }
     
     /**
