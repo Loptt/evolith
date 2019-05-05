@@ -234,13 +234,13 @@ public class NetworkData implements Commons {
 
             org.setPoint(new Point(x, y));
             
-            life = (double) ((int) (data[index++]));
+            life = (double) ((int) unsignByte((data[index++])));
             hunger = data[index++];
             thirst = data[index++];
             org.setLife(life);
             
             parseMutations(org.getOrgMutations(), data, index++);
-            getExtraInfo(org, orgs, data, index++, false);
+            getExtraInfo(org, orgs, data, index++, true);
         }
         
         for (int i = 0; i < addAmount; i++) {
@@ -645,7 +645,7 @@ public class NetworkData implements Commons {
         }
         
         if (first) {
-            org.updateMutations();
+            org.updateMutations(true);
         }
     }
     

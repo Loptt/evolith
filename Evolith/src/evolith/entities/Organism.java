@@ -123,7 +123,7 @@ public class Organism extends Item implements Commons {
         maxHealth = 0;
         intelligence = 0;
                 
-        updateStats();
+        updateStats(false);
         
         hunger = 50;
         thirst = 50;
@@ -419,10 +419,10 @@ public class Organism extends Item implements Commons {
         setMaxHealth(currMaxHealth > 0 ? currMaxHealth : 0);
         setStealth(currStealth > 0 ? currStealth : 0);
         
-        updateStats();
+        updateStats(false);
     }
     
-    public void updateMutations() {
+    public void updateMutations(boolean other) {
         strength = 0;
         speed = 0;
         maxHealth = 0;
@@ -450,13 +450,16 @@ public class Organism extends Item implements Commons {
             }
         }
         
-        updateStats();
+        updateStats(other);
     }
     
-    private void updateStats() {
+    private void updateStats(boolean other) {
         //Transform stat numbers to useful numbers
         currentMaxHealth = maxHealth * 2 + 100;
-        life = currentMaxHealth;
+        
+        if (!other) {
+            life = currentMaxHealth;
+        }
         
         currentSize = (int) (maxHealth * 0.5 + 30);
         width = currentSize;
@@ -493,7 +496,7 @@ public class Organism extends Item implements Commons {
             }
         }
         
-        org.updateStats();
+        org.updateStats(false);
         
         return org;
     }
@@ -864,8 +867,8 @@ public class Organism extends Item implements Commons {
         
         orgMutations.load(br);
         
-        updateMutations();
-        updateStats();
+        updateMutations(false);
+        updateStats(false);
     }
 
     /**

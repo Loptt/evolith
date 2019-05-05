@@ -465,11 +465,11 @@ public class Game implements Runnable, Commons {
 
     public void multiInitClient(String address) {
         server = false;
+        otherOrganisms = new OrganismManager(this, true);
         network = new NetworkManager(false, otherOrganisms, resources, predators);
-        network.initClient("localHost", 5000);
+        network.initClient(address, 5000);
         organisms.setSkin(2);
         
-        otherOrganisms = new OrganismManager(this, true);
         otherOrganisms.setSkin(0);
         
         Thread myThread = new Thread(network);
