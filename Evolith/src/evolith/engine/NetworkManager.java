@@ -155,16 +155,21 @@ public class NetworkManager implements Runnable {
                 address = packet.getAddress();
             }
             
+            //The first byte on each packet defines its type
             switch (receivedData[0]) {
+                //Organism packet
                 case 1:
                     NetworkData.parseBytes(otherorgs, receivedData);
                     break;
+                //Plants packet
                 case 2:
                     NetworkData.parseBytesPlants(resources, receivedData, server);
                     break;
+                //Water packet
                 case 3:
                     NetworkData.parseBytesWaters(resources, receivedData, server);
                     break;
+                //Predator packet    
                 case 4:
                     NetworkData.parseBytesPreds(predators, receivedData);
                     break;

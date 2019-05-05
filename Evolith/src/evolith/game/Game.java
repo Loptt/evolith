@@ -288,11 +288,8 @@ public class Game implements Runnable, Commons {
         inputKeyboard.tick();
         selection.tick();
         
-        predators.tick();
-        
         if (server) {
             resources.respawnResources(); 
-            network.sendDataPreds(predators);
         }
         
         network.sendDataPlants(resources);
@@ -317,7 +314,6 @@ public class Game implements Runnable, Commons {
         
         organisms.checkKill();
         otherOrganisms.checkKill();
-        predators.checkKill();
         
         if (server) {
             resources.deleteResources();
@@ -397,7 +393,7 @@ public class Game implements Runnable, Commons {
             resources.init();
         } else {
             network = new NetworkManager(false, otherOrganisms, resources, predators);
-            network.initClient("192.168.11.129", 5000);
+            network.initClient("localhost", 5000);
             organisms.setSkin(2);
             otherOrganisms.setSkin(0);
         }
