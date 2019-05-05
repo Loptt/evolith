@@ -40,6 +40,6 @@ BEGIN;
     UPDATE game SET game_duration = 1, WHERE game_id = 1;
 
 -----------INSERTS
-INSERT INTO organism(organism_alive,organism_generation, organism_kills, organism_lifespan,species_id) VALUES
+INSERT INTO organism(organism_alive,organism_generation,organism_speed,organism_stealth,organism_strength,organism_max_health,species_id) VALUES();
 
     */

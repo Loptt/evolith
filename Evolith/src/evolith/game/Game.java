@@ -158,7 +158,7 @@ public class Game implements Runnable, Commons {
 
         background = new Background(5000, 5000, width, height);
         buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
-        setupMenu = new SetupMenu(0, 0, width, height, this);
+        setupMenu = new SetupMenu(0, 0, width, height, this,mysql);
         pauseMenu = new PauseMenu(width / 2 - 250 / 2, height / 2 - 300 / 2, 250, 300, this);
         
         musicManager = new MusicManager();
@@ -176,6 +176,10 @@ public class Game implements Runnable, Commons {
         display.getCanvas().addMouseMotionListener(mouseManager);
         
         mysql.insertGame(gameID, clock.getTicker());
+        mysql.insertSpecies(gameID);
+        
+        organisms.setSpeciesID(mysql.getSpeciesID(gameID));
+        mysql.insertOrganism(organisms.getSpeciesID() , 1 ,organisms.getOrganism(0).getGeneration(),organisms.getOrganism(0).getSpeed(),organisms.getOrganism(0).getStealth() , organisms.getOrganism(0).getStrength(),organisms.getOrganism(0).getMaxHealth());
 
     }
 

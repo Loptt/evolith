@@ -77,7 +77,6 @@ public class JDBC {
     public void insertGame(int gameID, int ticker) {
         int countinsert = 0;
 
-
         try {
             myStatement = myConnection.createStatement();
             countinsert = myStatement.executeUpdate("INSERT INTO game(game_id,game_duration) VALUES (" + Integer.toString(gameID) + "," + Integer.toString(ticker) + ");");
@@ -125,22 +124,15 @@ public class JDBC {
         int speciesID = 0;
 
         try {
-            myConnection = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection made of user: " + user + " with password " + password);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        try {
             myStatement = myConnection.createStatement();
             myResult = JDBC.myStatement.executeQuery("SELECT species_id FROM species WHERE game_id =" + Integer.toString(gameID) + ";");
             myResult.next();
             speciesID = myResult.getInt(1);
-
+            
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
+        System.out.println(speciesID + " is the SpeciesID.\n");
         return speciesID;
 
     }
@@ -158,15 +150,13 @@ public class JDBC {
     }
 
     public void updateOrganisms(Organism o, int speciesID) {
-        
-        
-        
+     
       int countUpdated = 0;
 
         try {
             myStatement = myConnection.createStatement();
             
-            
+            System.out.println(speciesID + " is the SpeciesID.\n");
             countUpdated = myStatement.executeUpdate("UPDATE organism SET organism_alive = " + Integer.toString(o.isDead() ? 0 : 1) + " WHERE species_id = " + Integer.toString(speciesID) + ";");
             System.out.println(countUpdated + " records updated.\n");
 
@@ -192,5 +182,29 @@ public class JDBC {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }}
+
+    public void updateSpeciesName(int gameID, String name) {
+        int countUpdated;
+        try {
+            myStatement = myConnection.createStatement();
+           countUpdated =  myStatement.executeUpdate("UPDATE species SET species_name = " + name + " WHERE game_id = " + Integer.toString(gameID) +";");
+          System.out.println(countUpdated + " records updated.\n");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    
+    }
+
+    public void insertSpecies(int gameID) {
+                int countinsert = 0;
+        try {
+            myStatement = myConnection.createStatement();
+            countinsert = myStatement.executeUpdate("INSERT INTO species(game_id) VALUES (" + Integer.toString(gameID) + ");");
+            System.out.println(countinsert + " records inserted.\n");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
+    }
 
 }

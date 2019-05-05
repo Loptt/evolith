@@ -6,21 +6,13 @@
 package evolith.menus;
 
 import evolith.database.JDBC;
-import evolith.database.Ranking2P;
 import evolith.game.Game;
 import evolith.helpers.Commons;
 import evolith.helpers.FontLoader;
 import evolith.menus.Menu;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
 
 /**
  *
@@ -30,9 +22,6 @@ public class RankingPanel extends Menu implements Commons {
 
     private boolean connected;
     private FontLoader f;
-
-    // private Ranking2P rank;
-    //private List<Ranking2P> ranking;
     private Game game;
     private JDBC mysql;
     private ArrayList<ArrayList<Object>> myRanking;

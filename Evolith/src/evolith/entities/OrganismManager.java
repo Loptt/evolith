@@ -78,9 +78,9 @@ public class OrganismManager implements Commons {
         avg = new int[4];
         this.mysql =  game.getMysql();
         statsPanel = new StatisticsPanel(200,200,0,0,game,false);
-        this.speciesID = mysql.getSpeciesID( game.getGameID());
-        mysql.insertOrganism(speciesID,!organisms.get(0).isDead() ? 1 : 0,  organisms.get(0).getGeneration(), organisms.get(0).getSpeed(), organisms.get(0).getStealth(), organisms.get(0).getStrength(), organisms.get(0).getMaxHealth());
-    }
+        //this.speciesID = mysql.getSpeciesID( game.getGameID());
+        
+        }
     
     /**
      * updates all organisms
@@ -350,7 +350,6 @@ public class OrganismManager implements Commons {
     }
 private void updateOrganismsDB()
 {
-
         mysql.updateOrganisms(this);
 }
     /**
