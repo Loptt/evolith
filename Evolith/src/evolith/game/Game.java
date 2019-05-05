@@ -558,6 +558,7 @@ public class Game implements Runnable, Commons {
         }
         
         if (organisms.isMaxIntelligence()) {
+            network.sendDataWin();
             state = States.GameOver;
             win = true;
             overMenu = new OverMenu(0, 0, width, height, this, win);
