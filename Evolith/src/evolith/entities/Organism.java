@@ -178,6 +178,11 @@ public class Organism extends Item implements Commons {
             return;
         }
         
+        if (other) {
+            checkMovement();
+            return;
+        }
+        
         if (!other) {
             checkPredators();   
             if (game.getOtherOrganisms() != null) {
@@ -546,6 +551,10 @@ public class Organism extends Item implements Commons {
                 safeLeaveResource();
                 beingChased = true;
                 pred = o;
+                
+                if (o.intersects(this)) {
+                    life -= o.getDamage();
+                }
             } else {
 
             }
