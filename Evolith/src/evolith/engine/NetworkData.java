@@ -157,8 +157,8 @@ public class NetworkData implements Commons {
             Predator pred = preds.getPredator(i);
             data[index++] = addFlags(pred);
             
-            data[index++] = (byte) (pred.getPoint().x / 256);
-            data[index++] = (byte) (pred.getPoint().y);
+            data[index++] = (byte) (pred.getX()/ 256);
+            data[index++] = (byte) (pred.getX());
 
             data[index++] = (byte) (pred.getY() / 256);
             data[index++] = (byte) (pred.getY());
@@ -392,6 +392,8 @@ public class NetworkData implements Commons {
             x = data[index++] * 256 + unsignByte(data[index++]);
             y = data[index++] * 256 + unsignByte(data[index++]);
             
+            pred.setX(x);
+            pred.setY(y);
             pred.setPoint(new Point(x, y));
             
             life = unsignByte(data[index++]);
@@ -498,6 +500,10 @@ public class NetworkData implements Commons {
             result = (byte) (result | 128);
         }
         
+        if (pred.getMode() == Predator.Mode.Attacking) {
+            result = (byte) (result | 64);
+        }
+        
         //Small
         if (pred.getDamage() < 0.08) {
             result = (byte) (result | 0);
@@ -523,13 +529,19 @@ public class NetworkData implements Commons {
             pred.setDead(true);
         }
         
+        if ((unsignByte(data[index]) & 64) == 64) {
+            pred.setAbsMaxVel(pred.getChasingSpeed());
+        } else {
+            pred.setAbsMaxVel(1);
+        }
+        
         if ((data[index] & 0x3) == 0) {
             //Small
             pred.setWidth(PREDATOR_SIZE - 20);
             pred.setHeight(PREDATOR_SIZE - 20);
             
             pred.setDamage(0.07);
-            pred.setAbsMaxVel(3);
+            pred.setChasingSpeed(3);
             
             pred.setMaxHealth(100);
             pred.setLife(100);
@@ -539,7 +551,7 @@ public class NetworkData implements Commons {
             pred.setHeight(PREDATOR_SIZE );
             
             pred.setDamage(0.2);
-            pred.setAbsMaxVel(2);
+            pred.setChasingSpeed(2);
             
             pred.setMaxHealth(100);
             pred.setLife(100);
@@ -549,7 +561,7 @@ public class NetworkData implements Commons {
             pred.setHeight(PREDATOR_SIZE + 20);
             
             pred.setDamage(0.3);
-            pred.setAbsMaxVel(2);
+            pred.setChasingSpeed(2);
             
             pred.setMaxHealth(150);
             pred.setLife(150);

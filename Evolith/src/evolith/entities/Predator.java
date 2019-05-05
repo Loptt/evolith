@@ -68,11 +68,13 @@ public class Predator extends Item implements Commons {
     private boolean recovering;
     private int id;
     
+    private int chasingSpeed;
+    
     private int absMaxVel;
     private int prevResourceChangeSec;
     private int prevPointGeneratedSec;
     
-    private enum Mode {Water, Roaming, Attacking};
+    public enum Mode {Water, Roaming, Attacking};
     private Mode mode;
     private Mode prevMode;
     
@@ -134,6 +136,8 @@ public class Predator extends Item implements Commons {
         
         applyVariances();
         visible = false;
+        
+        chasingSpeed = 3;
     }
 
     /**
@@ -143,6 +147,12 @@ public class Predator extends Item implements Commons {
     public void tick() {
         //to determine the lifespan of the organism
         time.tick();
+        
+        if (!game.isServer()) {
+            checkMovement();
+            checkVitals();
+            return;
+        }
         
         if (leaving) {
             checkMovement();
@@ -197,7 +207,7 @@ public class Predator extends Item implements Commons {
             
             damage = 0.07;
             
-            absMaxVel = 3;
+            chasingSpeed = 3;
             
             maxHealth = 100;
             life = 100;
@@ -208,7 +218,7 @@ public class Predator extends Item implements Commons {
             
             damage = 0.2;
             
-            absMaxVel = 2;
+            chasingSpeed = 2;
         } else {
             //Big *scary*
             width = PREDATOR_SIZE + 20;
@@ -216,7 +226,7 @@ public class Predator extends Item implements Commons {
             
             damage = 0.3;
             
-            absMaxVel = 2;
+            chasingSpeed = 2;
             
             maxHealth = 150;
             life = maxHealth;
@@ -414,13 +424,15 @@ public class Predator extends Item implements Commons {
                 getTargetResource().setPredator(null);
             }
             
-            absMaxVel = 3;
+            absMaxVel = chasingSpeed;
             if (mode != Mode.Attacking) {
                 prevMode = mode;
                 mode = Mode.Attacking;
             }
             
-            setTargetResource(null);
+            if (game.isServer()) {
+                setTargetResource(null);
+            }
             setStamina(getStamina() - 0.3);
         } else {
             if (mode == Mode.Attacking) {
@@ -429,13 +441,18 @@ public class Predator extends Item implements Commons {
             }
             if (res != null && mode != Mode.Roaming) {
                 if (getTargetResource() == null) {
-                    setTargetResource(res);
-                    setTarget(null);
                     absMaxVel = 1;
+                    
+                    if (game.isServer()) {
+                        setTargetResource(res);
+                        setTarget(null);
+                    }
                 } else if (getTargetResource().getPredator() != this) {
                     //If not check if a resource is nearby and set target to that one
-                    setTargetResource(res);
-                    setTarget(null);
+                    if (game.isServer()) {
+                        setTargetResource(res);
+                        setTarget(null);
+                    }
                     absMaxVel = 1;
                 }
             }
@@ -583,9 +600,9 @@ public class Predator extends Item implements Commons {
      */
     @Override
     public void render(Graphics g) {
-        if (!visible) {
+        /*if (!visible) {
             return;
-        }
+        }*/
         
         g.drawImage(Assets.predator, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
         
@@ -789,5 +806,25 @@ public class Predator extends Item implements Commons {
 
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
+    }
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    public void setMaxVel(int maxVel) {
+        this.maxVel = maxVel;
+    }
+
+    public int getAbsMaxVel() {
+        return absMaxVel;
+    }
+
+    public void setChasingSpeed(int chasingSpeed) {
+        this.chasingSpeed = chasingSpeed;
+    }
+
+    public int getChasingSpeed() {
+        return chasingSpeed;
     }
 }
