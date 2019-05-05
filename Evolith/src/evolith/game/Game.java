@@ -51,6 +51,7 @@ public class Game implements Runnable, Commons {
     private MouseManager mouseManager;          // manages the mouse
     private InputKeyboard inputKeyboard;        // manages the input of the keyboard of the setup menu
     private MusicManager musicManager;
+    private SoundEffectManager sfx;
 
     private Background background;              // background of the game engine
     private Camera camera;                      // camera of the game engine
@@ -158,6 +159,7 @@ public class Game implements Runnable, Commons {
         pauseMenu = new PauseMenu(width / 2 - 250 / 2, height / 2 - 300 / 2, 250, 300, this);
         
         musicManager = new MusicManager();
+        sfx = new SoundEffectManager();
         //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
         organisms = new OrganismManager(this);
         predators = new PredatorManager(this);
@@ -260,6 +262,7 @@ public class Game implements Runnable, Commons {
         inputKeyboard.tick();
         selection.tick();
         weather.tick();
+        sfx.tick();
         
         keyManager.tick();
         musicManager.tick();
@@ -444,11 +447,11 @@ public class Game implements Runnable, Commons {
                 //Set the resource to the selected organisms
                 organisms.setSelectedResource(clickedResource);
                 if (clickedResource.getType() == Resource.ResourceType.Plant) {
-                    Assets.grasssound.play();
+                    sfx.playPlant();
                     organisms.setSelectedSearchFood(true);
                     organisms.setSelectedSearchWater(false);
                 } else {
-                    Assets.watersound.play();
+                    sfx.playWater();
                     organisms.setSelectedSearchWater(true);
                     organisms.setSearchFood(false);
                 }
@@ -549,7 +552,7 @@ public class Game implements Runnable, Commons {
                     }
                     minimap.render(g);
                     buttonBar.render(g);
-
+                    
                     if (selection.isActive()) {
                         selection.render(g);
                     }
@@ -776,6 +779,10 @@ public class Game implements Runnable, Commons {
         return night;
     }
 
+    public SoundEffectManager getSfx() {
+        return sfx;
+    }
+    
     /**
      * start game
      */
