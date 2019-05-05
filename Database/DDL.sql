@@ -35,6 +35,20 @@ species_id INT NOT NULL,
 PRIMARY KEY (organism_id),
 FOREIGN KEY(species_id) REFERENCES species(species_id)
 );
+CREATE TABLE backup_organism(
+backup_organism_id INT NOT NULL AUTO_INCREMENT,
+backup_organism_alive INT(1),
+backup_organism_generation INT,
+backup_organism_speed INT,
+backup_organism_stealth INT,
+backup_organism_strength INT,
+backup_organism_max_health INT,
+/*organism_kills INT,
+organism_lifespan INT,*/
+species_id INT NOT NULL,
+PRIMARY KEY (backup_organism_id),
+FOREIGN KEY(species_id) REFERENCES species(species_id)
+);
 
 /* CREATE TABLE mutation(
 mutation_id INT NOT NULL AUTO_INCREMENT,

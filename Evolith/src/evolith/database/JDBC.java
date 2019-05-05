@@ -176,7 +176,7 @@ public class JDBC {
             
             for(int i = 0; i < om.getAmount(); i++)
             {
-            countUpdated += myStatement.executeUpdate("UPDATE organism SET organism_alive = " + Integer.toString(om.getOrganism(i).isDead() ? 0 : 1) +  ", organism_generation "+ Integer.toString(om.getOrganism(i).getGeneration()) +  ", organism_speed "+Integer.toString(om.getOrganism(i).getSpeed())+  ", organism_stealth"+Integer.toString(om.getOrganism(i).getStealth())+  ", organism_strength "+Integer.toString(om.getOrganism(i).getStrength())+  ", organism_max_health "+Integer.toString(om.getOrganism(i).getMaxHealth()) + " WHERE species_id = " + Integer.toString(om.getSpeciesID()) + " AND organism_id = " + Integer.toString(om.getOrganism(i).getId()) + ";");
+            countUpdated += myStatement.executeUpdate("UPDATE organism SET organism_alive = " + Integer.toString(om.getOrganism(i).isDead() ? 0 : 1) +  ", organism_generation = "+ Integer.toString(om.getOrganism(i).getGeneration()) +  ", organism_speed ="+Integer.toString(om.getOrganism(i).getSpeed())+  ", organism_stealth ="+Integer.toString(om.getOrganism(i).getStealth())+  ", organism_strength = "+Integer.toString(om.getOrganism(i).getStrength())+  ", organism_max_health = "+Integer.toString(om.getOrganism(i).getMaxHealth()) + " WHERE species_id = " + Integer.toString(om.getSpeciesID()) + " AND organism_id = " + Integer.toString(om.getOrganism(i).getId()) + ";");
             }
             System.out.println(countUpdated + " records updated.\n");
         } catch (Exception e) {
