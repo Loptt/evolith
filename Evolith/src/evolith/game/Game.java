@@ -175,9 +175,8 @@ public class Game implements Runnable, Commons {
         display.getCanvas().addMouseListener(mouseManager);
         display.getCanvas().addMouseMotionListener(mouseManager);
         
-        mysql.insertGame(gameID, clock.getTicker());
+        mysql.insertGame(gameID, clock.getSeconds());
         mysql.insertSpecies(gameID);
-        
         organisms.setSpeciesID(mysql.getSpeciesID(gameID));
         mysql.insertOrganism(organisms.getSpeciesID() , 1 ,organisms.getOrganism(0).getGeneration(),organisms.getOrganism(0).getSpeed(),organisms.getOrganism(0).getStealth() , organisms.getOrganism(0).getStrength(),organisms.getOrganism(0).getMaxHealth());
 
@@ -659,6 +658,20 @@ public class Game implements Runnable, Commons {
         organisms.reset();
         predators.reset();
         resources.reset();
+        
+        try {
+            gameID = mysql.getLastGameID() + 1;
+            mysql.insertGame(gameID, clock.getTicker());
+            mysql.insertSpecies(gameID);
+            organisms.setSpeciesID(mysql.getSpeciesID(gameID));
+            mysql.insertOrganism(organisms.getSpeciesID() , 1 ,organisms.getOrganism(0).getGeneration(),organisms.getOrganism(0).getSpeed(),organisms.getOrganism(0).getStealth() , organisms.getOrganism(0).getStrength(),organisms.getOrganism(0).getMaxHealth());
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+
+        
     }
 
     /**

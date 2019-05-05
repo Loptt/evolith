@@ -149,26 +149,6 @@ public class JDBC {
         }
     }
 
-    public void updateOrganisms(Organism o, int speciesID) {
-     
-      int countUpdated = 0;
-
-        try {
-            myStatement = myConnection.createStatement();
-            
-            System.out.println(speciesID + " is the SpeciesID.\n");
-            countUpdated = myStatement.executeUpdate("UPDATE organism SET organism_alive = " + Integer.toString(o.isDead() ? 0 : 1) + " WHERE species_id = " + Integer.toString(speciesID) + ";");
-            System.out.println(countUpdated + " records updated.\n");
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    
-    
-    
-    
-    }
-
     public void updateOrganisms(OrganismManager om) {
           int countUpdated = 0;
         try {
@@ -187,7 +167,7 @@ public class JDBC {
         int countUpdated;
         try {
             myStatement = myConnection.createStatement();
-           countUpdated =  myStatement.executeUpdate("UPDATE species SET species_name = " + name + " WHERE game_id = " + Integer.toString(gameID) +";");
+           countUpdated =  myStatement.executeUpdate("UPDATE species SET species_name = \" " + name + " \" WHERE game_id = " + Integer.toString(gameID) +";");
           System.out.println(countUpdated + " records updated.\n");
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -205,6 +185,14 @@ public class JDBC {
             System.out.println(e.getMessage());
         }
         
+    }
+
+    public void saveOrganisms(OrganismManager aThis) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void loadOrganisms(OrganismManager aThis) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

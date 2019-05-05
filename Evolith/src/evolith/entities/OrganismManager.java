@@ -16,6 +16,7 @@ import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -339,8 +340,7 @@ public class OrganismManager implements Commons {
         
       //  if((orgPanel.isReproduce() && mutPanel.getButtons().get(0).isPressed()) || (orgPanel.isReproduce() && !mutPanel.isActive()) ){
         orgPanel.setReproduce(false);
-        offspring.setId(idCounter + 1);
-        idCounter++;
+        offspring.setId(idCounter-1);
         organisms.add(offspring);
         offspring.setSearchFood(org.isSearchFood());
         offspring.setSearchWater(org.isSearchWater());
@@ -498,6 +498,7 @@ private void updateOrganismsDB()
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).save(pw);
         }
+        mysql.saveOrganisms(this);
     }
     
     public void load(BufferedReader br) throws IOException {
@@ -510,6 +511,7 @@ private void updateOrganismsDB()
             organisms.add(new Organism(0,0, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, skin, 0));
             organisms.get(i).load(br);
         }
+        mysql.loadOrganisms(this);
     }
     
     public void reset() {
@@ -527,6 +529,9 @@ private void updateOrganismsDB()
         
         updatedNight = false;
         speciesName = "";
+        
+
+        
     }
 
     /**
