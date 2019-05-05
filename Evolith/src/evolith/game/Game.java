@@ -160,8 +160,6 @@ public class Game implements Runnable, Commons {
         organisms = new OrganismManager(this, false);
         otherOrganisms = new OrganismManager(this, true);
         predators = new PredatorManager(this);
-        //plants = new Plants(this);
-        //waters = new Waters(this);
         resources = new ResourceManager(this);
         display.getJframe().addKeyListener(keyManager);
         display.getJframe().addKeyListener(inputKeyboard);
@@ -290,13 +288,15 @@ public class Game implements Runnable, Commons {
         inputKeyboard.tick();
         selection.tick();
         
+        predators.tick();
+        
         if (server) {
             resources.respawnResources(); 
+            network.sendDataPreds(predators);
         }
         
         network.sendDataPlants(resources);
         network.sendDataWaters(resources);
-        
         network.sendData(organisms);
 
         keyManager.tick();
@@ -317,6 +317,7 @@ public class Game implements Runnable, Commons {
         
         organisms.checkKill();
         otherOrganisms.checkKill();
+        predators.checkKill();
         
         if (server) {
             resources.deleteResources();
@@ -389,13 +390,13 @@ public class Game implements Runnable, Commons {
         server = i == 1;
         
         if (server) {
-            network = new NetworkManager(true, otherOrganisms, resources);
+            network = new NetworkManager(true, otherOrganisms, resources, predators);
             network.initServer();
             organisms.setSkin(0);
             otherOrganisms.setSkin(2);
             resources.init();
         } else {
-            network = new NetworkManager(false, otherOrganisms, resources);
+            network = new NetworkManager(false, otherOrganisms, resources, predators);
             network.initClient("192.168.11.129", 5000);
             organisms.setSkin(2);
             otherOrganisms.setSkin(0);
@@ -874,6 +875,10 @@ public class Game implements Runnable, Commons {
 
     public OrganismManager getOtherOrganisms() {
         return otherOrganisms;
+    }
+    
+    public boolean isServer() {
+        return server;
     }
 
     /**

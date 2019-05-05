@@ -142,6 +142,33 @@ public class NetworkData implements Commons {
         return data;
     }
     
+    public static byte[] constructDataPreds(PredatorManager preds) {
+        byte[] data;
+        constructedByteAmount = preds.getPredatorAmount() * PRE_DATA_SIZE + 2;
+        data = new byte[constructedByteAmount];
+        
+        //Type: pred info
+        data[0] = (byte) 4;
+        data[1] = (byte) preds.getPredatorAmount();
+        
+        int index = 2;
+        
+        for (int i = 0; i < preds.getPredatorAmount(); i++) {
+            Predator pred = preds.getPredator(i);
+            data[index++] = addFlags(pred);
+            
+            data[index++] = (byte) (pred.getPoint().x / 256);
+            data[index++] = (byte) (pred.getPoint().y);
+
+            data[index++] = (byte) (pred.getY() / 256);
+            data[index++] = (byte) (pred.getY());
+            
+            data[index++] = (byte) ((int) pred.getLife());
+        }
+        
+        return data;
+    }
+    
     public static void parseBytes(OrganismManager orgs, byte[] data) {
         int index = 2;
         int x;
@@ -331,8 +358,46 @@ public class NetworkData implements Commons {
             for (int i = 0; i < removeIndices.size(); i++) {
                 res.removeWater(res.getWater(removeIndices.get(i)));
             }
+        } 
+    }
+    
+    public static void parseBytesPreds(PredatorManager preds, byte[] data) {
+        int index = 2;
+        int x;
+        int y;
+
+        int life;
+        int amount = unsignByte(data[1]);
+        int addAmount = amount - preds.getPredatorAmount();
+        
+        for (int i = 0; i < preds.getPredatorAmount(); i++) {
+            Predator pred = preds.getPredator(i);
+            getFlags(data, index++, pred);
+            
+            x = data[index++] * 256 + unsignByte(data[index++]);
+            y = data[index++] * 256 + unsignByte(data[index++]);
+            
+            pred.setPoint(new Point(x, y));
+            
+            life = unsignByte(data[index++]);
+            
+            pred.setLife(life);
         }
         
+        for (int i = 0; i < addAmount; i++) {
+            Predator pred = new Predator(0, 0, PREDATOR_SIZE,PREDATOR_SIZE, preds.getGame(),0); 
+            
+            getFlags(data, index++, pred);
+            
+            x = data[index++] * 256 + unsignByte(data[index++]);
+            y = data[index++] * 256 + unsignByte(data[index++]);
+            
+            pred.setPoint(new Point(x, y));
+            
+            life = unsignByte(data[index++]);
+            
+            pred.setLife(life);
+        }
     }
     
     private static byte convertMutations(MutationManager muts) {
@@ -426,12 +491,69 @@ public class NetworkData implements Commons {
         return result;
     }
     
+    private static byte addFlags(Predator pred) {
+        byte result = 0;
+        
+        if (pred.isDead()) {
+            result = (byte) (result | 128);
+        }
+        
+        //Small
+        if (pred.getDamage() < 0.08) {
+            result = (byte) (result | 0);
+        } else if (pred.getDamage() < 0.25) {
+            result = (byte) (result | 1);
+        } else {
+            result = (byte) (result | 2);
+        }
+        
+        return result;
+    }
+    
     private static boolean getFlags(byte[] data, int index) {
         if ((unsignByte(data[index]) & 128) == 128) {
             return true;
         }
         
         return false;
+    }
+    
+    private static void getFlags(byte[] data, int index, Predator pred) {
+        if ((unsignByte(data[index]) & 128) == 128) {
+            pred.setDead(true);
+        }
+        
+        if ((data[index] & 0x3) == 0) {
+            //Small
+            pred.setWidth(PREDATOR_SIZE - 20);
+            pred.setHeight(PREDATOR_SIZE - 20);
+            
+            pred.setDamage(0.07);
+            pred.setAbsMaxVel(3);
+            
+            pred.setMaxHealth(100);
+            pred.setLife(100);
+        } else if ((data[index] & 0x3) == 1) {
+            //Med
+            pred.setWidth(PREDATOR_SIZE);
+            pred.setHeight(PREDATOR_SIZE );
+            
+            pred.setDamage(0.2);
+            pred.setAbsMaxVel(2);
+            
+            pred.setMaxHealth(100);
+            pred.setLife(100);
+        } else {
+            //BIG SCARY
+            pred.setWidth(PREDATOR_SIZE + 20);
+            pred.setHeight(PREDATOR_SIZE + 20);
+            
+            pred.setDamage(0.3);
+            pred.setAbsMaxVel(2);
+            
+            pred.setMaxHealth(150);
+            pred.setLife(150);
+        }
     }
     
     private static void getExtraInfo(Organism org, OrganismManager orgs, byte[] data, int index) {

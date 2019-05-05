@@ -179,8 +179,10 @@ public class Organism extends Item implements Commons {
         }
         
         if (!other) {
-            checkPredators();
-            checkOthers();
+            checkPredators();   
+            if (game.getOtherOrganisms() != null) {
+                checkOthers();
+            }
         }
         
         handleTarget();

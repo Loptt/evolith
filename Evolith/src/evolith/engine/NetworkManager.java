@@ -6,6 +6,7 @@
 package evolith.engine;
 
 import evolith.entities.OrganismManager;
+import evolith.entities.PredatorManager;
 import evolith.entities.ResourceManager;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -30,10 +31,12 @@ public class NetworkManager implements Runnable {
     
     private OrganismManager otherorgs;
     private ResourceManager resources;
+    private PredatorManager predators;
     
-    public NetworkManager(boolean isServer, OrganismManager otherorgs, ResourceManager resources) {
+    public NetworkManager(boolean isServer, OrganismManager otherorgs, ResourceManager resources, PredatorManager predators) {
         this.otherorgs = otherorgs;
         this.resources = resources;
+        this.predators = predators;
         server = isServer;
         port = 0;
     }
@@ -120,6 +123,24 @@ public class NetworkManager implements Runnable {
         } 
     }
     
+    public void sendDataPreds(PredatorManager preds) {
+        if (port == 0) {
+            //No address specified
+            //beep beep bop
+            return;
+        }
+        
+        byte[] data = NetworkData.constructDataPreds(preds);
+        
+        packet = new DatagramPacket(data, NetworkData.getConstructedByteAmount(), address, port);
+        
+        try { 
+            socket.send(packet);
+        } catch (IOException ex) {
+            Logger.getLogger(NetworkManager.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }
+    
     public void receiveData() {
         try {
             //If port is 0, address and port have not been specified
@@ -134,12 +155,21 @@ public class NetworkManager implements Runnable {
                 address = packet.getAddress();
             }
             
-            if (receivedData[0] == 1) {
-                NetworkData.parseBytes(otherorgs, receivedData);
-            } else if (receivedData[0] == 2) {
-                NetworkData.parseBytesPlants(resources, receivedData, server);
-            } else if (receivedData[0] == 3) {
-                 NetworkData.parseBytesWaters(resources, receivedData, server);
+            switch (receivedData[0]) {
+                case 1:
+                    NetworkData.parseBytes(otherorgs, receivedData);
+                    break;
+                case 2:
+                    NetworkData.parseBytesPlants(resources, receivedData, server);
+                    break;
+                case 3:
+                    NetworkData.parseBytesWaters(resources, receivedData, server);
+                    break;
+                case 4:
+                    NetworkData.parseBytesPreds(predators, receivedData);
+                    break;
+                default:
+                    break;
             }
         } catch (IOException e) {
             System.out.println(e);

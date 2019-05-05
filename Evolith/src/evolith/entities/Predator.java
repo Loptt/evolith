@@ -782,4 +782,12 @@ public class Predator extends Item implements Commons {
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
+
+    public void setAbsMaxVel(int absMaxVel) {
+        this.absMaxVel = absMaxVel;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
 }
