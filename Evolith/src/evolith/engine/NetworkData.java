@@ -216,7 +216,7 @@ public class NetworkData implements Commons {
             org.setLife(life);
             
             parseMutations(org.getOrgMutations(), data, index++);
-            getExtraInfo(org, orgs, data, index++);
+            getExtraInfo(org, orgs, data, index++, false);
         }
         
         for (int i = 0; i < addAmount; i++) {
@@ -231,7 +231,7 @@ public class NetworkData implements Commons {
             thirst = data[index++];
             
             parseMutations(org.getOrgMutations(), data, index++);
-            getExtraInfo(org, orgs, data, index++);
+            getExtraInfo(org, orgs, data, index++, true);
             org.setEgg(true);
             org.setBorn(false);
             
@@ -591,7 +591,7 @@ public class NetworkData implements Commons {
         }
     }
     
-    private static void getExtraInfo(Organism org, OrganismManager orgs, byte[] data, int index) {
+    private static void getExtraInfo(Organism org, OrganismManager orgs, byte[] data, int index, boolean first) {
         if ((unsignByte(data[index]) & 128) == 128) {
             org.setEgg(true);
         } else {
@@ -620,7 +620,9 @@ public class NetworkData implements Commons {
             org.getOrgMutations().setStealthTier(2);
         }
         
-        org.updateMutations();
+        if (first) {
+            org.updateMutations();
+        }
     }
     
     public static int getConstructedByteAmount() {
