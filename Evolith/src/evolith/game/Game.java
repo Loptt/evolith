@@ -198,6 +198,8 @@ public class Game implements Runnable, Commons {
                 break;
             case Play:
                 playTick();
+                if(clock.getTicker() % 600 == 0)
+                    mysql.updateTimeGame(gameID, clock.getSeconds());
                 break;
             case Paused:
                 pausedTick();
@@ -205,8 +207,7 @@ public class Game implements Runnable, Commons {
             case GameOver:
                 overTick();
         }
-        if(clock.getTicker() % 60 == 0)
-           mysql.updateTimeGame(gameID, clock.getSeconds());
+        
 
     }
 
