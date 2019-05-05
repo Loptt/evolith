@@ -274,6 +274,10 @@ public class Organism extends Item implements Commons {
                 hatchTime = BORN_TIME;
             }
             
+            if (other) {
+                return;
+            }
+            
             if (life <= 0) {
                 dead = true;
             }

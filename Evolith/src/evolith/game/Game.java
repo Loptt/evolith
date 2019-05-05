@@ -404,6 +404,7 @@ public class Game implements Runnable, Commons {
             otherOrganisms.setSkin(2);
             resources.init();
             organisms.getOrganism(0).setMaturity(120);
+            organisms.getOrganism(0).setLife(50);
         } else {
             network = new NetworkManager(false, otherOrganisms, resources, predators);
             network.initClient("localhost", 5000);

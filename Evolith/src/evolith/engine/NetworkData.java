@@ -212,6 +212,9 @@ public class NetworkData implements Commons {
             hunger = data[index++];
             thirst = data[index++];
             
+            System.out.println("LIFE RECV:  " + life);
+            org.setLife(life);
+            
             parseMutations(org.getOrgMutations(), data, index++);
             getExtraInfo(org, orgs, data, index++);
         }
