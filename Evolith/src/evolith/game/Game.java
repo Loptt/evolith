@@ -295,6 +295,18 @@ public class Game implements Runnable, Commons {
         network.sendDataPlants(resources);
         network.sendDataWaters(resources);
         network.sendData(organisms);
+        
+        if (network.isOtherExtinct()) {
+            state = States.GameOver;
+            win = true;
+            overMenu = new OverMenu(0, 0, width, height, this, win);
+        }
+        
+        if (network.isOtherWon()) {
+            state = States.GameOver;
+            win = false;
+            overMenu = new OverMenu(0, 0, width, height, this, win);
+        }
 
         keyManager.tick();
         musicManager.tick();
@@ -391,6 +403,7 @@ public class Game implements Runnable, Commons {
             organisms.setSkin(0);
             otherOrganisms.setSkin(2);
             resources.init();
+            organisms.getOrganism(0).setMaturity(120);
         } else {
             network = new NetworkManager(false, otherOrganisms, resources, predators);
             network.initClient("localhost", 5000);
@@ -537,6 +550,7 @@ public class Game implements Runnable, Commons {
     
     public void checkGameOver() {
         if (organisms.getAmount() <= 0) {
+            network.sendDataExtinct();
             state = States.GameOver;
             win = false;
             System.out.println("OVER");

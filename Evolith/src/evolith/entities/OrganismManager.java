@@ -65,7 +65,7 @@ public class OrganismManager implements Commons {
             organisms.get(i).setBorn(true);
             organisms.get(i).setMaturity(0);
         }
-
+       
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
         mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
         

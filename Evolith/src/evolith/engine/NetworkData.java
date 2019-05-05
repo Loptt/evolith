@@ -169,6 +169,26 @@ public class NetworkData implements Commons {
         return data;
     }
     
+    public static byte[] constructDataExtinct() {
+        byte[] data;
+        constructedByteAmount = 1;
+        data = new byte[constructedByteAmount];
+        
+        data[0] = (byte) 5;
+        
+        return data;
+    }
+    
+    public static byte[] constructDataWin() {
+        byte[] data;
+        constructedByteAmount = 1;
+        data = new byte[constructedByteAmount];
+        
+        data[0] = (byte) 6;
+        
+        return data;
+    }
+    
     public static void parseBytes(OrganismManager orgs, byte[] data) {
         int index = 2;
         int x;

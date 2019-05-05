@@ -28,6 +28,9 @@ public class NetworkManager implements Runnable {
     private int port;
 
     private boolean server;
+    private boolean otherExtinct;
+    private boolean otherWon;
+    private boolean otherDisconnect;
     
     private OrganismManager otherorgs;
     private ResourceManager resources;
@@ -38,6 +41,11 @@ public class NetworkManager implements Runnable {
         this.resources = resources;
         this.predators = predators;
         server = isServer;
+        
+        otherExtinct = false;
+        otherWon = false;
+        otherDisconnect = false;
+        
         port = 0;
     }
     
@@ -141,6 +149,42 @@ public class NetworkManager implements Runnable {
         } 
     }
     
+    public void sendDataExtinct() {
+        if (port == 0) {
+            //No address specified
+            //beep beep bop
+            return;
+        }
+        
+        byte[] data = NetworkData.constructDataExtinct();
+        
+        packet = new DatagramPacket(data, NetworkData.getConstructedByteAmount(), address, port);
+        
+        try { 
+            socket.send(packet);
+        } catch (IOException ex) {
+            Logger.getLogger(NetworkManager.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }
+    
+    public void sendDataWin() {
+        if (port == 0) {
+            //No address specified
+            //beep beep bop
+            return;
+        }
+        
+        byte[] data = NetworkData.constructDataWin();
+        
+        packet = new DatagramPacket(data, NetworkData.getConstructedByteAmount(), address, port);
+        
+        try { 
+            socket.send(packet);
+        } catch (IOException ex) {
+            Logger.getLogger(NetworkManager.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }
+    
     public void receiveData() {
         try {
             //If port is 0, address and port have not been specified
@@ -173,12 +217,30 @@ public class NetworkManager implements Runnable {
                 case 4:
                     NetworkData.parseBytesPreds(predators, receivedData);
                     break;
-                default:
+                //Extinct message
+                case 5:
+                    otherExtinct = true;
+                    break;
+                //Won message
+                case 6:
+                    otherWon = true;
                     break;
             }
         } catch (IOException e) {
             System.out.println(e);
         }
+    }
+
+    public boolean isOtherWon() {
+        return otherWon;
+    }
+
+    public boolean isOtherExtinct() {
+        return otherExtinct;
+    }
+
+    public boolean isOtherDisconnect() {
+        return otherDisconnect;
     }
 
     @Override
