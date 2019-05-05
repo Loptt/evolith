@@ -22,17 +22,17 @@ public class JDBC {
         url = "jdbc:mysql://SG-Evolith-496-master.servers.mongodirector.com:3306/Evolith";
         user = "evadmin";
         password = "Evoadmin1$";
-    }
-
-    public ArrayList<ArrayList<Object>> getRanking() throws SQLException {
-
-        ArrayList<ArrayList<Object>> myRanking = new ArrayList<ArrayList<Object>>();
-        try {
+                try {
             myConnection = DriverManager.getConnection(url, user, password);
             System.out.println("Connection made of user: " + user + " with password " + password);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public ArrayList<ArrayList<Object>> getRanking() throws SQLException {
+
+        ArrayList<ArrayList<Object>> myRanking = new ArrayList<ArrayList<Object>>();
 
         try {
             myStatement = myConnection.createStatement();
@@ -62,13 +62,6 @@ public class JDBC {
         int gameID = 0;
 
         try {
-            myConnection = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection made of user: " + user + " with password " + password);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        try {
             myStatement = myConnection.createStatement();
             myResult = JDBC.myStatement.executeQuery("SELECT game_id FROM game ORDER BY game_id DESC LIMIT 1;");
             myResult.next();
@@ -83,12 +76,7 @@ public class JDBC {
 
     public void insertGame(int gameID, int ticker) {
         int countinsert = 0;
-        try {
-            myConnection = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection made of user: " + user + " with password " + password);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+
 
         try {
             myStatement = myConnection.createStatement();
@@ -103,13 +91,6 @@ public class JDBC {
 
     public void updateTimeGame(int gameID, int ticker) {
         int countUpdated = 0;
-        try {
-            myConnection = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection made of user: " + user + " with password " + password);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
         try {
             myStatement = myConnection.createStatement();
             countUpdated = myStatement.executeUpdate("UPDATE game SET game_duration = " + Integer.toString(ticker) + " WHERE game_id = " + Integer.toString(gameID) + ";");
@@ -167,13 +148,6 @@ public class JDBC {
     public void insertOrganism(int speciesID, int i, int generation, int speed, int stealth, int strength, int maxHealth) {
         int countinsert = 0;
         try {
-            myConnection = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection made of user: " + user + " with password " + password);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        try {
             myStatement = myConnection.createStatement();
             countinsert = myStatement.executeUpdate("INSERT INTO organism(organism_alive,organism_generation,organism_speed,organism_stealth,organism_strength,organism_max_health,species_id) VALUES(" + Integer.toString(i)+","+ Integer.toString(generation)+","+ Integer.toString(speed)+","+ Integer.toString(stealth)+","+ Integer.toString(strength)+","+ Integer.toString(maxHealth)+","+ Integer.toString(speciesID)+");");
             System.out.println(countinsert + " records inserted.\n");
@@ -188,12 +162,6 @@ public class JDBC {
         
         
       int countUpdated = 0;
-        try {
-            myConnection = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection made of user: " + user + " with password " + password);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
 
         try {
             myStatement = myConnection.createStatement();
@@ -213,13 +181,6 @@ public class JDBC {
 
     public void updateOrganisms(OrganismManager om) {
           int countUpdated = 0;
-        try {
-            myConnection = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection made of user: " + user + " with password " + password);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
         try {
             myStatement = myConnection.createStatement();
             
