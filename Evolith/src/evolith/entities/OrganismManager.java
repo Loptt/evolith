@@ -123,14 +123,15 @@ public class OrganismManager implements Commons {
             }
         }
     }
-    public void calculateAverage()
-    {
-            for (int i = 0; i < organisms.size(); i++) {
-                    avg[0] += organisms.get(i).getSpeed();
-                    avg[1] += organisms.get(i).getStealth();
-                    avg[2] += organisms.get(i).getStrength();
-                    avg[3] += organisms.get(i).getMaxHealth();
-            }
+    public void calculateAverage() {
+        for (int i = 0; i < organisms.size(); i++) {
+            avg[0] += organisms.get(i).getSpeed();
+            avg[1] += organisms.get(i).getStealth();
+            avg[2] += organisms.get(i).getStrength();
+            avg[3] += organisms.get(i).getMaxHealth();
+        }
+
+        if (!organisms.isEmpty()) {
             avg[0] /= organisms.size();
             avg[1] /= organisms.size();
             avg[2] /= organisms.size();
@@ -139,6 +140,7 @@ public class OrganismManager implements Commons {
             statsPanel.setStealth(avg[1]);
             statsPanel.setStrength(avg[2]);
             statsPanel.setHealth(avg[3]);
+        }
     }
     
     /**
