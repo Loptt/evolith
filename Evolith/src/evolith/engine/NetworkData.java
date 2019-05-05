@@ -6,6 +6,7 @@
 package evolith.engine;
 
 import evolith.entities.*;
+import evolith.game.Game;
 import evolith.helpers.Commons;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class NetworkData implements Commons {
     
     public static byte[] constructData(OrganismManager orgs) {
         byte[] data;
-        constructedByteAmount = orgs.getAmount() * ORG_DATA_SIZE + 2;
+        constructedByteAmount = orgs.getAmount() * ORG_DATA_SIZE + 3;
         data = new byte[constructedByteAmount];
         
         for (int i = 0; i < constructedByteAmount; i++) {
@@ -30,7 +31,10 @@ public class NetworkData implements Commons {
         data[0] = (byte) 1;
         data[1] = (byte) orgs.getAmount();
         
-        int index = 2;
+        //Game state
+        data[2] = constructGameState(orgs.getGame());
+        
+        int index = 3;
         
         for (int i = 0; i < orgs.getAmount(); i++) {
             Organism org = orgs.getOrganism(i);
@@ -189,8 +193,18 @@ public class NetworkData implements Commons {
         return data;
     }
     
+    private static byte constructGameState(Game game) {
+        byte result = 0;
+        
+        if (game.isNight()) {
+            result = (byte) (result | 128);
+        }
+        
+        return result;
+    }
+    
     public static void parseBytes(OrganismManager orgs, byte[] data) {
-        int index = 2;
+        int index = 3;
         int x;
         int y;
         
@@ -199,6 +213,14 @@ public class NetworkData implements Commons {
         int thirst;
         
         int addAmount = (int) unsignByte(data[1]) - orgs.getAmount();
+        
+        if (!orgs.getGame().isServer()) {
+            if ((unsignByte(data[2]) & 128) == 128) {
+                orgs.getGame().setNight(true);
+            } else {
+                orgs.getGame().setNight(false);
+            }
+        }
         
         for (int i = 0; i < orgs.getAmount(); i++) {
             Organism org = orgs.getOrganism(i);
@@ -211,8 +233,6 @@ public class NetworkData implements Commons {
             life = (double) ((int) (data[index++]));
             hunger = data[index++];
             thirst = data[index++];
-            
-            System.out.println("LIFE RECV:  " + life);
             org.setLife(life);
             
             parseMutations(org.getOrgMutations(), data, index++);

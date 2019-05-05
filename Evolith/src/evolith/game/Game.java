@@ -266,7 +266,7 @@ public class Game implements Runnable, Commons {
 
         manageMouse();
         manageKeyboard();
-
+        
         if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
             night = !night;
             background.setNight(night);
@@ -317,11 +317,16 @@ public class Game implements Runnable, Commons {
 
         manageMouse();
         manageKeyboard();
-
-        if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
-            night = !night;
-            background.setNight(night);
-            prevSecDayCycleChange = clock.getSeconds();
+        
+        if (server) {
+            System.out.println("SECS: " + clock.getSeconds());
+            System.out.println("PREV: " + prevSecDayCycleChange);
+            System.out.println("DURA: " + DAY_CYCLE_DURATION_SECONDS);
+            if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
+                night = !night;
+                background.setNight(night);
+                prevSecDayCycleChange = clock.getSeconds();
+            }
         }
         
         organisms.checkKill();
@@ -403,8 +408,6 @@ public class Game implements Runnable, Commons {
             organisms.setSkin(0);
             otherOrganisms.setSkin(2);
             resources.init();
-            organisms.getOrganism(0).setMaturity(120);
-            organisms.getOrganism(0).setLife(50);
         } else {
             network = new NetworkManager(false, otherOrganisms, resources, predators);
             network.initClient("localhost", 5000);
@@ -443,7 +446,7 @@ public class Game implements Runnable, Commons {
             }
         }
         
-        if (keyManager.p) {
+        if (keyManager.p && !organisms.getOrgPanel().isInputActive()) {
             pauseMenu.setMainMenuDisplayed(true);
             state = States.Paused;
         }
@@ -644,6 +647,9 @@ public class Game implements Runnable, Commons {
                     break;
                     
                 case Multi:
+                    if (!server) {
+                        background.setNight(night);
+                    }
                     g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
 
                     resources.render(g);
@@ -883,6 +889,10 @@ public class Game implements Runnable, Commons {
 
     public boolean isNight() {
         return night;
+    }
+
+    public void setNight(boolean night) {
+        this.night = night;
     }
 
     public OrganismManager getOtherOrganisms() {
