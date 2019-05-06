@@ -25,6 +25,7 @@ public class Hover extends Item implements Commons {
     private int stealthX;
     private int stealthY;
     private int stealthRange;
+    private String name;
 
     /**
      * Contructor of the hover panel of the organism
@@ -50,6 +51,7 @@ public class Hover extends Item implements Commons {
         
         stealthX = org.getX() - stealthRange + org.getWidth() / 2;
         stealthY = org.getY() - stealthRange + org.getHeight() / 2;
+        name = org.getName();
     }
 
     /**
@@ -80,7 +82,6 @@ public class Hover extends Item implements Commons {
         Font small = new Font("Helvetica", Font.BOLD, 14);
         g.setColor(new Color(197, 56, 218));
         g.setFont(small);*/
-
         g.drawImage(Assets.hoverImage, x, y, width, height, null);
 
 //  Hunger information 
@@ -118,5 +119,9 @@ public class Hover extends Item implements Commons {
         g.fillOval(game.getCamera().getRelX(stealthX) , game.getCamera().getRelY(stealthY), stealthRange*2, stealthRange*2);
         g.setColor(new Color(88,241,252));
         g.drawOval(game.getCamera().getRelX(stealthX) , game.getCamera().getRelY(stealthY), stealthRange*2, stealthRange*2);
+        
+        g.setColor(Color.white);
+        int widthName = g.getFontMetrics().stringWidth(name);
+        g.drawString(name, x + width/ 2 - widthName / 2, y + 23);
     }
 }

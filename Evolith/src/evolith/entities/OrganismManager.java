@@ -566,11 +566,7 @@ public class OrganismManager implements Commons {
         }
         //render the hover panel of an organism
 
-        if (!orgPanel.isActive() || !mutPanel.isActive()) {
-            if (h != null && isHover()) {
-                h.render(g);
-            }
-        }
+        
         
         //Handle orgPanel and mutPanel render in game to prevent other elements
         //to overlap them

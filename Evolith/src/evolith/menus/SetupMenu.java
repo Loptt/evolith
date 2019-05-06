@@ -194,6 +194,7 @@ public class SetupMenu extends Menu {
             tickToWrite = !tickToWrite;
         }
         
+    
         g.drawString(name, x + 407, y + 567);
         int width = g.getFontMetrics().stringWidth(name);
 

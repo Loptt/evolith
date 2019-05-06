@@ -243,6 +243,13 @@ public class OrganismPanel extends Menu implements Commons {
         } else {
             inputActive = false;
         }
+        
+        String name = organism.getName();
+        
+        if (name.length() > 1) {
+            name = name.substring(0, 1).toUpperCase() + name.substring(1);
+            organism.setName(name);
+        }
     }
 
     public boolean isSearchPrev() {
@@ -376,6 +383,11 @@ public class OrganismPanel extends Menu implements Commons {
 
         if (tickToWrite && !inputReader.isOnlyDelete() && buttons.get(5).isPressed()) {
             g.drawString("l", x + 125 + width, y + height - 45);
+        }
+        
+        if (inputActive) {
+            g.setColor(Color.white);
+            g.drawRect(x + 118, y + height - 63, 180, 22);
         }
 
     }
