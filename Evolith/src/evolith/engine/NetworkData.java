@@ -7,6 +7,7 @@ package evolith.engine;
 
 import evolith.entities.*;
 import evolith.game.Game;
+import evolith.game.Weather;
 import evolith.helpers.Commons;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -200,6 +201,29 @@ public class NetworkData implements Commons {
             result = (byte) (result | 128);
         }
         
+        if (null != game.getWeather().getState()) switch (game.getWeather().getState()) {
+            case Clear:
+                result = (byte) (result | 64);
+                break;
+            case Dry:
+                result = (byte) (result | 32);
+                break;
+            case Rain:
+                result = (byte) (result | 16);
+                break;
+            case Snow:
+                result = (byte) (result | 8);
+                break;
+            case Storm:
+                result = (byte) (result | 4);
+                break;
+            case Hail:
+                result = (byte) (result | 2);
+                break;
+            default:
+                break;
+        }
+        
         return result;
     }
     
@@ -240,6 +264,20 @@ public class NetworkData implements Commons {
                 orgs.getGame().setNight(true);
             } else {
                 orgs.getGame().setNight(false);
+            }
+            
+            if ((unsignByte(data[2]) & 64) == 64) {
+                orgs.getGame().getWeather().setWeather(Weather.State.Clear);
+            } else if ((unsignByte(data[2]) & 32) == 32) {
+                orgs.getGame().getWeather().setWeather(Weather.State.Dry);
+            }  else if ((unsignByte(data[2]) & 16) == 16) {
+                orgs.getGame().getWeather().setWeather(Weather.State.Rain);
+            } else if ((unsignByte(data[2]) & 8) == 8) {
+                orgs.getGame().getWeather().setWeather(Weather.State.Snow);
+            } else if ((unsignByte(data[2]) & 4) == 4) {
+                orgs.getGame().getWeather().setWeather(Weather.State.Storm);
+            }  else if ((unsignByte(data[2]) & 2) == 2) {
+                orgs.getGame().getWeather().setWeather(Weather.State.Hail);
             }
         }
         

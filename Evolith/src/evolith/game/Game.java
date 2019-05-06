@@ -247,6 +247,7 @@ public class Game implements Runnable, Commons {
             resetGame();
             state = States.SetupMenu;
             modeMenu.setSingle(false);
+            server = true;
         }
         
         if (modeMenu.isLoad()) {
@@ -312,7 +313,7 @@ public class Game implements Runnable, Commons {
         
         keyManager.tick();
         musicManager.tick();
-        if (clock.getSeconds() >= prevWeatherChange + 10) {
+        if (clock.getSeconds() >= prevWeatherChange + WEATHER_CYCLE_DURATION_SECONDS) {
             weather.changeWeather();
             prevWeatherChange = clock.getSeconds();
         }
@@ -344,6 +345,15 @@ public class Game implements Runnable, Commons {
         buttonBar.tick();
         inputKeyboard.tick();
         selection.tick();
+        weather.tick();
+        sfx.tick();
+        
+        if (server) {
+            if (clock.getSeconds() >= prevWeatherChange + WEATHER_CYCLE_DURATION_SECONDS) {
+                weather.changeWeather();
+                prevWeatherChange = clock.getSeconds();
+            }
+        }
         
         if (server) {
             resources.respawnResources(); 
@@ -749,7 +759,7 @@ public class Game implements Runnable, Commons {
                     resources.render(g);
                     organisms.render(g);
                     otherOrganisms.render(g);
-                    predators.render(g);
+                    weather.render(g);
 
                     if (night) {
                         g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
@@ -1024,6 +1034,10 @@ public class Game implements Runnable, Commons {
 
     public SoundEffectManager getSfx() {
         return sfx;
+    }
+
+    public Weather getWeather() {
+        return weather;
     }
 
     /**

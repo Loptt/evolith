@@ -159,7 +159,9 @@ public class ModeMenu extends Menu {
                 if (buttons.get(3).isPressed()) {
                     buttons.get(3).setPressed(false);
                     currentPage = 1;
-                    game.getNetwork().endConnection();
+                    if (game.getNetwork() != null) {
+                        game.getNetwork().endConnection();
+                    }
                 }
                 
                 if (game.getNetwork().isClientReady()) {
@@ -186,7 +188,9 @@ public class ModeMenu extends Menu {
                 if (buttons.get(3).isPressed()) {
                     buttons.get(3).setPressed(false);
                     currentPage = 1;
-                    game.getNetwork().endConnection();
+                    if (game.getNetwork() != null) {
+                        game.getNetwork().endConnection();
+                    }
                 }
                 
                 if (buttons.get(5).isPressed()) {

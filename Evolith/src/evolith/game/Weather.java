@@ -22,7 +22,7 @@ import java.util.ArrayList;
  */
 public class Weather {
     
-    private enum State {
+    public enum State {
         Clear, Dry, Rain, Hail, Snow, Storm
     }
     private State state;
@@ -149,14 +149,68 @@ public class Weather {
         raindrops.tick();
         snowhail.tick();
     }
-    
-    
-    
+
     public void changeWeather(){
         int newWeather = 0;
         newWeather = (int) Math.floor(Math.random()*states.get(prevWeather).size());
         setFalse();
         switch(states.get(prevWeather).get(newWeather)){
+            case Clear:
+                state = State.Clear;
+                clear.setActive(true);
+                System.out.println("clear");
+                prevWeather = 0;
+                background.setImageDay(clear.getDay());
+                background.setImageNight(clear.getNight());
+                
+                break;
+            case Dry:
+                state = State.Dry;
+                dry.setActive(true);
+                System.out.println("dry");
+                prevWeather = 1;
+                background.setImageDay(dry.getDay());
+                background.setImageNight(dry.getNight());
+                break;
+            case Rain:
+                state = State.Rain;
+                rain.setActive(true);
+                System.out.println("rain");
+                prevWeather = 2;
+                background.setImageDay(rain.getDay());
+                background.setImageNight(rain.getNight());
+                break;
+            case Storm:
+                state = State.Storm;
+                storm.setActive(true);
+                System.out.println("storm");
+                prevWeather = 3;
+                background.setImageDay(storm.getDay());
+                background.setImageNight(storm.getNight());
+                break;
+            case Hail:
+                state = State.Hail;
+                hail.setActive(true);
+                System.out.println("hail");
+                prevWeather = 4;
+                background.setImageDay(hail.getDay());
+                background.setImageNight(hail.getNight());
+                break;
+            case Snow:
+                state = State.Snow;
+                snow.setActive(true);
+                System.out.println("snow");
+                prevWeather = 5;
+                background.setImageDay(snow.getDay());
+                background.setImageNight(snow.getNight());
+                break;
+                
+        }
+    }
+    
+    public void setWeather(State s) {
+        setFalse();
+        switch(s){
             case Clear:
                 state = State.Clear;
                 clear.setActive(true);
