@@ -294,10 +294,8 @@ public class OrganismManager implements Commons {
         OrganismManager others = game.getOtherOrganisms();
         
         if (others == null) {
-            System.out.println("NULL");
             return;
         }
-        System.out.println("CHECKING");
         for (int i = 0; i < others.getAmount(); i++) {
             Organism org = others.getOrganism(i);
             org.setVisible(false);
