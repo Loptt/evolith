@@ -83,12 +83,14 @@ public class Organism extends Item implements Commons {
     
     private int currentMaxHealth;
     private int currentSize;
+    private int hatchTime;
     
     private boolean egg;
     private boolean born;
     private boolean needMutation;
+    private boolean other;
     
-    private Predator pred;
+    private Item pred;
 
     /**
      * Constructor of the organism
@@ -101,11 +103,12 @@ public class Organism extends Item implements Commons {
      * @param skin the id of the selected skin
      * @param id the unique identifier
      */
-    public Organism(int x, int y, int width, int height, Game game, int skin, int id) {
+    public Organism(int x, int y, int width, int height, Game game, int skin, int id, boolean other) {
         super(x, y, width, height);
         this.game = game;
         this.skin = skin;
         this.id = id;
+        this.other = other;
         point = new Point(x, y);
         maxVel = 2;
         absMaxVel = 2;
@@ -120,7 +123,7 @@ public class Organism extends Item implements Commons {
         maxHealth = 0;
         intelligence = 0;
                 
-        updateStats();
+        updateStats(false);
         
         hunger = 50;
         thirst = 50;
@@ -155,9 +158,11 @@ public class Organism extends Item implements Commons {
         egg = true;
         born = false;
         needMutation = false;
-        
+
         pred = null;
         target = null;
+        
+        hatchTime = 0;
     }
     
         
@@ -173,7 +178,18 @@ public class Organism extends Item implements Commons {
             return;
         }
         
-        checkPredators();
+        if (other) {
+            checkMovement();
+            return;
+        }
+        
+        if (!other) {
+            checkPredators();   
+            if (game.getOtherOrganisms() != null) {
+                checkOthers();
+            }
+        }
+        
         handleTarget();
         checkMovement();
         checkVitals(); 
@@ -186,7 +202,7 @@ public class Organism extends Item implements Commons {
         }
         
         
-        if (!beingChased && !isConsuming()) {
+        if (!beingChased && !isConsuming() && target == null) {
             autoLookTarget();
         }
     }
@@ -254,8 +270,17 @@ public class Organism extends Item implements Commons {
     private void checkVitals() {
         //Reduce hunger every x seconds defined in the commmons class
         if (egg) {
-            if (time.getSeconds() > BORN_TIME && !born) {
-                born();
+            hatchTime = (int) time.getSeconds();
+            if (time.getSeconds() >= BORN_TIME && !born) {
+                if (!other) {
+                    born();
+                }
+                
+                hatchTime = BORN_TIME;
+            }
+            
+            if (other) {
+                return;
             }
             
             if (life <= 0) {
@@ -331,7 +356,7 @@ public class Organism extends Item implements Commons {
 
             //If god command is active, organisms shouldn't generate a new point
             if (!godCommand) {
-                point = generateEscapePoint();
+                point = generateEscapePointPred();
             }
         } else {
             if (!godCommand) {
@@ -345,7 +370,7 @@ public class Organism extends Item implements Commons {
     private void born() {        
         born = true;
         //Check if a mutation will occur. Chance is 1/4 now
-        if ((int) (Math.random() * 10) == 0) {
+        if (((int) (Math.random() * 10) == 0 || true) && !other) {
             needMutation = true;
         } else {
             egg = false;
@@ -394,10 +419,15 @@ public class Organism extends Item implements Commons {
         setMaxHealth(currMaxHealth > 0 ? currMaxHealth : 0);
         setStealth(currStealth > 0 ? currStealth : 0);
         
-        updateStats();
+        updateStats(false);
     }
     
-    public void updateMutations() {
+    public void updateMutations(boolean other) {
+        strength = 0;
+        speed = 0;
+        maxHealth = 0;
+        stealth = 0;
+
         for (int i = 0; i < orgMutations.getMutations().size(); i++) {
             int newStr = 0;
             int newSpeed = 0;
@@ -411,20 +441,25 @@ public class Organism extends Item implements Commons {
                 newStealth += orgMutations.getMutations().get(i).get(j).getStealth();
                 
                 if (orgMutations.getMutations().get(i).get(j).isActive()) {
-                    strength = newStr;
-                    speed = newSpeed;
-                    maxHealth = newHealth;
-                    stealth = newStealth;
+                    strength += newStr;
+                    speed += newSpeed;
+                    maxHealth += newHealth;
+                    stealth += newStealth;
                     break;
                 }
             }
         }
+        
+        updateStats(other);
     }
     
-    private void updateStats() {
+    private void updateStats(boolean other) {
         //Transform stat numbers to useful numbers
         currentMaxHealth = maxHealth * 2 + 100;
-        life = currentMaxHealth;
+        
+        if (!other) {
+            life = currentMaxHealth;
+        }
         
         currentSize = (int) (maxHealth * 0.5 + 30);
         width = currentSize;
@@ -442,7 +477,7 @@ public class Organism extends Item implements Commons {
      * @return new organism
      */
     public Organism cloneOrg(){
-        Organism org = new Organism(x,y,width, height, game, skin, id);
+        Organism org = new Organism(x,y,width, height, game, skin, id, other);
         org.setPoint((Point) point.clone());
         org.setMaxVel(maxVel);
         org.setSpeed(speed);
@@ -461,7 +496,7 @@ public class Organism extends Item implements Commons {
             }
         }
         
-        org.updateStats();
+        org.updateStats(false);
         
         return org;
     }
@@ -508,13 +543,34 @@ public class Organism extends Item implements Commons {
         }
     }
     
+    private void checkOthers() {
+        OrganismManager others = game.getOtherOrganisms();
+        
+        for (int i = 0; i < others.getAmount(); i++) {
+            Organism o = others.getOrganism(i);
+
+            //If predator is in the range of the organism
+            if (SwarmMovement.distanceBetweenTwoPoints(x, y, o.getX(), o.getY()) < o.getStealthRange()) {
+                safeLeaveResource();
+                beingChased = true;
+                pred = o;
+                
+                if (o.intersects(this)) {
+                    life -= o.getDamage();
+                }
+            } else {
+
+            }
+        }
+    }
+    
      /**
      * Generate a point to run when an organism is being chased by a predator
      *
      * @param pred the predator to check
      * @return the generated point
      */
-    public Point generateEscapePoint() {
+    public Point generateEscapePointPred() {
 
         Point generatedPoint = new Point(x, y);
         
@@ -811,8 +867,8 @@ public class Organism extends Item implements Commons {
         
         orgMutations.load(br);
         
-        updateMutations();
-        updateStats();
+        updateMutations(false);
+        updateStats(false);
     }
 
     /**
@@ -838,7 +894,7 @@ public class Organism extends Item implements Commons {
             
             g.setColor(Color.YELLOW);
             g.fillRect(game.getCamera().getRelX(x) + (int) ((currentSize - 10) * barOffX) ,
-                    game.getCamera().getRelY(y) + (int) ((currentSize - 10) * barOffY) + 5, (int) ((currentSize - 10) * time.getSeconds() / BORN_TIME), 3);
+                    game.getCamera().getRelY(y) + (int) ((currentSize - 10) * barOffY) + 5, (int) ((currentSize - 10) * hatchTime / BORN_TIME), 3);
             
             g.setColor(Color.white);
             g.drawRect(game.getCamera().getRelX(x) + (int) ((currentSize - 10) * barOffX) -1,
@@ -1409,5 +1465,13 @@ public class Organism extends Item implements Commons {
 
     public void setBorn(boolean born) {
         this.born = born;
+    }
+
+    public boolean isOther() {
+        return other;
+    }
+
+    public void setOther(boolean other) {
+        this.other = other;
     }
 }

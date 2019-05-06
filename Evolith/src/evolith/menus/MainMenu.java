@@ -145,9 +145,6 @@ public class MainMenu extends Menu implements Commons {
         } else if (active && buttons.get(1).isActive()) {
             g.drawImage(Assets.startInstructions, 0, 0, 1000, 700, null);
         }
-
         g.setColor(BLUE_GREEN_COLOR);
-        //stats.render(g);
-}
-    
+        //stats.render(g);  
 }

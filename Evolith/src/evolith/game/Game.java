@@ -13,6 +13,7 @@ import evolith.entities.Resource;
 import evolith.helpers.InputReader;
 import evolith.helpers.Selection;
 import evolith.menus.InstructionMenu;
+import evolith.menus.ModeMenu;
 import evolith.menus.OverMenu;
 import evolith.menus.PauseMenu;
 import java.awt.Graphics;
@@ -23,7 +24,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import java.util.Scanner;
+
 import java.sql.SQLException;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,20 +56,22 @@ public class Game implements Runnable, Commons {
     private MouseManager mouseManager;          // manages the mouse
     private InputKeyboard inputKeyboard;        // manages the input of the keyboard of the setup menu
     private MusicManager musicManager;
+    private NetworkManager network;
     private SoundEffectManager sfx;
+
 
     private Background background;              // background of the game engine
     private Camera camera;                      // camera of the game engine
 
     private OrganismManager organisms;                //organisms in the game
-    //private Plants plants;                      // resources of plants in the game
-    //private Waters waters;
+    private OrganismManager otherOrganisms;
+    
     private ResourceManager resources;
 
     private PredatorManager predators;
 
-    private enum States {
-        MainMenu, Paused, GameOver, Play, Instructions, SetupMenu,
+    public enum States {
+        MainMenu, Paused, GameOver, Play, Instructions, SetupMenu, Multi, ModeMenu
     } // status of the flow of the game once running
     private States state;
 
@@ -74,6 +81,7 @@ public class Game implements Runnable, Commons {
     private PauseMenu pauseMenu;
     private OverMenu overMenu;
     private InstructionMenu instructionMenu;
+    private ModeMenu modeMenu;
 
     private Clock clock;                        // the time of the game
     private InputReader inputReader;            //To read text from keyboard
@@ -87,6 +95,7 @@ public class Game implements Runnable, Commons {
     private Weather weather;
     
     private boolean win;
+    private boolean server;
 
     /**
      * to create title, width and height and set the game is still not running
@@ -110,6 +119,7 @@ public class Game implements Runnable, Commons {
         selection = new Selection(this);
 
         night = false;
+        server = true;
         prevSecDayCycleChange = 0;
         win = false;
         prevWeatherChange = 0;
@@ -161,10 +171,8 @@ public class Game implements Runnable, Commons {
         musicManager = new MusicManager();
         sfx = new SoundEffectManager();
         //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
-        organisms = new OrganismManager(this);
+        organisms = new OrganismManager(this, false);
         predators = new PredatorManager(this);
-        //plants = new Plants(this);
-        //waters = new Waters(this);
         resources = new ResourceManager(this);
         display.getJframe().addKeyListener(keyManager);
         display.getJframe().addKeyListener(inputKeyboard);
@@ -172,6 +180,7 @@ public class Game implements Runnable, Commons {
         display.getJframe().addMouseMotionListener(mouseManager);
         display.getCanvas().addMouseListener(mouseManager);
         display.getCanvas().addMouseMotionListener(mouseManager);
+
         weather = new Weather(width, height, background);
 
     }
@@ -188,11 +197,17 @@ public class Game implements Runnable, Commons {
             case Instructions:
                 instructionsTick();
                 break;
+            case ModeMenu:
+                modeTick();
+                break;
             case SetupMenu:
                 setupMenuTick();
                 break;
             case Play:
                 playTick();
+                break;
+            case Multi:
+                multiTick();
                 break;
             case Paused:
                 pausedTick();
@@ -211,8 +226,9 @@ public class Game implements Runnable, Commons {
         mainMenu.tick();
         if (mainMenu.isClickPlay()) {
             mainMenu.setActive(false);
-            state = States.SetupMenu;
+            state = States.ModeMenu;
             mainMenu.setClickPlay(false);
+            modeMenu = new ModeMenu(0, 0, width, height, this);
         }
         
         if (mainMenu.isClickIns()) {
@@ -220,6 +236,40 @@ public class Game implements Runnable, Commons {
             mainMenu.setActive(false);
             state = States.Instructions;
             mainMenu.setClickIns(false);
+        }
+    }
+    
+    private void modeTick() {
+        modeMenu.tick();
+        inputKeyboard.tick();
+        
+        if (modeMenu.isSingle()) {
+            resetGame();
+            state = States.SetupMenu;
+            modeMenu.setSingle(false);
+        }
+        
+        if (modeMenu.isLoad()) {
+            loadGame();
+            state = States.Play;
+            modeMenu.setLoad(false);
+        }
+        
+        if (modeMenu.isHost()) {
+            state = States.Multi;
+            resetGameMutli();
+            modeMenu.setHost(false);
+        }
+        
+        if (modeMenu.isJoin()) {
+            state = States.Multi;
+            resetGameMutli();
+            modeMenu.setJoin(false);
+        }
+        
+        if (modeMenu.isToMainMenu()) {
+            state = States.MainMenu;
+            modeMenu.setToMainMenu(false);
         }
     }
     
@@ -240,11 +290,7 @@ public class Game implements Runnable, Commons {
         inputKeyboard.tick();
 
         if (setupMenu.isClickPlay()) {
-            organisms.setSpeciesName(setupMenu.getName());
-            setupMenu.setName("");
-            organisms.setSkin(setupMenu.getOption());
-            state = States.Play;
-            musicManager.play();
+            initSinglePlayer();
             setupMenu.setClickPlay(false);
         }
     }
@@ -277,11 +323,73 @@ public class Game implements Runnable, Commons {
 
         manageMouse();
         manageKeyboard();
-
+        
         if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
             night = !night;
             background.setNight(night);
             prevSecDayCycleChange = clock.getSeconds();
+        }
+        
+        organisms.checkKill();
+        checkGameOver();
+    }
+    
+    
+    
+    private void multiTick() {
+        clock.tick();
+        organisms.tick();
+        otherOrganisms.tick();
+        resources.tick();
+        buttonBar.tick();
+        inputKeyboard.tick();
+        selection.tick();
+        
+        if (server) {
+            resources.respawnResources(); 
+        }
+        
+        network.sendDataPlants(resources);
+        network.sendDataWaters(resources);
+        network.sendData(organisms);
+        
+        if (network.isOtherExtinct()) {
+            state = States.GameOver;
+            win = true;
+            overMenu = new OverMenu(0, 0, width, height, this, win);
+            network.endConnection();
+        }
+        
+        if (network.isOtherWon()) {
+            state = States.GameOver;
+            win = false;
+            overMenu = new OverMenu(0, 0, width, height, this, win);
+            network.endConnection();
+        }
+
+        keyManager.tick();
+        musicManager.tick();
+        
+        if (!organisms.getOrgPanel().isInputActive()) {
+            camera.tick();
+        }
+
+        manageMouse();
+        manageKeyboard();
+        
+        if (server) {
+            if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
+                night = !night;
+                background.setNight(night);
+                prevSecDayCycleChange = clock.getSeconds();
+            }
+        }
+        
+        organisms.checkKill();
+        otherOrganisms.checkKill();
+        
+        if (server) {
+            resources.deleteResources();
         }
         
         checkGameOver();
@@ -334,6 +442,67 @@ public class Game implements Runnable, Commons {
             System.out.println("STATS NOT READY");
         }
     }
+    
+    private void initSinglePlayer() {
+        organisms.setSpeciesName(setupMenu.getName());
+        setupMenu.setName("");
+        organisms.setSkin(setupMenu.getOption());
+        state = States.Play;
+        musicManager.play();
+        resources.init();
+    }
+    
+    private void mutliInit() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("SERVER?:  ");
+        int i = sc.nextInt();
+        server = i == 1;
+        
+        if (server) {
+            network = new NetworkManager(true, otherOrganisms, resources, predators);
+            network.initServer();
+            organisms.setSkin(0);
+            otherOrganisms.setSkin(2);
+            resources.init();
+        } else {
+            network = new NetworkManager(false, otherOrganisms, resources, predators);
+            network.initClient("localhost", 5000);
+            organisms.setSkin(2);
+            otherOrganisms.setSkin(0);
+        }
+        
+        Thread myThread = new Thread(network);
+        
+        myThread.start();
+    }
+    
+    public void mutliInitServer() {
+        server = true;
+        otherOrganisms = new OrganismManager(this, true);
+        network = new NetworkManager(true, otherOrganisms, resources, predators);
+        network.initServer();
+        organisms.setSkin(0);
+        otherOrganisms.setSkin(2);
+        resources.init();
+
+        Thread myThread = new Thread(network);
+        
+        myThread.start();
+    }
+
+    public void multiInitClient(String address) {
+        server = false;
+        otherOrganisms = new OrganismManager(this, true);
+        network = new NetworkManager(false, otherOrganisms, resources, predators);
+        network.initClient(address, 5000);
+        organisms.setSkin(2);
+        
+        otherOrganisms.setSkin(0);
+        
+        Thread myThread = new Thread(network);
+        
+        myThread.start();
+    }
 
     /**
      * Handle the mouse while in game
@@ -361,7 +530,7 @@ public class Game implements Runnable, Commons {
             }
         }
         
-        if (keyManager.p) {
+        if (keyManager.p && !organisms.getOrgPanel().isInputActive()) {
             pauseMenu.setMainMenuDisplayed(true);
             state = States.Paused;
         }
@@ -433,7 +602,7 @@ public class Game implements Runnable, Commons {
 
         if (buttonBar.hasMouse(mouseX, mouseY)) {
             mouseManager.setRight(false);
-            //Second in hierarchy is the minimap
+            //Second in hierarchy is the m6000inimap
         } else if (minimap.hasMouse(mouseX, mouseY)) {
             mouseManager.setRight(false);
             //Third in hierarchy is the background   
@@ -471,6 +640,7 @@ public class Game implements Runnable, Commons {
     
     public void checkGameOver() {
         if (organisms.getAmount() <= 0) {
+            network.sendDataExtinct();
             state = States.GameOver;
             win = false;
             System.out.println("OVER");
@@ -478,6 +648,7 @@ public class Game implements Runnable, Commons {
         }
         
         if (organisms.isMaxIntelligence()) {
+            network.sendDataWin();
             state = States.GameOver;
             win = true;
             overMenu = new OverMenu(0, 0, width, height, this, win);
@@ -507,6 +678,9 @@ public class Game implements Runnable, Commons {
                     break;
                 case Instructions:
                     instructionMenu.render(g);
+                    break;
+                case ModeMenu:
+                    modeMenu.render(g);
                     break;
                 case SetupMenu:
                     setupMenu.render(g);
@@ -562,6 +736,37 @@ public class Game implements Runnable, Commons {
                         organisms.getOrgPanel().render(g);
                     } else if (organisms.isMutPanelActive()) {
                         organisms.getMutPanel().render(g);
+                    }
+
+                    break;
+                    
+                case Multi:
+                    if (!server) {
+                        background.setNight(night);
+                    }
+                    g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
+
+                    resources.render(g);
+                    organisms.render(g);
+                    otherOrganisms.render(g);
+                    predators.render(g);
+
+                    if (night) {
+                        g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
+                    }
+                    minimap.render(g);
+                    buttonBar.render(g);
+
+                    if (selection.isActive()) {
+                        selection.render(g);
+                    }
+
+                    if (organisms.isOrgPanelActive()) {
+                        organisms.getOrgPanel().render(g);
+                    } else if (organisms.isMutPanelActive()) {
+                        organisms.getMutPanel().render(g);
+                    } else if (organisms.getH() != null && organisms.isHover()) {
+                        organisms.getH().render(g);
                     }
 
                     break;
@@ -650,8 +855,25 @@ public class Game implements Runnable, Commons {
             System.out.println(e.toString());
         }
     }
+    
+    private void resetGameMutli() {
+        if (server) {
+            camera.setX(INITIAL_POINT_HOST - width / 2);
+            camera.setY(INITIAL_POINT_HOST - height / 2);
+            resources.reset(true);
+        } else {
+            camera.setX(INITIAL_POINT_CLIENT - width / 2);
+            camera.setY(INITIAL_POINT_CLIENT - height / 2);
+            resources.reset(false);
+        }
+        
+        clock.setTicker(0);
+        organisms.reset();
+        otherOrganisms.reset();
+    }
 
     public void resetGame() {
+        server = true;
         camera.setX(INITIAL_POINT - width / 2);
         camera.setY(INITIAL_POINT - height / 2);
         
@@ -659,7 +881,7 @@ public class Game implements Runnable, Commons {
         
         organisms.reset();
         predators.reset();
-        resources.reset();
+        resources.reset(true);
     }
 
     /**
@@ -780,10 +1002,30 @@ public class Game implements Runnable, Commons {
         return night;
     }
 
+    public void setNight(boolean night) {
+        this.night = night;
+    }
+
+    public OrganismManager getOtherOrganisms() {
+        return otherOrganisms;
+    }
+    
+    public boolean isServer() {
+        return server;
+    }
+
+    public NetworkManager getNetwork() {
+        return network;
+    }
+
+    public States getState() {
+        return state;
+    }
+
     public SoundEffectManager getSfx() {
         return sfx;
     }
-    
+
     /**
      * start game
      */

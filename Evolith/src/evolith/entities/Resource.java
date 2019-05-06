@@ -44,13 +44,15 @@ public class Resource extends Item implements Commons{
     private ResourceType type;
     
     private int prevSecUpdate;
+    private boolean update;
+    private boolean add;
     
     private Predator predator;
     
     public Resource(int x, int y, int width, int height, Game game, ResourceType type) {
         super(x, y, width, height);
         this.game = game;
-        maxQuantity = (int) (Math.random() * 20 + 40);
+        maxQuantity = 50;
         quantity = maxQuantity;
         full = false;
         fullOfPredators = false;
@@ -64,6 +66,8 @@ public class Resource extends Item implements Commons{
         prevSecUpdate = 0;
         
         this.type = type;
+        update = true;
+        add = true;
         
         predator = null;
     }
@@ -185,6 +189,11 @@ public class Resource extends Item implements Commons{
         time.tick();
         
         if (time.getSeconds() > prevSecUpdate + CONSUMING_RATE) {
+            if (parasiteAmount > 0) {
+                update = true;
+            } else {
+                update = false;
+            }
             quantity -= parasiteAmount;
             prevSecUpdate = (int) time.getSeconds();
             Iterator it = map.entrySet().iterator();
@@ -236,5 +245,25 @@ public class Resource extends Item implements Commons{
         g.fillRect(game.getCamera().getRelX(x) + 10, game.getCamera().getRelY(y) + 85, (int) 87 * this.quantity / maxQuantity, 7);
         g.setColor(Color.white);
         g.drawRect(game.getCamera().getRelX(x) + 9, game.getCamera().getRelY(y) + 85, 87, 8);
+    }
+
+    public boolean isUpdate() {
+        return update;
+    }
+
+    public void setUpdate(boolean update) {
+        this.update = update;
+    }
+    
+    public boolean isPlant() {
+        return type == ResourceType.Plant;
+    }
+
+    public boolean isAdd() {
+        return add;
+    }
+
+    public void setAdd(boolean add) {
+        this.add = add;
     }
 }

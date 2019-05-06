@@ -69,6 +69,90 @@ public class MutationManager implements Commons{
         return mutations;
     }
     
+    public int getStrengthTier() {
+        int tier = 0;
+        for (int i = 0; i < mutations.get(0).size(); i++) {
+            if (mutations.get(0).get(i).isActive()) {
+                tier = i + 1;
+            }
+        }
+        
+        return tier;
+    }
+    
+    public int getSpeedTier() {
+        int tier = 0;
+        for (int i = 0; i < mutations.get(1).size(); i++) {
+            if (mutations.get(1).get(i).isActive()) {
+                tier = i + 1;
+            }
+        }
+        
+        return tier;
+    }
+    
+    public int getHealthTier() {
+        int tier = 0;
+        for (int i = 0; i < mutations.get(2).size(); i++) {
+            if (mutations.get(2).get(i).isActive()) {
+                tier = i + 1;
+            }
+        }
+        
+        return tier;
+    }
+    
+    public int getStealthTier() {
+        int tier = 0;
+        for (int i = 0; i < mutations.get(3).size(); i++) {
+            if (mutations.get(3).get(i).isActive()) {
+                tier = i + 1;
+            }
+        }
+        
+        return tier;
+    }
+    
+    public void setStrengthTier(int tier) {
+        for (int i = 0; i < mutations.get(0).size(); i++) {
+            if (i + 1 == tier) {
+                mutations.get(0).get(i).setActive(true);
+            } else {
+                mutations.get(0).get(i).setActive(false);
+            }
+        }
+    }
+    
+    public void setSpeedTier(int tier) {
+        for (int i = 0; i < mutations.get(1).size(); i++) {
+            if (i + 1 == tier) {
+                mutations.get(1).get(i).setActive(true);
+            } else {
+                mutations.get(1).get(i).setActive(false);
+            }
+        }
+    }
+    
+    public void setHealthTier(int tier) {
+        for (int i = 0; i < mutations.get(2).size(); i++) {
+            if (i + 1 == tier) {
+                mutations.get(2).get(i).setActive(true);
+            } else {
+                mutations.get(2).get(i).setActive(false);
+            }
+        }
+    }
+    
+    public void setStealthTier(int tier) {
+        for (int i = 0; i < mutations.get(3).size(); i++) {
+            if (i + 1 == tier) {
+                mutations.get(3).get(i).setActive(true);
+            } else {
+                mutations.get(3).get(i).setActive(false);
+            }
+        }
+    }
+    
     public void save(PrintWriter pw) {
         //Save the state of each mutation
         for (int i = 0; i < mutations.size(); i++) {
