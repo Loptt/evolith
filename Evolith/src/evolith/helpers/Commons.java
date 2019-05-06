@@ -95,9 +95,13 @@ public interface Commons {
     public static final int PREDATOR_SECONDS_IN_RESOURCE = 7;
     public static final int PREDATOR_SECONDS_TO_ROAM = 10;
     
+
     public static final int BORN_TIME = 20;
     
     public static final int ORG_DATA_SIZE = 9;
     public static final int RES_DATA_SIZE = 7;
     public static final int PRE_DATA_SIZE = 6;
+
+    public static final int STATISTICS_DIMENSION = 400;
+    public static final int STATISTICS_POINT_DIMENSION = 20;
 }

@@ -1,9 +1,17 @@
 package evolith.menus;
 
+import evolith.database.JDBC;
 import evolith.game.Game;
 import evolith.engine.Assets;
 import evolith.helpers.Commons;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.math.BigInteger;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -27,10 +35,11 @@ public class MainMenu extends Menu implements Commons {
      * @param height
      * @param game
      */
-    public MainMenu(int x, int y, int width, int height, Game game) {
+    public MainMenu(int x, int y, int width, int height, Game game) throws SQLException {
         super(x, y, width, height, game);
         active = true;
         clickPlay = false;
+
         clickIns = false;
 
         buttons.add(new Button(BUTTON_PLAY_X, BUTTON_PLAY_Y, BUTTON_PLAY_WIDTH, BUTTON_PLAY_HEIGHT)); // Play button
@@ -125,9 +134,9 @@ public class MainMenu extends Menu implements Commons {
      *
      * @param g
      */
-
     @Override
     public void render(Graphics g) {
+
         // if the main menu is active
         if (active && !buttons.get(0).isActive() && !buttons.get(1).isActive()) {
             g.drawImage(Assets.start, 0, 0, 1000, 700, null);
@@ -136,5 +145,6 @@ public class MainMenu extends Menu implements Commons {
         } else if (active && buttons.get(1).isActive()) {
             g.drawImage(Assets.startInstructions, 0, 0, 1000, 700, null);
         }
-    }
+        g.setColor(BLUE_GREEN_COLOR);
+        //stats.render(g);  
 }

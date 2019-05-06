@@ -94,7 +94,7 @@ public class Assets {
     public static BufferedImage statsMenuButtonOff;
     
     public static ArrayList<BufferedImage> instructions;
-    
+
     public static ArrayList<BufferedImage> modes;
     public static BufferedImage singlePlayerOn;
     public static BufferedImage singlePlayerOff;
@@ -108,6 +108,54 @@ public class Assets {
     public static BufferedImage hostOff;
     public static BufferedImage joinOn;
     public static BufferedImage joinOff;
+
+    public static BufferedImage coldLayer;
+    public static BufferedImage noBackground;
+    public static BufferedImage dryLayer;
+    public static BufferedImage dryBackground;
+    public static BufferedImage dryBackgroundNight;
+    public static BufferedImage backgroundRainNight;
+    public static BufferedImage backgroundRain;
+    public static BufferedImage backgroundSnow;
+    public static BufferedImage backgroundSnowNight;
+    
+    public static BufferedImage rain0;
+    public static BufferedImage rain1;
+    public static BufferedImage rain2;
+    public static BufferedImage rain3;
+    public static BufferedImage rain4;
+    public static BufferedImage rain5;
+    public static BufferedImage rain6;
+    public static BufferedImage rain7;
+    
+    public static BufferedImage rainanimation[];
+    
+    public static BufferedImage snow0;
+    public static BufferedImage snow1;
+    public static BufferedImage snow2;
+    public static BufferedImage snow3;
+    public static BufferedImage snow4;
+    public static BufferedImage snow5;
+    public static BufferedImage snow6;
+    public static BufferedImage snow7;
+    public static BufferedImage snow8;
+    public static BufferedImage snow9;
+    public static BufferedImage snow10;
+    public static BufferedImage snow11;
+    public static BufferedImage snow12;
+    public static BufferedImage snow13;
+    public static BufferedImage snow14;
+    public static BufferedImage snow15;
+    public static BufferedImage snow16;
+    public static BufferedImage snow17;
+    public static BufferedImage snow18;
+    public static BufferedImage snow19;
+    
+    public static BufferedImage snowanimation[];
+    
+    public static SoundClip watersound;
+    public static SoundClip grasssound;
+    public static SoundClip aliensound;
 
     /**
      * Initializes the assets and links to the image folder
@@ -247,7 +295,7 @@ public class Assets {
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions4.png"));
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions5.png"));
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions6.png"));
-        
+
         modes = new ArrayList<>();
         modes.add(ImageLoader.loadImage("/images/multiplayer/modescreen.png"));
         modes.add(ImageLoader.loadImage("/images/multiplayer/multiplayerscreen.png"));
@@ -267,6 +315,80 @@ public class Assets {
         hostOff = ImageLoader.loadImage("/images/multiplayer/hostgameoff.png");
         joinOn = ImageLoader.loadImage("/images/multiplayer/joingameon.png");
         joinOff = ImageLoader.loadImage("/images/multiplayer/joingameoff.png");
+
+        coldLayer = ImageLoader.loadImage("/images/backgrounds/whitelayer.png");
+        noBackground = ImageLoader.loadImage("/images/backgrounds/nolayer.png");
+        dryLayer = ImageLoader.loadImage("/images/backgrounds/drylayer.png");
+        dryBackground = ImageLoader.loadImage("/images/backgrounds/drybackground.png");
+        dryBackgroundNight = ImageLoader.loadImage("/images/backgrounds/drybackgroundnight.png");
+        backgroundRainNight = ImageLoader.loadImage("/images/backgrounds/rainbackground.png");
+        backgroundRain = ImageLoader.loadImage("/images/backgrounds/backgroundrainday.png");
+        backgroundSnow = ImageLoader.loadImage("/images/backgrounds/backgroundsnow.png");
+        backgroundSnowNight = ImageLoader.loadImage("/images/backgrounds/backgroundsnownight.png");
+        
+        rainanimation = new BufferedImage[8];
+        rain0 = ImageLoader.loadImage("/images/weatheranimations/rain0.png");
+        rainanimation[0] = rain0;
+        rain1 = ImageLoader.loadImage("/images/weatheranimations/rain1.png");
+        rainanimation[1] = rain1;
+        rain2 = ImageLoader.loadImage("/images/weatheranimations/rain2.png");
+        rainanimation[2] = rain2;
+        rain3 = ImageLoader.loadImage("/images/weatheranimations/rain3.png");
+        rainanimation[3] = rain3;
+        rain4 = ImageLoader.loadImage("/images/weatheranimations/rain4.png");
+        rainanimation[4] = rain4;
+        rain5 = ImageLoader.loadImage("/images/weatheranimations/rain5.png");
+        rainanimation[5] = rain5;
+        rain6 = ImageLoader.loadImage("/images/weatheranimations/rain6.png");
+        rainanimation[6] = rain6;
+        rain7 = ImageLoader.loadImage("/images/weatheranimations/rain7.png");
+        rainanimation[7] = rain7;
+
+        snowanimation = new BufferedImage[20];
+        snow0 = ImageLoader.loadImage("/images/weatheranimations/snow0.png");
+        snowanimation[0] = snow0;
+        snow1 = ImageLoader.loadImage("/images/weatheranimations/snow1.png");
+        snowanimation[1] = snow1;
+        snow2 = ImageLoader.loadImage("/images/weatheranimations/snow2.png");
+        snowanimation[2] = snow2;
+        snow3 = ImageLoader.loadImage("/images/weatheranimations/snow3.png");
+        snowanimation[3] = snow3;
+        snow4 = ImageLoader.loadImage("/images/weatheranimations/snow4.png");
+        snowanimation[4] = snow4;
+        snow5 = ImageLoader.loadImage("/images/weatheranimations/snow5.png");
+        snowanimation[5] = snow5;
+        snow6 = ImageLoader.loadImage("/images/weatheranimations/snow6.png");
+        snowanimation[6] = snow6;
+        snow7 = ImageLoader.loadImage("/images/weatheranimations/snow7.png");
+        snowanimation[7] = snow7;
+        snow8 = ImageLoader.loadImage("/images/weatheranimations/snow8.png");
+        snowanimation[8] = snow8;
+        snow9 = ImageLoader.loadImage("/images/weatheranimations/snow9.png");
+        snowanimation[9] = snow9;
+        snow10 = ImageLoader.loadImage("/images/weatheranimations/snow10.png");
+        snowanimation[10] = snow10;
+        snow11 = ImageLoader.loadImage("/images/weatheranimations/snow11.png");
+        snowanimation[11] = snow11;
+        snow12 = ImageLoader.loadImage("/images/weatheranimations/snow12.png");
+        snowanimation[12] = snow12;
+        snow13 = ImageLoader.loadImage("/images/weatheranimations/snow13.png");
+        snowanimation[13] = snow13;
+        snow14 = ImageLoader.loadImage("/images/weatheranimations/snow14.png");
+        snowanimation[14] = snow14;
+        snow15 = ImageLoader.loadImage("/images/weatheranimations/snow15.png");
+        snowanimation[15] = snow15;
+        snow16 = ImageLoader.loadImage("/images/weatheranimations/snow16.png");
+        snowanimation[16] = snow16;
+        snow17 = ImageLoader.loadImage("/images/weatheranimations/snow17.png");
+        snowanimation[17] = snow17;
+        snow18 = ImageLoader.loadImage("/images/weatheranimations/snow18.png");
+        snowanimation[18] = snow18;
+        snow19 = ImageLoader.loadImage("/images/weatheranimations/snow19.png");
+        snowanimation[19] = snow19;
+        
+        watersound = new SoundClip("/sounds/watersound.wav");
+        grasssound = new SoundClip("/sounds/grasssound.wav");
+        aliensound = new SoundClip("/sounds/aliensound.wav");
     }
     
     /**

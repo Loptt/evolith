@@ -24,7 +24,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import java.util.Scanner;
+
+import java.sql.SQLException;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,6 +57,8 @@ public class Game implements Runnable, Commons {
     private InputKeyboard inputKeyboard;        // manages the input of the keyboard of the setup menu
     private MusicManager musicManager;
     private NetworkManager network;
+    private SoundEffectManager sfx;
+
 
     private Background background;              // background of the game engine
     private Camera camera;                      // camera of the game engine
@@ -84,6 +90,9 @@ public class Game implements Runnable, Commons {
 
     private boolean night;
     private int prevSecDayCycleChange;
+    private int prevWeatherChange;
+    
+    private Weather weather;
     
     private boolean win;
     private boolean server;
@@ -95,7 +104,7 @@ public class Game implements Runnable, Commons {
      * @param width to set the width of the window
      * @param height to set the height of the window
      */
-    public Game(String title, int width, int height) {
+    public Game(String title, int width, int height) throws SQLException {
         this.title = title;
         this.width = width;
         this.height = height;
@@ -113,6 +122,8 @@ public class Game implements Runnable, Commons {
         server = true;
         prevSecDayCycleChange = 0;
         win = false;
+        prevWeatherChange = 0;
+        
     }
 
     /**
@@ -158,6 +169,7 @@ public class Game implements Runnable, Commons {
         pauseMenu = new PauseMenu(width / 2 - 250 / 2, height / 2 - 300 / 2, 250, 300, this);
         
         musicManager = new MusicManager();
+        sfx = new SoundEffectManager();
         //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
         organisms = new OrganismManager(this, false);
         predators = new PredatorManager(this);
@@ -168,6 +180,9 @@ public class Game implements Runnable, Commons {
         display.getJframe().addMouseMotionListener(mouseManager);
         display.getCanvas().addMouseListener(mouseManager);
         display.getCanvas().addMouseMotionListener(mouseManager);
+
+        weather = new Weather(width, height, background);
+
     }
 
     /**
@@ -175,7 +190,6 @@ public class Game implements Runnable, Commons {
      */
     private void tick() {
         //Every single case is separated in its own function
-
         switch (state) {
             case MainMenu:
                 mainMenuTick();
@@ -293,9 +307,15 @@ public class Game implements Runnable, Commons {
         buttonBar.tick();
         inputKeyboard.tick();
         selection.tick();
+        weather.tick();
+        sfx.tick();
         
         keyManager.tick();
         musicManager.tick();
+        if (clock.getSeconds() >= prevWeatherChange + 10) {
+            weather.changeWeather();
+            prevWeatherChange = clock.getSeconds();
+        }
         
         if (!organisms.getOrgPanel().isInputActive()) {
             camera.tick();
@@ -596,9 +616,11 @@ public class Game implements Runnable, Commons {
                 //Set the resource to the selected organisms
                 organisms.setSelectedResource(clickedResource);
                 if (clickedResource.getType() == Resource.ResourceType.Plant) {
+                    sfx.playPlant();
                     organisms.setSelectedSearchFood(true);
                     organisms.setSelectedSearchWater(false);
                 } else {
+                    sfx.playWater();
                     organisms.setSelectedSearchWater(true);
                     organisms.setSearchFood(false);
                 }
@@ -673,6 +695,10 @@ public class Game implements Runnable, Commons {
                     if (night) {
                         g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
                     }
+                    else{
+                        weather.render(g);
+                    }
+                    
                     minimap.render(g);
                     buttonBar.render(g);
 
@@ -694,13 +720,14 @@ public class Game implements Runnable, Commons {
                     resources.render(g);
                     organisms.render(g);
                     predators.render(g);
+                    weather.render(g);
 
                     if (night) {
                         g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
                     }
                     minimap.render(g);
                     buttonBar.render(g);
-
+                    
                     if (selection.isActive()) {
                         selection.render(g);
                     }
@@ -993,6 +1020,10 @@ public class Game implements Runnable, Commons {
 
     public States getState() {
         return state;
+    }
+
+    public SoundEffectManager getSfx() {
+        return sfx;
     }
 
     /**
