@@ -31,6 +31,8 @@ public class NetworkManager implements Runnable {
     private boolean otherExtinct;
     private boolean otherWon;
     private boolean otherDisconnect;
+    private boolean clientReady;
+    private boolean serverReady;
     
     private OrganismManager otherorgs;
     private ResourceManager resources;
@@ -185,6 +187,24 @@ public class NetworkManager implements Runnable {
         } 
     }
     
+    public void sendReady(boolean client) {
+        if (port == 0) {
+            //No address specified
+            //beep beep bop
+            return;
+        }
+        
+        byte[] data = NetworkData.constructReady(client);
+        
+        packet = new DatagramPacket(data, NetworkData.getConstructedByteAmount(), address, port);
+        
+        try { 
+            socket.send(packet);
+        } catch (IOException ex) {
+            Logger.getLogger(NetworkManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void receiveData() {
         try {
             //If port is 0, address and port have not been specified
@@ -225,6 +245,13 @@ public class NetworkManager implements Runnable {
                 case 6:
                     otherWon = true;
                     break;
+                //Ready message
+                case 7:
+                    if (NetworkData.unsignByte(receivedData[1]) == 128) {
+                        clientReady = true;
+                    } else if (NetworkData.unsignByte(receivedData[1]) == 64) {
+                        serverReady = true;
+                    }
             }
         } catch (IOException e) {
             System.out.println(e);
@@ -232,11 +259,11 @@ public class NetworkManager implements Runnable {
     }
     
     public boolean isClientReady() {
-        return true;
+        return clientReady;
     }
     
     public boolean isServerReady() {
-        return true;
+        return serverReady;
     }
 
     public boolean isOtherWon() {

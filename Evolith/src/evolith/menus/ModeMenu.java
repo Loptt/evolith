@@ -161,6 +161,7 @@ public class ModeMenu extends Menu {
                     load = false;
                     host = true;
                     join = false;
+                    game.getNetwork().sendReady(false);
                 }
                 break;
             case 3:
@@ -195,6 +196,8 @@ public class ModeMenu extends Menu {
                     } else {
                         System.out.println("NOT READY");
                     }
+                    
+                    game.getNetwork().sendReady(true);
                 } else {
                 }
         }

@@ -203,6 +203,23 @@ public class NetworkData implements Commons {
         return result;
     }
     
+    public static byte[] constructReady(boolean client) {
+        byte[] data;
+        constructedByteAmount = 2;
+        data = new byte[constructedByteAmount];
+        
+        //Type: Ready
+        data[0] = (byte) 7;
+        
+        if (client) {
+            data[1] = (byte) 128;
+        } else {
+            data[1] = (byte) 64;
+        }
+        
+        return data;
+    }
+    
     public static void parseBytes(OrganismManager orgs, byte[] data) {
         int index = 3;
         int x;
@@ -293,8 +310,8 @@ public class NetworkData implements Commons {
                 x = data[index++] * 256 + unsignByte(data[index++]);
                 y = data[index++] * 256 + unsignByte(data[index++]);
 
-                plant.setX(x);
-                plant.setY(y);
+                //plant.setX(x);
+                //plant.setY(y);
 
                 quantity = unsignByte(data[index++]);
                 plant.setQuantity(quantity);
@@ -364,10 +381,11 @@ public class NetworkData implements Commons {
                 x = data[index++] * 256 + unsignByte(data[index++]);
                 y = data[index++] * 256 + unsignByte(data[index++]);
                 
+                /*
                 if (!server) {
                     water.setX(x);
                     water.setY(y);
-                }
+                }*/
 
                 quantity = unsignByte(data[index++]);
                 water.setQuantity(quantity);

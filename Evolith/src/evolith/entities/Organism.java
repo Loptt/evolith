@@ -202,7 +202,7 @@ public class Organism extends Item implements Commons {
         }
         
         
-        if (!beingChased && !isConsuming()) {
+        if (!beingChased && !isConsuming() && target == null) {
             autoLookTarget();
         }
     }

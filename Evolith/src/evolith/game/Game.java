@@ -649,6 +649,7 @@ public class Game implements Runnable, Commons {
                     break;
                 case Instructions:
                     instructionMenu.render(g);
+                    break;
                 case ModeMenu:
                     modeMenu.render(g);
                     break;

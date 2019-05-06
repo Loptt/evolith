@@ -139,13 +139,13 @@ public class ResourceManager implements Commons {
     }
     
     public Resource containsResource(int x, int y) {
-        for (int i = 0; i < plants.size()-1; i++) {
+        for (int i = 0; i < plants.size(); i++) {
             if (plants.get(i).getPerimeter().contains(x, y)) {
                 return plants.get(i);
             }
         }
         
-        for (int i = 0; i < waters.size()-1; i++) {
+        for (int i = 0; i < waters.size(); i++) {
             if (waters.get(i).getPerimeter().contains(x, y)) {
                 return waters.get(i);
             }
