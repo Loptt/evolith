@@ -348,6 +348,7 @@ public class Game implements Runnable, Commons {
         weather.tick();
         sfx.tick();
         
+        organisms.checkOtherVisible();
         if (server) {
             if (clock.getSeconds() >= prevWeatherChange + WEATHER_CYCLE_DURATION_SECONDS) {
                 weather.changeWeather();

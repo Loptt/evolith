@@ -289,6 +289,28 @@ public class OrganismManager implements Commons {
         
         return false;
     }
+    
+    public void checkOtherVisible() {
+        OrganismManager others = game.getOtherOrganisms();
+        
+        if (others == null) {
+            System.out.println("NULL");
+            return;
+        }
+        System.out.println("CHECKING");
+        for (int i = 0; i < others.getAmount(); i++) {
+            Organism org = others.getOrganism(i);
+            org.setVisible(false);
+            
+            for (int j = 0; j < organisms.size(); j++) {
+                Organism thisOrg = organisms.get(j);
+                
+                if (SwarmMovement.distanceBetweenTwoPoints(thisOrg.getX(), thisOrg.getY(), org.getX(), org.getY()) < MAX_SIGHT_DISTANCE + 350) {
+                    org.setVisible(true);
+                }
+            }
+        }
+    }
 
     /**
      * Check which organisms are in the selected area and toggle them

@@ -158,7 +158,6 @@ public class Weather {
             case Clear:
                 state = State.Clear;
                 clear.setActive(true);
-                System.out.println("clear");
                 prevWeather = 0;
                 background.setImageDay(clear.getDay());
                 background.setImageNight(clear.getNight());
@@ -167,7 +166,6 @@ public class Weather {
             case Dry:
                 state = State.Dry;
                 dry.setActive(true);
-                System.out.println("dry");
                 prevWeather = 1;
                 background.setImageDay(dry.getDay());
                 background.setImageNight(dry.getNight());
@@ -175,7 +173,6 @@ public class Weather {
             case Rain:
                 state = State.Rain;
                 rain.setActive(true);
-                System.out.println("rain");
                 prevWeather = 2;
                 background.setImageDay(rain.getDay());
                 background.setImageNight(rain.getNight());
@@ -183,7 +180,6 @@ public class Weather {
             case Storm:
                 state = State.Storm;
                 storm.setActive(true);
-                System.out.println("storm");
                 prevWeather = 3;
                 background.setImageDay(storm.getDay());
                 background.setImageNight(storm.getNight());
@@ -191,7 +187,6 @@ public class Weather {
             case Hail:
                 state = State.Hail;
                 hail.setActive(true);
-                System.out.println("hail");
                 prevWeather = 4;
                 background.setImageDay(hail.getDay());
                 background.setImageNight(hail.getNight());
@@ -199,7 +194,6 @@ public class Weather {
             case Snow:
                 state = State.Snow;
                 snow.setActive(true);
-                System.out.println("snow");
                 prevWeather = 5;
                 background.setImageDay(snow.getDay());
                 background.setImageNight(snow.getNight());
@@ -214,7 +208,6 @@ public class Weather {
             case Clear:
                 state = State.Clear;
                 clear.setActive(true);
-                System.out.println("clear");
                 prevWeather = 0;
                 background.setImageDay(clear.getDay());
                 background.setImageNight(clear.getNight());
@@ -223,7 +216,6 @@ public class Weather {
             case Dry:
                 state = State.Dry;
                 dry.setActive(true);
-                System.out.println("dry");
                 prevWeather = 1;
                 background.setImageDay(dry.getDay());
                 background.setImageNight(dry.getNight());
@@ -231,7 +223,6 @@ public class Weather {
             case Rain:
                 state = State.Rain;
                 rain.setActive(true);
-                System.out.println("rain");
                 prevWeather = 2;
                 background.setImageDay(rain.getDay());
                 background.setImageNight(rain.getNight());
@@ -239,7 +230,6 @@ public class Weather {
             case Storm:
                 state = State.Storm;
                 storm.setActive(true);
-                System.out.println("storm");
                 prevWeather = 3;
                 background.setImageDay(storm.getDay());
                 background.setImageNight(storm.getNight());
@@ -247,7 +237,6 @@ public class Weather {
             case Hail:
                 state = State.Hail;
                 hail.setActive(true);
-                System.out.println("hail");
                 prevWeather = 4;
                 background.setImageDay(hail.getDay());
                 background.setImageNight(hail.getNight());
@@ -255,7 +244,6 @@ public class Weather {
             case Snow:
                 state = State.Snow;
                 snow.setActive(true);
-                System.out.println("snow");
                 prevWeather = 5;
                 background.setImageDay(snow.getDay());
                 background.setImageNight(snow.getNight());

@@ -565,11 +565,7 @@ public class Organism extends Item implements Commons {
             }
             
             //CHANGE
-            if (SwarmMovement.distanceBetweenTwoPoints(x, y, o.getX(), o.getY()) < MAX_SIGHT_DISTANCE + 350) {
-                o.setVisible(true);
-            } else {
-                o.setVisible(false);
-            }
+           
         }
     }
     
