@@ -696,103 +696,17 @@ public class Game implements Runnable, Commons {
                     setupMenu.render(g);
                     break;
                 case Paused:
-                    g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
-
-                    resources.render(g);
-                    organisms.render(g);
-                    predators.render(g);
-
-                    if (night) {
-                        g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
-                    }
-                    else{
-                        weather.render(g);
-                    }
-                    
-                    minimap.render(g);
-                    buttonBar.render(g);
-
-                    if (selection.isActive()) {
-                        selection.render(g);
-                    }
-
-                    if (organisms.isOrgPanelActive()) {
-                        organisms.getOrgPanel().render(g);
-                    } else if (organisms.isMutPanelActive()) {
-                        organisms.getMutPanel().render(g);
-                    }
-                    
-                    pauseMenu.render(g);
+                    pausedRender(g);
                     break;
                 case Play:
-                    g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
-
-                    resources.render(g);
-                    organisms.render(g);
-                    predators.render(g);
-                    weather.render(g);
-
-                    if (night) {
-                        g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
-                    }
-                    minimap.render(g);
-                    buttonBar.render(g);
-                    
-                    if (selection.isActive()) {
-                        selection.render(g);
-                    }
-
-                    if (organisms.isOrgPanelActive()) {
-                        organisms.getOrgPanel().render(g);
-                    } else if (organisms.isMutPanelActive()) {
-                        organisms.getMutPanel().render(g);
-                    }
-
+                    playRender(g);
                     break;
                     
                 case Multi:
-                    if (!server) {
-                        background.setNight(night);
-                    }
-                    g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
-
-                    resources.render(g);
-                    organisms.render(g);
-                    otherOrganisms.render(g);
-                    weather.render(g);
-
-                    if (night) {
-                        g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
-                    }
-                    minimap.render(g);
-                    buttonBar.render(g);
-
-                    if (selection.isActive()) {
-                        selection.render(g);
-                    }
-
-                    if (organisms.isOrgPanelActive()) {
-                        organisms.getOrgPanel().render(g);
-                    } else if (organisms.isMutPanelActive()) {
-                        organisms.getMutPanel().render(g);
-                    } else if (organisms.getH() != null && organisms.isHover()) {
-                        organisms.getH().render(g);
-                    }
-
+                    multiRender(g);
                     break;
                 case GameOver:
-                    g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
-
-                    resources.render(g);
-                    organisms.render(g);
-                    predators.render(g);
-
-                    if (night) {
-                        g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
-                    }
-                    
-                    overMenu.render(g);
-
+                    overRender(g);
                     break;
             }
             /*g.drawString(Integer.toString(camera.getAbsX(mouseManager.getX())), 30, 650);
@@ -801,7 +715,106 @@ public class Game implements Runnable, Commons {
             g.dispose();
         }
     }
+    
+    public void pausedRender(Graphics g) {
+        g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
 
+        resources.render(g);
+        organisms.render(g);
+        predators.render(g);
+
+        if (night) {
+            g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
+        }
+        else{
+            weather.render(g);
+        }
+
+        minimap.render(g);
+        buttonBar.render(g);
+
+        if (selection.isActive()) {
+            selection.render(g);
+        }
+
+        if (organisms.isOrgPanelActive()) {
+            organisms.getOrgPanel().render(g);
+        } else if (organisms.isMutPanelActive()) {
+            organisms.getMutPanel().render(g);
+        }
+
+        pauseMenu.render(g);
+    }
+    
+    public void playRender(Graphics g) {
+        g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
+
+        resources.render(g);
+        organisms.render(g);
+        predators.render(g);
+        weather.render(g);
+
+        if (night) {
+            g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
+        }
+        minimap.render(g);
+        buttonBar.render(g);
+
+        if (selection.isActive()) {
+            selection.render(g);
+        }
+
+        if (organisms.isOrgPanelActive()) {
+            organisms.getOrgPanel().render(g);
+        } else if (organisms.isMutPanelActive()) {
+            organisms.getMutPanel().render(g);
+        }
+    }
+    
+    public void multiRender(Graphics g) {
+        if (!server) {
+            background.setNight(night);
+        }
+        g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
+
+        resources.render(g);
+        organisms.render(g);
+        otherOrganisms.render(g);
+        weather.render(g);
+
+        if (night) {
+            g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
+        }
+        minimap.render(g);
+        buttonBar.render(g);
+
+        if (selection.isActive()) {
+            selection.render(g);
+        }
+
+        if (organisms.isOrgPanelActive()) {
+            organisms.getOrgPanel().render(g);
+        } else if (organisms.isMutPanelActive()) {
+            organisms.getMutPanel().render(g);
+        } else if (organisms.getH() != null && organisms.isHover()) {
+            organisms.getH().render(g);
+        }
+    }
+    
+    public void overRender(Graphics g) {
+        g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
+
+        resources.render(g);
+        organisms.render(g);
+        predators.render(g);
+
+        if (night) {
+            g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
+        }
+
+        overMenu.render(g);
+    }
+    
     /**
      * Saves current game status into a text file Each important variable to
      * define the current status of the game is stored in the file in a specific

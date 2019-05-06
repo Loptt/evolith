@@ -89,6 +89,7 @@ public class Organism extends Item implements Commons {
     private boolean born;
     private boolean needMutation;
     private boolean other;
+    private boolean visible;
     
     private Item pred;
 
@@ -158,6 +159,7 @@ public class Organism extends Item implements Commons {
         egg = true;
         born = false;
         needMutation = false;
+        visible = !other;
 
         pred = null;
         target = null;
@@ -561,6 +563,13 @@ public class Organism extends Item implements Commons {
             } else {
 
             }
+            
+            //CHANGE
+            if (SwarmMovement.distanceBetweenTwoPoints(x, y, o.getX(), o.getY()) < MAX_SIGHT_DISTANCE + 350) {
+                o.setVisible(true);
+            } else {
+                o.setVisible(false);
+            }
         }
     }
     
@@ -881,6 +890,10 @@ public class Organism extends Item implements Commons {
         double barOffX = 0.05;
         double barOffY = 1.1;
         
+        if (!visible) {
+            return;
+        }
+        
         if (egg) {
             g.drawImage(Assets.egg, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width - 10, height - 10, null);
             
@@ -922,12 +935,12 @@ public class Organism extends Item implements Commons {
             if (selected) {
                  g.drawImage(Assets.glow, game.getCamera().getRelX(x) - 6, game.getCamera().getRelY(y) - 6, width + 12, height + 12, null);
             }
-            
+            /*
             if (beingChased) {
                 //g.drawString(Integer.toString((int) point.getX())  + "-" + point.getY(), game.getCamera().getRelX(x), game.getCamera().getRelY(y));
                 g.setColor(Color.RED);
                 g.fillOval(game.getCamera().getRelX(getX() - width / 2 + 50), game.getCamera().getRelY(getY() - width / 2 + 50), currentSize / 2, currentSize / 2);
-            }
+            }*/
         }
     }
     
@@ -1473,5 +1486,9 @@ public class Organism extends Item implements Commons {
 
     public void setOther(boolean other) {
         this.other = other;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

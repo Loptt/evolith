@@ -600,9 +600,9 @@ public class Predator extends Item implements Commons {
      */
     @Override
     public void render(Graphics g) {
-        /*if (!visible) {
+        if (!visible) {
             return;
-        }*/
+        }
         
         g.drawImage(Assets.predator, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
         
