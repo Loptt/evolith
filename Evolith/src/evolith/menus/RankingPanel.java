@@ -6,7 +6,6 @@
 package evolith.menus;
 
 import evolith.database.JDBC;
-import evolith.database.Ranking2P;
 import evolith.game.Game;
 import evolith.helpers.Commons;
 import evolith.helpers.FontLoader;
@@ -17,10 +16,7 @@ import java.awt.Graphics;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
+
 
 /**
  *

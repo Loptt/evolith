@@ -162,6 +162,7 @@ public class PredatorManager implements Commons {
             //Check if the predator is touching an organism
             if (SwarmMovement.distanceBetweenTwoPoints(org.getX(), org.getY(), pred.getX(), pred.getY()) < MAX_SIGHT_DISTANCE + 350) {
                 pred.setVisible(true);
+                game.getSfx().playAlien();
             }
             
             if (pred.intersects(org)) {
