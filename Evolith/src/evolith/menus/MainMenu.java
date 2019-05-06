@@ -147,4 +147,5 @@ public class MainMenu extends Menu implements Commons {
         }
         g.setColor(BLUE_GREEN_COLOR);
         //stats.render(g);  
+    }
 }
