@@ -15,7 +15,7 @@ FOREIGN KEY(player_id) REFERENCES player(player_id)*/
 );
 CREATE TABLE species(
 species_id INT NOT NULL AUTO_INCREMENT,
-species_color VARCHAR(20),
+species_intelligence INT,
 species_name VARCHAR(20),
 game_id INT NOT NULL,
 PRIMARY KEY (species_id),

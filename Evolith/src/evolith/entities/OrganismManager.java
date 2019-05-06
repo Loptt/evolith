@@ -50,6 +50,7 @@ public class OrganismManager implements Commons {
     private boolean updatedNight;
     private int avg[];
     private JDBC mysql;
+    private int maxIntelligence;
     
 
     /**
@@ -78,9 +79,9 @@ public class OrganismManager implements Commons {
         speciesName = "";
         avg = new int[4];
         this.mysql =  game.getMysql();
-        statsPanel = new StatisticsPanel(200,200,0,0,game,false);
+        statsPanel = new StatisticsPanel(150,150,0,0,game,true,true);
         //this.speciesID = mysql.getSpeciesID( game.getGameID());
-        
+        this.maxIntelligence = 0;
         }
     
     /**
@@ -91,8 +92,10 @@ public class OrganismManager implements Commons {
             organisms.get(i).tick();
             checkNeedMutation(organisms.get(i));
             checkKill(organisms.get(i));
+            
         }
         calculateAverage();
+        statsPanel.tick();
         checkNight();
         updateMenuPanels();
     }
@@ -136,7 +139,7 @@ public class OrganismManager implements Commons {
             avg[0] /= organisms.size();
             avg[1] /= organisms.size();
             avg[2] /= organisms.size();
-            avg[3] /=organisms.size();
+            avg[3] /= organisms.size();
             statsPanel.setSpeed(avg[0]);
             statsPanel.setStealth(avg[1]);
             statsPanel.setStrength(avg[2]);
@@ -362,7 +365,7 @@ private void updateOrganismsDB()
     private void checkKill(Organism org) {
         if (org.isDead()) {
             organisms.remove(org);
-           updateOrganismsDB();
+            updateOrganismsDB();
         }
     }
     
@@ -481,6 +484,10 @@ private void updateOrganismsDB()
     
     public boolean isMaxIntelligence() {
         for (int i = 0; i < organisms.size(); i++) {
+            if(maxIntelligence < organisms.get(i).getIntelligence())
+            {
+                maxIntelligence = organisms.get(i).getIntelligence();
+            }
             if (organisms.get(i).getIntelligence() >= MAX_INTELLIGENCE) {
                 return true;
             }
@@ -490,6 +497,11 @@ private void updateOrganismsDB()
     }
     
     public void save(PrintWriter pw) {
+        /*
+        Save organisms but drop if 
+        */
+        mysql.updateOrganisms(this);
+        //mysql.saveOrganisms(this);
         //Save amount
         pw.println(Integer.toString(organisms.size()));
         
@@ -500,20 +512,22 @@ private void updateOrganismsDB()
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).save(pw);
         }
-        mysql.saveOrganisms(this);
     }
     
     public void load(BufferedReader br) throws IOException {
+        /*
+        Update table the organisms from backup_organism
+        */
+        
+        
         int am = Integer.parseInt(br.readLine());
         organisms.clear();
-        
         skin = Integer.parseInt(br.readLine());
-        
         for (int i = 0; i < am; i++) {
-            organisms.add(new Organism(0,0, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, skin, 0));
+            organisms.add(new Organism(0,0, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, skin, idCounter++));
             organisms.get(i).load(br);
+            mysql.insertOrganism(speciesID , 1 ,organisms.get(i).getGeneration(),organisms.get(i).getSpeed(),organisms.get(i).getStealth() , organisms.get(i).getStrength(),organisms.get(i).getMaxHealth());
         }
-        mysql.loadOrganisms(this);
     }
     
     public void reset() {
@@ -531,8 +545,6 @@ private void updateOrganismsDB()
         
         updatedNight = false;
         speciesName = "";
-        
-
         
     }
 
@@ -567,7 +579,7 @@ private void updateOrganismsDB()
                 h.render(g);
             }
         }
-        
+        statsPanel.render(g);
         //Handle orgPanel and mutPanel render in game to prevent other elements
         //to overlap them
     }
@@ -784,6 +796,14 @@ private void updateOrganismsDB()
 
     public void setSpeciesID(int speciesID) {
         this.speciesID = speciesID;
+    }
+
+    public int getMaxIntelligence() {
+        return maxIntelligence;
+    }
+
+    public void setMaxIntelligence(int maxIntelligence) {
+        this.maxIntelligence = maxIntelligence;
     }
     
 }

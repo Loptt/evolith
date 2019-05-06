@@ -26,7 +26,7 @@ public class RankingPanel extends Menu implements Commons {
     private JDBC mysql;
     private ArrayList<ArrayList<Object>> myRanking;
 
-    public RankingPanel(int x, int y, int width, int height, Game game) {
+    public RankingPanel(int x, int y, int width, int height, Game game, JDBC mysql) {
         super(x, y, width, height, game);
         try {
             f = new FontLoader();
@@ -40,7 +40,7 @@ public class RankingPanel extends Menu implements Commons {
             System.out.println("Ranking Panel Expection:" + e.getMessage());
         }
         this.game = game;
-
+        this.mysql = mysql;
     }
 
     @Override

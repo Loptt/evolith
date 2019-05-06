@@ -40,7 +40,7 @@ public class MainMenu extends Menu implements Commons {
         buttons.add(new Button(BUTTON_PLAY_X, BUTTON_PLAY_Y, BUTTON_PLAY_WIDTH, BUTTON_PLAY_HEIGHT)); // Play button
         buttons.add(new Button(BUTTON_INSTRUCTIONS_X, BUTTON_INSTRUCTIONS_Y, BUTTON_INSTRUCTIONS_WIDTH, BUTTON_INSTRUCTIONS_HEIGHT)); // Instructions button
         //rankpanel = new RankingPanel(0,0,0,0,null);
-         stats = new StatisticsPanel(600,400,0,0,null,active) ;
+        stats = new StatisticsPanel(600,400,0,0,null,active,true) ;
     }
     /**
      * To

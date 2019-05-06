@@ -16,6 +16,7 @@ import evolith.helpers.Selection;
 import evolith.menus.InstructionMenu;
 import evolith.menus.OverMenu;
 import evolith.menus.PauseMenu;
+import evolith.menus.StatisticsMenu;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
@@ -64,7 +65,7 @@ public class Game implements Runnable, Commons {
     private PredatorManager predators;
 
     private enum States {
-        MainMenu, Paused, GameOver, Play, Instructions, SetupMenu,
+        MainMenu, Paused, GameOver, Play, Instructions, SetupMenu, Statistics,
     } // status of the flow of the game once running
     private States state;
 
@@ -74,6 +75,7 @@ public class Game implements Runnable, Commons {
     private PauseMenu pauseMenu;
     private OverMenu overMenu;
     private InstructionMenu instructionMenu;
+    private StatisticsMenu statsMenu;
 
     private Clock clock;                        // the time of the game
     private InputReader inputReader;            //To read text from keyboard
@@ -113,8 +115,6 @@ public class Game implements Runnable, Commons {
         prevSecDayCycleChange = 0;
         win = false;
         this.mysql = new JDBC();
-        
-        
         this.gameID = mysql.getLastGameID() + 1;
        
     }
@@ -151,7 +151,7 @@ public class Game implements Runnable, Commons {
      * initializing the display window of the game
      */
     private void init() {
-
+        mysql.updateBackup();
         clock = new Clock(0, 0, 100, 100);
         display = new Display(title, width, height);
         Assets.init();
@@ -160,7 +160,7 @@ public class Game implements Runnable, Commons {
         buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
         setupMenu = new SetupMenu(0, 0, width, height, this,mysql);
         pauseMenu = new PauseMenu(width / 2 - 250 / 2, height / 2 - 300 / 2, 250, 300, this);
-        
+        statsMenu = new StatisticsMenu(0,0,width,height,this,false,mysql);
         musicManager = new MusicManager();
         //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
         organisms = new OrganismManager(this);
@@ -179,7 +179,7 @@ public class Game implements Runnable, Commons {
         mysql.insertSpecies(gameID);
         organisms.setSpeciesID(mysql.getSpeciesID(gameID));
         mysql.insertOrganism(organisms.getSpeciesID() , 1 ,organisms.getOrganism(0).getGeneration(),organisms.getOrganism(0).getSpeed(),organisms.getOrganism(0).getStealth() , organisms.getOrganism(0).getStrength(),organisms.getOrganism(0).getMaxHealth());
-
+        
     }
 
     /**
@@ -209,6 +209,8 @@ public class Game implements Runnable, Commons {
                 break;
             case GameOver:
                 overTick();
+            case Statistics:
+                statisticsTick();
         }
         
 
@@ -333,11 +335,21 @@ public class Game implements Runnable, Commons {
             state = States.MainMenu;
             resetGame();
         }
-        
         if (overMenu.isStats()) {
             overMenu.setStats(false);
-            System.out.println("STATS NOT READY");
+            state = States.Statistics;
         }
+    }
+    private void statisticsTick() {
+        statsMenu.tick();
+        
+        if(statsMenu.isMainMenu())
+        {
+            statsMenu.setMainMenu(false);
+            state = States.MainMenu;
+            resetGame();
+        }
+        
     }
 
     /**
@@ -664,7 +676,7 @@ public class Game implements Runnable, Commons {
             mysql.insertGame(gameID, clock.getTicker());
             mysql.insertSpecies(gameID);
             organisms.setSpeciesID(mysql.getSpeciesID(gameID));
-            mysql.insertOrganism(organisms.getSpeciesID() , 1 ,organisms.getOrganism(0).getGeneration(),organisms.getOrganism(0).getSpeed(),organisms.getOrganism(0).getStealth() , organisms.getOrganism(0).getStrength(),organisms.getOrganism(0).getMaxHealth());
+        mysql.insertOrganism(organisms.getSpeciesID() , 1 ,organisms.getOrganism(0).getGeneration(),organisms.getOrganism(0).getSpeed(),organisms.getOrganism(0).getStealth() , organisms.getOrganism(0).getStrength(),organisms.getOrganism(0).getMaxHealth());
 
         } catch (SQLException ex) {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);

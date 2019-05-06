@@ -20,9 +20,9 @@ public class JDBC {
 
     public JDBC() {
         url = "jdbc:mysql://SG-Evolith-496-master.servers.mongodirector.com:3306/Evolith";
-        user = "evadmin";
-        password = "Evoadmin1$";
-                try {
+        user = "sgroot";
+        password = "a6yaRypnDU-29cBS";
+        try {
             myConnection = DriverManager.getConnection(url, user, password);
             System.out.println("Connection made of user: " + user + " with password " + password);
         } catch (Exception e) {
@@ -36,17 +36,12 @@ public class JDBC {
 
         try {
             myStatement = myConnection.createStatement();
-            myResult = JDBC.myStatement.executeQuery("SELECT player_name, species_name, game_duration, game_score,SUM(organism_alive) as 'Survivor', MAX(organism_generation), SUM(organism_kills), MAX(organism_lifespan) FROM player P JOIN game G ON P.player_id = G.player_id JOIN species S ON S.game_id = G.game_id JOIN organism O ON O.species_id = S.species_id GROUP BY O.species_id ORDER BY G.game_score DESC LIMIT 10;");
+            myResult = JDBC.myStatement.executeQuery("SELECT species_name, game_duration, MAX(organism_generation) FROM game G JOIN species S ON S.game_id = G.game_id JOIN organism O ON O.species_id = S.species_id GROUP BY O.species_id ORDER BY S.species_intelligence DESC LIMIT 10;");
             while (myResult.next()) {
-                System.out.println(myResult.getString(1) + " " + myResult.getString(2) + " " + myResult.getInt(3) + " " + myResult.getInt(4) + " " + myResult.getString(4) + " " + myResult.getString(5) + " " + myResult.getString(6) + " " + myResult.getString(7));
-                ArrayList<Object> Res = new ArrayList<Object>(7);
+                ArrayList<Object> Res = new ArrayList<Object>(3);
                 Res.add(myResult.getString(1));
-                Res.add(myResult.getString(2));
+                Res.add(Integer.toString(myResult.getInt(2)));
                 Res.add(Integer.toString(myResult.getInt(3)));
-                Res.add(Integer.toString(myResult.getInt(4)));
-                Res.add(myResult.getString(5));
-                Res.add(myResult.getString(6));
-                Res.add(myResult.getString(7));
                 myRanking.add(Res);
             }
         } catch (Exception e) {
@@ -128,7 +123,7 @@ public class JDBC {
             myResult = JDBC.myStatement.executeQuery("SELECT species_id FROM species WHERE game_id =" + Integer.toString(gameID) + ";");
             myResult.next();
             speciesID = myResult.getInt(1);
-            
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -141,7 +136,7 @@ public class JDBC {
         int countinsert = 0;
         try {
             myStatement = myConnection.createStatement();
-            countinsert = myStatement.executeUpdate("INSERT INTO organism(organism_alive,organism_generation,organism_speed,organism_stealth,organism_strength,organism_max_health,species_id) VALUES(" + Integer.toString(i)+","+ Integer.toString(generation)+","+ Integer.toString(speed)+","+ Integer.toString(stealth)+","+ Integer.toString(strength)+","+ Integer.toString(maxHealth)+","+ Integer.toString(speciesID)+");");
+            countinsert = myStatement.executeUpdate("INSERT INTO backup_organism(backup_organism_alive,backup_organism_generation,backup_organism_speed,backup_organism_stealth,backup_organism_strength,backup_organism_max_health,species_id) VALUES(" + Integer.toString(i) + "," + Integer.toString(generation) + "," + Integer.toString(speed) + "," + Integer.toString(stealth) + "," + Integer.toString(strength) + "," + Integer.toString(maxHealth) + "," + Integer.toString(speciesID) + ");");
             System.out.println(countinsert + " records inserted.\n");
 
         } catch (Exception e) {
@@ -150,33 +145,49 @@ public class JDBC {
     }
 
     public void updateOrganisms(OrganismManager om) {
-          int countUpdated = 0;
+        
+        int countUpdated = 0;
         try {
             myStatement = myConnection.createStatement();
-            
-            for(int i = 0; i < om.getAmount(); i++)
-            {
-            countUpdated += myStatement.executeUpdate("UPDATE organism SET organism_alive = " + Integer.toString(om.getOrganism(i).isDead() ? 0 : 1) +  ", organism_generation = "+ Integer.toString(om.getOrganism(i).getGeneration()) +  ", organism_speed ="+Integer.toString(om.getOrganism(i).getSpeed())+  ", organism_stealth ="+Integer.toString(om.getOrganism(i).getStealth())+  ", organism_strength = "+Integer.toString(om.getOrganism(i).getStrength())+  ", organism_max_health = "+Integer.toString(om.getOrganism(i).getMaxHealth()) + " WHERE species_id = " + Integer.toString(om.getSpeciesID()) + " AND organism_id = " + Integer.toString(om.getOrganism(i).getId()) + ";");
+
+            for (int i = 0; i < om.getAmount(); i++) {
+                countUpdated += myStatement.executeUpdate("UPDATE backup_organism SET backup_organism_alive = " + Integer.toString(om.getOrganism(i).isDead() ? 0 : 1) + ", backup_organism_generation = " + Integer.toString(om.getOrganism(i).getGeneration()) + ", backup_organism_speed =" + Integer.toString(om.getOrganism(i).getSpeed()) + ", backup_organism_stealth =" + Integer.toString(om.getOrganism(i).getStealth()) + ", backup_organism_strength = " + Integer.toString(om.getOrganism(i).getStrength()) + ", backup_organism_max_health = " + Integer.toString(om.getOrganism(i).getMaxHealth()) + " WHERE backup_organism_id = " + Integer.toString(om.getOrganism(i).getId()) + ";");
             }
             System.out.println(countUpdated + " records updated.\n");
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }}
+        }
+        
+        String updateIntelligence = "UPDATE species SET species_intelligence = " + Integer.toString(om.getMaxIntelligence())  +"WHERE species_id = " + Integer.toString(om.getSpeciesID());
+        try {
+            myStatement = myConnection.createStatement();
+
+                countUpdated = myStatement.executeUpdate(updateIntelligence);
+  
+            System.out.println(countUpdated + " records updated.\n");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
+        
+        
+        
+    }
 
     public void updateSpeciesName(int gameID, String name) {
         int countUpdated;
         try {
             myStatement = myConnection.createStatement();
-           countUpdated =  myStatement.executeUpdate("UPDATE species SET species_name = \" " + name + " \" WHERE game_id = " + Integer.toString(gameID) +";");
-          System.out.println(countUpdated + " records updated.\n");
+            countUpdated = myStatement.executeUpdate("UPDATE species SET species_name = \" " + name + " \" WHERE game_id = " + Integer.toString(gameID) + ";");
+            System.out.println(countUpdated + " records updated.\n");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-    
+
     }
 
     public void insertSpecies(int gameID) {
-                int countinsert = 0;
+        int countinsert = 0;
         try {
             myStatement = myConnection.createStatement();
             countinsert = myStatement.executeUpdate("INSERT INTO species(game_id) VALUES (" + Integer.toString(gameID) + ");");
@@ -184,15 +195,67 @@ public class JDBC {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        
+
     }
 
-    public void saveOrganisms(OrganismManager aThis) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public void updateBackup() {
+        int countUpdated = 0;
+        String mysqlDelete = "DELETE FROM backup_organism;";
+        String modifyAutoIncrement = " ALTER TABLE backup_organism AUTO_INCREMENT = 1;";
+        try {
+            myStatement = myConnection.createStatement();
 
-    public void loadOrganisms(OrganismManager aThis) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+            countUpdated = myStatement.executeUpdate("INSERT INTO organism(organism_alive,organism_generation,organism_speed,organism_stealth,organism_strength,organism_max_health,species_id) SELECT backup_organism_alive,backup_organism_generation,backup_organism_speed,backup_organism_stealth,backup_organism_strength,backup_organism_max_health,species_id FROM backup_organism ;");
+            System.out.println(countUpdated + " records updated.\n");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
+        try {
+            myStatement = myConnection.createStatement();
+
+            countUpdated = myStatement.executeUpdate(mysqlDelete);
+            System.out.println(countUpdated + " records deleted.\n");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            myStatement = myConnection.createStatement();
+            countUpdated = myStatement.executeUpdate(modifyAutoIncrement);
+            System.out.println(countUpdated + " records updated.\n");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+    /*
+    public void saveOrganisms(OrganismManager om) {
+    int countUpdated = 0;
+    
+    try {
+    myStatement = myConnection.createStatement();
+    
+    countUpdated = myStatement.executeUpdate("INSERT INTO backup_organism(backup_organism_alive,backup_organism_generation,backup_organism_speed,backup_organism_stealth,backup_organism_strength,backup_organism_max_health,backup_species_id) SELECT organism_alive,organism_generation,organism_speed,organism_stealth,organism_strength,organism_max_health,species_id FROM organism WHERE specied_id = " +Integer.toString(om.getSpeciesID()) + ";");
+    System.out.println(countUpdated + " records updated.\n");
+    } catch (Exception e) {
+    System.out.println(e.getMessage());
+    }}
+     */
+
+ /*
+    public void loadOrganisms(OrganismManager om, int idCounter) {
+        int countUpdated = 0;
+
+        String sqlDelete = "DELETE FROM backup_organism where backup_organism_id >" + Integer.toString(idCounter) + ";";
+        try {
+            myStatement = myConnection.createStatement();
+
+            countUpdated = myStatement.executeUpdate(sqlDelete);
+            System.out.println(countUpdated + " records updated.\n");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+     */
 }
