@@ -54,9 +54,9 @@ public class StatisticsPanel extends Menu implements Commons {
 
         this.active = active;
         this.speed = 80;
-        this.stealth = 50;
-        this.health = 70;
-        this.strength = 60;
+        this.stealth = 70;
+        this.health = 60;
+        this.strength = 50;
         this.pMiddle = new Point(x + STATISTICS_DIMENSION / 2 - STATISTICS_POINT_DIMENSION / 2, y + STATISTICS_DIMENSION / 2 - STATISTICS_POINT_DIMENSION / 2);
         this.points = new ArrayList<Point>(4);
 
@@ -118,9 +118,9 @@ public class StatisticsPanel extends Menu implements Commons {
 //         }
         g2.setColor(new Color(28,117,160));
         g2.setStroke(new BasicStroke(2));
-        g2.drawOval(x, y, STATISTICS_DIMENSION, STATISTICS_DIMENSION);
+        g2.drawOval(x-STATISTICS_CIRCLE_DIMENSION/2, y-STATISTICS_CIRCLE_DIMENSION/2, STATISTICS_CIRCLE_DIMENSION, STATISTICS_CIRCLE_DIMENSION);
         g.setColor(new Color(28,117,160,100));
-        g.fillOval(x, y, STATISTICS_DIMENSION, STATISTICS_DIMENSION);
+        g.fillOval(x-STATISTICS_CIRCLE_DIMENSION/2, y-STATISTICS_CIRCLE_DIMENSION/2, STATISTICS_CIRCLE_DIMENSION, STATISTICS_CIRCLE_DIMENSION);
         
         g.setColor(BLUE_GREEN_COLOR);
         g.setFont(f.getFontEvolve().deriveFont(20f));
@@ -163,10 +163,10 @@ public class StatisticsPanel extends Menu implements Commons {
         g2.drawLine(pointsX[3],pointsY[3],pointsX[0],pointsY[0]);
         
         
-        g.drawString("Speed", x- STATISTICS_POINT_DIMENSION / 2 ,y- STATISTICS_POINT_DIMENSION / 2);
-        g.drawString("Strength",x + STATISTICS_DIMENSION- STATISTICS_POINT_DIMENSION / 2 ,y- STATISTICS_POINT_DIMENSION / 2);
-        g.drawString("Stealth",x- STATISTICS_POINT_DIMENSION / 2 ,y + STATISTICS_DIMENSION- STATISTICS_POINT_DIMENSION / 2 );
-        g.drawString("Max Health",x + STATISTICS_DIMENSION- STATISTICS_POINT_DIMENSION / 2,y + STATISTICS_DIMENSION- STATISTICS_POINT_DIMENSION / 2 );
+        g.drawString("Speed", x - STATISTICS_CIRCLE_DIMENSION / 2 , y - STATISTICS_CIRCLE_DIMENSION / 2 + 20);
+        g.drawString("Strength", x + STATISTICS_CIRCLE_DIMENSION/2 - 60 , y - STATISTICS_CIRCLE_DIMENSION/2 + 20);
+        g.drawString("Stealth", x - STATISTICS_CIRCLE_DIMENSION / 2 , y + STATISTICS_CIRCLE_DIMENSION/2 );
+        g.drawString("Max Health", x + STATISTICS_CIRCLE_DIMENSION/2 - 60 , y + STATISTICS_CIRCLE_DIMENSION/2);
         
 //        //Right Top Speed
 //        g.setColor(Color.MAGENTA);
