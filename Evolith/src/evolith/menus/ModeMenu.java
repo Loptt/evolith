@@ -54,13 +54,13 @@ public class ModeMenu extends Menu {
         backgrounds.add(Assets.modes.get(2));
         backgrounds.add(Assets.modes.get(3));
         
-        buttons.add(new Button(game.getWidth() / 2 - 400 / 2, 300, 400, 80, Assets.singlePlayerOn, Assets.singlePlayerOff)); //Single player
-        buttons.add(new Button(game.getWidth() / 2 - 400 / 2, 400, 400, 80, Assets.loadModeOn, Assets.loadModeOff)); //Load player
-        buttons.add(new Button(game.getWidth() / 2 - 400 / 2, 500, 400, 80, Assets.multiplayerOn, Assets.multiplayerOff)); //Multiplayer
-        buttons.add(new Button(game.getWidth() / 2 - 250 / 2, 600, 250, 60, Assets.backOn, Assets.backOff)); //Back
+        buttons.add(new Button(game.getWidth() / 2 - 400 / 2, 200, 400, 80, Assets.singlePlayerOn, Assets.singlePlayerOff)); //Single player
+        buttons.add(new Button(game.getWidth() / 2 - 400 / 2, 330, 400, 80, Assets.loadModeOn, Assets.loadModeOff)); //Load player
+        buttons.add(new Button(game.getWidth() / 2 - 400 / 2, 460, 400, 80, Assets.multiplayerOn, Assets.multiplayerOff)); //Multiplayer
+        buttons.add(new Button(game.getWidth() / 2 - 250 / 2, 575, 250, 60, Assets.backOn, Assets.backOff)); //Back
         
-        buttons.add(new Button(game.getWidth() / 2 - 400 / 2, 350, 400, 60, Assets.hostOn, Assets.hostOff)); //Host
-        buttons.add(new Button(game.getWidth() / 2 - 400 / 2, 450, 400, 60, Assets.joinOn, Assets.joinOff)); //Join
+        buttons.add(new Button(game.getWidth() / 2 - 400 / 2, 300, 400, 80, Assets.hostOn, Assets.hostOff)); //Host
+        buttons.add(new Button(game.getWidth() / 2 - 400 / 2, 450, 400, 80, Assets.joinOn, Assets.joinOff)); //Join
         
         single = false;
         load = false;
@@ -93,14 +93,16 @@ public class ModeMenu extends Menu {
                 buttons.get(i).setActive(true);
 
                 if(game.getMouseManager().isLeft()){
+                    System.out.println("PRESSED: " + i);
                     buttons.get(i).setPressed(true);
-                    game.getMouseManager().setLeft(false);
                 }
             }
             else {
                 buttons.get(i).setActive(false);
             }
         }
+        
+        game.getMouseManager().setLeft(false);
         
         
 
@@ -122,6 +124,7 @@ public class ModeMenu extends Menu {
                     host = false;
                     join = false;
                     buttons.get(1).setPressed(false);
+                    
                 }
                 
                 if (buttons.get(2).isPressed()) {
@@ -136,12 +139,14 @@ public class ModeMenu extends Menu {
                 break;
             case 1:
                 if (buttons.get(4).isPressed()) {
+                    System.out.println("HOST");
                     buttons.get(4).setPressed(false);
                     game.mutliInitServer();
                     currentPage = 2;
                 }
                 
                 if (buttons.get(5).isPressed()) {
+                    System.out.println("CLIENT");
                     buttons.get(5).setPressed(false);
                     currentPage = 3;
                 }
@@ -154,6 +159,7 @@ public class ModeMenu extends Menu {
                 if (buttons.get(3).isPressed()) {
                     buttons.get(3).setPressed(false);
                     currentPage = 1;
+                    game.getNetwork().endConnection();
                 }
                 
                 if (game.getNetwork().isClientReady()) {
@@ -180,6 +186,7 @@ public class ModeMenu extends Menu {
                 if (buttons.get(3).isPressed()) {
                     buttons.get(3).setPressed(false);
                     currentPage = 1;
+                    game.getNetwork().endConnection();
                 }
                 
                 if (buttons.get(5).isPressed()) {
@@ -200,6 +207,10 @@ public class ModeMenu extends Menu {
                     game.getNetwork().sendReady(true);
                 } else {
                 }
+        }
+        
+        for (int i = 0; i < buttons.size(); i++) {
+            buttons.get(i).setPressed(false);
         }
     }
 

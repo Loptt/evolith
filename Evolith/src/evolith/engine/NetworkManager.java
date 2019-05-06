@@ -34,6 +34,8 @@ public class NetworkManager implements Runnable {
     private boolean clientReady;
     private boolean serverReady;
     
+    private boolean active;
+    
     private OrganismManager otherorgs;
     private ResourceManager resources;
     private PredatorManager predators;
@@ -43,7 +45,7 @@ public class NetworkManager implements Runnable {
         this.resources = resources;
         this.predators = predators;
         server = isServer;
-        
+        active = false;
         otherExtinct = false;
         otherWon = false;
         otherDisconnect = false;
@@ -57,6 +59,8 @@ public class NetworkManager implements Runnable {
             return;
         }
         
+        active = true;
+        
         try {
             this.address = InetAddress.getByName(address);
             this.port = port;
@@ -68,6 +72,7 @@ public class NetworkManager implements Runnable {
     
     public void initServer() {
         try {  
+            active = true;
             socket = new DatagramSocket(5000);
         } catch (SocketException e) {
             e.printStackTrace();
@@ -258,6 +263,13 @@ public class NetworkManager implements Runnable {
         }
     }
     
+    public void endConnection() {
+        if (socket != null) {
+            socket.close();
+        }
+        active = false;
+    }
+    
     public boolean isClientReady() {
         return clientReady;
     }
@@ -280,7 +292,7 @@ public class NetworkManager implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (active) {
             receiveData();
         }
     }

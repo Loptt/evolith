@@ -252,6 +252,11 @@ public class Game implements Runnable, Commons {
             resetGameMutli();
             modeMenu.setJoin(false);
         }
+        
+        if (modeMenu.isToMainMenu()) {
+            state = States.MainMenu;
+            modeMenu.setToMainMenu(false);
+        }
     }
     
     private void instructionsTick() {
@@ -332,12 +337,14 @@ public class Game implements Runnable, Commons {
             state = States.GameOver;
             win = true;
             overMenu = new OverMenu(0, 0, width, height, this, win);
+            network.endConnection();
         }
         
         if (network.isOtherWon()) {
             state = States.GameOver;
             win = false;
             overMenu = new OverMenu(0, 0, width, height, this, win);
+            network.endConnection();
         }
 
         keyManager.tick();
@@ -826,10 +833,11 @@ public class Game implements Runnable, Commons {
         if (server) {
             camera.setX(INITIAL_POINT_HOST - width / 2);
             camera.setY(INITIAL_POINT_HOST - height / 2);
-            resources.reset();
+            resources.reset(true);
         } else {
             camera.setX(INITIAL_POINT_CLIENT - width / 2);
             camera.setY(INITIAL_POINT_CLIENT - height / 2);
+            resources.reset(false);
         }
         
         clock.setTicker(0);
@@ -846,7 +854,7 @@ public class Game implements Runnable, Commons {
         
         organisms.reset();
         predators.reset();
-        resources.reset();
+        resources.reset(true);
     }
 
     /**
