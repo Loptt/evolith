@@ -52,7 +52,7 @@ public interface Commons {
     public static final int BUTTON_CLOSE_DIMENSION = 40;
     
     public static final int PANEL_STATS_X = 50;
-    public static final int PANEL_STATS_Y = 75;
+    public static final int PANEL_STATS_Y = 115;
     public static final int PANEL_STATS_WIDTH = 732;
     public static final int PANEL_STATS_HEIGHT = 517;
     public static final int BUTTON_STATS_CLOSE_DIMENSION = 40;

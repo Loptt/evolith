@@ -753,6 +753,13 @@ private void updateOrganismsDB()
     public boolean isMutPanelActive() {
         return mutPanel.isActive();
     }
+    /**
+     * to check if statsPanel is active
+     * @return mutPanel.isActive()
+     */
+    public boolean isStatsPanelActive() {
+        return statsPanel.isActive();
+    }
 
     /**
      * to get the orgPanel

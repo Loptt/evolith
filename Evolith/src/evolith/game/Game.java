@@ -230,7 +230,6 @@ public class Game implements Runnable, Commons {
             state = States.SetupMenu;
             mainMenu.setClickPlay(false);
         }
-        
         if (mainMenu.isClickIns()) {
             instructionMenu = new InstructionMenu(0, 0, width, height, this);
             mainMenu.setActive(false);
@@ -425,7 +424,7 @@ public class Game implements Runnable, Commons {
          * button bar
          */
         //First in hierarchy is the buttonbar
-        if (organisms.isOrgPanelActive() || organisms.isMutPanelActive()) {
+        if (organisms.isOrgPanelActive() || organisms.isMutPanelActive() || organisms.isStatsPanelActive()) {
             //Let the panels handle mouse activity
         } else if (selection.isActive()) {
             checkOrganismsInSelection();
@@ -532,7 +531,6 @@ public class Game implements Runnable, Commons {
             switch (state) {
                 case MainMenu:
                     mainMenu.render(g);
-                    gameStats.render(g);
                     break;
                 case Instructions:
                     instructionMenu.render(g);
@@ -863,6 +861,10 @@ public class Game implements Runnable, Commons {
 
     public Clock getClock() {
         return clock;
+    }
+
+    public GameStatisticsMenu getGameStats() {
+        return gameStats;
     }
     
 }

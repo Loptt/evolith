@@ -74,10 +74,10 @@ public class StatisticsPanel extends Menu implements Commons {
         this.pointsYAvg = new int[4];
         this.ingame = ingame;
         this.game = game;
-        this.centerX =centerX;
-        this.centerY =centerY;
+        this.centerX = centerX;
+        this.centerY = centerY;
         //Close Button
-        buttons.add(new Button(this.x + this.width - 20, this.y - 20, BUTTON_CLOSE_DIMENSION, BUTTON_CLOSE_DIMENSION,Assets.organismPanel_close));
+        buttons.add(new Button(PANEL_STATS_X + PANEL_STATS_WIDTH -BUTTON_CLOSE_DIMENSION/2, PANEL_STATS_Y-BUTTON_CLOSE_DIMENSION/2, BUTTON_CLOSE_DIMENSION, BUTTON_CLOSE_DIMENSION,Assets.organismPanel_close));
 
     }
 
@@ -107,9 +107,9 @@ public class StatisticsPanel extends Menu implements Commons {
             }
         }
         
-        //Closes the 
         if (buttons.get(0).isPressed()) {
             active = false;
+            buttons.get(0).setPressed(false);
         }
         
         this.pointsX[0] = (int) ((-STATISTICS_DIMENSION * speed / MAX_SPEED) / 2 + x+centerX );
@@ -134,7 +134,7 @@ public class StatisticsPanel extends Menu implements Commons {
         this.pointsYAvg[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + y+centerY);
         this.pointsYAvg[3] = (int) ((STATISTICS_DIMENSION * health / MAX_HEALTH) / 2 + y +centerY);
     
-    }
+        }
         
     }
  
@@ -144,14 +144,14 @@ public class StatisticsPanel extends Menu implements Commons {
         
         if(!active)
             return;
-        Graphics2D g2 = (Graphics2D) g;
+        
+       Graphics2D g2 = (Graphics2D) g;
+       if(ingame)
+       {
         g.drawImage(Assets.statsPanel, PANEL_STATS_X, PANEL_STATS_Y, PANEL_STATS_WIDTH, PANEL_STATS_HEIGHT, null);
 
         g.setColor(BLUE_GREEN_COLOR);
         g.setFont(f.getFontEvolve().deriveFont(17f));
-        
-       if(ingame)
-       {
         g.setColor(Color.WHITE);
         g.setFont(f.getFontEvolve().deriveFont(17f));
         g.drawString("Speed", x +60, y + 157 );
@@ -229,7 +229,5 @@ public class StatisticsPanel extends Menu implements Commons {
     public void setActive(boolean active) {
         this.active = active;
     }
-    
-
     
 }
