@@ -93,10 +93,10 @@ public class PredatorManager implements Commons {
         }
         
         if (game.isNight()) {
-            currentMaxAmount = PREDATORS_AMOUNT + 4;
+            currentMaxAmount = PREDATORS_AMOUNT + 4 * (game.getOrganisms().getAmount() / 10);
             purged = false;
         } else {
-            currentMaxAmount = PREDATORS_AMOUNT;
+            currentMaxAmount = PREDATORS_AMOUNT + 2 * (game.getOrganisms().getAmount() / 10);;
         }
         
         checkPredatorsAmount();
