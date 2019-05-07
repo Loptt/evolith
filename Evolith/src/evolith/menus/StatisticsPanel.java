@@ -121,11 +121,12 @@ public class StatisticsPanel extends Menu implements Commons {
                 buttons.get(i).setActive(false);
             }
         }
-        
+    if(ingame){    
         if (buttons.get(0).isPressed()) {
             active = false;
             buttons.get(0).setPressed(false);
         }
+    }
         
         this.pointsX[0] = (int) ((-STATISTICS_DIMENSION * speed / MAX_SPEED) / 2 + x+centerX );
         this.pointsX[1] = (int) ((STATISTICS_DIMENSION * stealth / MAX_STEALTH) / 2 + x+centerX );

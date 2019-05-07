@@ -163,7 +163,7 @@ public class Game implements Runnable, Commons {
         gameStats = new GameStatisticsMenu(0,0,0,0,this);
         setupMenu = new SetupMenu(0, 0, width, height, this,mysql);
         pauseMenu = new PauseMenu(width / 2 - 250 / 2, height / 2 - 300 / 2, 250, 300, this);
-        statsMenu = new StatisticsMenu(0,0,width,height,this,false,mysql);
+        statsMenu = new StatisticsMenu(0,39,width,622,this,false,mysql);
         musicManager = new MusicManager();
         //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
         organisms = new OrganismManager(this);
@@ -602,7 +602,12 @@ public class Game implements Runnable, Commons {
                     }
                     
                     overMenu.render(g);
-
+                    break;
+                    
+                case Statistics:
+                    
+                    statsMenu.render(g);
+                    
                     break;
             }
             /*g.drawString(Integer.toString(camera.getAbsX(mouseManager.getX())), 30, 650);

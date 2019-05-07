@@ -31,7 +31,7 @@ public class StatisticsMenu extends Menu {
         this.win = win;
         f = new FontLoader();
         rankPanel = new RankingPanel(x+200,y+200,0,0,game,mysql);
-        statsPanel = new StatisticsPanel(x,y,100,100,game,true,false,400,400);
+        statsPanel = new StatisticsPanel(x,y,100,100,game,true,false,231,388);
         buttons.add(new Button(width / 2 - 340 / 2, 390, 340, 71, Assets.overMenuButtonOn, Assets.overMenuButtonOff));
     }
 
@@ -68,20 +68,23 @@ public class StatisticsMenu extends Menu {
         
         if (buttons.get(0).isPressed()) {
             mainMenu = true;
+            buttons.get(0).setPressed(false);
         }
+        statsPanel.tick();
         
     }
 
     @Override
     public void render(Graphics g) {
         
-        g.drawImage(Assets.overWin, x, y, width, height, null);
+        g.drawImage(Assets.rankPanel, x, y, width, height, null);
         
         if (win) {
             g.drawString("Trascended",x,y);
         } else {
             g.drawString("Extinct",x,y);
         }
+        statsPanel.render(g);
         
         for (int i = 0; i < buttons.size(); i++) {
             buttons.get(i).render(g);
