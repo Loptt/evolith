@@ -755,7 +755,10 @@ public class Game implements Runnable, Commons {
             selection.activate(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
         }
     }
-
+    
+    /**
+     * Handle what a mouse right click should do
+     */
     public void manageRightClick() {
         int mouseX = mouseManager.getX();
         int mouseY = mouseManager.getY();
@@ -766,7 +769,7 @@ public class Game implements Runnable, Commons {
         //Second in hierarchy is the minimap
         } else if (minimap.hasMouse(mouseX, mouseY)) {
             mouseManager.setRight(false);
-            //Third in hierarchy is the background   
+        //Lastly, move the   
         } else {
             selection.deactivate();
             Resource clickedResource = resources.containsResource(camera.getAbsX(mouseX), camera.getAbsY(mouseY));

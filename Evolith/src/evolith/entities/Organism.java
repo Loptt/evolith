@@ -229,6 +229,21 @@ public class Organism extends Item implements Commons {
      * Update the position of the organism according to the point
      */
     private void checkMovement() {
+        if (point.x > BACKGROUND_WIDTH) {
+            point.x = BACKGROUND_WIDTH - 20;
+        }
+        
+        if (point.y > BACKGROUND_HEIGHT) {
+            point.y = BACKGROUND_HEIGHT - 20;
+        }
+        
+        if (point.x < 0) {
+            point.x = 20;
+        }
+        
+        if (point.y < 0) {
+            point.y = 20;
+        }
         // if the organism is less than 25 units reduce velocity
         if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 25) {
             // if the organism is less than 15 units reduce velocity
