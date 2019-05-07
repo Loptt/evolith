@@ -37,8 +37,8 @@ public interface Commons {
     public static final int WATER_SIZE = 100;
     public static final int SWARM_SEPARATION = ORGANISM_SIZE_STAT+30;
     
-    public static final int SECONDS_PER_HUNGER = 5;
-    public static final int SECONDS_PER_THIRST = 5;
+    public static final int SECONDS_PER_HUNGER = 3;
+    public static final int SECONDS_PER_THIRST = 3;
     public static final int SECONDS_PER_MATURITY = 1;
     public static final int SECONDS_PER_FULL_RES_INTEL = 2;
     
@@ -74,6 +74,8 @@ public interface Commons {
     public static final int BACKGROUND_HEIGHT = 5000;
     
     public static final int INITIAL_POINT = BACKGROUND_WIDTH / 2;           // inital point
+    public static final int INITIAL_POINT_HOST = 1000;                      // inital point host
+    public static final int INITIAL_POINT_CLIENT = 4000;                    // inital client
 
     
     public static final int MINIMAP_WIDTH = BACKGROUND_WIDTH / 30; // 166~
@@ -89,13 +91,21 @@ public interface Commons {
     public static final int CONSUMING_RATE = 1;
     
     public static final int DAY_CYCLE_DURATION_SECONDS = 60;
+    public static final int WEATHER_CYCLE_DURATION_SECONDS = 20;
     
     public static final int PREDATOR_SECONDS_IN_RESOURCE = 7;
     public static final int PREDATOR_SECONDS_TO_ROAM = 10;
     
 
     public static final int BORN_TIME = 20;
+    
+    public static final int ORG_DATA_SIZE = 9;
+    public static final int RES_DATA_SIZE = 7;
+    public static final int PRE_DATA_SIZE = 6;
 
     public static final int STATISTICS_DIMENSION = 400;
     public static final int STATISTICS_POINT_DIMENSION = 20;
+    public static final int MUTATION_CHANCE = 9;
+    
+    
 }

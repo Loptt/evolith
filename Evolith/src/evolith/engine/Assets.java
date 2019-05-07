@@ -94,7 +94,21 @@ public class Assets {
     public static BufferedImage statsMenuButtonOff;
     
     public static ArrayList<BufferedImage> instructions;
-    
+
+    public static ArrayList<BufferedImage> modes;
+    public static BufferedImage singlePlayerOn;
+    public static BufferedImage singlePlayerOff;
+    public static BufferedImage loadModeOn;
+    public static BufferedImage loadModeOff;
+    public static BufferedImage multiplayerOn;
+    public static BufferedImage multiplayerOff;
+    public static BufferedImage backOn;
+    public static BufferedImage backOff;
+    public static BufferedImage hostOn;
+    public static BufferedImage hostOff;
+    public static BufferedImage joinOn;
+    public static BufferedImage joinOff;
+
     public static BufferedImage coldLayer;
     public static BufferedImage noBackground;
     public static BufferedImage dryLayer;
@@ -138,6 +152,15 @@ public class Assets {
     public static BufferedImage snow19;
     
     public static BufferedImage snowanimation[];
+    
+    public static BufferedImage repClock;
+    
+    public static BufferedImage clearIcon;
+    public static BufferedImage dryIcon;
+    public static BufferedImage rainIcon;
+    public static BufferedImage stormIcon;
+    public static BufferedImage snowIcon;
+    public static BufferedImage hailIcon;
     
     public static SoundClip watersound;
     public static SoundClip grasssound;
@@ -281,6 +304,27 @@ public class Assets {
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions4.png"));
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions5.png"));
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions6.png"));
+
+        modes = new ArrayList<>();
+        modes.add(ImageLoader.loadImage("/images/multiplayer/modescreen.png"));
+        modes.add(ImageLoader.loadImage("/images/multiplayer/multiplayerscreen.png"));
+        modes.add(ImageLoader.loadImage("/images/multiplayer/hostingscreen.png"));
+        modes.add(ImageLoader.loadImage("/images/multiplayer/joingamescreen.png"));
+        
+        singlePlayerOn = ImageLoader.loadImage("/images/multiplayer/singleplayeron.png");
+        singlePlayerOff = ImageLoader.loadImage("/images/multiplayer/singleplayeroff.png");
+        loadModeOn = ImageLoader.loadImage("/images/multiplayer/loadgameon.png");
+        loadModeOff = ImageLoader.loadImage("/images/multiplayer/loadgameoff.png");
+        multiplayerOn = ImageLoader.loadImage("/images/multiplayer/multiplayeron.png");
+        multiplayerOff = ImageLoader.loadImage("/images/multiplayer/multiplayeroff.png");
+        backOn = ImageLoader.loadImage("/images/multiplayer/backon.png");
+        backOff = ImageLoader.loadImage("/images/multiplayer/backoff.png");
+        backOff = ImageLoader.loadImage("/images/multiplayer/backoff.png");
+        hostOn = ImageLoader.loadImage("/images/multiplayer/hostgameon.png");
+        hostOff = ImageLoader.loadImage("/images/multiplayer/hostgameoff.png");
+        joinOn = ImageLoader.loadImage("/images/multiplayer/joingameon.png");
+        joinOff = ImageLoader.loadImage("/images/multiplayer/joingameoff.png");
+
         coldLayer = ImageLoader.loadImage("/images/backgrounds/whitelayer.png");
         noBackground = ImageLoader.loadImage("/images/backgrounds/nolayer.png");
         dryLayer = ImageLoader.loadImage("/images/backgrounds/drylayer.png");
@@ -351,9 +395,20 @@ public class Assets {
         snow19 = ImageLoader.loadImage("/images/weatheranimations/snow19.png");
         snowanimation[19] = snow19;
         
+        clearIcon = ImageLoader.loadImage("/images/weatheranimations/icons/sun.png");
+        dryIcon = ImageLoader.loadImage("/images/weatheranimations/icons/sunny.png");
+        rainIcon = ImageLoader.loadImage("/images/weatheranimations/icons/rain.png");
+        stormIcon = ImageLoader.loadImage("/images/weatheranimations/icons/storm.png");
+        hailIcon = ImageLoader.loadImage("/images/weatheranimations/icons/hail.png");
+        snowIcon = ImageLoader.loadImage("/images/weatheranimations/icons/snow.png");
+        
         watersound = new SoundClip("/sounds/watersound.wav");
         grasssound = new SoundClip("/sounds/grasssound.wav");
         aliensound = new SoundClip("/sounds/aliensound.wav");
+        
+        repClock = ImageLoader.loadImage("/images/organisms/clock.png");
+        
+        
     }
     
     /**
@@ -393,7 +448,7 @@ public class Assets {
         return rotated;
     }
     
-    public static BufferedImage setAlpha(byte alpha, BufferedImage img) {       
+    public static BufferedImage setAlpha(byte alpha, BufferedImage img) {
         alpha %= 0xff; 
         for (int cx=0;cx<img.getWidth();cx++) {          
             for (int cy=0;cy<img.getHeight();cy++) {

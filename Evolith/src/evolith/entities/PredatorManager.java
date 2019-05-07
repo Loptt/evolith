@@ -84,6 +84,11 @@ public class PredatorManager implements Commons {
         for (int i = 0; i < predators.size(); i++) { 
             predators.get(i).tick();
             checkWithOrganisms(predators.get(i));
+            
+            if (game.getOtherOrganisms() != null) {
+                checkWithOtherOrganisms(predators.get(i));
+            }
+            
             checkKill(predators.get(i));
         }
         
@@ -154,6 +159,12 @@ public class PredatorManager implements Commons {
         }
     }
     
+    public void checkKill() {
+        for (int i = 0; i < predators.size(); i++) { 
+            checkKill(predators.get(i));
+        }
+    }
+    
     private void checkWithOrganisms(Predator pred) {
         //Check status with every organism
         pred.setVisible(false);
@@ -168,9 +179,24 @@ public class PredatorManager implements Commons {
             if (pred.intersects(org)) {
                 //Get current life
                 double acutalLife = org.getLife();
-
-                //Decrease life
+                
+                if (!org.isEgg()) {
+                    pred.setLife(pred.getLife() - org.getDamage());
+                }
+                
                 org.setLife(acutalLife - pred.getDamage());
+                //Decrease life
+                
+            }           
+        }
+    }
+    
+    private void checkWithOtherOrganisms(Predator pred) {
+        for (int j = 0; j < game.getOtherOrganisms().getOrganismsAmount(); j++) {
+            Organism org = game.getOtherOrganisms().getOrganism(j);
+            if (pred.intersects(org)) {
+                //Get current life
+                double acutalLife = org.getLife();
                 pred.setLife(pred.getLife() - org.getDamage());
             }           
         }
@@ -253,7 +279,8 @@ public class PredatorManager implements Commons {
     public int getPredatorAmount() {
         return predators.size();
     }
-    /**
-     * Single organism class
-     */
+
+    public Game getGame() {
+        return game;
+    }
 }
