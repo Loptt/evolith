@@ -824,6 +824,7 @@ public class Organism extends Item implements Commons {
     public void save(PrintWriter pw) {
         //Save id
         pw.println(Integer.toString(id));
+        pw.println(name);
         
         //Save position and speed
         pw.println(Integer.toString(x));
@@ -859,6 +860,7 @@ public class Organism extends Item implements Commons {
     
     public void load(BufferedReader br) throws IOException {
         id = Integer.parseInt(br.readLine());
+        name = br.readLine();
         
         x = Integer.parseInt(br.readLine());
         y = Integer.parseInt(br.readLine());

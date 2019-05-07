@@ -37,8 +37,8 @@ public interface Commons {
     public static final int WATER_SIZE = 100;
     public static final int SWARM_SEPARATION = ORGANISM_SIZE_STAT+30;
     
-    public static final int SECONDS_PER_HUNGER = 2;
-    public static final int SECONDS_PER_THIRST = 2;
+    public static final int SECONDS_PER_HUNGER = 3;
+    public static final int SECONDS_PER_THIRST = 3;
     public static final int SECONDS_PER_MATURITY = 1;
     public static final int SECONDS_PER_FULL_RES_INTEL = 2;
     
@@ -91,7 +91,7 @@ public interface Commons {
     public static final int CONSUMING_RATE = 1;
     
     public static final int DAY_CYCLE_DURATION_SECONDS = 60;
-    public static final int WEATHER_CYCLE_DURATION_SECONDS = 15;
+    public static final int WEATHER_CYCLE_DURATION_SECONDS = 20;
     
     public static final int PREDATOR_SECONDS_IN_RESOURCE = 7;
     public static final int PREDATOR_SECONDS_TO_ROAM = 10;

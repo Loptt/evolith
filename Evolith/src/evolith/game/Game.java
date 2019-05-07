@@ -222,6 +222,7 @@ public class Game implements Runnable, Commons {
      * Tick the main menu
      */
     private void mainMenuTick() {
+        musicManager.stop();
         mainMenu.setActive(true);
         mainMenu.tick();
         if (mainMenu.isClickPlay()) {
@@ -254,6 +255,7 @@ public class Game implements Runnable, Commons {
             loadGame();
             state = States.Play;
             modeMenu.setLoad(false);
+            musicManager.play();
         }
         
         if (modeMenu.isHost()) {
@@ -436,6 +438,7 @@ public class Game implements Runnable, Commons {
             pauseMenu.setClickExit(false);
             state = States.MainMenu;
             resetGame();
+            musicManager.stop();
         }
     }
     
@@ -446,6 +449,7 @@ public class Game implements Runnable, Commons {
             overMenu.setMainMenu(false);
             state = States.MainMenu;
             resetGame();
+            musicManager.stop();
         }
         
         if (overMenu.isStats()) {
@@ -731,9 +735,8 @@ public class Game implements Runnable, Commons {
         if (night) {
             g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
         }
-        else{
-            weather.render(g);
-        }
+        
+        weather.render(g);
 
         minimap.render(g);
         buttonBar.render(g);
@@ -757,11 +760,12 @@ public class Game implements Runnable, Commons {
         resources.render(g);
         organisms.render(g);
         predators.render(g);
-        weather.render(g);
 
         if (night) {
             g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
         }
+        
+        weather.render(g);
         minimap.render(g);
         buttonBar.render(g);
 

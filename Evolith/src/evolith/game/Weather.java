@@ -317,25 +317,31 @@ public class Weather {
         switch(state){
             case Clear:
                 g.drawImage(clear.getTopLayer(), 0, 0, width, height, null);
+                g.drawImage(Assets.clearIcon, 750, 25, 42, 42, null);
                 break;
             case Dry:
                 g.drawImage(dry.getTopLayer(), 0, 0, width, height, null);
+                g.drawImage(Assets.dryIcon, 750, 25, 42, 42, null);
                 break;
             case Rain:
                 g.drawImage(raindrops.getCurrentFrame(), 0, 0, width, height, null);
                 g.drawImage(rain.getTopLayer(), 0, 0,width, height, null);
+                g.drawImage(Assets.rainIcon, 750, 25, 42, 42, null);
                 break;
             case Storm:
                  g.drawImage(raindrops.getCurrentFrame(), 0, 0, width, height, null);
                 g.drawImage(storm.getTopLayer(), 0, 0, width, height, null);
+                g.drawImage(Assets.stormIcon, 750, 25, 42, 42, null);
                 break;
             case Hail:
                 g.drawImage(snowhail.getCurrentFrame(), 0, 0, width, height, null);
                 g.drawImage(hail.getTopLayer(), 0, 0, width, height, null);
+                g.drawImage(Assets.hailIcon, 750, 25, 42, 42, null);
                 break;
             case Snow:
                 g.drawImage(snowhail.getCurrentFrame(), 0, 0, width, height, null);
                 g.drawImage(snow.getTopLayer(), 0, 0, width, height, null);
+                g.drawImage(Assets.snowIcon, 750, 25, 42, 42, null);
                 break;
         }
     }

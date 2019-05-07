@@ -155,6 +155,13 @@ public class Assets {
     
     public static BufferedImage repClock;
     
+    public static BufferedImage clearIcon;
+    public static BufferedImage dryIcon;
+    public static BufferedImage rainIcon;
+    public static BufferedImage stormIcon;
+    public static BufferedImage snowIcon;
+    public static BufferedImage hailIcon;
+    
     public static SoundClip watersound;
     public static SoundClip grasssound;
     public static SoundClip aliensound;
@@ -388,11 +395,20 @@ public class Assets {
         snow19 = ImageLoader.loadImage("/images/weatheranimations/snow19.png");
         snowanimation[19] = snow19;
         
+        clearIcon = ImageLoader.loadImage("/images/weatheranimations/icons/sun.png");
+        dryIcon = ImageLoader.loadImage("/images/weatheranimations/icons/sunny.png");
+        rainIcon = ImageLoader.loadImage("/images/weatheranimations/icons/rain.png");
+        stormIcon = ImageLoader.loadImage("/images/weatheranimations/icons/storm.png");
+        hailIcon = ImageLoader.loadImage("/images/weatheranimations/icons/hail.png");
+        snowIcon = ImageLoader.loadImage("/images/weatheranimations/icons/snow.png");
+        
         watersound = new SoundClip("/sounds/watersound.wav");
         grasssound = new SoundClip("/sounds/grasssound.wav");
         aliensound = new SoundClip("/sounds/aliensound.wav");
         
         repClock = ImageLoader.loadImage("/images/organisms/clock.png");
+        
+        
     }
     
     /**
