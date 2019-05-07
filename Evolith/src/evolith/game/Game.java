@@ -532,6 +532,7 @@ public class Game implements Runnable, Commons {
             case Clear:
                 break;
             case Dry:
+                
                 break;
             case Rain:
                 break;
