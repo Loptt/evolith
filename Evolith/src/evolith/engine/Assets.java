@@ -153,6 +153,8 @@ public class Assets {
     
     public static BufferedImage snowanimation[];
     
+    public static BufferedImage repClock;
+    
     public static SoundClip watersound;
     public static SoundClip grasssound;
     public static SoundClip aliensound;
@@ -389,6 +391,8 @@ public class Assets {
         watersound = new SoundClip("/sounds/watersound.wav");
         grasssound = new SoundClip("/sounds/grasssound.wav");
         aliensound = new SoundClip("/sounds/aliensound.wav");
+        
+        repClock = ImageLoader.loadImage("/images/organisms/clock.png");
     }
     
     /**
@@ -428,7 +432,7 @@ public class Assets {
         return rotated;
     }
     
-    public static BufferedImage setAlpha(byte alpha, BufferedImage img) {       
+    public static BufferedImage setAlpha(byte alpha, BufferedImage img) {
         alpha %= 0xff; 
         for (int cx=0;cx<img.getWidth();cx++) {          
             for (int cy=0;cy<img.getHeight();cy++) {

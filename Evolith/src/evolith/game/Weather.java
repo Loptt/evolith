@@ -11,6 +11,9 @@ import evolith.helpers.Clock;
 import static evolith.helpers.Commons.DAY_CYCLE_DURATION_SECONDS;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
@@ -260,6 +263,54 @@ public class Weather {
         storm.setActive(false);
         hail.setActive(false);
         snow.setActive(false);
+    }
+    
+    public void save(PrintWriter pw) {
+        switch(state) {
+            case Clear:
+                pw.println(Integer.toString(1));
+                break;
+            case Dry:
+                pw.println(Integer.toString(2));
+                break;
+            case Rain:
+                pw.println(Integer.toString(3));
+                break;
+            case Storm:
+                pw.println(Integer.toString(4));
+                break;
+            case Hail:
+                pw.println(Integer.toString(5));
+                break;
+            case Snow:
+                pw.println(Integer.toString(6));
+                break;
+        }
+    }
+    
+    public void load(BufferedReader br) throws IOException {
+        int s = Integer.parseInt(br.readLine());
+        
+        switch(s) {
+            case 1:
+                setWeather(State.Clear);
+                break;
+            case 2:
+                setWeather(State.Dry);
+                break;
+            case 3:
+                setWeather(State.Rain);
+                break;
+            case 4:
+                setWeather(State.Storm);
+                break;
+            case 5:
+                setWeather(State.Hail);
+                break;
+            case 6:
+                setWeather(State.Snow);
+                break;
+        }
     }
     
     public void render(Graphics g){

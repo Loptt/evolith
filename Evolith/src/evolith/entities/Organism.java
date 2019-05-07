@@ -91,6 +91,9 @@ public class Organism extends Item implements Commons {
     private boolean other;
     private boolean visible;
     
+    private int alfa;
+    private boolean animationDone;
+    
     private Item pred;
 
     /**
@@ -165,6 +168,9 @@ public class Organism extends Item implements Commons {
         target = null;
         
         hatchTime = 0;
+        
+        alfa = 0;
+        animationDone = false;
     }
     
         
@@ -175,6 +181,16 @@ public class Organism extends Item implements Commons {
     public void tick() {
         //to determine the lifespan of the organism
         time.tick();
+        
+        if (dead) {
+            alfa -= 1;
+            if (alfa <= 0) {
+                animationDone = true;
+            }
+
+            return;
+        }
+        
         if (egg) {
             checkVitals();
             return;
@@ -332,14 +348,13 @@ public class Organism extends Item implements Commons {
             prevMatInc = (int) time.getSeconds();
 
             //Reproduction happen at these two points in maturity
-            if (maturity == 100) {
+            if (maturity == 110) {
                 needOffspring = true;
             }
 
-            if (maturity == 135) {
+            if (maturity == 140) {
                 needOffspring = true;
             }
-            
         }
 
         //Once the organisms reaches max maturity, kill it
@@ -348,7 +363,7 @@ public class Organism extends Item implements Commons {
         }
         
         if (life <= 0) {
-            dead = true;
+            kill();
         }
     }
     
@@ -372,7 +387,7 @@ public class Organism extends Item implements Commons {
     private void born() {        
         born = true;
         //Check if a mutation will occur. Chance is 1/4 now
-        if (((int) (Math.random() * 10) == 0 || true) && !other) {
+        if (((int) (Math.random() * MUTATION_CHANCE) == 0) && !other) {
             needMutation = true;
         } else {
             egg = false;
@@ -557,7 +572,7 @@ public class Organism extends Item implements Commons {
                 beingChased = true;
                 pred = o;
                 
-                if (o.intersects(this)) {
+                if (o.intersects(this) && !o.isEgg()) {
                     life -= o.getDamage();
                 }
             } else {
@@ -910,12 +925,16 @@ public class Organism extends Item implements Commons {
                     game.getCamera().getRelY(y) + (int) ((currentSize - 10) * barOffY) + 4, (currentSize - 10), 4);
             
         } else {
+            if (dead) {
+                //g.drawImage(Assets.setAlpha((byte) alfa, Assets.orgColors.get(skin)), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
+            }
             g.drawImage(Assets.orgColors.get(skin), game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
 
             //Warning that the organism can reproduce
             if(isNeedOffspring()){
                 g.setColor(Color.BLACK);
-                g.fillOval(game.getCamera().getRelX(getX() - width / 2), game.getCamera().getRelY(getY() - width / 2), currentSize / 2, currentSize / 2);
+                g.drawImage(Assets.repClock, game.getCamera().getRelX(getX() - width / 2), game.getCamera().getRelY(getY() - width / 2) - 5, 15, 17, null);
+                //g.fillOval(game.getCamera().getRelX(getX() - width / 2), game.getCamera().getRelY(getY() - width / 2), currentSize / 2, currentSize / 2);
             }
 
             orgMutations.render(g);
@@ -1486,5 +1505,9 @@ public class Organism extends Item implements Commons {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public boolean isAnimationDone() {
+        return animationDone;
     }
 }

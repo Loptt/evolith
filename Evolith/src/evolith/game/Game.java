@@ -651,7 +651,9 @@ public class Game implements Runnable, Commons {
     
     public void checkGameOver() {
         if (organisms.getAmount() <= 0) {
-            network.sendDataExtinct();
+            if (network != null) {
+                network.sendDataExtinct();
+            }
             state = States.GameOver;
             win = false;
             System.out.println("OVER");
@@ -659,7 +661,9 @@ public class Game implements Runnable, Commons {
         }
         
         if (organisms.isMaxIntelligence()) {
-            network.sendDataWin();
+            if (network != null) {
+                network.sendDataWin();
+            }
             state = States.GameOver;
             win = true;
             overMenu = new OverMenu(0, 0, width, height, this, win);
@@ -834,6 +838,11 @@ public class Game implements Runnable, Commons {
             
             //Save time
             pw.println(Integer.toString(clock.getTicker()));
+            pw.println(Integer.toString(night ? 1 : 0));
+            pw.println(Integer.toString(prevSecDayCycleChange));
+            pw.println(Integer.toString(prevWeatherChange));
+            
+            weather.save(pw);
             
             //Save organisms
             organisms.save(pw);
@@ -868,6 +877,13 @@ public class Game implements Runnable, Commons {
             
             //Load time
             clock.setTicker(Integer.parseInt(br.readLine()));
+            night = Integer.parseInt(br.readLine()) == 1;
+            background.setNight(night);
+            
+            prevSecDayCycleChange = Integer.parseInt(br.readLine());
+            prevWeatherChange = Integer.parseInt(br.readLine());
+            
+            weather.load(br);
             
             organisms.load(br);
             
@@ -894,6 +910,13 @@ public class Game implements Runnable, Commons {
         }
         
         clock.setTicker(0);
+        
+        weather.setWeather(Weather.State.Clear);
+        prevSecDayCycleChange = 0;
+        prevWeatherChange = 0;
+        
+        night = false;
+        
         organisms.reset();
         otherOrganisms.reset();
     }
@@ -904,6 +927,12 @@ public class Game implements Runnable, Commons {
         camera.setY(INITIAL_POINT - height / 2);
         
         clock.setTicker(0);
+        
+        weather.setWeather(Weather.State.Clear);
+        prevSecDayCycleChange = 0;
+        prevWeatherChange = 0;
+        
+        night = false;
         
         organisms.reset();
         predators.reset();

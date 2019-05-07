@@ -389,6 +389,5 @@ public class OrganismPanel extends Menu implements Commons {
             g.setColor(Color.white);
             g.drawRect(x + 118, y + height - 63, 180, 22);
         }
-
     }
 };
