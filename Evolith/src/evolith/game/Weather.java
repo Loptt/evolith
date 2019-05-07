@@ -29,6 +29,7 @@ public class Weather {
         Clear, Dry, Rain, Hail, Snow, Storm
     }
     private State state;
+    private State prevState;
     private ArrayList<ArrayList<State>>states;
     
     private WeatherInstance clear = new WeatherInstance(Assets.backgroundDay, Assets.backgroundNight, Assets.noBackground, 0, true);
@@ -62,6 +63,7 @@ public class Weather {
         this.background = background;
         
         state = State.Clear;
+        prevState = State.Clear;
         
         prevSecDayCycleChange = 0;
         prevWeather = 0;
@@ -147,6 +149,10 @@ public class Weather {
     public State getState() {
         return state;
     }
+
+    public State getPrevState() {
+        return prevState;
+    }
     
     public void tick(){
         raindrops.tick();
@@ -157,6 +163,7 @@ public class Weather {
         int newWeather = 0;
         newWeather = (int) Math.floor(Math.random()*states.get(prevWeather).size());
         setFalse();
+        prevState = state;
         switch(states.get(prevWeather).get(newWeather)){
             case Clear:
                 state = State.Clear;
@@ -206,6 +213,7 @@ public class Weather {
     }
     
     public void setWeather(State s) {
+        prevState = state;
         setFalse();
         switch(s){
             case Clear:

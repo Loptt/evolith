@@ -318,6 +318,7 @@ public class Game implements Runnable, Commons {
         if (clock.getSeconds() >= prevWeatherChange + WEATHER_CYCLE_DURATION_SECONDS) {
             weather.changeWeather();
             prevWeatherChange = clock.getSeconds();
+            changeEnvironmentToWeather();
         }
         
         if (!organisms.getOrgPanel().isInputActive()) {
@@ -517,6 +518,30 @@ public class Game implements Runnable, Commons {
         Thread myThread = new Thread(network);
         
         myThread.start();
+    }
+    
+    /**
+     * Changes resources and predators according to weather
+     */
+    private void changeEnvironmentToWeather() {
+        if (weather.getState() == weather.getPrevState()) {
+            return;
+        }
+        
+        switch(weather.getState()) {
+            case Clear:
+                break;
+            case Dry:
+                break;
+            case Rain:
+                break;
+            case Storm:
+                break;
+            case Hail:
+                break;
+            case Snow:
+                break;
+        }
     }
 
     /**
