@@ -344,7 +344,8 @@ public class Game implements Runnable, Commons {
             state = States.Statistics;
         }
     }
-    private void statisticsTick() {
+    private void statisticsTick(){
+        
         statsMenu.tick();
         
         if(statsMenu.isMainMenu())
@@ -504,7 +505,7 @@ public class Game implements Runnable, Commons {
             overMenu = new OverMenu(0, 0, width, height, this, win);
         }
         
-        if (organisms.isMaxIntelligence()) {
+        if (organisms.isMaxIntelligence() || true) {
             state = States.GameOver;
             win = true;
             overMenu = new OverMenu(0, 0, width, height, this, win);

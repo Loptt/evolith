@@ -252,20 +252,19 @@ public class JDBC {
         }
     }
      */
-    public String[] getAverage()
+    public int[] getAverage()
     {
-        String avg[] = new String[4];
+        int avg[] = new int[4];
         
         try {
             myStatement = myConnection.createStatement();
             myResult = JDBC.myStatement.executeQuery("SELECT AVG(organism_speed),AVG(organism_strength),AVG(organism_speed),AVG(organism_max_health) FROM organism;");
             while(myResult.next()){
-             avg[0] = Integer.toString(myResult.getInt(1));
-             avg[1] = Integer.toString(myResult.getInt(2));
-             avg[2] = Integer.toString(myResult.getInt(3));
-             avg[3] = Integer.toString(myResult.getInt(4));
-             System.out.println("Avg Speed: "+ avg[0] + " Avg Strength: " + avg[1] + " Avg Speed: " + avg[2] + " Avg Health: " + avg[3]);
-            }
+             avg[0] = myResult.getInt(1);
+             avg[1] = myResult.getInt(2);
+             avg[2] = myResult.getInt(3);
+             avg[3] = myResult.getInt(4);
+             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

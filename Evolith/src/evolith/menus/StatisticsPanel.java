@@ -5,6 +5,7 @@
  */
 package evolith.menus;
 
+import evolith.database.JDBC;
 import evolith.engine.Assets;
 import evolith.game.Game;
 import evolith.helpers.Commons;
@@ -55,7 +56,7 @@ public class StatisticsPanel extends Menu implements Commons {
         super(x, y, width, height, game);
         
         f = new FontLoader();
-
+        this.mysql = game.getMysql();
         this.active = active;
         this.speed = 100;
         this.stealth = 100;
@@ -71,19 +72,27 @@ public class StatisticsPanel extends Menu implements Commons {
         this.game = game;
         this.centerX = centerX;
         this.centerY = centerY;
+        
+        if(!ingame){
+            try {
+                avg = mysql.getAverage();
+
+                this.pointsXAvg[0] = (int) ((-STATISTICS_DIMENSION * avg[0] / MAX_SPEED) / 2 + x+centerX );
+                this.pointsXAvg[1] = (int) ((STATISTICS_DIMENSION  * avg[1] / MAX_STEALTH) / 2 + x+centerX );
+                this.pointsXAvg[2] = (int) ((STATISTICS_DIMENSION  * avg[2] / MAX_STRENGTH) / 2 + x+centerX );
+                this.pointsXAvg[3] = (int) ((-STATISTICS_DIMENSION * avg[3] / MAX_HEALTH) / 2 + x+centerX );
+
+                this.pointsYAvg[0] = (int) ((-STATISTICS_DIMENSION * avg[0]/ MAX_SPEED) / 2 + y + centerY);
+                this.pointsYAvg[1] = (int) ((-STATISTICS_DIMENSION * avg[1]/ MAX_STEALTH) / 2 + y+centerY);
+                this.pointsYAvg[2] = (int) ((STATISTICS_DIMENSION  * avg[2]/ MAX_STRENGTH) / 2 + y+centerY);
+                this.pointsYAvg[3] = (int) ((STATISTICS_DIMENSION  * avg[3] / MAX_HEALTH) / 2 + y +centerY);
+            } catch(Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }else{
         //Close Button
         buttons.add(new Button(PANEL_STATS_X + PANEL_STATS_WIDTH -BUTTON_CLOSE_DIMENSION/2, PANEL_STATS_Y-BUTTON_CLOSE_DIMENSION/2, BUTTON_CLOSE_DIMENSION, BUTTON_CLOSE_DIMENSION,Assets.organismPanel_close));
         
-        if(!ingame){
-            this.pointsXAvg[0] = (int) ((-STATISTICS_DIMENSION * avg[0] / MAX_SPEED) / 2 + x+centerX );
-            this.pointsXAvg[1] = (int) ((STATISTICS_DIMENSION  * avg[1] / MAX_STEALTH) / 2 + x+centerX );
-            this.pointsXAvg[2] = (int) ((STATISTICS_DIMENSION  * avg[2] / MAX_STRENGTH) / 2 + x+centerX );
-            this.pointsXAvg[3] = (int) ((-STATISTICS_DIMENSION * avg[3] / MAX_HEALTH) / 2 + x+centerX );
-
-            this.pointsYAvg[0] = (int) ((-STATISTICS_DIMENSION * avg[0]/ MAX_SPEED) / 2 + y + centerY);
-            this.pointsYAvg[1] = (int) ((-STATISTICS_DIMENSION * avg[1]/ MAX_STEALTH) / 2 + y+centerY);
-            this.pointsYAvg[2] = (int) ((STATISTICS_DIMENSION  * avg[2]/ MAX_STRENGTH) / 2 + y+centerY);
-            this.pointsYAvg[3] = (int) ((STATISTICS_DIMENSION  * avg[3] / MAX_HEALTH) / 2 + y +centerY);    
         }
     }
 
@@ -127,49 +136,53 @@ public class StatisticsPanel extends Menu implements Commons {
         this.pointsY[1] = (int) ((-STATISTICS_DIMENSION * stealth / MAX_STEALTH) / 2 + y+centerY);
         this.pointsY[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + y+centerY);
         this.pointsY[3] = (int) ((STATISTICS_DIMENSION * health / MAX_HEALTH) / 2 + y +centerY);
-        
-        
     }
  
     @Override
     public void render(Graphics g) {
-        
-        
         if(!active)
             return;
         
        Graphics2D g2 = (Graphics2D) g;
-       if(ingame)
-       {
-        g.drawImage(Assets.statsPanel, PANEL_STATS_X, PANEL_STATS_Y, PANEL_STATS_WIDTH, PANEL_STATS_HEIGHT, null);
-
-        g.setColor(BLUE_GREEN_COLOR);
-        g.setFont(f.getFontEvolve().deriveFont(17f));
-        g.setColor(Color.WHITE);
-        g.setFont(f.getFontEvolve().deriveFont(17f));
-        g.drawString("Speed", x +60, y + 157 );
-        g.drawString("Strength", x +290 ,y +157);
-        g.drawString("Stealth",  x +65, y + 340  );
-        g.drawString("Max Health",  x +310, y + 340 );
-        g.setFont(f.getFontEvolve().deriveFont(30f));
-        g.drawString(game.getOrganisms().getSpeciesName(), x +465, y+100);
-        
-        g.setFont(f.getFontEvolve().deriveFont(25f));
-        g.drawString("Game Duration", x +430, y+175);
-        g.drawString(Integer.toString(game.getClock().getSeconds()) , x +430, y+220);
-        g.drawString("Maximum Generation", x +430, y+277);
-        g.drawString(Integer.toString(game.getOrganisms().getMaxGeneration()), x +430, y+322);
-        g.drawString("Maximum Intelligence", x +430, y+379);
-        g.drawString(Integer.toString(game.getOrganisms().getMaxIntelligence()), x +430, y+424);
        
+       if(ingame){
+            g.drawImage(Assets.statsPanel, PANEL_STATS_X, PANEL_STATS_Y, PANEL_STATS_WIDTH, PANEL_STATS_HEIGHT, null);
+
+            g.setColor(BLUE_GREEN_COLOR);
+            g.setFont(f.getFontEvolve().deriveFont(17f));
+            g.setColor(Color.WHITE);
+            g.setFont(f.getFontEvolve().deriveFont(17f));
+            g.drawString("Speed", x +60, y + 157 );
+            g.drawString("Strength", x +290 ,y +157);
+            g.drawString("Stealth",  x +65, y + 340  );
+            g.drawString("Max Health",  x +310, y + 340 );
+            g.setFont(f.getFontEvolve().deriveFont(30f));
+            g.drawString(game.getOrganisms().getSpeciesName(), x +465, y+100);
+
+            g.setFont(f.getFontEvolve().deriveFont(25f));
+            g.drawString("Game Duration", x +430, y+175);
+            g.drawString(Integer.toString(game.getClock().getSeconds()) , x +430, y+220);
+            g.drawString("Maximum Generation", x +430, y+277);
+            g.drawString(Integer.toString(game.getOrganisms().getMaxGeneration()), x +430, y+322);
+            g.drawString("Maximum Intelligence", x +430, y+379);
+            g.drawString(Integer.toString(game.getOrganisms().getMaxIntelligence()), x +430, y+424);
+            for (int i = 0; i < buttons.size(); i++) {
+                buttons.get(i).render(g);
+            }
        } else{
-           
+            g.setColor(new Color(255,211,0, 170));
+            g.fillPolygon(pointsXAvg, pointsYAvg, 4);
+            g2.setColor(new Color(255,211,0));
+            g2.setStroke(new BasicStroke(2));
+            g2.drawLine(pointsXAvg[0],pointsYAvg[0],pointsXAvg[1],pointsYAvg[1]);
+            g2.drawLine(pointsXAvg[1],pointsYAvg[1],pointsXAvg[2],pointsYAvg[2]);
+            g2.drawLine(pointsXAvg[2],pointsYAvg[2],pointsXAvg[3],pointsYAvg[3]);
+            g2.drawLine(pointsXAvg[3],pointsYAvg[3],pointsXAvg[0],pointsYAvg[0]);
        }
        
         g.setColor(new Color(9,255,200, 170));
         g.fillPolygon(pointsX, pointsY, 4);
-        
-        g.setColor(new Color(9,255,200, 170));
+       
         g2.setStroke(new BasicStroke(2));
         
         g2.drawLine(pointsX[0],pointsY[0],pointsX[1],pointsY[1]);
@@ -177,9 +190,7 @@ public class StatisticsPanel extends Menu implements Commons {
         g2.drawLine(pointsX[2],pointsY[2],pointsX[3],pointsY[3]);
         g2.drawLine(pointsX[3],pointsY[3],pointsX[0],pointsY[0]);
         
-        for (int i = 0; i < buttons.size(); i++) {
-            buttons.get(i).render(g);
-        }
+
         
     }
 

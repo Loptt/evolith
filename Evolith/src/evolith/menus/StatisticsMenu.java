@@ -32,7 +32,6 @@ public class StatisticsMenu extends Menu {
         f = new FontLoader();
         rankPanel = new RankingPanel(x+200,y+200,0,0,game,mysql);
         statsPanel = new StatisticsPanel(x,y,100,100,game,true,false,400,400);
-        
         buttons.add(new Button(width / 2 - 340 / 2, 390, 340, 71, Assets.overMenuButtonOn, Assets.overMenuButtonOff));
     }
 
