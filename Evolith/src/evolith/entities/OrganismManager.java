@@ -27,6 +27,7 @@ import java.util.HashSet;
 public class OrganismManager implements Commons {
 
     private ArrayList<Organism> organisms;  //array of all organisms
+    private ArrayList<Organism> deadOrgs;
 
     private Game game;          // game instance
 
@@ -56,6 +57,7 @@ public class OrganismManager implements Commons {
         this.game = game;
         this.other = other;
         organisms = new ArrayList<>();
+        deadOrgs = new ArrayList<>();
         int amount = 1;
         idCounter = 1;
 
@@ -63,7 +65,7 @@ public class OrganismManager implements Commons {
             organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
             organisms.get(i).setEgg(false);
             organisms.get(i).setBorn(true);
-            organisms.get(i).setMaturity(0);
+            organisms.get(i).setMaturity(100);
         }
        
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
@@ -80,6 +82,15 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).tick();
             checkNeedMutation(organisms.get(i));
+        }
+        
+        for (int i = 0; i < deadOrgs.size(); i++) {
+            Organism org = deadOrgs.get(i);
+            org.tick();
+            
+            if (org.isAnimationDone()) {
+                deadOrgs.remove(org);
+            }
         }
         
         checkNight();
@@ -317,7 +328,9 @@ public class OrganismManager implements Commons {
      */
     public void checkSelection(Rectangle r) {
         for (int i = 0; i < organisms.size(); i++) {
-            organisms.get(i).setSelected(organisms.get(i).intersects(r));
+            if (!organisms.get(i).isEgg()) {
+                organisms.get(i).setSelected(organisms.get(i).intersects(r));
+            }
         }
     }
     
@@ -349,6 +362,7 @@ public class OrganismManager implements Commons {
             Organism org = organisms.get(i);
             if (org.isDead()) {
                 organisms.remove(org);
+                deadOrgs.add(org);
             }
             
         }
@@ -531,7 +545,7 @@ public class OrganismManager implements Commons {
         
         organisms.get(0).setEgg(false);
         organisms.get(0).setBorn(true);
-        organisms.get(0).setMaturity(50);
+        organisms.get(0).setMaturity(100);
 
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
         mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
@@ -564,14 +578,11 @@ public class OrganismManager implements Commons {
                 organisms.get(i).render(g);
             }
         }
-        //render the hover panel of an organism
-
-        if (!orgPanel.isActive() || !mutPanel.isActive()) {
-            if (h != null && isHover()) {
-                h.render(g);
-            }
-        }
         
+        for (int i = 0; i < deadOrgs.size(); i++) {
+            deadOrgs.get(i).render(g);
+        }
+
         //Handle orgPanel and mutPanel render in game to prevent other elements
         //to overlap them
     }

@@ -180,7 +180,7 @@ public class PredatorManager implements Commons {
                 //Get current life
                 double acutalLife = org.getLife();
                 
-                if (game.isServer()) {
+                if (!org.isEgg()) {
                     pred.setLife(pred.getLife() - org.getDamage());
                 }
                 
