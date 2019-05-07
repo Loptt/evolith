@@ -13,14 +13,14 @@ import java.awt.image.BufferedImage;
  */
 public class Button extends Item {
 
-    private boolean pressed;
-    private boolean active;
-    private boolean hover;
-    private boolean enlarge;
-    private final int enlargement = 40;
+    protected boolean pressed;
+    protected boolean active;
+    protected boolean hover;
+    protected boolean enlarge;
+    protected final int enlargement = 40;
 
-    private BufferedImage imgOn;
-    private BufferedImage imgOff;
+    protected BufferedImage imgOn;
+    protected BufferedImage imgOff;
     
     public Button(int x, int y, int width, int height, BufferedImage on, BufferedImage off, boolean enlarge) {
         super(x,y,width,height);

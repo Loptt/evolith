@@ -12,7 +12,9 @@ import evolith.engine.*;
 import evolith.entities.Resource;
 import evolith.helpers.InputReader;
 import evolith.helpers.Selection;
+import evolith.menus.Button;
 import evolith.menus.InstructionMenu;
+import evolith.menus.MaxIntelligenceButton;
 import evolith.menus.ModeMenu;
 import evolith.menus.OverMenu;
 import evolith.menus.PauseMenu;
@@ -82,6 +84,8 @@ public class Game implements Runnable, Commons {
     private OverMenu overMenu;
     private InstructionMenu instructionMenu;
     private ModeMenu modeMenu;
+    
+    private MaxIntelligenceButton maxIntButton;
 
     private Clock clock;                        // the time of the game
     private InputReader inputReader;            //To read text from keyboard
@@ -184,6 +188,8 @@ public class Game implements Runnable, Commons {
 
         weather = new Weather(width, height, background);
         paused = false;
+        
+        maxIntButton = new MaxIntelligenceButton(870, 400, 110, 30, Assets.backOn, Assets.backOff, organisms.getOrganism(0));
 
     }
 
@@ -338,6 +344,11 @@ public class Game implements Runnable, Commons {
             prevSecDayCycleChange = clock.getSeconds();
         }
         
+        maxIntButton.setOrg(organisms.getMostIntelligent());
+        
+        resources.deleteResources();
+        resources.respawnResources(); 
+        
         organisms.checkKill();
         checkGameOver();
     }
@@ -376,9 +387,7 @@ public class Game implements Runnable, Commons {
             }
         }
         
-        if (server) {
-            resources.respawnResources(); 
-        }
+        
         
         network.sendDataPlants(resources);
         network.sendDataWaters(resources);
@@ -422,7 +431,10 @@ public class Game implements Runnable, Commons {
         
         if (server) {
             resources.deleteResources();
+            resources.respawnResources(); 
         }
+        
+        maxIntButton.setOrg(organisms.getMostIntelligent());
         
         checkGameOver();
     }
@@ -673,6 +685,10 @@ public class Game implements Runnable, Commons {
             minimap.applyMouse(mouseX, mouseY, camera);
             mouseManager.setLeft(false);
             //Third in hierarchy is the background   
+        } else if (maxIntButton.hasMouse(mouseX, mouseY)) {
+            camera.setX(maxIntButton.getOrg().getX() - width / 2);
+            camera.setY(maxIntButton.getOrg().getY() -  height / 2);
+            maxIntButton.getOrg().setSelected(true);
         } else {
             selection.activate(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
         }
@@ -819,6 +835,8 @@ public class Game implements Runnable, Commons {
         if (paused) {
             pauseMenu.render(g);
         }
+        
+        maxIntButton.render(g);
     }
     
     public void multiRender(Graphics g) {
