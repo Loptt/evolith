@@ -387,7 +387,7 @@ public class Organism extends Item implements Commons {
     private void born() {        
         born = true;
         //Check if a mutation will occur. Chance is 1/4 now
-        if (((int) (Math.random() * MUTATION_CHANCE) == 0) && !other) {
+        if (((int) (Math.random() * MUTATION_CHANCE) == 0) && !other && !game.getOrganisms().getMutPanel().isActive()) {
             needMutation = true;
         } else {
             egg = false;

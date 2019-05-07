@@ -161,6 +161,10 @@ public class OrganismPanel extends Menu implements Commons {
         if (!active) {
             return;
         }
+        
+        if (inputActive) {
+            game.getInputKeyboard().tick();
+        }
 
         organism.setName(inputReader.getSpeciesName());
         //Checks the mouse positon relative to the button

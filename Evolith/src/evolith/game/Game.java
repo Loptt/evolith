@@ -96,6 +96,7 @@ public class Game implements Runnable, Commons {
     
     private boolean win;
     private boolean server;
+    private boolean paused;
 
     /**
      * to create title, width and height and set the game is still not running
@@ -182,6 +183,7 @@ public class Game implements Runnable, Commons {
         display.getCanvas().addMouseMotionListener(mouseManager);
 
         weather = new Weather(width, height, background);
+        paused = false;
 
     }
 
@@ -302,18 +304,23 @@ public class Game implements Runnable, Commons {
      * Tick the main game
      */
     private void playTick() {
+        
+        if (paused) {
+            pausedTick();
+            return;
+        }
         clock.tick();
         
         organisms.tick();
         resources.tick();
         predators.tick();
         buttonBar.tick();
-        inputKeyboard.tick();
+        
         selection.tick();
         weather.tick();
         sfx.tick();
-        
         keyManager.tick();
+        
         musicManager.tick();
         if (clock.getSeconds() >= prevWeatherChange + WEATHER_CYCLE_DURATION_SECONDS) {
             weather.changeWeather();
@@ -341,6 +348,10 @@ public class Game implements Runnable, Commons {
     
     
     private void multiTick() {
+        if (paused) {
+            pausedTick();
+        }
+        
         clock.tick();
         organisms.tick();
         otherOrganisms.tick();
@@ -412,29 +423,35 @@ public class Game implements Runnable, Commons {
     private void pausedTick() {
         pauseMenu.tick();
         keyManager.tick();
-        
+        musicManager.tick();
+
         if (keyManager.p) {
-            state = States.Play;
+            paused = !paused;
+            inputKeyboard.p = false;
+            inputKeyboard.prevp = false;
         }
-        
+
         if (keyManager.esc) {
-            state = States.Play;
+            paused = !paused;
         }
-        
+
         if (!pauseMenu.isMainMenuDisplayed()) {
-            state = States.Play;
+            paused = !paused;
         }
-        
+
         if (pauseMenu.isClickSave()) {
             saveGame();
             pauseMenu.setClickSave(false);
         }
-        
+
         if (pauseMenu.isClickLoad()) {
+            musicManager.stop();
             loadGame();
             pauseMenu.setClickLoad(false);
+            musicManager.play();
+            paused = !paused;
         }
-        
+
         if (pauseMenu.isClickExit()) {
             pauseMenu.setClickExit(false);
             state = States.MainMenu;
@@ -559,10 +576,28 @@ public class Game implements Runnable, Commons {
     }
     
     private void manageKeyboard() {
+        //IF paused
+        if (paused) {
+            if (keyManager.esc) {
+                pauseMenu.setMainMenuDisplayed(!paused);
+                paused = !paused;
+            }
+            
+            if (keyManager.p && !organisms.getOrgPanel().isInputActive()) {
+                pauseMenu.setMainMenuDisplayed(!paused);
+                paused = !paused;
+                keyManager.p = false;
+                keyManager.prevp = false;
+            }
+            
+            return;
+        }
+        
+        //Else, check all other keys
         if (!organisms.getOrgPanel().isActive()) {
             if (keyManager.esc) {
                 pauseMenu.setMainMenuDisplayed(true);
-                state = States.Paused;
+                paused = !paused;
             }
         } else {
             if (keyManager.esc) {
@@ -572,7 +607,7 @@ public class Game implements Runnable, Commons {
         
         if (keyManager.p && !organisms.getOrgPanel().isInputActive()) {
             pauseMenu.setMainMenuDisplayed(true);
-            state = States.Paused;
+            paused = !paused;
         }
         
         if (keyManager.num1) {
@@ -805,6 +840,10 @@ public class Game implements Runnable, Commons {
         } else if (organisms.getH() != null && organisms.isHover()) {
             organisms.getH().render(g);
         }
+        
+        if (paused) {
+            pauseMenu.render(g);
+        }
     }
     
     public void multiRender(Graphics g) {
@@ -834,6 +873,10 @@ public class Game implements Runnable, Commons {
             organisms.getMutPanel().render(g);
         } else if (organisms.getH() != null && organisms.isHover()) {
             organisms.getH().render(g);
+        }
+        
+        if (paused) {
+            pauseMenu.render(g);
         }
     }
     
