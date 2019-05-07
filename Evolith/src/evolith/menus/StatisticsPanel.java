@@ -45,10 +45,8 @@ public class StatisticsPanel extends Menu implements Commons {
     private int stealth;
     private int health;
     private int strength;
-    private int avgSpeed;
-    private int avgStealth;
-    private int avgHealth;
-    private int avgStrength;
+    private int avg[];
+    private JDBC mysql;
     
     
     private Point pMiddle;
@@ -63,10 +61,7 @@ public class StatisticsPanel extends Menu implements Commons {
         this.stealth = 100;
         this.health = 100;
         this.strength = 100;
-        this.avgSpeed = 100;
-        this.avgStealth = 100;
-        this.avgHealth = 100;
-        this.avgStrength = 100;
+        this.avg = new int[4];
         
         this.pointsX = new int[4];
         this.pointsY = new int[4];
@@ -78,7 +73,18 @@ public class StatisticsPanel extends Menu implements Commons {
         this.centerY = centerY;
         //Close Button
         buttons.add(new Button(PANEL_STATS_X + PANEL_STATS_WIDTH -BUTTON_CLOSE_DIMENSION/2, PANEL_STATS_Y-BUTTON_CLOSE_DIMENSION/2, BUTTON_CLOSE_DIMENSION, BUTTON_CLOSE_DIMENSION,Assets.organismPanel_close));
+        
+        if(!ingame){
+            this.pointsXAvg[0] = (int) ((-STATISTICS_DIMENSION * avg[0] / MAX_SPEED) / 2 + x+centerX );
+            this.pointsXAvg[1] = (int) ((STATISTICS_DIMENSION  * avg[1] / MAX_STEALTH) / 2 + x+centerX );
+            this.pointsXAvg[2] = (int) ((STATISTICS_DIMENSION  * avg[2] / MAX_STRENGTH) / 2 + x+centerX );
+            this.pointsXAvg[3] = (int) ((-STATISTICS_DIMENSION * avg[3] / MAX_HEALTH) / 2 + x+centerX );
 
+            this.pointsYAvg[0] = (int) ((-STATISTICS_DIMENSION * avg[0]/ MAX_SPEED) / 2 + y + centerY);
+            this.pointsYAvg[1] = (int) ((-STATISTICS_DIMENSION * avg[1]/ MAX_STEALTH) / 2 + y+centerY);
+            this.pointsYAvg[2] = (int) ((STATISTICS_DIMENSION  * avg[2]/ MAX_STRENGTH) / 2 + y+centerY);
+            this.pointsYAvg[3] = (int) ((STATISTICS_DIMENSION  * avg[3] / MAX_HEALTH) / 2 + y +centerY);    
+        }
     }
 
     @Override
@@ -122,19 +128,6 @@ public class StatisticsPanel extends Menu implements Commons {
         this.pointsY[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + y+centerY);
         this.pointsY[3] = (int) ((STATISTICS_DIMENSION * health / MAX_HEALTH) / 2 + y +centerY);
         
-        if(!ingame)
-        {
-        this.pointsXAvg[0] = (int) ((-STATISTICS_DIMENSION * speed / MAX_SPEED) / 2 + x+centerX );
-        this.pointsXAvg[1] = (int) ((STATISTICS_DIMENSION * stealth / MAX_STEALTH) / 2 + x+centerX );
-        this.pointsXAvg[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + x+centerX );
-        this.pointsXAvg[3] = (int) ((-STATISTICS_DIMENSION * health / MAX_HEALTH) / 2 + x+centerX );
-        
-        this.pointsYAvg[0] = (int) ((-STATISTICS_DIMENSION * speed / MAX_SPEED) / 2 + y + centerY);
-        this.pointsYAvg[1] = (int) ((-STATISTICS_DIMENSION * stealth / MAX_STEALTH) / 2 + y+centerY);
-        this.pointsYAvg[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + y+centerY);
-        this.pointsYAvg[3] = (int) ((STATISTICS_DIMENSION * health / MAX_HEALTH) / 2 + y +centerY);
-    
-        }
         
     }
  

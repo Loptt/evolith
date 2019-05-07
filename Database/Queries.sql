@@ -43,3 +43,8 @@ BEGIN;
 INSERT INTO organism(organism_alive,organism_generation,organism_speed,organism_stealth,organism_strength,organism_max_health,species_id) VALUES();
 
     */
+organism_speed INT,
+organism_stealth INT,
+organism_strength INT,
+organism_max_health INT,
+SELECT AVG(organism_speed),AVG(organism_strength),AVG(organism_speed),AVG(organism_max_health) FROM organism
