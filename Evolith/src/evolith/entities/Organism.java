@@ -852,7 +852,7 @@ public class Organism extends Item implements Commons {
 
         //Save generation and time
         pw.println(Integer.toString(generation));
-        pw.println(Integer.toString(time.getTicker()));
+        pw.println(Long.toString(time.getTicker()));
         
         //Save mutations
         orgMutations.save(pw);
@@ -885,7 +885,7 @@ public class Organism extends Item implements Commons {
         egg = Integer.parseInt(br.readLine()) == 1;
         
         generation = Integer.parseInt(br.readLine());
-        time.setTicker(Integer.parseInt(br.readLine()));
+        time.setTicker(Long.parseLong(br.readLine()));
         
         orgMutations.load(br);
         

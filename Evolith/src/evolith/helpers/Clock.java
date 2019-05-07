@@ -27,11 +27,11 @@ public class Clock extends Item implements Commons {
         this.time = new Time();
     }
     
-    public int getTicker() {
+    public long getTicker() {
         return time.getTicker();
     }
     
-    public void setTicker(int tick) {
+    public void setTicker(long tick) {
         time.setTicker(tick);
     }
 

@@ -902,7 +902,7 @@ public class Game implements Runnable, Commons {
             pw.println(Integer.toString(camera.getY()));
             
             //Save time
-            pw.println(Integer.toString(clock.getTicker()));
+            pw.println(Long.toString(clock.getTicker()));
             pw.println(Integer.toString(night ? 1 : 0));
             pw.println(Integer.toString(prevSecDayCycleChange));
             pw.println(Integer.toString(prevWeatherChange));
@@ -941,7 +941,7 @@ public class Game implements Runnable, Commons {
             camera.setY(Integer.parseInt(br.readLine()));
             
             //Load time
-            clock.setTicker(Integer.parseInt(br.readLine()));
+            clock.setTicker(Long.parseLong(br.readLine()));
             night = Integer.parseInt(br.readLine()) == 1;
             background.setNight(night);
             
