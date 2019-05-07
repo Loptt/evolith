@@ -71,7 +71,7 @@ public class Game implements Runnable, Commons {
     private PredatorManager predators;
 
     public enum States {
-        MainMenu, Paused, GameOver, Play, Instructions, SetupMenu, Multi, ModeMenu
+        MainMenu, GameOver, Play, Instructions, SetupMenu, Multi, ModeMenu
     } // status of the flow of the game once running
     private States state;
 
@@ -210,9 +210,6 @@ public class Game implements Runnable, Commons {
                 break;
             case Multi:
                 multiTick();
-                break;
-            case Paused:
-                pausedTick();
                 break;
             case GameOver:
                 overTick();
@@ -353,6 +350,7 @@ public class Game implements Runnable, Commons {
         }
         
         clock.tick();
+        network.tick();
         organisms.tick();
         otherOrganisms.tick();
         resources.tick();
@@ -361,6 +359,13 @@ public class Game implements Runnable, Commons {
         selection.tick();
         weather.tick();
         sfx.tick();
+        
+        if (network.isTimeOut()) {
+            state = States.GameOver;
+            win = true;
+            overMenu = new OverMenu(0, 0, width, height, this, win);
+            network.endConnection();
+        }
         
         organisms.checkOtherVisible();
         if (server) {
@@ -764,9 +769,6 @@ public class Game implements Runnable, Commons {
                 case SetupMenu:
                     setupMenu.render(g);
                     break;
-                case Paused:
-                    pausedRender(g);
-                    break;
                 case Play:
                     playRender(g);
                     break;
@@ -783,35 +785,6 @@ public class Game implements Runnable, Commons {
             bs.show();
             g.dispose();
         }
-    }
-    
-    public void pausedRender(Graphics g) {
-        g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
-
-        resources.render(g);
-        organisms.render(g);
-        predators.render(g);
-
-        if (night) {
-            g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
-        }
-        
-        weather.render(g);
-
-        minimap.render(g);
-        buttonBar.render(g);
-
-        if (selection.isActive()) {
-            selection.render(g);
-        }
-
-        if (organisms.isOrgPanelActive()) {
-            organisms.getOrgPanel().render(g);
-        } else if (organisms.isMutPanelActive()) {
-            organisms.getMutPanel().render(g);
-        }
-
-        pauseMenu.render(g);
     }
     
     public void playRender(Graphics g) {

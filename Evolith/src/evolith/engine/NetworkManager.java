@@ -8,6 +8,8 @@ package evolith.engine;
 import evolith.entities.OrganismManager;
 import evolith.entities.PredatorManager;
 import evolith.entities.ResourceManager;
+import evolith.helpers.Commons;
+import evolith.helpers.Time;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -21,7 +23,7 @@ import java.util.logging.Logger;
  *
  * @author charles
  */
-public class NetworkManager implements Runnable {
+public class NetworkManager implements Runnable, Commons {
     private DatagramSocket socket;
     private DatagramPacket packet;
     private InetAddress address;
@@ -33,12 +35,16 @@ public class NetworkManager implements Runnable {
     private boolean otherDisconnect;
     private boolean clientReady;
     private boolean serverReady;
+    private boolean timeOut;
     
     private boolean active;
     
     private OrganismManager otherorgs;
     private ResourceManager resources;
     private PredatorManager predators;
+    
+    private Time time;
+    private int secSinceRecv;
     
     public NetworkManager(boolean isServer, OrganismManager otherorgs, ResourceManager resources, PredatorManager predators) {
         this.otherorgs = otherorgs;
@@ -49,6 +55,9 @@ public class NetworkManager implements Runnable {
         otherExtinct = false;
         otherWon = false;
         otherDisconnect = false;
+        timeOut = false;
+        
+        time = new Time();
         
         port = 0;
     }
@@ -76,6 +85,14 @@ public class NetworkManager implements Runnable {
             socket = new DatagramSocket(5000);
         } catch (SocketException e) {
             e.printStackTrace();
+        }
+    }
+    
+    public void tick() {
+        time.tick();
+        
+        if (time.getSeconds() >= secSinceRecv + CONNECTION_TIMEOUT_SEC) {
+            timeOut = true;
         }
     }
     
@@ -290,10 +307,15 @@ public class NetworkManager implements Runnable {
         return otherDisconnect;
     }
 
+    public boolean isTimeOut() {
+        return timeOut;
+    }
+
     @Override
     public void run() {
         while (active) {
             receiveData();
+            secSinceRecv = (int) time.getSeconds();
         }
     }
 }

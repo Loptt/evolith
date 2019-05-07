@@ -107,5 +107,5 @@ public interface Commons {
     public static final int STATISTICS_POINT_DIMENSION = 20;
     public static final int MUTATION_CHANCE = 9;
     
-    
+    public static final int CONNECTION_TIMEOUT_SEC = 5;
 }
