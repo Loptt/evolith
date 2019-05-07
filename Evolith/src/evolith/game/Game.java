@@ -58,20 +58,20 @@ public class Game implements Runnable, Commons {
     private KeyManager keyManager;              // manages the keyboard 
     private MouseManager mouseManager;          // manages the mouse
     private InputKeyboard inputKeyboard;        // manages the input of the keyboard of the setup menu
-    private MusicManager musicManager;
-    private NetworkManager network;
-    private SoundEffectManager sfx;
+    private MusicManager musicManager;          // Manages background music
+    private NetworkManager network;             // Manages connections between computers
+    private SoundEffectManager sfx;             // Manages sounds in game
 
 
     private Background background;              // background of the game engine
     private Camera camera;                      // camera of the game engine
 
-    private OrganismManager organisms;                //organisms in the game
-    private OrganismManager otherOrganisms;
+    private OrganismManager organisms;          //organisms in the game
+    private OrganismManager otherOrganisms;     //Opponent organisms in multiplayer
     
-    private ResourceManager resources;
+    private ResourceManager resources;          //Food and water sources in game
 
-    private PredatorManager predators;
+    private PredatorManager predators;          //Main enemies
 
     public enum States {
         MainMenu, GameOver, Play, Instructions, SetupMenu, Multi, ModeMenu
@@ -79,29 +79,29 @@ public class Game implements Runnable, Commons {
     private States state;
 
     private MainMenu mainMenu;                  // main menu
-    private ButtonBarMenu buttonBar;
-    private SetupMenu setupMenu;
-    private PauseMenu pauseMenu;
-    private OverMenu overMenu;
-    private InstructionMenu instructionMenu;
-    private ModeMenu modeMenu;
+    private ButtonBarMenu buttonBar;            // Top bar which indicates what organisms should do
+    private SetupMenu setupMenu;                //Menu to choose color and 
+    private PauseMenu pauseMenu;                // Menu in pause
+    private OverMenu overMenu;                  // Game over menu
+    private InstructionMenu instructionMenu;    // Instructions menu
+    private ModeMenu modeMenu;                  // Menu to choose game mode
     
-    private MaxIntelligenceButton maxIntButton;
+    private MaxIntelligenceButton maxIntButton; //Button to show the most intelligent organism
 
     private Clock clock;                        // the time of the game
     private InputReader inputReader;            //To read text from keyboard
-    private Minimap minimap;
-    private Selection selection;
+    private Minimap minimap;                    //Game minimap
+    private Selection selection;                //Selection object to select organisms
 
-    private boolean night;
-    private int prevSecDayCycleChange;
-    private int prevWeatherChange;
+    private boolean night;                      // Decides if it is night
+    private int prevSecDayCycleChange;          //Time to change day cycle
+    private int prevWeatherChange;              //Time to change weather
     
-    private Weather weather;
+    private Weather weather;                    //Weather manager
     
-    private boolean win;
-    private boolean server;
-    private boolean paused;
+    private boolean win;                        // To decide if the player has won
+    private boolean server;                     // Decides if it is a server or not
+    private boolean paused;                     // Decides if the game is paused
 
     /**
      * to create title, width and height and set the game is still not running
@@ -228,9 +228,11 @@ public class Game implements Runnable, Commons {
      * Tick the main menu
      */
     private void mainMenuTick() {
-        musicManager.stop();
+        musicManager.stop();    //Stop game music
         mainMenu.setActive(true);
         mainMenu.tick();
+        
+        //If play is clicked, go to mode menu
         if (mainMenu.isClickPlay()) {
             mainMenu.setActive(false);
             state = States.ModeMenu;
@@ -238,6 +240,7 @@ public class Game implements Runnable, Commons {
             modeMenu = new ModeMenu(0, 0, width, height, this);
         }
         
+        //If instructions are clicked, go to instructions menu
         if (mainMenu.isClickIns()) {
             instructionMenu = new InstructionMenu(0, 0, width, height, this);
             mainMenu.setActive(false);
@@ -246,10 +249,14 @@ public class Game implements Runnable, Commons {
         }
     }
     
+    /**
+     * Tick the mode menu
+     */
     private void modeTick() {
         modeMenu.tick();
         inputKeyboard.tick();
         
+        //If single player is chosen, go to setup menu
         if (modeMenu.isSingle()) {
             resetGame();
             state = States.SetupMenu;
@@ -257,6 +264,7 @@ public class Game implements Runnable, Commons {
             server = true;
         }
         
+        //If Load is chosen, load last game and switch to play state
         if (modeMenu.isLoad()) {
             loadGame();
             state = States.Play;
@@ -264,27 +272,34 @@ public class Game implements Runnable, Commons {
             musicManager.play();
         }
         
+        //If host is chosen, go to multiplayer mode
         if (modeMenu.isHost()) {
             state = States.Multi;
             resetGameMutli();
             modeMenu.setHost(false);
         }
         
+        //If join is chosen, go to multiplayer mode
         if (modeMenu.isJoin()) {
             state = States.Multi;
             resetGameMutli();
             modeMenu.setJoin(false);
         }
         
+        //If back is chosen, go to main menu mode
         if (modeMenu.isToMainMenu()) {
             state = States.MainMenu;
             modeMenu.setToMainMenu(false);
         }
     }
     
+    /**
+     * Tick instructions menu
+     */
     private void instructionsTick() {
         instructionMenu.tick();
         
+        //If instructions screens are over, return to main menu
         if (instructionMenu.isOver()) {
             state = States.MainMenu;
         }
@@ -297,7 +312,8 @@ public class Game implements Runnable, Commons {
         setupMenu.tick();
         setupMenu.setActive(true);
         inputKeyboard.tick();
-
+        
+        //If play is clicked, go to single player play state
         if (setupMenu.isClickPlay()) {
             initSinglePlayer();
             setupMenu.setClickPlay(false);
@@ -305,33 +321,36 @@ public class Game implements Runnable, Commons {
     }
 
     /**
-     * Tick the main game
+     * Tick the main game in single player
      */
     private void playTick() {
         
+        //If paused, tick pause and return
         if (paused) {
             pausedTick();
             return;
         }
-        clock.tick();
         
+        //Tick all involved objects
+        clock.tick();
         organisms.tick();
         resources.tick();
         predators.tick();
         buttonBar.tick();
-        
         selection.tick();
         weather.tick();
         sfx.tick();
         keyManager.tick();
-        
         musicManager.tick();
+        
+        //Change weather when the duration has passed
         if (clock.getSeconds() >= prevWeatherChange + WEATHER_CYCLE_DURATION_SECONDS) {
             weather.changeWeather();
             prevWeatherChange = clock.getSeconds();
             changeEnvironmentToWeather();
         }
         
+        //Only tick camera when the organism panel is not active
         if (!organisms.getOrgPanel().isInputActive()) {
             camera.tick();
         }
@@ -339,6 +358,7 @@ public class Game implements Runnable, Commons {
         manageMouse();
         manageKeyboard();
         
+        //Change the day cycle 
         if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
             night = !night;
             background.setNight(night);
@@ -347,6 +367,7 @@ public class Game implements Runnable, Commons {
         
         maxIntButton.setOrg(organisms.getMostIntelligent());
         
+        //Update resources
         resources.deleteResources();
         resources.respawnResources(); 
         
@@ -354,13 +375,17 @@ public class Game implements Runnable, Commons {
         checkGameOver();
     }
     
-    
-    
+    /**
+     * Tick in multiplayer mode
+     */
     private void multiTick() {
+        
+        //If paused, tick pause but not return
         if (paused) {
             pausedTick();
         }
         
+        //Tick involved objects
         clock.tick();
         network.tick();
         organisms.tick();
@@ -372,6 +397,7 @@ public class Game implements Runnable, Commons {
         weather.tick();
         sfx.tick();
         
+        //Check if the other player has disconnected
         if (network.isTimeOut()) {
             System.out.println("TIMEOUT");
             state = States.GameOver;
@@ -381,6 +407,8 @@ public class Game implements Runnable, Commons {
         }
         
         organisms.checkOtherVisible();
+        
+        //If server, change weather
         if (server) {
             if (clock.getSeconds() >= prevWeatherChange + WEATHER_CYCLE_DURATION_SECONDS) {
                 weather.changeWeather();
@@ -389,11 +417,12 @@ public class Game implements Runnable, Commons {
         }
         
         
-        
+        //Send the updated data of objects through the network
         network.sendDataPlants(resources);
         network.sendDataWaters(resources);
         network.sendData(organisms);
         
+        //Check if the other player went extinct. If so, then game won
         if (network.isOtherExtinct()) {
             state = States.GameOver;
             win = true;
@@ -401,6 +430,7 @@ public class Game implements Runnable, Commons {
             network.endConnection();
         }
         
+        //Check if the other player has won. If so, then game lost
         if (network.isOtherWon()) {
             state = States.GameOver;
             win = false;
@@ -412,6 +442,7 @@ public class Game implements Runnable, Commons {
         keyManager.tick();
         musicManager.tick();
         
+        //Only tick camera when org panel is not active
         if (!organisms.getOrgPanel().isInputActive()) {
             camera.tick();
         }
@@ -419,6 +450,7 @@ public class Game implements Runnable, Commons {
         manageMouse();
         manageKeyboard();
         
+        //If server, change the day cycle
         if (server) {
             if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
                 night = !night;
@@ -430,6 +462,7 @@ public class Game implements Runnable, Commons {
         organisms.checkKill();
         otherOrganisms.checkKill();
         
+        //If server, then add and remove resources
         if (server) {
             resources.deleteResources();
             resources.respawnResources(); 
@@ -440,17 +473,22 @@ public class Game implements Runnable, Commons {
         checkGameOver();
     }
     
+    /**
+     * Tick the pause menu
+     */
     private void pausedTick() {
         pauseMenu.tick();
         keyManager.tick();
         musicManager.tick();
-
+        
+        //If p is pressed, go back to play
         if (keyManager.p) {
             paused = !paused;
             inputKeyboard.p = false;
             inputKeyboard.prevp = false;
         }
-
+        
+        //If esc is pressed, go back to play
         if (keyManager.esc) {
             paused = !paused;
         }
@@ -458,12 +496,14 @@ public class Game implements Runnable, Commons {
         if (!pauseMenu.isMainMenuDisplayed()) {
             paused = !paused;
         }
-
+        
+        //Is save button is pressed, save current game state
         if (pauseMenu.isClickSave()) {
             saveGame();
             pauseMenu.setClickSave(false);
         }
-
+        
+        //If load button is pressed, load current game state
         if (pauseMenu.isClickLoad()) {
             musicManager.stop();
             loadGame();
@@ -471,18 +511,27 @@ public class Game implements Runnable, Commons {
             musicManager.play();
             paused = !paused;
         }
-
+        
+        //If exit button is pressed, go back to main menu
         if (pauseMenu.isClickExit()) {
             pauseMenu.setClickExit(false);
             state = States.MainMenu;
             resetGame();
             musicManager.stop();
+            
+            if (network != null) {
+                network.endConnection();
+            }
         }
     }
     
+    /**
+     * Tick the game over menu
+     */
     private void overTick() {
         overMenu.tick();
         
+        //If main menu button is pressed, go back to main menu
         if (overMenu.isMainMenu()) {
             overMenu.setMainMenu(false);
             state = States.MainMenu;
@@ -490,12 +539,16 @@ public class Game implements Runnable, Commons {
             musicManager.stop();
         }
         
+        //If statistics button is pressed, go to stats screen
         if (overMenu.isStats()) {
             overMenu.setStats(false);
             System.out.println("STATS NOT READY");
         }
     }
     
+    /**
+     * Initialize single player game
+     */
     private void initSinglePlayer() {
         organisms.setSpeciesName(setupMenu.getName());
         setupMenu.setName("");
@@ -503,32 +556,12 @@ public class Game implements Runnable, Commons {
         state = States.Play;
         musicManager.play();
         resources.init();
+        night = false;
     }
     
-    private void mutliInit() {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("SERVER?:  ");
-        int i = sc.nextInt();
-        server = i == 1;
-        
-        if (server) {
-            network = new NetworkManager(true, otherOrganisms, resources, predators);
-            network.initServer();
-            organisms.setSkin(0);
-            otherOrganisms.setSkin(2);
-            resources.init();
-        } else {
-            network = new NetworkManager(false, otherOrganisms, resources, predators);
-            network.initClient("localhost", 5000);
-            organisms.setSkin(2);
-            otherOrganisms.setSkin(0);
-        }
-        
-        Thread myThread = new Thread(network);
-        
-        myThread.start();
-    }
-    
+    /**
+     * Initialize the multiplayer game for the server
+     */
     public void mutliInitServer() {
         server = true;
         otherOrganisms = new OrganismManager(this, true);
@@ -542,18 +575,23 @@ public class Game implements Runnable, Commons {
         
         myThread.start();
     }
-
+    
+    /**
+     * initialize the multiplayer game for the client
+     * @param address the server address
+     */
     public void multiInitClient(String address) {
         server = false;
         otherOrganisms = new OrganismManager(this, true);
         network = new NetworkManager(false, otherOrganisms, resources, predators);
         network.initClient(address, 5000);
-        organisms.setSkin(2);
+        organisms.setSkin(2);   //Client is always skin 2
         
-        otherOrganisms.setSkin(0);
+        otherOrganisms.setSkin(0);  //Server is always skin 0
         
         Thread myThread = new Thread(network);
         
+        //Initialize receiving information from connection in a new thread
         myThread.start();
     }
     
@@ -592,11 +630,20 @@ public class Game implements Runnable, Commons {
             manageRightClick();
         } else {
             selection.deactivate();
+            //Check hover on in game buttons
+            if (maxIntButton.hasMouse(mouseManager.getX(), mouseManager.getY())) {
+                maxIntButton.setActive(true);
+            } else {
+                maxIntButton.setActive(false);
+            }
         }
     }
     
+    /**
+     * Handle the keyboard input while in game
+     */
     private void manageKeyboard() {
-        //IF paused
+        //If paused check for pause-deactivating keys
         if (paused) {
             if (keyManager.esc) {
                 pauseMenu.setMainMenuDisplayed(!paused);
@@ -634,6 +681,7 @@ public class Game implements Runnable, Commons {
             paused = !paused;
         }
         
+        //Turn on Water searching
         if (keyManager.num1) {
             buttonBar.setWaterActive(!buttonBar.isWaterActive());
             organisms.setSelectedSearchFood(buttonBar.isFoodActive());
@@ -642,6 +690,7 @@ public class Game implements Runnable, Commons {
             organisms.emptySelectedTargets();
         }
         
+        //Turn on Food searching
         if (keyManager.num2) {
             buttonBar.setFoodActive(!buttonBar.isFoodActive());
             organisms.setSelectedSearchFood(buttonBar.isFoodActive());
@@ -650,6 +699,7 @@ public class Game implements Runnable, Commons {
             organisms.emptySelectedTargets();
         }
         
+        //Turn on fight
         if (keyManager.num3) {
             buttonBar.setFightActive(!buttonBar.isFightActive());
             organisms.setSelectedSearchFood(buttonBar.isFoodActive());
@@ -658,7 +708,10 @@ public class Game implements Runnable, Commons {
             organisms.emptySelectedTargets();
         }
     }
-
+    
+    /**
+     * Handle what a mouse left click should do
+     */
     public void manageLeftClick() {
         int mouseX = mouseManager.getX();
         int mouseY = mouseManager.getY();
@@ -670,13 +723,16 @@ public class Game implements Runnable, Commons {
          * it prevents the organisms to move when the player clicks on the
          * button bar
          */
-        //First in hierarchy is the buttonbar
+        //First if the organism panel or the mutation panel are active, ignore the click
         if (organisms.isOrgPanelActive() || organisms.isMutPanelActive()) {
             //Let the panels handle mouse activity
+        //Next check the selection
         } else if (selection.isActive()) {
             checkOrganismsInSelection();
+        //Next if an organism is clicked
         } else if (organisms.checkPanel()) {
             mouseManager.setLeft(false);
+        //Next check if the buttonbar is clicked
         } else if (buttonBar.hasMouse(mouseX, mouseY)) {
             //Process the mouse in the button bar
             buttonBar.applyMouse(mouseX, mouseY);
@@ -685,15 +741,16 @@ public class Game implements Runnable, Commons {
             organisms.setSelectedAggressiveness(buttonBar.isFightActive());
             organisms.emptySelectedTargets();
             mouseManager.setLeft(false);
-            //Second in hierarchy is the minimap
+        //Next check the minimap
         } else if (minimap.hasMouse(mouseX, mouseY)) {
             minimap.applyMouse(mouseX, mouseY, camera);
             mouseManager.setLeft(false);
-            //Third in hierarchy is the background   
+        //Next, check the max intelligence button 
         } else if (maxIntButton.hasMouse(mouseX, mouseY)) {
             camera.setX(maxIntButton.getOrg().getX() - width / 2);
             camera.setY(maxIntButton.getOrg().getY() -  height / 2);
             maxIntButton.getOrg().setSelected(true);
+        //Lastly, activate selection
         } else {
             selection.activate(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
         }
@@ -702,10 +759,11 @@ public class Game implements Runnable, Commons {
     public void manageRightClick() {
         int mouseX = mouseManager.getX();
         int mouseY = mouseManager.getY();
-
+        
+        //first check the buttonbar
         if (buttonBar.hasMouse(mouseX, mouseY)) {
             mouseManager.setRight(false);
-            //Second in hierarchy is the m6000inimap
+        //Second in hierarchy is the minimap
         } else if (minimap.hasMouse(mouseX, mouseY)) {
             mouseManager.setRight(false);
             //Third in hierarchy is the background   
