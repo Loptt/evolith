@@ -43,7 +43,7 @@ public class Resource extends Item implements Commons{
     public enum ResourceType {Plant, Water};
     private ResourceType type;
     
-    private int prevSecUpdate;
+    private double prevSecUpdate;
     private boolean update;
     private boolean add;
     
@@ -195,7 +195,7 @@ public class Resource extends Item implements Commons{
                 update = false;
             }
             quantity -= parasiteAmount;
-            prevSecUpdate = (int) time.getSeconds();
+            prevSecUpdate = time.getSeconds();
             Iterator it = map.entrySet().iterator();
             
             while(it.hasNext()){

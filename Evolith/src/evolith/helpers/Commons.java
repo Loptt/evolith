@@ -88,7 +88,7 @@ public interface Commons {
     
     public static final Color FONT_COLOR = new Color(9, 255, 200);
     
-    public static final int CONSUMING_RATE = 1;
+    public static final double CONSUMING_RATE = 0.3;
     
     public static final int DAY_CYCLE_DURATION_SECONDS = 60;
     public static final int WEATHER_CYCLE_DURATION_SECONDS = 20;
