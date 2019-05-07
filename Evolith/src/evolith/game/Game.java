@@ -361,9 +361,10 @@ public class Game implements Runnable, Commons {
         sfx.tick();
         
         if (network.isTimeOut()) {
+            System.out.println("TIMEOUT");
             state = States.GameOver;
             win = true;
-            overMenu = new OverMenu(0, 0, width, height, this, win);
+            overMenu = new OverMenu(0, 0, width, height, this, win, "Other player has disconnected");
             network.endConnection();
         }
         
@@ -386,7 +387,7 @@ public class Game implements Runnable, Commons {
         if (network.isOtherExtinct()) {
             state = States.GameOver;
             win = true;
-            overMenu = new OverMenu(0, 0, width, height, this, win);
+            overMenu = new OverMenu(0, 0, width, height, this, win, "You have extinguished the opponent");
             network.endConnection();
         }
         
@@ -394,6 +395,7 @@ public class Game implements Runnable, Commons {
             state = States.GameOver;
             win = false;
             overMenu = new OverMenu(0, 0, width, height, this, win);
+            overMenu = new OverMenu(0, 0, width, height, this, win, "The opponent has reached max intelligence");
             network.endConnection();
         }
 
