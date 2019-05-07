@@ -376,6 +376,23 @@ public class OrganismManager implements Commons {
             org.setNeedMutation(false);
         }
     }
+    
+    public Organism getMostIntelligent() {
+        Organism mostInt;
+        if (organisms.isEmpty()) {
+            return null;
+        }
+        
+        mostInt = organisms.get(0);
+        
+        for (int i = 1; i < organisms.size(); i++) {
+            if (organisms.get(i).getIntelligence() > mostInt.getIntelligence() && !organisms.get(i).isEgg()) {
+                mostInt = organisms.get(i);
+            }
+        }
+        
+        return mostInt;
+    }
 
     /**
      * sets a resource for all organisms (deprecated)
@@ -384,6 +401,7 @@ public class OrganismManager implements Commons {
      */
     public void setResource(Resource resource) {
         for (int i = 0; i < organisms.size(); i++) {
+            organisms.get(i).safeLeaveResource();
             organisms.get(i).setTarget(resource);
         }
     }
@@ -433,6 +451,12 @@ public class OrganismManager implements Commons {
             if (organisms.get(i).isSelected()) {
                 organisms.get(i).setGodCommand(value);
             }
+        }
+    }
+    
+    public void clearSelection() {
+        for (int i = 0; i < organisms.size(); i++) {
+            organisms.get(i).setSelected(false);
         }
     }
 

@@ -12,7 +12,9 @@ import evolith.engine.*;
 import evolith.entities.Resource;
 import evolith.helpers.InputReader;
 import evolith.helpers.Selection;
+import evolith.menus.Button;
 import evolith.menus.InstructionMenu;
+import evolith.menus.MaxIntelligenceButton;
 import evolith.menus.ModeMenu;
 import evolith.menus.OverMenu;
 import evolith.menus.PauseMenu;
@@ -71,7 +73,7 @@ public class Game implements Runnable, Commons {
     private PredatorManager predators;
 
     public enum States {
-        MainMenu, Paused, GameOver, Play, Instructions, SetupMenu, Multi, ModeMenu
+        MainMenu, GameOver, Play, Instructions, SetupMenu, Multi, ModeMenu
     } // status of the flow of the game once running
     private States state;
 
@@ -82,6 +84,8 @@ public class Game implements Runnable, Commons {
     private OverMenu overMenu;
     private InstructionMenu instructionMenu;
     private ModeMenu modeMenu;
+    
+    private MaxIntelligenceButton maxIntButton;
 
     private Clock clock;                        // the time of the game
     private InputReader inputReader;            //To read text from keyboard
@@ -184,6 +188,8 @@ public class Game implements Runnable, Commons {
 
         weather = new Weather(width, height, background);
         paused = false;
+        
+        maxIntButton = new MaxIntelligenceButton(870, 400, 110, 30, Assets.backOn, Assets.backOff, organisms.getOrganism(0));
 
     }
 
@@ -210,9 +216,6 @@ public class Game implements Runnable, Commons {
                 break;
             case Multi:
                 multiTick();
-                break;
-            case Paused:
-                pausedTick();
                 break;
             case GameOver:
                 overTick();
@@ -341,6 +344,11 @@ public class Game implements Runnable, Commons {
             prevSecDayCycleChange = clock.getSeconds();
         }
         
+        maxIntButton.setOrg(organisms.getMostIntelligent());
+        
+        resources.deleteResources();
+        resources.respawnResources(); 
+        
         organisms.checkKill();
         checkGameOver();
     }
@@ -353,6 +361,7 @@ public class Game implements Runnable, Commons {
         }
         
         clock.tick();
+        network.tick();
         organisms.tick();
         otherOrganisms.tick();
         resources.tick();
@@ -362,6 +371,14 @@ public class Game implements Runnable, Commons {
         weather.tick();
         sfx.tick();
         
+        if (network.isTimeOut()) {
+            System.out.println("TIMEOUT");
+            state = States.GameOver;
+            win = true;
+            overMenu = new OverMenu(0, 0, width, height, this, win, "Other player has disconnected");
+            network.endConnection();
+        }
+        
         organisms.checkOtherVisible();
         if (server) {
             if (clock.getSeconds() >= prevWeatherChange + WEATHER_CYCLE_DURATION_SECONDS) {
@@ -370,9 +387,7 @@ public class Game implements Runnable, Commons {
             }
         }
         
-        if (server) {
-            resources.respawnResources(); 
-        }
+        
         
         network.sendDataPlants(resources);
         network.sendDataWaters(resources);
@@ -381,7 +396,7 @@ public class Game implements Runnable, Commons {
         if (network.isOtherExtinct()) {
             state = States.GameOver;
             win = true;
-            overMenu = new OverMenu(0, 0, width, height, this, win);
+            overMenu = new OverMenu(0, 0, width, height, this, win, "You have extinguished the opponent");
             network.endConnection();
         }
         
@@ -389,6 +404,7 @@ public class Game implements Runnable, Commons {
             state = States.GameOver;
             win = false;
             overMenu = new OverMenu(0, 0, width, height, this, win);
+            overMenu = new OverMenu(0, 0, width, height, this, win, "The opponent has reached max intelligence");
             network.endConnection();
         }
 
@@ -415,7 +431,10 @@ public class Game implements Runnable, Commons {
         
         if (server) {
             resources.deleteResources();
+            resources.respawnResources(); 
         }
+        
+        maxIntButton.setOrg(organisms.getMostIntelligent());
         
         checkGameOver();
     }
@@ -666,6 +685,10 @@ public class Game implements Runnable, Commons {
             minimap.applyMouse(mouseX, mouseY, camera);
             mouseManager.setLeft(false);
             //Third in hierarchy is the background   
+        } else if (maxIntButton.hasMouse(mouseX, mouseY)) {
+            camera.setX(maxIntButton.getOrg().getX() - width / 2);
+            camera.setY(maxIntButton.getOrg().getY() -  height / 2);
+            maxIntButton.getOrg().setSelected(true);
         } else {
             selection.activate(camera.getAbsX(mouseX), camera.getAbsY(mouseY));
         }
@@ -764,9 +787,6 @@ public class Game implements Runnable, Commons {
                 case SetupMenu:
                     setupMenu.render(g);
                     break;
-                case Paused:
-                    pausedRender(g);
-                    break;
                 case Play:
                     playRender(g);
                     break;
@@ -783,35 +803,6 @@ public class Game implements Runnable, Commons {
             bs.show();
             g.dispose();
         }
-    }
-    
-    public void pausedRender(Graphics g) {
-        g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
-
-        resources.render(g);
-        organisms.render(g);
-        predators.render(g);
-
-        if (night) {
-            g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
-        }
-        
-        weather.render(g);
-
-        minimap.render(g);
-        buttonBar.render(g);
-
-        if (selection.isActive()) {
-            selection.render(g);
-        }
-
-        if (organisms.isOrgPanelActive()) {
-            organisms.getOrgPanel().render(g);
-        } else if (organisms.isMutPanelActive()) {
-            organisms.getMutPanel().render(g);
-        }
-
-        pauseMenu.render(g);
     }
     
     public void playRender(Graphics g) {
@@ -844,6 +835,8 @@ public class Game implements Runnable, Commons {
         if (paused) {
             pauseMenu.render(g);
         }
+        
+        maxIntButton.render(g);
     }
     
     public void multiRender(Graphics g) {

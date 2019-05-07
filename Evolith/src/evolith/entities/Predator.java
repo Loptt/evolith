@@ -200,26 +200,7 @@ public class Predator extends Item implements Commons {
     private void applyVariances() {
         int chance = (int) (Math.random() * 10);
         
-        if (chance < 4) {
-            //Small
-            width = PREDATOR_SIZE - 20;
-            height = PREDATOR_SIZE - 20;
-            
-            damage = 0.07;
-            
-            chasingSpeed = 3;
-            
-            maxHealth = 100;
-            life = 100;
-        } else if (chance  < 8) {
-            //Medium
-            width = PREDATOR_SIZE;
-            height = PREDATOR_SIZE;
-            
-            damage = 0.2;
-            
-            chasingSpeed = 2;
-        } else {
+        if (chance < 3 && game.getOrganisms().getAmount() > 15) {
             //Big *scary*
             width = PREDATOR_SIZE + 20;
             height = PREDATOR_SIZE + 20;
@@ -230,6 +211,26 @@ public class Predator extends Item implements Commons {
             
             maxHealth = 150;
             life = maxHealth;
+            
+        } else if (chance  < 7) {
+            //Medium
+            width = PREDATOR_SIZE;
+            height = PREDATOR_SIZE;
+            
+            damage = 0.2;
+            
+            chasingSpeed = 2;
+        } else {
+            //Small
+            width = PREDATOR_SIZE - 20;
+            height = PREDATOR_SIZE - 20;
+            
+            damage = 0.07;
+            
+            chasingSpeed = 3;
+            
+            maxHealth = 100;
+            life = 100;
         }
     }
     

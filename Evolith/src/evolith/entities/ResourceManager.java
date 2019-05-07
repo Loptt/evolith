@@ -65,7 +65,7 @@ public class ResourceManager implements Commons {
             
             //System.out.println("plants size: " + plants.size());
             
-            for (int j = 0; j < plants.size() - 1; j++) {
+            for (int j = 0; j < plants.size()-1; j++) {
                 if (plants.get(plants.size()-1).intersects(plants.get(j))) {
                     plants.remove(i);
                     i--;
@@ -155,11 +155,11 @@ public class ResourceManager implements Commons {
     }
     
     public void emptyParasites() {
-        for (int i = 0; i < plants.size()-1; i++) {
+        for (int i = 0; i < plants.size(); i++) {
             plants.get(i).removeParasites();
         }
         
-        for (int i = 0; i < waters.size()-1; i++) {
+        for (int i = 0; i < waters.size(); i++) {
             waters.get(i).removeParasites();
         } 
     }
