@@ -94,7 +94,11 @@ public class Assets {
     public static BufferedImage statsMenuButtonOff;
     
     public static ArrayList<BufferedImage> instructions;
-
+    
+    public static BufferedImage statsiconOff;
+    public static BufferedImage statsiconOn;
+    public static BufferedImage rankPanel;
+    public static BufferedImage statsPanel;
     /**
      * Initializes the assets and links to the image folder
      */
@@ -233,6 +237,12 @@ public class Assets {
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions4.png"));
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions5.png"));
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions6.png"));
+        
+   
+        statsiconOff = ImageLoader.loadImage("/images/ranking/statsoff.png");
+        statsiconOn = ImageLoader.loadImage("/images/ranking/statson.png");
+        statsPanel = ImageLoader.loadImage("/images/ranking/statspanel.png");
+        rankPanel = ImageLoader.loadImage("/images/ranking/rankingpanel.png");
     }
     
     /**

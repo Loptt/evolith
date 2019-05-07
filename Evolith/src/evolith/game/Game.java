@@ -13,6 +13,7 @@ import evolith.engine.*;
 import evolith.entities.Resource;
 import evolith.helpers.InputReader;
 import evolith.helpers.Selection;
+import evolith.menus.GameStatisticsMenu;
 import evolith.menus.InstructionMenu;
 import evolith.menus.OverMenu;
 import evolith.menus.PauseMenu;
@@ -71,6 +72,7 @@ public class Game implements Runnable, Commons {
 
     private MainMenu mainMenu;                  // main menu
     private ButtonBarMenu buttonBar;
+    private GameStatisticsMenu gameStats;
     private SetupMenu setupMenu;
     private PauseMenu pauseMenu;
     private OverMenu overMenu;
@@ -158,6 +160,7 @@ public class Game implements Runnable, Commons {
 
         background = new Background(5000, 5000, width, height);
         buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
+        gameStats = new GameStatisticsMenu(0,0,0,0,this);
         setupMenu = new SetupMenu(0, 0, width, height, this,mysql);
         pauseMenu = new PauseMenu(width / 2 - 250 / 2, height / 2 - 300 / 2, 250, 300, this);
         statsMenu = new StatisticsMenu(0,0,width,height,this,false,mysql);
@@ -234,6 +237,7 @@ public class Game implements Runnable, Commons {
             state = States.Instructions;
             mainMenu.setClickIns(false);
         }
+        
     }
     
     private void instructionsTick() {
@@ -272,6 +276,7 @@ public class Game implements Runnable, Commons {
         resources.tick();
         predators.tick();
         buttonBar.tick();
+        gameStats.tick();
         inputKeyboard.tick();
         selection.tick();
         
@@ -429,12 +434,18 @@ public class Game implements Runnable, Commons {
         } else if (buttonBar.hasMouse(mouseX, mouseY)) {
             //Process the mouse in the button bar
             buttonBar.applyMouse(mouseX, mouseY);
+            
             organisms.setSelectedSearchFood(buttonBar.isFoodActive());
             organisms.setSelectedSearchWater(buttonBar.isWaterActive());
             organisms.setSelectedAggressiveness(buttonBar.isFightActive());
             organisms.emptySelectedTargets();
             mouseManager.setLeft(false);
             //Second in hierarchy is the minimap
+        } else if(gameStats.hasMouse(mouseX, mouseY)){
+            
+            gameStats.applyMouse(mouseX, mouseY);
+            mouseManager.setLeft(false);
+            
         } else if (minimap.hasMouse(mouseX, mouseY)) {
             minimap.applyMouse(mouseX, mouseY, camera);
             mouseManager.setLeft(false);
@@ -451,6 +462,8 @@ public class Game implements Runnable, Commons {
         if (buttonBar.hasMouse(mouseX, mouseY)) {
             mouseManager.setRight(false);
             //Second in hierarchy is the minimap
+        } else if(gameStats.hasMouse(mouseX, mouseY)){
+            mouseManager.setRight(false);
         } else if (minimap.hasMouse(mouseX, mouseY)) {
             mouseManager.setRight(false);
             //Third in hierarchy is the background   
@@ -519,6 +532,7 @@ public class Game implements Runnable, Commons {
             switch (state) {
                 case MainMenu:
                     mainMenu.render(g);
+                    gameStats.render(g);
                     break;
                 case Instructions:
                     instructionMenu.render(g);
@@ -538,6 +552,8 @@ public class Game implements Runnable, Commons {
                     }
                     minimap.render(g);
                     buttonBar.render(g);
+                    gameStats.render(g);
+                    
 
                     if (selection.isActive()) {
                         selection.render(g);
@@ -563,7 +579,7 @@ public class Game implements Runnable, Commons {
                     }
                     minimap.render(g);
                     buttonBar.render(g);
-
+                    gameStats.render(g);
                     if (selection.isActive()) {
                         selection.render(g);
                     }
@@ -843,6 +859,10 @@ public class Game implements Runnable, Commons {
 
     public void setMysql(JDBC mysql) {
         this.mysql = mysql;
+    }
+
+    public Clock getClock() {
+        return clock;
     }
     
 }

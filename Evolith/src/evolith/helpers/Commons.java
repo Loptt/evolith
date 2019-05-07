@@ -51,6 +51,12 @@ public interface Commons {
     public static final int PANEL_HEIGHT = 369;
     public static final int BUTTON_CLOSE_DIMENSION = 40;
     
+    public static final int PANEL_STATS_X = 50;
+    public static final int PANEL_STATS_Y = 75;
+    public static final int PANEL_STATS_WIDTH = 732;
+    public static final int PANEL_STATS_HEIGHT = 517;
+    public static final int BUTTON_STATS_CLOSE_DIMENSION = 40;
+    
     public static final int MUTATION_PANEL_X = 50;
     public static final int MUTATION_PANEL_Y = 75;
     public static final int MUTATION_PANEL_WIDTH = 732;
@@ -96,7 +102,7 @@ public interface Commons {
 
     public static final int BORN_TIME = 20;
 
-    public static final int STATISTICS_DIMENSION = 200;
-    public static final int STATISTICS_CIRCLE_DIMENSION = 283;
+    public static final int STATISTICS_DIMENSION = 175;
+    public static final int STATISTICS_CIRCLE_DIMENSION = 250;
     public static final int STATISTICS_POINT_DIMENSION = 20;
 }

@@ -31,7 +31,7 @@ public class StatisticsMenu extends Menu {
         this.win = win;
         f = new FontLoader();
         rankPanel = new RankingPanel(x+200,y+200,0,0,game,mysql);
-        statsPanel = new StatisticsPanel(x+400,y+400,100,100,game,true,false);
+        statsPanel = new StatisticsPanel(x,y,100,100,game,true,false,400,400);
         
         buttons.add(new Button(width / 2 - 340 / 2, 390, 340, 71, Assets.overMenuButtonOn, Assets.overMenuButtonOff));
     }
@@ -75,6 +75,8 @@ public class StatisticsMenu extends Menu {
 
     @Override
     public void render(Graphics g) {
+        
+        g.drawImage(Assets.overWin, x, y, width, height, null);
         
         if (win) {
             g.drawString("Trascended",x,y);

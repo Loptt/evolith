@@ -20,7 +20,7 @@ public class MainMenu extends Menu implements Commons {
     private boolean clickIns;
 
     //private RankingPanel rankpanel;
-    private StatisticsPanel stats;
+    
     /**
      * Constructor of the main menu
      *
@@ -40,7 +40,7 @@ public class MainMenu extends Menu implements Commons {
         buttons.add(new Button(BUTTON_PLAY_X, BUTTON_PLAY_Y, BUTTON_PLAY_WIDTH, BUTTON_PLAY_HEIGHT)); // Play button
         buttons.add(new Button(BUTTON_INSTRUCTIONS_X, BUTTON_INSTRUCTIONS_Y, BUTTON_INSTRUCTIONS_WIDTH, BUTTON_INSTRUCTIONS_HEIGHT)); // Instructions button
         //rankpanel = new RankingPanel(0,0,0,0,null);
-        stats = new StatisticsPanel(280,375,0,0,null,active,true) ;
+        
     }
     /**
      * To
@@ -123,11 +123,7 @@ public class MainMenu extends Menu implements Commons {
                 buttons.get(1).setPressed(false);
             }
         }
-//        stats.setSpeed(stats.getSpeed()+1);
-//        stats.setStealth(stats.getStealth()-1);
-//        stats.setHealth(stats.getHealth()+1);
-//        stats.setStrength(stats.getStrength()+1);
-        stats.tick();
+
     }
 
     /**
@@ -147,9 +143,6 @@ public class MainMenu extends Menu implements Commons {
             g.drawImage(Assets.startInstructions, 0, 0, 1000, 700, null);
         }
         //rankpanel.render(g);
-
-        g.setColor(BLUE_GREEN_COLOR);
-        stats.render(g);
 }
     
 }

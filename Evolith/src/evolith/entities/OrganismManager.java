@@ -51,6 +51,7 @@ public class OrganismManager implements Commons {
     private int avg[];
     private JDBC mysql;
     private int maxIntelligence;
+    private int maxGeneration;
     
 
     /**
@@ -64,6 +65,7 @@ public class OrganismManager implements Commons {
         organisms = new ArrayList<>();
         int amount = 1;
         idCounter = 1;
+        maxGeneration = 1;
 
         for (int i = 0; i < amount; i++) {
             organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++));
@@ -79,9 +81,9 @@ public class OrganismManager implements Commons {
         speciesName = "";
         avg = new int[4];
         this.mysql =  game.getMysql();
-        statsPanel = new StatisticsPanel(150,150,0,0,game,true,true);
         //this.speciesID = mysql.getSpeciesID( game.getGameID());
         this.maxIntelligence = 0;
+        statsPanel = new StatisticsPanel(PANEL_STATS_X,PANEL_STATS_Y,0,0,game,false,true,207,250);
         }
     
     /**
@@ -92,10 +94,8 @@ public class OrganismManager implements Commons {
             organisms.get(i).tick();
             checkNeedMutation(organisms.get(i));
             checkKill(organisms.get(i));
-            
+            checkGeneration(organisms.get(i));
         }
-        calculateAverage();
-        statsPanel.tick();
         checkNight();
         updateMenuPanels();
     }
@@ -216,6 +216,7 @@ public class OrganismManager implements Commons {
      * update all menu panels of the organisms
      */
     private void updateMenuPanels() {
+        
         if (orgPanel.isActive()) {
             orgPanel.tick();
             setHover(false);
@@ -256,7 +257,13 @@ public class OrganismManager implements Commons {
         } else if (mutPanel.isActive()) {
             mutPanel.tick();
             setHover(false);
-        } else {
+        } else if(statsPanel.isActive())
+        {
+            calculateAverage();
+            statsPanel.tick();
+            setHover(false);
+        }
+        else {
             checkHover();
         }
     }
@@ -495,6 +502,7 @@ private void updateOrganismsDB()
         
         return false;
     }
+
     
     public void save(PrintWriter pw) {
         /*
@@ -574,7 +582,7 @@ private void updateOrganismsDB()
         }
         //render the hover panel of an organism
 
-        if (!orgPanel.isActive() || !mutPanel.isActive()) {
+        if (!orgPanel.isActive() || !mutPanel.isActive() || !statsPanel.isActive()) {
             if (h != null && isHover()) {
                 h.render(g);
             }
@@ -805,5 +813,23 @@ private void updateOrganismsDB()
     public void setMaxIntelligence(int maxIntelligence) {
         this.maxIntelligence = maxIntelligence;
     }
+
+    private void checkGeneration(Organism o) {
+        if(o.getGeneration()>= maxGeneration)
+            maxGeneration = o.getGeneration();
+    }
+
+    public int getMaxGeneration() {
+        return maxGeneration;
+    }
+
+    public StatisticsPanel getStatsPanel() {
+        return statsPanel;
+    }
+
+    public void setStatsPanel(StatisticsPanel statsPanel) {
+        this.statsPanel = statsPanel;
+    }
+    
     
 }

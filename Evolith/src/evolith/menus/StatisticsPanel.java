@@ -5,6 +5,7 @@
  */
 package evolith.menus;
 
+import evolith.engine.Assets;
 import evolith.game.Game;
 import evolith.helpers.Commons;
 import static evolith.helpers.Commons.BLUE_GREEN_COLOR;
@@ -33,6 +34,11 @@ public class StatisticsPanel extends Menu implements Commons {
 
     private int pointsX[];
     private int pointsY[];
+    private int pointsYAvg[];
+    private int pointsXAvg[];
+    
+    private int centerX;
+    private int centerY;
 
     private Game game;
     private int speed;
@@ -47,106 +53,122 @@ public class StatisticsPanel extends Menu implements Commons {
     
     private Point pMiddle;
 
-    public StatisticsPanel(int x, int y, int width, int height, Game game, boolean active, boolean ingame) {
+    public StatisticsPanel(int x, int y, int width, int height, Game game, boolean active, boolean ingame,int centerX, int centerY) {
         super(x, y, width, height, game);
         
         f = new FontLoader();
 
         this.active = active;
-        this.speed = 80;
-        this.stealth = 70;
-        this.health = 60;
-        this.strength = 50;
-        this.pMiddle = new Point(x + STATISTICS_DIMENSION / 2 - STATISTICS_POINT_DIMENSION / 2, y + STATISTICS_DIMENSION / 2 - STATISTICS_POINT_DIMENSION / 2);
-        this.points = new ArrayList<Point>(4);
-
-        this.points.add(new Point(x - STATISTICS_POINT_DIMENSION / 2, y - STATISTICS_POINT_DIMENSION / 2));
-        this.points.add(new Point(x + STATISTICS_DIMENSION - STATISTICS_POINT_DIMENSION / 2, y - STATISTICS_POINT_DIMENSION / 2));
-        this.points.add(new Point(x + STATISTICS_DIMENSION - STATISTICS_POINT_DIMENSION / 2, y + STATISTICS_DIMENSION - STATISTICS_POINT_DIMENSION / 2));
-        this.points.add(new Point(x - STATISTICS_POINT_DIMENSION / 2, y + STATISTICS_DIMENSION - STATISTICS_POINT_DIMENSION / 2));
-
+        this.speed = 100;
+        this.stealth = 100;
+        this.health = 100;
+        this.strength = 100;
+        this.avgSpeed = 100;
+        this.avgStealth = 100;
+        this.avgHealth = 100;
+        this.avgStrength = 100;
+        
         this.pointsX = new int[4];
         this.pointsY = new int[4];
-
-        this.pointsInner = new ArrayList<Point>(4);
-        for (int i = 0; i < 4; i++) {
-            this.pointsInner.add(new Point(pointsX[i] - STATISTICS_POINT_DIMENSION / 2, pointsY[i] - STATISTICS_POINT_DIMENSION / 2));
-        }
+        this.pointsXAvg = new int[4];
+        this.pointsYAvg = new int[4];
         this.ingame = ingame;
-        //this.pointsInner.add(new Point(pointsX[0]-STATISTICS_POINT_DIMENSION/2, pointsY[0]-STATISTICS_POINT_DIMENSION/2));
-        //this.pointsInner.add(new Point(pointsX[1]-STATISTICS_POINT_DIMENSION/2, pointsY[1]-STATISTICS_POINT_DIMENSION/2));
-        //this.pointsInner.add(new Point(pointsX[2]-STATISTICS_POINT_DIMENSION/2, pointsY[2]-STATISTICS_POINT_DIMENSION/2));
-        //this.pointsInner.add(new Point(pointsX[3]-STATISTICS_POINT_DIMENSION/2, pointsY[3]-STATISTICS_POINT_DIMENSION/2));
-        
+        this.game = game;
+        this.centerX =centerX;
+        this.centerY =centerY;
+        //Close Button
+        buttons.add(new Button(this.x + this.width - 20, this.y - 20, BUTTON_CLOSE_DIMENSION, BUTTON_CLOSE_DIMENSION,Assets.organismPanel_close));
+
     }
 
     @Override
     public void tick() {
+        //Checks the mouse positon relative to the button
+        for (int i = 0; i < buttons.size(); i++) {
+            if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
+                //if the mouse is over the button 
+                buttons.get(i).setActive(true);
+                //if left click change mouse status
+                if (game.getMouseManager().isLeft()) {
+                    //Sets the button to the pressed status
+                    buttons.get(i).setPressed(true);
+                    for (int j = 0; j < buttons.size(); j++) {
+                        if (i != j) {
+                            buttons.get(j).setPressed(false);
+                        }
+                    }
+                    //Turns off mouse 
+                    game.getMouseManager().setLeft(false);
+                    break;
+                }
+            } else {
+                //Sets the button to false if the button is hovered
+                buttons.get(i).setActive(false);
+            }
+        }
         
-        this.pointsX[0] = (int) ((-STATISTICS_DIMENSION * speed / MAX_SPEED) / 2 + x );
-        this.pointsX[1] = (int) ((STATISTICS_DIMENSION * stealth / MAX_STEALTH) / 2 + x );
-        this.pointsX[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + x );
-        this.pointsX[3] = (int) ((-STATISTICS_DIMENSION * health / MAX_HEALTH) / 2 + x );
+        //Closes the 
+        if (buttons.get(0).isPressed()) {
+            active = false;
+        }
         
-        this.pointsY[0] = (int) ((-STATISTICS_DIMENSION * speed / MAX_SPEED) / 2 + y);
-        this.pointsY[1] = (int) ((-STATISTICS_DIMENSION * stealth / MAX_STEALTH) / 2 + y);
-        this.pointsY[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + y);
-        this.pointsY[3] = (int) ((STATISTICS_DIMENSION * health / MAX_HEALTH) / 2 + y);
+        this.pointsX[0] = (int) ((-STATISTICS_DIMENSION * speed / MAX_SPEED) / 2 + x+centerX );
+        this.pointsX[1] = (int) ((STATISTICS_DIMENSION * stealth / MAX_STEALTH) / 2 + x+centerX );
+        this.pointsX[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + x+centerX );
+        this.pointsX[3] = (int) ((-STATISTICS_DIMENSION * health / MAX_HEALTH) / 2 + x+centerX );
+        
+        this.pointsY[0] = (int) ((-STATISTICS_DIMENSION * speed / MAX_SPEED) / 2 + y + centerY);
+        this.pointsY[1] = (int) ((-STATISTICS_DIMENSION * stealth / MAX_STEALTH) / 2 + y+centerY);
+        this.pointsY[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + y+centerY);
+        this.pointsY[3] = (int) ((STATISTICS_DIMENSION * health / MAX_HEALTH) / 2 + y +centerY);
         
         if(!ingame)
         {
-        }
+        this.pointsXAvg[0] = (int) ((-STATISTICS_DIMENSION * speed / MAX_SPEED) / 2 + x+centerX );
+        this.pointsXAvg[1] = (int) ((STATISTICS_DIMENSION * stealth / MAX_STEALTH) / 2 + x+centerX );
+        this.pointsXAvg[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + x+centerX );
+        this.pointsXAvg[3] = (int) ((-STATISTICS_DIMENSION * health / MAX_HEALTH) / 2 + x+centerX );
+        
+        this.pointsYAvg[0] = (int) ((-STATISTICS_DIMENSION * speed / MAX_SPEED) / 2 + y + centerY);
+        this.pointsYAvg[1] = (int) ((-STATISTICS_DIMENSION * stealth / MAX_STEALTH) / 2 + y+centerY);
+        this.pointsYAvg[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + y+centerY);
+        this.pointsYAvg[3] = (int) ((STATISTICS_DIMENSION * health / MAX_HEALTH) / 2 + y +centerY);
+    
+    }
         
     }
-
+ 
     @Override
     public void render(Graphics g) {
         
         
         if(!active)
             return;
-        
-         Graphics2D g2 = (Graphics2D) g;
-//       g.setColor(new Color(255,255,255,127));
-//        for(int i = 0; i < 50; i++)
-//         {
-//             for(int j = 0; j < 50; j++)
-//        {
-//             g.fillOval(x+10*i, y+10*j, 2, 2);
-//            
-//        }
-//         }
-        g2.setColor(new Color(28,117,160));
-        g2.setStroke(new BasicStroke(2));
-        g2.drawOval(x-STATISTICS_CIRCLE_DIMENSION/2, y-STATISTICS_CIRCLE_DIMENSION/2, STATISTICS_CIRCLE_DIMENSION, STATISTICS_CIRCLE_DIMENSION);
-        g.setColor(new Color(28,117,160,100));
-        g.fillOval(x-STATISTICS_CIRCLE_DIMENSION/2, y-STATISTICS_CIRCLE_DIMENSION/2, STATISTICS_CIRCLE_DIMENSION, STATISTICS_CIRCLE_DIMENSION);
-        
+        Graphics2D g2 = (Graphics2D) g;
+        g.drawImage(Assets.statsPanel, PANEL_STATS_X, PANEL_STATS_Y, PANEL_STATS_WIDTH, PANEL_STATS_HEIGHT, null);
+
         g.setColor(BLUE_GREEN_COLOR);
-        g.setFont(f.getFontEvolve().deriveFont(20f));
-
-        //Right Top
-        //g.fillOval( (int) points.get(0).getX(),(int)points.get(0).getY(), STATISTICS_POINT_DIMENSION,STATISTICS_POINT_DIMENSION);  
-        //Left-Top
-        //g.fillOval( (int) points.get(1).getX(),(int)points.get(1).getY(), STATISTICS_POINT_DIMENSION,STATISTICS_POINT_DIMENSION);  
-        //Right-Bottom
-        //g.fillOval( (int) points.get(2).getX(),(int)points.get(2).getY(), STATISTICS_POINT_DIMENSION,STATISTICS_POINT_DIMENSION);  
-        //Left-Bottom
-        //g.fillOval( (int) points.get(3).getX(),(int)points.get(3).getY(), STATISTICS_POINT_DIMENSION,STATISTICS_POINT_DIMENSION);  
+        g.setFont(f.getFontEvolve().deriveFont(17f));
         
-//        for (int i = 0; i < 4; i++) {
-//            g.fillOval((int) points.get(i).getX() - STATISTICS_POINT_DIMENSION / 2, (int) points.get(i).getY() - STATISTICS_POINT_DIMENSION / 2, STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
-//        }
-        
-//        g.drawLine((int) points.get(0).getX(), (int) points.get(0).getY(), (int) points.get(1).getX(), (int) points.get(1).getY());
-//        g.drawLine((int) points.get(1).getX(), (int) points.get(1).getY(), (int) points.get(2).getX(), (int) points.get(2).getY());
-//        g.drawLine((int) points.get(2).getX(), (int) points.get(2).getY(), (int) points.get(3).getX(), (int) points.get(3).getY());
-//        g.drawLine((int) points.get(3).getX(), (int) points.get(3).getY(), (int) points.get(0).getX(), (int) points.get(0).getY());
-
-       // g.setColor(new Color(1,196,181, 150));
        if(ingame)
        {
-           
+        g.setColor(Color.WHITE);
+        g.setFont(f.getFontEvolve().deriveFont(17f));
+        g.drawString("Speed", x +60, y + 157 );
+        g.drawString("Strength", x +290 ,y +157);
+        g.drawString("Stealth",  x +65, y + 340  );
+        g.drawString("Max Health",  x +310, y + 340 );
+        g.setFont(f.getFontEvolve().deriveFont(30f));
+        g.drawString(game.getOrganisms().getSpeciesName(), x +465, y+100);
+        
+        g.setFont(f.getFontEvolve().deriveFont(25f));
+        g.drawString("Game Duration", x +430, y+175);
+        g.drawString(Integer.toString(game.getClock().getSeconds()) , x +430, y+220);
+        g.drawString("Maximum Generation", x +430, y+277);
+        g.drawString(Integer.toString(game.getOrganisms().getMaxGeneration()), x +430, y+322);
+        g.drawString("Maximum Intelligence", x +430, y+379);
+        g.drawString(Integer.toString(game.getOrganisms().getMaxIntelligence()), x +430, y+424);
+       
        } else{
            
        }
@@ -162,33 +184,9 @@ public class StatisticsPanel extends Menu implements Commons {
         g2.drawLine(pointsX[2],pointsY[2],pointsX[3],pointsY[3]);
         g2.drawLine(pointsX[3],pointsY[3],pointsX[0],pointsY[0]);
         
-        
-        g.drawString("Speed", x - STATISTICS_CIRCLE_DIMENSION / 2 , y - STATISTICS_CIRCLE_DIMENSION / 2 + 20);
-        g.drawString("Strength", x + STATISTICS_CIRCLE_DIMENSION/2 - 60 , y - STATISTICS_CIRCLE_DIMENSION/2 + 20);
-        g.drawString("Stealth", x - STATISTICS_CIRCLE_DIMENSION / 2 , y + STATISTICS_CIRCLE_DIMENSION/2 );
-        g.drawString("Max Health", x + STATISTICS_CIRCLE_DIMENSION/2 - 60 , y + STATISTICS_CIRCLE_DIMENSION/2);
-        
-//        //Right Top Speed
-//        g.setColor(Color.MAGENTA);
-//        g.fillOval((int) pointsInner.get(0).getX(), (int) pointsInner.get(0).getY(), STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
-//        g.drawLine(pMiddle.x, pMiddle.y, pointsX[0], pointsY[0]);
-//        //Left-Top Stealth
-//        g.setColor(Color.ORANGE);
-//        g.fillOval((int) pointsInner.get(1).getX(), (int) pointsInner.get(1).getY(), STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
-//         g.drawLine(pMiddle.x, pMiddle.y, pointsX[1], pointsY[1]);
-//        //Right-Bottom Strength
-//        g.setColor(Color.YELLOW);
-//        g.fillOval((int) pointsInner.get(2).getX(), (int) pointsInner.get(2).getY(), STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
-//         g.drawLine(pMiddle.x, pMiddle.y, pointsX[2], pointsY[2]);
-//        //Left-Bottom Health
-//        g.setColor(Color.RED);
-//        g.fillOval((int) pointsInner.get(3).getX(), (int) pointsInner.get(3).getY(), STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
-//         g.drawLine(pMiddle.x, pMiddle.y, pointsX[3], pointsY[3]);
-         
-//        g.setColor(Color.BLACK);
-//        g.fillOval(pMiddle.x- STATISTICS_POINT_DIMENSION / 2, pMiddle.y- STATISTICS_POINT_DIMENSION / 2, STATISTICS_POINT_DIMENSION, STATISTICS_POINT_DIMENSION);
-//        
-         
+        for (int i = 0; i < buttons.size(); i++) {
+            buttons.get(i).render(g);
+        }
         
     }
 
