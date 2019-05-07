@@ -190,6 +190,16 @@ public class OrganismManager implements Commons {
         }
     }
     
+    public void selectInRect(Rectangle r) {
+        for (int i = 0; i < organisms.size(); i++) {
+            if (organisms.get(i).intersects(r) && !organisms.get(i).isEgg()) {
+                organisms.get(i).setSelected(true);
+            } else {
+                organisms.get(i).setSelected(false);
+            }
+        }
+    }
+    
     /**
      * update all menu panels of the organisms
      */

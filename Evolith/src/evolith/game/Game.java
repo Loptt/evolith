@@ -19,6 +19,7 @@ import evolith.menus.ModeMenu;
 import evolith.menus.OverMenu;
 import evolith.menus.PauseMenu;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.io.BufferedReader;
@@ -622,6 +623,10 @@ public class Game implements Runnable, Commons {
             if (keyManager.esc) {
                 organisms.getOrgPanel().setActive(false);
             }
+        }
+        
+        if (keyManager.space) {
+            organisms.selectInRect(new Rectangle(camera.getX(), camera.getY(), width, height));
         }
         
         if (keyManager.p && !organisms.getOrgPanel().isInputActive()) {
