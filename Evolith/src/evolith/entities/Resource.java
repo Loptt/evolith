@@ -24,31 +24,43 @@ import java.util.*;
 
 /**
  *
- * @author charles
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class Resource extends Item implements Commons{
 
-    private int quantity;
-    private int maxQuantity;
-    private Game game;
-    private boolean full;
-    private boolean fullOfPredators;
-    private boolean over;
-    private int parasiteAmount;
-    private int predatorAmount;
-    private ArrayList<Point> positions;
-    private HashMap<Organism, Integer> map;
-    private Time time;
+    private int quantity;       //Resource amount
+    private int maxQuantity;    //Starting quantity
+    private Game game;          //Game object
+    private boolean full;       //Full state
+    private boolean fullOfPredators;    //Predator full
+    private boolean over;               //Over state
+    private int parasiteAmount;         //Amount of parasites (organisms) consuming from it
+    private int predatorAmount;         //Amount of predators resting on it
+    private ArrayList<Point> positions; //Positions for organisms to surround resource
+    private HashMap<Organism, Integer> map; // organisms acting as parasites
+    private Time time;                  //Time keeper
 
-    public enum ResourceType {Plant, Water};
-    private ResourceType type;
+    public enum ResourceType {Plant, Water}; //Types of resource
+    private ResourceType type;               //Type of resource
     
-    private double prevSecUpdate;
-    private boolean update;
-    private boolean add;
+    private double prevSecUpdate;           //seconds from previous update
+    private boolean update;                 //update state
+    private boolean add;                    //add state
     
     private Predator predator;
     
+    /**
+     * Resource constructor
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param width current width
+     * @param height current height
+     * @param game game object
+     * @param type resource type
+     */
     public Resource(int x, int y, int width, int height, Game game, ResourceType type) {
         super(x, y, width, height);
         this.game = game;
@@ -72,10 +84,17 @@ public class Resource extends Item implements Commons{
         predator = null;
     }
     
+    /**
+     * Update parasites positions
+     */
     public void updatePositions() {
         positions = SwarmMovement.getPositions(x + PLANT_SIZE / 2, y + PLANT_SIZE / 2, 6, 1);
     }
     
+    /**
+     * add new organism parasite
+     * @param org Organism to add
+     */
     public void addParasite(Organism org) {
         if (!full) {
             for (int i = 0; i < 6; i++) {
@@ -96,7 +115,11 @@ public class Resource extends Item implements Commons{
             System.out.println("ERROR, POSITIONS FULL");
         }
     }
-
+    
+    /**
+     * Remove organism as parasite
+     * @param org Organism
+     */
     public void removeParasite(Organism org) {
         if (map.containsKey(org)) {
             //System.out.println("AMOUNT  :" + map.size());
@@ -113,6 +136,10 @@ public class Resource extends Item implements Commons{
         //System.out.println("END OF REMOVEPAR FUNCTION:  ID:   " + i);
     }
     
+    /**
+     * Save current resource state in print writer
+     * @param pw print writer
+     */
     public void save(PrintWriter pw) {
         //Save positions
         pw.println(Integer.toString(x));
@@ -125,6 +152,11 @@ public class Resource extends Item implements Commons{
         pw.println(Integer.toString(type == ResourceType.Plant ? 1 : 0));
     }
     
+    /**
+     * Load last game save from buffered reader
+     * @param br buffered reader
+     * @throws IOException 
+     */
     public void load(BufferedReader br) throws IOException {
         x = Integer.parseInt(br.readLine());
         y = Integer.parseInt(br.readLine());
@@ -136,10 +168,18 @@ public class Resource extends Item implements Commons{
         int b = Integer.parseInt(br.readLine());
     }
     
+    /**
+     * remove all parasites
+     */
     public void removeParasites() {
         map.clear();
     }
     
+    /**
+     * Check if the organism is a parasite
+     * @param org organism to check
+     * @return 
+     */
     boolean hasParasite(Organism org) {
         return map.containsKey(org);
     }
