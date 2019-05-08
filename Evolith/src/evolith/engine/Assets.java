@@ -426,9 +426,10 @@ public class Assets {
     
     /**
      * SLOWS DOWN GAME
+     * 
      * @param img
      * @param angle
-     * @return 
+     * @return rotated
      */
     public static BufferedImage rotateImage(BufferedImage img, double angle) {
         
@@ -461,6 +462,13 @@ public class Assets {
         return rotated;
     }
     
+    /**
+     * Set alpha
+     * 
+     * @param alpha
+     * @param img
+     * @return img
+     */
     public static BufferedImage setAlpha(byte alpha, BufferedImage img) {
         alpha %= 0xff; 
         for (int cx=0;cx<img.getWidth();cx++) {          

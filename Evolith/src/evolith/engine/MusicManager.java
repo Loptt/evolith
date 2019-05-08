@@ -10,7 +10,10 @@ import java.util.ArrayList;
 
 /**
  *
- * @author moisesfernandez
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class MusicManager {
     private ArrayList<Song> songs;  // Array of the songs of the game
