@@ -20,12 +20,16 @@ public class MusicManager {
 
     public MusicManager() {
         time = new Time();
-        songs = new ArrayList<Song>();     
-        songs.add(new Song(Assets.fatrat, 190));
+        songs = new ArrayList<Song>();  
+        songs.add(new Song(Assets.fatrat_afterlife, 95));
+        songs.add(new Song(Assets.fatrat_threnody, 75));
+        songs.add(new Song(Assets.originalsong, 29));
     }
     
     public void tick() {
         time.tick();
+        
+        System.out.println(time.getSeconds() + " " + secondStart + songs.get(currentSong).duration);
         
         if (time.getSeconds() >= secondStart + songs.get(currentSong).duration) {
             currentSong++;
@@ -37,6 +41,7 @@ public class MusicManager {
     }
     
     public void play() {
+        time.setTicker(0);
         currentSong = 0;
         secondStart = (int) time.getSeconds();
         
@@ -44,6 +49,8 @@ public class MusicManager {
     }
     
     public void stop() {
+        time.setTicker(0);
+        secondStart = 0;
         songs.get(currentSong).stop();
     }
     
