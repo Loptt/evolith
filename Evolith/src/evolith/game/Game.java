@@ -506,7 +506,7 @@ public class Game implements Runnable, Commons {
             statsMenu.setWin(win);
         }
         
-        if (organisms.isMaxIntelligence() || true) {
+        if (organisms.isMaxIntelligence()) {
             state = States.GameOver;
             win = true;
             overMenu = new OverMenu(0, 0, width, height, this, win);
