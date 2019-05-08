@@ -102,11 +102,11 @@ public class OrganismPanel extends Menu implements Commons {
         // Arrow prev
         buttons.add(new Button(this.x - 100, this.y + PANEL_HEIGHT / 2, 50, 50, Assets.prevArrow));
         // Reproduce button 
-        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 400, 300, 75, Assets.organismPanel_reproduceButton_ON, Assets.organismPanel_reproduceButton_OFF));
+        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 380, 300, 75, Assets.organismPanel_reproduceButton_ON, Assets.organismPanel_reproduceButton_OFF));
         //Name button
         buttons.add(new Button(this.x + 110, this.y + 300, 193, 27));
         //campfire
-        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 450, 300, 75, Assets.setCampfireOn, Assets.setCampfireOff));
+        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 100, this.y + 480, 200, 50, Assets.setCampfireOn, Assets.setCampfireOff));
         
         if (this.organism.getName() != null || this.organism.getName() != "") {
             inputReader = new InputReader(this.organism.getName(), game);
@@ -282,7 +282,7 @@ public class OrganismPanel extends Menu implements Commons {
             if (campfire) {
                 buttons.get(6).setPressed(false);
                 campfire = false;
-            } else {
+            } else if (organism.getIntelligence() > INT_FOR_CAMP) {
                 campfire = true;
                 buttons.get(6).setPressed(true);
                 int posx = organism.getX();
@@ -417,15 +417,16 @@ public class OrganismPanel extends Menu implements Commons {
         g.setColor(Color.WHITE);
         g.setFont(fontEvolve);
 
-        for (int i = 0; i < buttons.size(); i++) {
+        for (int i = 0; i < buttons.size() - 1; i++) {
 
             if (i != 4 || organism.isNeedOffspring()) {
                 buttons.get(i).render(g);
             }
-
         }
         
-        buttons.get(6).render(g);
+        if (!campfires.isCooldown() && organism.getIntelligence() > INT_FOR_CAMP) {
+            buttons.get(6).render(g);
+        }
 
         if (timeOpen % 60 == 0) {
             timeOpen = 0;
