@@ -35,7 +35,7 @@ public class MutationManager implements Commons{
         ArrayList<Mutation> m1 = new ArrayList<Mutation>();
         m1.add(new Mutation("Spine",20,0,0,0,false,1,-0.34,-0.35,1.72,1.72,game, org)); // Finished
         m1.add(new Mutation("Sting",20,-20,0,20,false,2,-0.1,0.95,0.8,0.8, game, org)); // Finished
-        m1.add(new Mutation("Claws",20,-20,0,0,false,3,-0.3,1,0.9,0.9, game, org));     // Asset must be changed
+        m1.add(new Mutation("Claws",20,-20,0,-20,false,3,-0.3,1,0.9,0.9, game, org));     // Asset must be changed
         m1.add(new Mutation("Horns",20,-20,0,-40,false,4,-0.5,-0.5,2,1, game, org));    // Finished
         mutations.add(m1);
 
@@ -169,30 +169,24 @@ public class MutationManager implements Commons{
             }
         }
     }
-
-    /*
-    public void setMutationData(Mutation orgMutation, int stat, int tier){
-        orgMutation.setSpeed(mutations.get(stat).get(tier).getSpeed());
-        orgMutation.setStrength(mutations.get(stat).get(tier).getStrength());
-        orgMutation.setMaxHealth(mutations.get(stat).get(tier).getMaxHealth());
-        orgMutation.setStealth(mutations.get(stat).get(tier).getStealth());
-        orgMutation.setName(mutations.get(stat).get(tier).getName());
-        orgMutation.setActive(mutations.get(stat).get(tier).isActive());
-        orgMutation.setSprite(mutations.get(stat).get(tier).getSprite());
-        orgMutation.setX(mutations.get(stat).get(tier).getX());
-        orgMutation.setY(mutations.get(stat).get(tier).getY());
-        orgMutation.setWidth(mutations.get(stat).get(tier).getWidth());
-        orgMutation.setHeight(mutations.get(stat).get(tier).getHeight());
-    }
-    */
     
     public void render(Graphics g){
-        for(int i=0; i<4; i++){
-            for(int j=0; j<mutations.get(i).size(); j++){
-                mutations.get(i).get(j).render(g);
-            }
+        for(int j=0; j<mutations.get(3).size(); j++){
+            mutations.get(3).get(j).render(g);
+        }
+        
+        for(int j=0; j<mutations.get(1).size(); j++){
+            mutations.get(1).get(j).render(g);
+        }
+        
+        for(int j=0; j<mutations.get(2).size(); j++){
+            mutations.get(2).get(j).render(g);
+        }
+        
+        for(int j=0; j<mutations.get(0).size(); j++){
+            mutations.get(0).get(j).render(g);
         }
     }
-    }
+}
     
    

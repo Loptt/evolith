@@ -394,6 +394,8 @@ public class Organism extends Item implements Commons {
             if (maturity == 140) {
                 needOffspring = true;
             }
+            
+            needOffspring = true;
         }
 
         //Once the organisms reaches max maturity, kill it
@@ -435,7 +437,7 @@ public class Organism extends Item implements Commons {
     private void born() {        
         born = true;
         //Check if a mutation will occur. Chance is defined in the commons class
-        if (((int) (Math.random() * MUTATION_CHANCE) == 0) && !other && !game.getOrganisms().getMutPanel().isActive()) {
+        if (((int) (Math.random() * MUTATION_CHANCE) == 0 || true) && !other && !game.getOrganisms().getMutPanel().isActive()) {
             needMutation = true;
         } else {
             egg = false;
@@ -518,7 +520,10 @@ public class Organism extends Item implements Commons {
                 }
             }
         }
-        
+        strength = strength > 0 ? strength : 0;
+        speed = speed > 0 ? speed : 0;
+        maxHealth = maxHealth > 0 ? maxHealth : 0;
+        stealth = stealth > 0 ? stealth : 0;;
         updateStats(other);
     }
     
@@ -534,9 +539,16 @@ public class Organism extends Item implements Commons {
             life = currentMaxHealth;
         }
         
-        currentSize = (int) (maxHealth * 0.5 + 30);
-        width = currentSize;
-        height = currentSize;
+        if (maxHealth >= 70) {
+            currentSize = (int) ((maxHealth-40) * 0.5 + 30);
+            width = currentSize;
+            height = currentSize;
+        } else {
+            currentSize = (int) ((maxHealth) * 0.5 + 30);
+            width = currentSize;
+            height = currentSize;
+        }
+        System.out.println(speed);
         
         stealthRange = MAX_SIGHT_DISTANCE - (stealth) * 9;
         
