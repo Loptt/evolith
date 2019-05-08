@@ -21,34 +21,68 @@ public class InputReader {
     private Game game;
     private boolean onlyDelete;
 
+    /**
+     * To initialize the input reader when the organism has no name
+     * 
+     * @param game
+     */
     public InputReader(Game game) {
         this.game = game;
         this.speciesName = "";
         this.onlyDelete = false;
     }
 
+    /**
+     * To initialize the input reader when the organism has a name
+     * 
+     * @param speciesName
+     * @param game
+     */
     public InputReader(String speciesName, Game game) {
         this.speciesName = speciesName;
         this.game = game;
         this.onlyDelete = false;
     }
 
+    /**
+     * To set the status if the user can only delete
+     * 
+     * @return onlyDelete
+     */
     public boolean isOnlyDelete() {
         return onlyDelete;
     }
 
+    /**
+     * To get the status if the user can only delete
+     * 
+     * @param onlyDelete
+     */
     public void setOnlyDelete(boolean onlyDelete) {
         this.onlyDelete = onlyDelete;
     }
 
+    /**
+     * To get the species name
+     * 
+     * @return speciesName
+     */
     public String getSpeciesName() {
         return speciesName;
     }
 
+    /**
+     * To set the species name
+     * 
+     * @param speciesName
+     */
     public void setSpeciesName(String speciesName) {
         this.speciesName = speciesName;
     }
 
+    /**
+     * To read the input of the user's keyboard when typing the species name
+     */
     public void readInput() {
         if (!onlyDelete) {
             if (game.getInputKeyboard().a) {

@@ -27,10 +27,20 @@ public class Clock extends Item implements Commons {
         this.time = new Time();
     }
     
+    /**
+     * To get the ticker
+     * 
+     * @return ticker
+     */
     public long getTicker() {
         return time.getTicker();
     }
     
+    /**
+     * To set the ticker
+     * 
+     * @param tick
+     */
     public void setTicker(long tick) {
         time.setTicker(tick);
     }
@@ -39,21 +49,26 @@ public class Clock extends Item implements Commons {
      * To tick the ticker per number of frames
      */
     public void tick() {
-        //ticks the time
+        // Ticks the time
         time.tick();
 
-        //displays the actual time in the terminal
+        // Displays the actual time in the terminal
         if (time.getTicker() % 60 == 0) {
             //System.out.println("Seconds Passed: " + time.getSeconds());
         }
     }
 
-    //to render the clock in the screen
+    // To render the clock in the screen
     @Override
     public void render(Graphics g) {
 
     }
     
+    /**
+     * To return the number of seconds
+     * 
+     * @return seconds
+     */
     public int getSeconds() {
         return (int) time.getSeconds();
     }

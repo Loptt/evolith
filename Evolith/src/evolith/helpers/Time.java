@@ -30,7 +30,7 @@ public class Time implements Commons {
     /**
      * To get the ticker
      *
-     * @return
+     * @return ticker
      */
     public long getTicker() {
         return ticker;
@@ -48,7 +48,7 @@ public class Time implements Commons {
     /**
      * To get the hour
      *
-     * @return
+     * @return hour
      */
     public double getHour() {
         return hour;
@@ -57,7 +57,7 @@ public class Time implements Commons {
     /**
      * To get the minutes
      *
-     * @return
+     * @return minutes
      */
     public double getMinutes() {
         return minutes;
@@ -66,7 +66,7 @@ public class Time implements Commons {
     /**
      * To get the seconds
      *
-     * @return
+     * @return seconds
      */
     public double getSeconds() {
         return seconds;
@@ -75,7 +75,7 @@ public class Time implements Commons {
     /**
      * To get the milliseconds
      *
-     * @return
+     * @return milliseconds
      */
     public double getMilliseconds() {
         return milliseconds;
@@ -106,7 +106,7 @@ public class Time implements Commons {
     /**
      * Returns string of the time
      *
-     * @return
+     * @return string of the time
      */
     @Override
     public String toString() {

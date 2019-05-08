@@ -15,13 +15,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
  *
- * @author ErickFrank
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class FontLoader  {
     private String fontPath;                //Path to where the font is located
     private Font fontEvolve;                //Font used in the organism panel
     private InputStream is;                 //Manages the input of the name in the panel
 
+    /**
+     * To load the font
+     */
     public FontLoader() {
         fontPath = "/Fonts/MADE-Evolve-Sans-Regular.ttf";
         this.is = OrganismPanel.class.getResourceAsStream(fontPath);
@@ -35,6 +41,11 @@ public class FontLoader  {
         }
     }
 
+    /**
+     * To get the font
+     * 
+     * @return font
+     */
     public Font getFontEvolve() {
         return fontEvolve;
     }

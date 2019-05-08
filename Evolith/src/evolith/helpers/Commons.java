@@ -3,13 +3,15 @@
 import java.awt.Color;
 
 /**
- *a
+ *
  * @author Erick González
  * @author Carlos Estrada
  * @author Víctor Villarreal
  * @author Moisés Fernández
  */
 public interface Commons {
+    // This class contains all the constants used in the game
+    
     public static final int MAX_INTELLIGENCE = 1000;        //This marks the end of a game
     
     public static final int ORGANISM_SIZE_STAT = 20;            // organism size

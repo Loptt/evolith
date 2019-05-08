@@ -31,6 +31,7 @@ public class Selection {
     
     /**
      * Selection constructor
+     * 
      * @param game game object
      */
     public Selection(Game game) {
@@ -41,6 +42,7 @@ public class Selection {
     
     /**
      * Activate selection at coordinates
+     * 
      * @param x x coordinate
      * @param y y coordinate
      */
@@ -59,7 +61,8 @@ public class Selection {
     }
     
     /**
-     * to check if active
+     * To check if active
+     * 
      * @return 
      */
     public boolean isActive() {
@@ -68,6 +71,7 @@ public class Selection {
     
     /**
      * To set active
+     * 
      * @param active 
      */
     public void setActive(boolean active) {
@@ -75,15 +79,17 @@ public class Selection {
     }
     
     /**
-     * to get the rectangle selection
-     * @return 
+     * To get the rectangle selection
+     * 
+     * @return sel
      */
     public Rectangle getSel() {
         return sel;
     }
     
     /**
-     * to set the rectangle selection
+     * To set the rectangle selection
+     * 
      * @param sel new rectangle
      */
     public void setSel(Rectangle sel) {
@@ -91,7 +97,7 @@ public class Selection {
     }
     
     /**
-     * to tick the selection
+     * To tick the selection
      */
     public void tick() {
         if (!active) {
@@ -112,7 +118,8 @@ public class Selection {
     }
     
     /**
-     * to render the selection
+     * To render the selection
+     * 
      * @param g graphics
      */
     public void render(Graphics g) {

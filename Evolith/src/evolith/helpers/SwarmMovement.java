@@ -157,6 +157,7 @@ public class SwarmMovement implements Commons {
     
     /**
      * To get the distance between two coordinates
+     * 
      * @param x1 x from first coordinate
      * @param y1 y from first coordinate
      * @param x2 x from second coordinate
