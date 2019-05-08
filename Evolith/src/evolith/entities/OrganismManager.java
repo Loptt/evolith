@@ -495,7 +495,7 @@ public class OrganismManager implements Commons {
     }
     
     /**
-     * Save the current state of the organisms to the printwriter
+     * Save the current state of the organisms to the print writer
      * @param pw print writer
      */
     public void save(PrintWriter pw) {

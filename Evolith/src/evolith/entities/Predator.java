@@ -401,7 +401,7 @@ public class Predator extends Item implements Commons {
     }
     
     /**
-     * Look new target
+     * Look target from any kind
      */
     public void autoLookTarget() {
         //Finds closest organism or water
@@ -453,7 +453,7 @@ public class Predator extends Item implements Commons {
     }
     
     /**
-     * 
+     * Find new resource target
      */
     private void lookNewTarget() {
         Resource closestWater = null; 
@@ -485,8 +485,8 @@ public class Predator extends Item implements Commons {
     }
     
     /**
-     *
-     * @return
+     * Find nearest organism to predator
+     * @return nearest Organism
      */
     public Organism findNearestOrganism(){
         Organism closestOrganism = null; 
@@ -505,18 +505,13 @@ public class Predator extends Item implements Commons {
                 closestOrganism = game.getOrganisms().getOrganism(i);
             }
         }
-        /*
-        if (closestDistanceBetweenPredatorAndOrganism > 100){
-            return null;
-        }
-        */
-        
+
         return closestOrganism;
     }
     
     /**
-     *
-     * @return
+     * Find nearest water
+     * @return nearest water
      */
     public Resource findNearestValidWater() {
         Resource closestWater = null; 
@@ -542,7 +537,7 @@ public class Predator extends Item implements Commons {
     }
     
     /**
-     *
+     * Check if predator has reached water resource
      */
     public void checkArrivalOnResource() {
         if (targetResource != null) {
@@ -556,15 +551,15 @@ public class Predator extends Item implements Commons {
     }
 
     /**
-     * Kill the organism
+     * Kill the predator
      */
     public void kill() {
         dead = true;
     }
     
     /**
-     *
-     * @param pw
+     * save the current predator state to print writer
+     * @param pw print writer
      */
     public void save(PrintWriter pw) {
         pw.println(Integer.toString(id));
@@ -586,8 +581,8 @@ public class Predator extends Item implements Commons {
     }
     
     /**
-     *
-     * @param br
+     * load last saved state from the buffered reader
+     * @param br buffered reader
      * @throws IOException
      */
     public void load(BufferedReader br) throws IOException {
@@ -610,7 +605,7 @@ public class Predator extends Item implements Commons {
     }
 
     /**
-     * Renders the organisms relative to the camera
+     * Renders the predators relative to the camera
      *
      * @param g
      */
@@ -648,31 +643,31 @@ public class Predator extends Item implements Commons {
     /**
      * To set the point
      *
-     * @param point
+     * @param point new point
      */
     public void setPoint(Point point) {
         this.point = point;
     }
     
     /**
-     *
-     * @return
+     * To get life
+     * @return life
      */
     public double getLife() {
         return life;
     }
 
     /**
-     *
-     * @return
+     * to get time
+     * @return time
      */
     public Time getTime() {
         return time;
     }
 
     /**
-     *
-     * @param time
+     * to set new time
+     * @param time new time
      */
     public void setTime(Time time) {
         this.time = time;
@@ -690,182 +685,182 @@ public class Predator extends Item implements Commons {
     /**
      * To set dead
      *
-     * @param dead
+     * @param dead dead state
      */
     public void setDead(boolean dead) {
         this.dead = dead;
     }
 
     /**
-     *
-     * @return
+     * to get the current target
+     * @return organism target
      */
     public Organism getTarget() {
         return target;
     }
     
     /**
-     *
-     * @return
+     * to get the current resource target
+     * @return targetResource
      */
     public Resource getTargetResource(){
         return targetResource;
     }
     
     /**
-     *
-     * @param target
+     * to set the target resource
+     * @param target new target
      */
     public void setTargetResource(Resource target){
         this.targetResource = target;
     }
 
     /**
-     *
-     * @param target
+     * to set the organism target
+     * @param target organism target
      */
     public void setTarget(Organism target) {
         this.target = target;
     }
     
     /**
-     *
-     * @return
+     * to get current damage
+     * @return damage
      */
     public double getDamage() {
         return damage;
     }
 
     /**
-     *
-     * @param damage
+     * to set damage
+     * @param damage new damage
      */
     public void setDamage(double damage) {
         this.damage = damage;
     }
 
     /**
-     *
-     * @param life
+     * to set life
+     * @param life new life
      */
     public void setLife(double life) {
         this.life = life;
     }
 
     /**
-     *
-     * @param stamina
+     * to set stamina
+     * @param stamina new stamina
      */
     public void setStamina(double stamina) {
         this.stamina = stamina;
     }
 
     /**
-     *
-     * @return
+     * to get stamina
+     * @return stamina
      */
     public double getStamina() {
         return stamina;
     }
 
     /**
-     *
-     * @return
+     * to check if recovering
+     * @return recovering
      */
     public boolean isRecovering() {
         return recovering;
     }
 
     /**
-     *
-     * @param recovering
+     * to set recovering
+     * @param recovering recovering state
      */
     public void setRecovering(boolean recovering) {
         this.recovering = recovering;
     }
 
     /**
-     *
-     * @return
+     * to check if leaving
+     * @return leaving
      */
     public boolean isLeaving() {
         return leaving;
     }
 
     /**
-     *
-     * @param leaving
+     * to set leaving state
+     * @param leaving leaving state
      */
     public void setLeaving(boolean leaving) {
         this.leaving = leaving;
     }
 
     /**
-     *
-     * @return
+     * to get visible state
+     * @return visible
      */
     public boolean isVisible() {
         return visible;
     }
 
     /**
-     *
-     * @param visible
+     * to set visible state
+     * @param visible visible state
      */
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
 
     /**
-     *
-     * @param absMaxVel
+     * to set absolute max speed
+     * @param absMaxVel new max speed
      */
     public void setAbsMaxVel(int absMaxVel) {
         this.absMaxVel = absMaxVel;
     }
 
     /**
-     *
-     * @param maxHealth
+     * to set max health
+     * @param maxHealth new health
      */
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
     }
 
     /**
-     *
-     * @return
+     * to get Mode
+     * @return mode
      */
     public Mode getMode() {
         return mode;
     }
 
     /**
-     *
-     * @param maxVel
+     * to set max velocity
+     * @param maxVel new max velocity
      */
     public void setMaxVel(int maxVel) {
         this.maxVel = maxVel;
     }
 
     /**
-     *
-     * @return
+     * to get absolute max velocity
+     * @return absMaxVel
      */
     public int getAbsMaxVel() {
         return absMaxVel;
     }
 
     /**
-     *
-     * @param chasingSpeed
+     * to set chasing speed
+     * @param chasingSpeed new chasing speed
      */
     public void setChasingSpeed(int chasingSpeed) {
         this.chasingSpeed = chasingSpeed;
     }
 
     /**
-     *
+     * to get chasing speed
      * @return
      */
     public int getChasingSpeed() {
