@@ -95,6 +95,7 @@ public class Organism extends Item implements Commons {
     private boolean animationDone;
     
     private Item pred;
+    private boolean inCamp;
     
 
     /**
@@ -152,6 +153,7 @@ public class Organism extends Item implements Commons {
         drinking = false;
         selected = false;
         godCommand = false;
+        inCamp = false;
         
         damage = 0.05;
 
@@ -209,6 +211,7 @@ public class Organism extends Item implements Commons {
             }
         }
         
+        checkCamps();
         handleTarget();
         checkMovement();
         checkVitals(); 
@@ -383,6 +386,20 @@ public class Organism extends Item implements Commons {
                 point = new Point(pred.getX() + 30 + randX, pred.getY() + 30 + randY);
             }
         }
+    }
+    
+    private void checkCamps() {
+        Campfire camp;
+        for (int i = 0; i < game.getCampfires().getAmount(); i++) {
+            camp = game.getCampfires().getCamp(i);
+            
+            if (camp.containsRectInRad(getPerimeter())) {
+                inCamp = true;
+                return;
+            }
+        }
+        
+        inCamp = false;
     }
     
     private void born() {        
@@ -1512,5 +1529,13 @@ public class Organism extends Item implements Commons {
 
     public boolean isAnimationDone() {
         return animationDone;
+    }
+
+    public boolean isInCamp() {
+        return inCamp;
+    }
+
+    public void setInCamp(boolean inCamp) {
+        this.inCamp = inCamp;
     }
 }

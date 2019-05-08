@@ -162,6 +162,7 @@ public class Predator extends Item implements Commons {
         }
         
         autoLookTarget();
+        checkCampfires();
         
         switch (mode) {
             case Attacking:
@@ -417,7 +418,7 @@ public class Predator extends Item implements Commons {
         
         //If there is an organism and is in valid distance
         if (org != null && SwarmMovement.distanceBetweenTwoPoints(getX(), getY(), org.getX(), org.getY()) < org.getStealthRange()
-                && !isRecovering()) {
+                && !isRecovering() && !org.isInCamp()) {
             setTarget(org);
             
             if (getTargetResource() != null && getTargetResource().getPredator() == this) {
@@ -546,6 +547,21 @@ public class Predator extends Item implements Commons {
                 autoLookTarget();
             }
         }
+    }
+    
+    public void checkCampfires() {
+        for (int i = 0; i < game.getCampfires().getAmount(); i++) {
+            if (game.getCampfires().getCamp(i).containsRectInRad(getPerimeter())) {
+                escapeCamp(game.getCampfires().getCamp(i).getCenter());
+                target = null;
+                targetResource = null;
+            }
+        }
+    }
+    
+    public void escapeCamp(Point center) {
+        point.x = x + (x - center.x) + SwarmMovement.generateRandomness(100);
+        point.y = y + (y - center.y) + SwarmMovement.generateRandomness(100);
     }
 
     /**

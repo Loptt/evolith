@@ -63,6 +63,10 @@ public class CampfireManager implements Commons {
         }
     }
     
+    public Campfire getCamp(int i) {
+        return campfires.get(i);
+    }
+    
     public void render(Graphics g){
         if(campfires.size()>0){
             for(int i=0; i<campfires.size();i++){
@@ -71,5 +75,8 @@ public class CampfireManager implements Commons {
         }
     }
     
-    
+
+    public int getAmount() {
+        return campfires.size();
+    }
 }
