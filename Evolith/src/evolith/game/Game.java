@@ -217,7 +217,7 @@ public class Game implements Runnable, Commons {
         weather = new Weather(width, height, background);
         paused = false;
 
-        maxIntButton = new MaxIntelligenceButton(870, 400, 110, 30, Assets.maxIntButtonOn, Assets.maxIntButtonOff, organisms.getOrganism(0));
+        maxIntButton = new MaxIntelligenceButton(825, 210, 150, 70, Assets.maxIntButtonOn, Assets.maxIntButtonOff, organisms.getOrganism(0));
     }
 
     /**

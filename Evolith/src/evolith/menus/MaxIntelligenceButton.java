@@ -63,7 +63,7 @@ public class MaxIntelligenceButton extends Button {
         super.render(g);
         //to set the new color and background of the button
         g.setColor(new Color(255,215,0));
-        g.fillRect(x + 10, y + 15, (int) 151 * org.getIntelligence() / MAX_INTELLIGENCE, 19);
+        g.fillRect(x + 21, y + 36, (int) 109 * org.getIntelligence() / MAX_INTELLIGENCE, 20);
     }
     /**
      * To set the organism with the max intelligence

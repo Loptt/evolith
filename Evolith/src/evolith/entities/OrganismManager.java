@@ -109,6 +109,7 @@ public class OrganismManager implements Commons {
                 deadOrgs.remove(org);
             }
         }
+        
         checkNight();
         updateMenuPanels();
     }
