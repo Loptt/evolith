@@ -29,7 +29,7 @@ public class MusicManager {
     public void tick() {
         time.tick();
         
-        System.out.println(time.getSeconds() + " " + secondStart + songs.get(currentSong).duration);
+        System.out.println(time.getSeconds() + " " + secondStart + " " + songs.get(currentSong).duration);
         
         if (time.getSeconds() >= secondStart + songs.get(currentSong).duration) {
             currentSong++;
