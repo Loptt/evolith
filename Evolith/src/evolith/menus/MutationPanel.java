@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package evolith.menus;
 
 import evolith.engine.Assets;
@@ -13,47 +8,31 @@ import static evolith.helpers.Commons.MAX_SPEED;
 import static evolith.helpers.Commons.MAX_STEALTH;
 import static evolith.helpers.Commons.MAX_STRENGTH;
 import static evolith.helpers.Commons.MAX_SURVIVABILITY;
-import evolith.helpers.InputReader;
+import evolith.helpers.FontLoader;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Graphics;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
- * @author ErickFrank
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class MutationPanel extends Menu implements Commons {
 
     private Organism organism;
 
-    private String fontPath;
-    private String name;
     private boolean active;
     private Font fontEvolve;
-    private InputStream is;
     private HashMap<Integer, String> hmap;
-
     private int selection;
 
     public MutationPanel(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
-        fontPath = "/Fonts/MADE-Evolve-Sans-Regular.ttf";
-        this.is = OrganismPanel.class.getResourceAsStream(fontPath);
-        try {
-            fontEvolve = Font.createFont(Font.TRUETYPE_FONT, is);
-            fontEvolve = fontEvolve.deriveFont(18f);
-        } catch (FontFormatException ex) {
-            Logger.getLogger(MutationPanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(MutationPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     public MutationPanel(Organism organism, int x, int y, int width, int height, Game game) {
@@ -280,42 +259,7 @@ public class MutationPanel extends Menu implements Commons {
         }
     }
 
-    public ArrayList<Button> getButtons() {
-        return buttons;
-    }
     
-    public Organism getOrganism() {
-        return organism;
-    }
-
-    public void setOrganism(Organism organism) {
-        this.organism = organism;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public HashMap<Integer, String> getHmap() {
-        return hmap;
-    }
-
-    public void setHmap(HashMap<Integer, String> hmap) {
-        this.hmap = hmap;
-    }
-
-    public int getSelection() {
-        return selection;
-    }
-
-    public void setSelection(int selection) {
-        this.selection = selection;
-    }
-
     public boolean isActive() {
         return active;
     }
