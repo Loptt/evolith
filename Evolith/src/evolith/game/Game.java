@@ -19,6 +19,7 @@ import evolith.menus.Button;
 import evolith.menus.InstructionMenu;
 import evolith.menus.MaxIntelligenceButton;
 import evolith.menus.ModeMenu;
+import evolith.menus.MultiPauseMenu;
 import evolith.menus.OverMenu;
 import evolith.menus.PauseMenu;
 import evolith.menus.StatisticsMenu;
@@ -87,6 +88,7 @@ public class Game implements Runnable, Commons {
     private GameStatisticsMenu gameStats;
     private SetupMenu setupMenu;                //Menu to choose color and 
     private PauseMenu pauseMenu;                // Menu in pause
+    private MultiPauseMenu multiPauseMenu;                // Menu in pause
     private OverMenu overMenu;                  // Game over menu
     private InstructionMenu instructionMenu;    // Instructions menu
     private ModeMenu modeMenu;                  // Menu to choose game mode
@@ -195,6 +197,7 @@ public class Game implements Runnable, Commons {
         gameStats = new GameStatisticsMenu(0,0,0,0,this);
         setupMenu = new SetupMenu(0, 0, width, height, this,mysql);
         pauseMenu = new PauseMenu(width / 2 - 250 / 2, height / 2 - 300 / 2, 250, 300, this);
+        multiPauseMenu = new MultiPauseMenu(width / 2 - 250 / 2, height / 2 - 200 / 2, 250, 200, this);
 
         statsMenu = new StatisticsMenu(0,0,width,height,this,false,mysql);
 
@@ -531,7 +534,7 @@ public class Game implements Runnable, Commons {
         pauseMenu.tick();
         keyManager.tick();
         musicManager.tick();
-
+        
         //If p is pressed, go back to play
         if (keyManager.p) {
             paused = !paused;
@@ -580,9 +583,10 @@ public class Game implements Runnable, Commons {
      * Tick the pause menu
      */
     private void pausedMultiTick() {
-        pauseMenu.tick();
+        multiPauseMenu.tick();
         keyManager.tick();
         musicManager.tick();
+        
 
         //If p is pressed, go back to play
         if (keyManager.p) {
@@ -596,23 +600,12 @@ public class Game implements Runnable, Commons {
             paused = !paused;
         }
 
-        if (!pauseMenu.isMainMenuDisplayed()) {
-            paused = !paused;
-        }
-
-        //Is save button is pressed, save current game state
-        if (pauseMenu.isClickSave()) {
-            pauseMenu.setClickSave(false);
-        }
-
-        //If load button is pressed, load current game state
-        if (pauseMenu.isClickLoad()) {
-            pauseMenu.setClickLoad(false);
+        if (!multiPauseMenu.isMainMenuDisplayed()) {
             paused = !paused;
         }
 
         //If exit button is pressed, go back to main menu
-        if (pauseMenu.isClickExit()) {
+        if (multiPauseMenu.isClickExit()) {
             pauseMenu.setClickExit(false);
             state = States.MainMenu;
             resetGame();
@@ -657,6 +650,10 @@ public class Game implements Runnable, Commons {
             statsMenu.setMainMenu(false);
             state = States.MainMenu;
             resetGame();
+            
+            if (network != null) {
+                network.endConnection();
+            }
         }
         
     }
@@ -770,11 +767,13 @@ public class Game implements Runnable, Commons {
         if (paused) {
             if (keyManager.esc) {
                 pauseMenu.setMainMenuDisplayed(!paused);
+                multiPauseMenu.setMainMenuDisplayed(!paused);
                 paused = !paused;
             }
 
             if (keyManager.p && !organisms.getOrgPanel().isInputActive()) {
                 pauseMenu.setMainMenuDisplayed(!paused);
+                multiPauseMenu.setMainMenuDisplayed(!paused);
                 paused = !paused;
                 keyManager.p = false;
                 keyManager.prevp = false;
@@ -787,6 +786,7 @@ public class Game implements Runnable, Commons {
         if (!organisms.getOrgPanel().isActive()) {
             if (keyManager.esc) {
                 pauseMenu.setMainMenuDisplayed(true);
+                multiPauseMenu.setMainMenuDisplayed(true);
                 paused = !paused;
             }
         } else {
@@ -801,6 +801,7 @@ public class Game implements Runnable, Commons {
 
         if (keyManager.p && !organisms.getOrgPanel().isInputActive()) {
             pauseMenu.setMainMenuDisplayed(true);
+            multiPauseMenu.setMainMenuDisplayed(true);
             paused = !paused;
         }
 
@@ -1095,7 +1096,7 @@ public class Game implements Runnable, Commons {
         }
 
         if (paused) {
-            pauseMenu.render(g);
+            multiPauseMenu.render(g);
         }
         
         maxIntButton.render(g);
