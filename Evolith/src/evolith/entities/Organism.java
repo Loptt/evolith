@@ -567,7 +567,6 @@ public class Organism extends Item implements Commons {
             width = currentSize;
             height = currentSize;
         }
-        System.out.println(speed);
         
         stealthRange = MAX_SIGHT_DISTANCE - (stealth) * 9;
         

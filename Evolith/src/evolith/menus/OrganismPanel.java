@@ -198,7 +198,8 @@ public class OrganismPanel extends Menu implements Commons {
                         break;
                     }
                 }
-                else if(!game.getWeather().getRain().isActive() && !game.getWeather().getStorm().isActive() && !campfires.isCooldown()){
+                else if(!campfires.isCooldown() && organism.getIntelligence() > INT_FOR_CAMP && game.getState() == Game.States.Play
+                    && !game.getWeather().getRain().isActive() && !game.getWeather().getStorm().isActive()){
                     buttons.get(i).setActive(true);
                     //if left click change mouse status
                     if (game.getMouseManager().isLeft()) {
@@ -278,7 +279,8 @@ public class OrganismPanel extends Menu implements Commons {
         }
         
         //campfires
-        if (buttons.get(6).isPressed()) {
+        if (buttons.get(6).isPressed() && game.getState() == Game.States.Play 
+                && !game.getWeather().getRain().isActive() && !game.getWeather().getStorm().isActive()) {
             if (campfire) {
                 buttons.get(6).setPressed(false);
                 campfire = false;
@@ -424,7 +426,8 @@ public class OrganismPanel extends Menu implements Commons {
             }
         }
         
-        if (!campfires.isCooldown() && organism.getIntelligence() > INT_FOR_CAMP) {
+        if (!campfires.isCooldown() && organism.getIntelligence() > INT_FOR_CAMP && game.getState() == Game.States.Play
+                && !game.getWeather().getRain().isActive() && !game.getWeather().getStorm().isActive()) {
             buttons.get(6).render(g);
         }
 

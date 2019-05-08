@@ -93,6 +93,7 @@ public class Game implements Runnable, Commons {
     private StatisticsMenu statsMenu;
 
     private MaxIntelligenceButton maxIntButton; //Button to show the most intelligent organism
+    private MaxIntelligenceButton maxIntButtonOpp; //Button to show the most intelligent organism
 
     private Clock clock;                        // the time of the game
     private InputReader inputReader;            //To read text from keyboard
@@ -218,6 +219,10 @@ public class Game implements Runnable, Commons {
         paused = false;
 
         maxIntButton = new MaxIntelligenceButton(825, 210, 150, 70, Assets.maxIntButtonOn, Assets.maxIntButtonOff, organisms.getOrganism(0));
+        maxIntButtonOpp = new MaxIntelligenceButton(825, 290, 150, 70, Assets.maxIntButtonOpp, Assets.maxIntButtonOpp, organisms.getOrganism(0));
+        
+        maxIntButton.setyOff(36);
+        maxIntButtonOpp.setyOff(45);
     }
 
     /**
@@ -503,6 +508,7 @@ public class Game implements Runnable, Commons {
         }
 
         maxIntButton.setOrg(organisms.getMostIntelligent());
+        maxIntButtonOpp.setOrg(otherOrganisms.getMostIntelligent());
 
         checkGameOver();
     }
@@ -1032,6 +1038,9 @@ public class Game implements Runnable, Commons {
         if (paused) {
             pauseMenu.render(g);
         }
+        
+        maxIntButton.render(g);
+        maxIntButtonOpp.render(g);
     }
 
     /**
