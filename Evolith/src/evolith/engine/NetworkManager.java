@@ -27,28 +27,35 @@ import java.util.logging.Logger;
  * @author Moisés Fernández
  */
 public class NetworkManager implements Runnable, Commons {
-    private DatagramSocket socket;
-    private DatagramPacket packet;
-    private InetAddress address;
-    private int port;
+    private DatagramSocket socket;      //Connection socket
+    private DatagramPacket packet;      //Transimission packet
+    private InetAddress address;        //Other player address
+    private int port;                   //Other player port
 
-    private boolean server;
-    private boolean otherExtinct;
-    private boolean otherWon;
-    private boolean otherDisconnect;
-    private boolean clientReady;
-    private boolean serverReady;
-    private boolean timeOut;
+    private boolean server;             //Server state
+    private boolean otherExtinct;       //extinct state
+    private boolean otherWon;           //win state
+    private boolean otherDisconnect;    //Other player disconnected flag
+    private boolean clientReady;        //client ready flag
+    private boolean serverReady;        //server ready flag
+    private boolean timeOut;            //timeout flag
     
-    private boolean active;
+    private boolean active;             //Active flag
     
-    private OrganismManager otherorgs;
-    private ResourceManager resources;
-    private PredatorManager predators;
+    private OrganismManager otherorgs;  //Opponent organisms
+    private ResourceManager resources;  //Resources
+    private PredatorManager predators;  //Preadtors
     
-    private Time time;
-    private int secSinceRecv;
+    private Time time;                  //current time
+    private int secSinceRecv;           //Seconds to timeout
     
+    /**
+     * NetworkManager constructor
+     * @param isServer server state
+     * @param otherorgs opponent organisms
+     * @param resources this resources
+     * @param predators this predators
+     */
     public NetworkManager(boolean isServer, OrganismManager otherorgs, ResourceManager resources, PredatorManager predators) {
         this.otherorgs = otherorgs;
         this.resources = resources;
@@ -65,6 +72,11 @@ public class NetworkManager implements Runnable, Commons {
         port = 0;
     }
     
+    /**
+     * Initialize client
+     * @param address host address
+     * @param port host port
+     */
     public void initClient(String address, int port) {
         if (server) {
             //Not valid if instance is not a client
@@ -82,6 +94,9 @@ public class NetworkManager implements Runnable, Commons {
         }
     }
     
+    /**
+     * Initialize server
+     */
     public void initServer() {
         try {  
             active = true;
@@ -91,6 +106,9 @@ public class NetworkManager implements Runnable, Commons {
         }
     }
     
+    /**
+     * tick the time
+     */
     public void tick() {
         time.tick();
         
@@ -100,9 +118,8 @@ public class NetworkManager implements Runnable, Commons {
     }
     
     /**
-     *
-     * @param orgs
-     * @param data
+     *  Send organism data
+     * @param orgs organisms to send
      */
     public void sendData(OrganismManager orgs) {
         if (port == 0) {
@@ -122,6 +139,10 @@ public class NetworkManager implements Runnable, Commons {
         } 
     }
     
+    /**
+     * Send plant data
+     * @param res plants to send
+     */
     public void sendDataPlants(ResourceManager res) {
         if (port == 0) {
             //No address specified
@@ -140,6 +161,10 @@ public class NetworkManager implements Runnable, Commons {
         } 
     }
     
+    /**
+     *  Send water data
+     * @param res waters to send
+     */
     public void sendDataWaters(ResourceManager res) {
         if (port == 0) {
             //No address specified
@@ -158,6 +183,10 @@ public class NetworkManager implements Runnable, Commons {
         } 
     }
     
+    /**
+     * Send predators data
+     * @param preds predators to send
+     */
     public void sendDataPreds(PredatorManager preds) {
         if (port == 0) {
             //No address specified
@@ -176,6 +205,9 @@ public class NetworkManager implements Runnable, Commons {
         } 
     }
     
+    /**
+     * Send extinct flag
+     */
     public void sendDataExtinct() {
         if (port == 0) {
             //No address specified
@@ -194,6 +226,9 @@ public class NetworkManager implements Runnable, Commons {
         } 
     }
     
+    /**
+     * Send won flag
+     */
     public void sendDataWin() {
         if (port == 0) {
             //No address specified
@@ -212,6 +247,10 @@ public class NetworkManager implements Runnable, Commons {
         } 
     }
     
+    /**
+     * Send ready flag
+     * @param client true if client
+     */
     public void sendReady(boolean client) {
         if (port == 0) {
             //No address specified
@@ -230,6 +269,9 @@ public class NetworkManager implements Runnable, Commons {
         }
     }
     
+    /**
+     * Receive data from the remote computer and process it
+     */
     public void receiveData() {
         try {
             //If port is 0, address and port have not been specified
@@ -283,6 +325,9 @@ public class NetworkManager implements Runnable, Commons {
         }
     }
     
+    /**
+     * Close the connection
+     */
     public void endConnection() {
         if (socket != null) {
             socket.close();
@@ -290,30 +335,57 @@ public class NetworkManager implements Runnable, Commons {
         active = false;
     }
     
+    /**
+     * get clientReady state
+     * @return clientReady
+     */
     public boolean isClientReady() {
         return clientReady;
     }
     
+    /**
+     * get serverReady state
+     * @return serverReady
+     */
     public boolean isServerReady() {
         return serverReady;
     }
 
+    /**
+     * get other won
+     * @return otherWon
+     */
     public boolean isOtherWon() {
         return otherWon;
     }
 
+    /**
+     * get other extinct state
+     * @return otherExtinct
+     */
     public boolean isOtherExtinct() {
         return otherExtinct;
     }
 
+    /**
+     * get other disconnect
+     * @return other disconnect
+     */
     public boolean isOtherDisconnect() {
         return otherDisconnect;
     }
 
+    /**
+     * get timeout from remote
+     * @return timeOut
+     */
     public boolean isTimeOut() {
         return timeOut;
     }
 
+    /**
+     * Start network thread
+     */
     @Override
     public void run() {
         while (active) {

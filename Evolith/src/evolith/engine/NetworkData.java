@@ -22,6 +22,11 @@ import java.util.ArrayList;
 public class NetworkData implements Commons {
     private static int constructedByteAmount;
     
+    /**
+     * To construct data from the organisms
+     * @param orgs organisms data
+     * @return byte array of data
+     */
     public static byte[] constructData(OrganismManager orgs) {
         byte[] data;
         constructedByteAmount = orgs.getAmount() * ORG_DATA_SIZE + 3;
@@ -69,8 +74,8 @@ public class NetworkData implements Commons {
     /**
      * To construct the plants with their respective data
      * 
-     * @param res
-     * @return data
+     * @param res plants
+     * @return data byte array of data
      */
     public static byte[] constructDataPlants(ResourceManager res) {
         byte[] data;
@@ -117,8 +122,8 @@ public class NetworkData implements Commons {
     /**
      * To construct the water with its respective data
      * 
-     * @param res
-     * @return data
+     * @param res waters
+     * @return data byte array of data
      */
     public static byte[] constructDataWaters(ResourceManager res) {
         byte[] data;
@@ -165,8 +170,8 @@ public class NetworkData implements Commons {
     /**
      * To construct the predators with their respective data
      * 
-     * @param preds
-     * @return data
+     * @param preds predators
+     * @return data byte array of data
      */
     public static byte[] constructDataPreds(PredatorManager preds) {
         byte[] data;
@@ -196,9 +201,9 @@ public class NetworkData implements Commons {
     }
     
     /**
-     * To construct the data when a player extincts
+     * To construct the data when a player goes extinct
      * 
-     * @return data
+     * @return byte array of data
      */
     public static byte[] constructDataExtinct() {
         byte[] data;
@@ -213,7 +218,7 @@ public class NetworkData implements Commons {
     /**
      * To construct the data when a player wins
      * 
-     * @return data
+     * @return byte array of data
      */
     public static byte[] constructDataWin() {
         byte[] data;
@@ -228,7 +233,7 @@ public class NetworkData implements Commons {
     /**
      * To construct the state of the game
      * 
-     * @param game
+     * @param game game object
      * @return result
      */
     private static byte constructGameState(Game game) {
@@ -267,8 +272,8 @@ public class NetworkData implements Commons {
     /**
      * To construct the data when the client is ready
      * 
-     * @param client
-     * @return data
+     * @param client client flag
+     * @return byte array of data
      */
     public static byte[] constructReady(boolean client) {
         byte[] data;
@@ -288,10 +293,10 @@ public class NetworkData implements Commons {
     }
     
     /**
-     * To parse bytes
+     * To parse bytes to organism
      * 
-     * @param orgs
-     * @param data 
+     * @param orgs organism to update
+     * @param data byte array
      */
     public static void parseBytes(OrganismManager orgs, byte[] data) {
         int index = 3;
@@ -370,9 +375,9 @@ public class NetworkData implements Commons {
     /**
      * To parse the bytes of the plants
      * 
-     * @param res
-     * @param data
-     * @param server 
+     * @param res plants to update
+     * @param data byte array
+     * @param server server flag
      */
     public static void parseBytesPlants(ResourceManager res, byte[] data, boolean server) {
         int index = 2;
@@ -449,9 +454,9 @@ public class NetworkData implements Commons {
     /**
      * To parse the bytes of the water
      * 
-     * @param res
-     * @param data
-     * @param server 
+     * @param res waters to modify
+     * @param data byte array
+     * @param server server flag
      */
     public static void parseBytesWaters(ResourceManager res, byte[] data, boolean server) {
         int index = 2;
@@ -530,8 +535,8 @@ public class NetworkData implements Commons {
     /**
      * To parse the bytes of the predators
      * 
-     * @param preds
-     * @param data 
+     * @param preds predators to update
+     * @param data byte array
      */
     public static void parseBytesPreds(PredatorManager preds, byte[] data) {
         int index = 2;
@@ -577,7 +582,7 @@ public class NetworkData implements Commons {
     /**
      * To convert the mutations
      * 
-     * @param muts
+     * @param muts mutations to parse
      * @return result
      */
     private static byte convertMutations(MutationManager muts) {
@@ -608,9 +613,9 @@ public class NetworkData implements Commons {
     /**
      * To parse the mutations
      * 
-     * @param muts
-     * @param data
-     * @param index 
+     * @param muts mutations to update
+     * @param data byte array
+     * @param index byte array position
      */
     private static void parseMutations(MutationManager muts, byte[] data, int index) {
         int tier;
@@ -635,10 +640,10 @@ public class NetworkData implements Commons {
     }
     
     /**
-     * To add extra information
+     * To add flags from organisms
      * 
-     * @param org
-     * @param muts
+     * @param org organisms 
+     * @param muts mutations
      * @return result
      */
     private static byte addExtraInfo(Organism org, MutationManager muts) {
@@ -674,7 +679,7 @@ public class NetworkData implements Commons {
     /**
      * To add flags for the resources
      * 
-     * @param res
+     * @param res resource
      * @return result
      */
     private static byte addFlags(Resource res) {
@@ -694,7 +699,7 @@ public class NetworkData implements Commons {
     /**
      * To add flags for the predators
      * 
-     * @param pred
+     * @param pred predator
      * @return result
      */
     private static byte addFlags(Predator pred) {
@@ -723,9 +728,9 @@ public class NetworkData implements Commons {
     /**
      * To get the flags of the resources
      * 
-     * @param data
-     * @param index
-     * @return boolean
+     * @param data byte array
+     * @param index position
+     * @return true if remove
      */
     private static boolean getFlags(byte[] data, int index) {
         if ((unsignByte(data[index]) & 128) == 128) {
@@ -738,9 +743,9 @@ public class NetworkData implements Commons {
     /**
      * To get the flags of the predators
      * 
-     * @param data
-     * @param index
-     * @param pred 
+     * @param data byte array
+     * @param index position
+     * @param pred predator
      */
     private static void getFlags(byte[] data, int index, Predator pred) {
         if ((unsignByte(data[index]) & 128) == 128) {
@@ -787,13 +792,13 @@ public class NetworkData implements Commons {
     }
     
     /**
-     * To get extra information
+     * To get extra information from organism packet
      * 
-     * @param org
-     * @param orgs
-     * @param data
-     * @param index
-     * @param first 
+     * @param org organism
+     * @param orgs organism manager
+     * @param data byte array
+     * @param index position
+     * @param first if first update
      */
     private static void getExtraInfo(Organism org, OrganismManager orgs, byte[] data, int index, boolean first) {
         if ((unsignByte(data[index]) & 128) == 128) {
