@@ -184,7 +184,7 @@ public class Game implements Runnable, Commons {
         display.getCanvas().addMouseListener(mouseManager);
         display.getCanvas().addMouseMotionListener(mouseManager);
 
-        weather = new Weather(width, height, background);
+        weather = new Weather(width, height, background, this);
 
     }
 

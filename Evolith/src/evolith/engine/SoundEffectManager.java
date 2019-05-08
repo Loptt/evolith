@@ -27,6 +27,8 @@ public class SoundEffectManager {
     private int secondStartAlien;
     private Time time;
     private boolean predator, water, plant, organism, rain, storm, wind, next, back, win, over;
+    private Song rainsound;
+    private Song stormsound;
 
     public SoundEffectManager() {
         time = new Time();
@@ -41,11 +43,13 @@ public class SoundEffectManager {
         back = false;
         win = false;
         over = false;
-        predatorSound = new Song(Assets.aliensound, 3);
+        predatorSound = new Song(Assets.aliensound, 5);
         waterSound = new Song(Assets.watersound, 1);
         plantSound = new Song(Assets.grasssound, 1); 
         nextSound = new Song(Assets.nextsound, 1);
         backSound = new Song(Assets.backsound, 1);
+        rainsound = new Song(Assets.rainsound, 40);
+        stormsound = new Song(Assets.stormsound, 40);
         secondStartAlien = 0;
     }
     
@@ -82,12 +86,21 @@ public class SoundEffectManager {
             overSound.play();
             over = false;
         }
+        if(rain){
+            rainsound.play();
+            rain = false;
+        }
+        if(storm){
+            stormsound.play();
+            storm = false;
+        }
         
     }
     
     public void playAlien() {
         predator = true;
     }
+    
     
     public void playWater() {
         water = true;
@@ -121,6 +134,23 @@ public class SoundEffectManager {
         return predator;
     }
     
+    public void playRain(){
+        rain = true;
+    }
+    
+    public void stopRain(){
+        rain = false;
+        rainsound.stop();
+    }
+    
+    public void playStorm(){
+        storm = true;
+    }
+    
+    public void stopStorm(){
+        storm = false;
+        stormsound.stop();
+    }
     
     
     private class Song {
@@ -134,6 +164,10 @@ public class SoundEffectManager {
         
         public void play() {
             clip.play();
+        }
+        
+        public void stop(){
+            clip.stop();
         }
     }
     
