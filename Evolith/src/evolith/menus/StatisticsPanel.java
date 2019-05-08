@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package evolith.menus;
 
 import evolith.database.JDBC;
@@ -21,8 +16,10 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
- *
- * @author ErickFrank
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class StatisticsPanel extends Menu implements Commons {
 
@@ -156,6 +153,7 @@ public class StatisticsPanel extends Menu implements Commons {
  
     @Override
     public void render(Graphics g) {
+        
         if(!active)
             return;
         

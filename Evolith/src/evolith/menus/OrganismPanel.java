@@ -5,6 +5,7 @@ import evolith.entities.CampfireManager;
 import evolith.entities.Organism;
 import evolith.game.Game;
 import evolith.helpers.Commons;
+import evolith.helpers.FontLoader;
 import evolith.helpers.InputReader;
 import java.awt.Color;
 import java.awt.Font;
@@ -17,17 +18,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author ErickFrank
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class OrganismPanel extends Menu implements Commons {
 
     private Organism organism;              //Organism that is being displayed in the panel
-
-    private String fontPath;                //Path to where the font is located
-    private Font fontEvolve;                //Font used in the organism panel
-    private InputStream is;                 //Manages the input of the name in the panel
-
+    private FontLoader f;
     private InputReader inputReader;        //Manages the input keyboard of the name in the panel
 
     private boolean active;                 //Determines whether the panel is active     
@@ -55,16 +54,7 @@ public class OrganismPanel extends Menu implements Commons {
     public OrganismPanel(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
         active = false;
-        fontPath = "/Fonts/MADE-Evolve-Sans-Regular.ttf";
-        this.is = OrganismPanel.class.getResourceAsStream(fontPath);
-        try {
-            fontEvolve = Font.createFont(Font.TRUETYPE_FONT, is);
-            fontEvolve = fontEvolve.deriveFont(20f);
-        } catch (FontFormatException ex) {
-            Logger.getLogger(OrganismPanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(OrganismPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        f = new FontLoader();
         inputReader = new InputReader(game);
         inputActive = false;
         
@@ -162,17 +152,12 @@ public class OrganismPanel extends Menu implements Commons {
      */
     @Override
     public void tick() {
-        /*if(organism.isDead())
-        {
-            active = false;
-        }*/
-        //Reads the input
-
+        
         //If the panel is not active, do nothing
         if (!active) {
             return;
         }
-        
+        //Reads the input
         if (inputActive) {
             game.getInputKeyboard().tick();
         }
@@ -338,14 +323,6 @@ public class OrganismPanel extends Menu implements Commons {
         this.active = active;
     }
 
-    public ArrayList<Button> getButtons() {
-        return buttons;
-    }
-
-    public void setButtons(ArrayList<Button> buttons) {
-        this.buttons = buttons;
-    }
-    
     public boolean isInputActive() {
         return inputActive;
     }
@@ -412,12 +389,12 @@ public class OrganismPanel extends Menu implements Commons {
         
         // Edit
         g.setColor(Color.WHITE);
-        g.setFont(fontEvolve);
+        g.setFont(f.getFontEvolve());
         g.drawString(Integer.toString(organism.getGeneration()), x + 474, y + 286);
         g.drawString(Double.toString(organism.getTime().getSeconds()), x + 458, y + 313);
 
         g.setColor(Color.WHITE);
-        g.setFont(fontEvolve);
+        g.setFont(f.getFontEvolve());
 
         for (int i = 0; i < buttons.size() - 1; i++) {
 
