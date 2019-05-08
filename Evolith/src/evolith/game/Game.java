@@ -1463,15 +1463,7 @@ public class Game implements Runnable, Commons {
     public void setMysql(JDBC mysql) {
         this.mysql = mysql;
     }
-
-    /**
-     * to get clock
-     * @return clock
-     */
-    public Clock getClock() {
-        return clock;
-    }
-
+    
     /**
      * to get game statistics menu
      * @return gameStats
