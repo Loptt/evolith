@@ -218,10 +218,7 @@ public class StatisticsPanel extends Menu implements Commons {
             g.drawString("Stealth", 49 , 467);
             g.drawString("Max Health", 333 , 467);
             
-            
-            
-            
-            
+
             g2.setStroke(new BasicStroke(2));
             
             g.setColor(new Color(255,211,0, 170));
@@ -246,32 +243,16 @@ public class StatisticsPanel extends Menu implements Commons {
         
     }
 
-    public int getSpeed() {
-        return speed;
-    }
-
     public void setSpeed(int speed) {
         this.speed = speed;
-    }
-
-    public int getStealth() {
-        return stealth;
     }
 
     public void setStealth(int stealth) {
         this.stealth = stealth;
     }
 
-    public int getHealth() {
-        return health;
-    }
-
     public void setHealth(int health) {
         this.health = health;
-    }
-
-    public int getStrength() {
-        return strength;
     }
 
     public void setStrength(int strength) {
