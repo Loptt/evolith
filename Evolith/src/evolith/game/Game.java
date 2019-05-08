@@ -422,7 +422,7 @@ public class Game implements Runnable, Commons {
 
         //If paused, tick pause but not return
         if (paused) {
-            pausedTick();
+            pausedMultiTick();
         }
 
         //Tick involved objects
@@ -549,6 +549,54 @@ public class Game implements Runnable, Commons {
             loadGame();
             pauseMenu.setClickLoad(false);
             musicManager.play();
+            paused = !paused;
+        }
+
+        //If exit button is pressed, go back to main menu
+        if (pauseMenu.isClickExit()) {
+            pauseMenu.setClickExit(false);
+            state = States.MainMenu;
+            resetGame();
+            musicManager.stop();
+
+            if (network != null) {
+                network.endConnection();
+            }
+        }
+    }
+    
+        /**
+     * Tick the pause menu
+     */
+    private void pausedMultiTick() {
+        pauseMenu.tick();
+        keyManager.tick();
+        musicManager.tick();
+
+        //If p is pressed, go back to play
+        if (keyManager.p) {
+            paused = !paused;
+            inputKeyboard.p = false;
+            inputKeyboard.prevp = false;
+        }
+
+        //If esc is pressed, go back to play
+        if (keyManager.esc) {
+            paused = !paused;
+        }
+
+        if (!pauseMenu.isMainMenuDisplayed()) {
+            paused = !paused;
+        }
+
+        //Is save button is pressed, save current game state
+        if (pauseMenu.isClickSave()) {
+            pauseMenu.setClickSave(false);
+        }
+
+        //If load button is pressed, load current game state
+        if (pauseMenu.isClickLoad()) {
+            pauseMenu.setClickLoad(false);
             paused = !paused;
         }
 

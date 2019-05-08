@@ -397,6 +397,8 @@ public class Organism extends Item implements Commons {
             if (maturity == 140) {
                 needOffspring = true;
             }
+            
+            needOffspring = true;
         }
 
         //Once the organisms reaches max maturity, kill it
@@ -454,7 +456,7 @@ public class Organism extends Item implements Commons {
     private void born() {        
         born = true;
         //Check if a mutation will occur. Chance is defined in the commons class
-        if (((int) (Math.random() * MUTATION_CHANCE) == 0) && !other && !game.getOrganisms().getMutPanel().isActive()) {
+        if (((int) (Math.random() * MUTATION_CHANCE) == 0 || true) && !other && !game.getOrganisms().getMutPanel().isActive()) {
             needMutation = true;
         } else {
             egg = false;
