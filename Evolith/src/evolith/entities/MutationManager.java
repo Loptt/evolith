@@ -49,7 +49,7 @@ public class MutationManager implements Commons{
         ArrayList<Mutation> m3 = new ArrayList<Mutation>();
         m3.add(new Mutation("Medium Size",0,0,20,0,false,1,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game, org));   // Finished
         m3.add(new Mutation("Big Size",20,-20,20,-20,false,2,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game, org)); // Finished
-        m3.add(new Mutation("Shell",-20 ,-40,40,0,false,3,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game, org));    // Finished
+        m3.add(new Mutation("Hard Skin",-20 ,-40,40,0,false,3,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game, org));    // Finished
         mutations.add(m3);
         
         ArrayList<Mutation> m4 = new ArrayList<Mutation>();
@@ -63,6 +63,9 @@ public class MutationManager implements Commons{
             }
         }
         
+        mutations.get(1).get(0).setMutSprite(Assets.leg1prev);
+        mutations.get(1).get(1).setMutSprite(Assets.leg2prev);
+        mutations.get(1).get(2).setMutSprite(Assets.leg3prev);
     }
 
     public ArrayList<ArrayList<Mutation>> getMutations() {
@@ -178,10 +181,10 @@ public class MutationManager implements Commons{
         for(int j=0; j<mutations.get(1).size(); j++){
             mutations.get(1).get(j).render(g);
         }
-        
+        /*
         for(int j=0; j<mutations.get(2).size(); j++){
             mutations.get(2).get(j).render(g);
-        }
+        }*/
         
         for(int j=0; j<mutations.get(0).size(); j++){
             mutations.get(0).get(j).render(g);
