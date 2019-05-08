@@ -28,16 +28,17 @@ public class Hover extends Item implements Commons {
     private String name;        //  name of the organism
 
     /**
-     * Contructor of the hover panel of the organism
-     *
+     * Constructor of the hover
      * @param x
      * @param y
      * @param width
      * @param height
      * @param food
      * @param water
-     * @param mat
+     * @param life
+     * @param maxHealth
      * @param game
+     * @param org 
      */
     public Hover(int x, int y, int width, int height, int food, int water, double life, int maxHealth, Game game, Organism org) {
         super(x, y, width, height);

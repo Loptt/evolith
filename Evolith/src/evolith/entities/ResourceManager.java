@@ -61,35 +61,43 @@ public class ResourceManager implements Commons {
     public void respawnResources(){
         Random randomGen = new Random();
         for (int i = 0; i < deadPlants; ++i) {
-            int xCoord, yCoord; 
-            xCoord = randomGen.nextInt(5000) + 1;
-            yCoord = randomGen.nextInt(5000) + 1;
-            plants.add(new Resource(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE, game, Resource.ResourceType.Plant));
-            
-            //System.out.println("plants size: " + plants.size());
-            
-            for (int j = 0; j < plants.size()-1; j++) {
-                if (plants.get(plants.size()-1).intersects(plants.get(j))) {
-                    plants.remove(i);
-                    i--;
+            if(plants.size()<=plantsAmount){
+                
+                 int xCoord, yCoord; 
+                xCoord = randomGen.nextInt(5000) + 1;
+                yCoord = randomGen.nextInt(5000) + 1;
+                plants.add(new Resource(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE, game, Resource.ResourceType.Plant));
+
+                //System.out.println("plants size: " + plants.size());
+
+                for (int j = 0; j < plants.size()-1; j++) {
+                    if (plants.get(plants.size()-1).intersects(plants.get(j))) {
+                        plants.remove(i);
+                        i--;
+                    }
                 }
+                
             }
         }
         
         
         for (int i = 0; i < deadWaters; ++i) {
-            int xCoord, yCoord; 
-            xCoord = randomGen.nextInt(5000) + 1;
-            yCoord = randomGen.nextInt(5000) + 1;
-            waters.add(new Resource(xCoord, yCoord, WATER_SIZE, WATER_SIZE, game, Resource.ResourceType.Water));
+            if(waters.size()<=watersAmount){
+                
+                int xCoord, yCoord; 
+                xCoord = randomGen.nextInt(5000) + 1;
+                yCoord = randomGen.nextInt(5000) + 1;
+                waters.add(new Resource(xCoord, yCoord, WATER_SIZE, WATER_SIZE, game, Resource.ResourceType.Water));
 
-            //System.out.println("waters size: " + waters.size());
-            
-            for (int j = 0; j < waters.size() - 1; j++) {
-                if (waters.get(waters.size() - 1).intersects(waters.get(j)) && i != j) {
-                    waters.remove(i);
-                    i--;
+                //System.out.println("waters size: " + waters.size());
+
+                for (int j = 0; j < waters.size() - 1; j++) {
+                    if (waters.get(waters.size() - 1).intersects(waters.get(j)) && i != j) {
+                        waters.remove(i);
+                        i--;
+                    }
                 }
+                
             }
         }
     
@@ -112,13 +120,19 @@ public class ResourceManager implements Commons {
             waters.add(new Resource(xCoord, yCoord, WATER_SIZE, WATER_SIZE, game, Resource.ResourceType.Water));
         }
         int i=0;
-        while(plants.size()>plantsAmount){
-            plants.remove(i);
+        int currentPlants = plants.size();
+        while(currentPlants>plantsAmount){
+            plants.get(i).setOver(true);
+            currentPlants = currentPlants - 1;
+            //plants.remove(i);
             i++;
         }
         int j=0;
-        while(waters.size()>watersAmount){
-            waters.remove(j);
+        int currentWaters = waters.size();
+        while(currentWaters>watersAmount){
+            waters.get(j).setOver(true);
+            currentWaters = currentWaters - 1;
+            //waters.remove(j);
             j++;
         }
         
@@ -126,20 +140,22 @@ public class ResourceManager implements Commons {
     
     public void reducePlants(int max){
         int i=0;
-        while(plants.size()>max){
+        plantsAmount = plants.size();
+        while(plantsAmount>max){
             plants.get(i).setOver(true);
-            plants.remove(i);
-            plantsAmount = plants.size();
+            //plants.remove(i);
+            plantsAmount = plantsAmount - 1;
             i++;
         }
     }
     
     public void reduceWaters(int max){
         int i=0;
-        while(waters.size()>max){
+        watersAmount = waters.size();
+        while(watersAmount>max){
             waters.get(i).setOver(true);
-            waters.remove(i);
-            watersAmount = waters.size();
+            //waters.remove(i);
+            watersAmount = watersAmount - 1;
             i++;
         }
     }

@@ -334,6 +334,9 @@ public class Assets {
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions4.png"));
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions5.png"));
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions6.png"));
+        instructions.add(ImageLoader.loadImage("/images/instructions/instructions7.png"));
+        instructions.add(ImageLoader.loadImage("/images/instructions/instructions8.png"));
+        instructions.add(ImageLoader.loadImage("/images/instructions/instructions9.png"));
    
         statsiconOff = ImageLoader.loadImage("/images/ranking/statsoff.png");
         statsiconOn = ImageLoader.loadImage("/images/ranking/statson.png");

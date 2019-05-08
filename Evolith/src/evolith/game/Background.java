@@ -22,7 +22,6 @@ public class Background {
 
     /**
      *
-     * @param img
      * @param width
      * @param height
      * @param cameraWidth

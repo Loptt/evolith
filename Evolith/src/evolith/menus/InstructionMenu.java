@@ -41,6 +41,9 @@ public class InstructionMenu extends Menu {
         images.add(Assets.instructions.get(3));     //Fourth instructions image
         images.add(Assets.instructions.get(4));     //Fifth instructions image
         images.add(Assets.instructions.get(5));     //Sixth instructions image
+        images.add(Assets.instructions.get(6));     //Seventh instructions image
+        images.add(Assets.instructions.get(7));     //Eighth instructions image
+        images.add(Assets.instructions.get(8));     //nineth instructions image
         
         buttons.add(new Button(920, 625, 55, 50, Assets.nextArrow, Assets.nextArrow)); //Next
         sounds = game.getSfx();

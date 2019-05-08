@@ -231,7 +231,8 @@ public class JDBC {
      */
     public void updateOrganisms(OrganismManager om) {
         //Query to update organisms' intelligence
-        String updateIntelligence = "UPDATE species SET species_intelligence = " + Integer.toString(om.getMaxIntelligence()) + " WHERE species_id = " + Integer.toString(om.getSpeciesID()) + ";" ;
+
+        String updateIntelligence = "UPDATE species SET species_intelligence = " + Integer.toString(om.getMaxIntelligence()) + " WHERE species_id = " + Integer.toString(om.getSpeciesID()) + ";";
 
         try {
             //Creates a new statement from the connection of the databases

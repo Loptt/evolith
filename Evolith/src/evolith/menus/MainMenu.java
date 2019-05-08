@@ -79,9 +79,9 @@ public class MainMenu extends Menu implements Commons {
     public boolean isClickIns() {
         return clickIns;
     }
-        /**
-     * To check if the menu is clicked inside
-     * @return clickIns
+    /**
+     * To set the status if it is clicked inside
+     * @param clickIns 
      */
     public void setClickIns(boolean clickIns) {
         this.clickIns = clickIns;
