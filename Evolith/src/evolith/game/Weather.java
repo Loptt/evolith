@@ -91,8 +91,6 @@ public class Weather {
         states.get(0).add(State.Rain);
         states.get(0).add(State.Dry);
         
-        states.get(0).add(State.Hail);
-        
         //Dry
         states.get(1).add(State.Dry);
         states.get(1).add(State.Rain);
@@ -110,7 +108,7 @@ public class Weather {
         states.get(4).add(State.Hail);
         states.get(4).add(State.Clear);
         states.get(4).add(State.Snow);
-        
+
         //Snow
         states.get(5).add(State.Clear);
         
@@ -173,6 +171,7 @@ public class Weather {
                 clear.setActive(true);
                 game.getSfx().stopRain();
                 game.getSfx().stopStorm();
+                game.getSfx().stopSnow();
                 prevWeather = 0;
                 background.setImageDay(clear.getDay());
                 background.setImageNight(clear.getNight());
@@ -211,6 +210,7 @@ public class Weather {
             case Snow:
                 state = State.Snow;
                 snow.setActive(true);
+                game.getSfx().playSnow();
                 prevWeather = 5;
                 background.setImageDay(snow.getDay());
                 background.setImageNight(snow.getNight());

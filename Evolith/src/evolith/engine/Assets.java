@@ -171,6 +171,7 @@ public class Assets {
     public static SoundClip oversound;
     public static SoundClip rainsound;
     public static SoundClip stormsound;
+    public static SoundClip snowsound;
     
     public static BufferedImage campfire;
     public static BufferedImage setCampfireOn;
@@ -421,6 +422,7 @@ public class Assets {
         oversound = new SoundClip("/sounds/over.wav");
         rainsound = new SoundClip("/sounds/rain.wav");
         stormsound = new SoundClip("/sounds/storm.wav");
+        snowsound = new SoundClip("/sounds/snow.wav");
         
         repClock = ImageLoader.loadImage("/images/organisms/clock.png");
         

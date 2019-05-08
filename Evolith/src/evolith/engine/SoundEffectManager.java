@@ -26,9 +26,10 @@ public class SoundEffectManager {
     private Song winSound;
     private int secondStartAlien;
     private Time time;
-    private boolean predator, water, plant, organism, rain, storm, wind, next, back, win, over;
+    private boolean predator, water, plant, organism, rain, storm, snow, next, back, win, over;
     private Song rainsound;
     private Song stormsound;
+    private Song snowsound;
 
     public SoundEffectManager() {
         time = new Time();
@@ -38,7 +39,7 @@ public class SoundEffectManager {
         organism = false;
         rain = false;
         storm = false;
-        wind = false;
+        snow = false;
         next = false;
         back = false;
         win = false;
@@ -50,6 +51,7 @@ public class SoundEffectManager {
         backSound = new Song(Assets.backsound, 1);
         rainsound = new Song(Assets.rainsound, 40);
         stormsound = new Song(Assets.stormsound, 40);
+        snowsound = new Song(Assets.snowsound, 40);
         secondStartAlien = 0;
     }
     
@@ -93,6 +95,11 @@ public class SoundEffectManager {
         if(storm){
             stormsound.play();
             storm = false;
+        }
+        if(snow){
+            System.out.println("snow plays");
+            snowsound.play();
+            snow = false;
         }
         
     }
@@ -152,6 +159,14 @@ public class SoundEffectManager {
         stormsound.stop();
     }
     
+    public void playSnow(){
+        snow = true;
+    }
+    
+    public void stopSnow(){
+        snow = false;
+        snowsound.stop();
+    }
     
     private class Song {
         private SoundClip clip;
