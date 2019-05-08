@@ -261,11 +261,11 @@ public class ModeMenu extends Menu {
                     tickToWrite = !tickToWrite;
                 }
 
-                g.drawString(address, x + 407, y + 567);
+                g.drawString(address, x + 330, y + 400);
                 int width = g.getFontMetrics().stringWidth(address);
 
                 if (tickToWrite && !inputReader.isOnlyDelete()) {
-                    g.drawString("l", x + 407 + width, y + 567);
+                    g.drawString("l", x + 330 + width, y + 400);
                 }
                 break;
         }
