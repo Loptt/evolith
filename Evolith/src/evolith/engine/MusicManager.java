@@ -43,6 +43,10 @@ public class MusicManager {
         songs.get(currentSong).play();
     }
     
+    public void stop() {
+        songs.get(currentSong).stop();
+    }
+    
     private class Song {
         private SoundClip clip;
         private int duration;
@@ -54,6 +58,10 @@ public class MusicManager {
         
         public void play() {
             clip.play();
+        }
+        
+        public void stop() {
+            clip.stop();
         }
     }
 }

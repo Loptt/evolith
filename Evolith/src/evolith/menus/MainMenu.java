@@ -1,10 +1,15 @@
 package evolith.menus;
 
+
+import evolith.database.JDBC;
+
 import evolith.game.Game;
 import evolith.engine.Assets;
 import evolith.helpers.Commons;
 import java.awt.Graphics;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -19,8 +24,6 @@ public class MainMenu extends Menu implements Commons {
     private boolean clickPlay;
     private boolean clickIns;
 
-    //private RankingPanel rankpanel;
-    
     /**
      * Constructor of the main menu
      *
@@ -39,8 +42,6 @@ public class MainMenu extends Menu implements Commons {
 
         buttons.add(new Button(BUTTON_PLAY_X, BUTTON_PLAY_Y, BUTTON_PLAY_WIDTH, BUTTON_PLAY_HEIGHT)); // Play button
         buttons.add(new Button(BUTTON_INSTRUCTIONS_X, BUTTON_INSTRUCTIONS_Y, BUTTON_INSTRUCTIONS_WIDTH, BUTTON_INSTRUCTIONS_HEIGHT)); // Instructions button
-        //rankpanel = new RankingPanel(0,0,0,0,null);
-        
     }
     /**
      * To
@@ -141,8 +142,6 @@ public class MainMenu extends Menu implements Commons {
             g.drawImage(Assets.startPlay, 0, 0, 1000, 700, null);
         } else if (active && buttons.get(1).isActive()) {
             g.drawImage(Assets.startInstructions, 0, 0, 1000, 700, null);
-        }
-        //rankpanel.render(g);
-}
-    
+        } 
+    }
 }

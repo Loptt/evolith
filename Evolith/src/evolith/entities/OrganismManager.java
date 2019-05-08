@@ -30,6 +30,7 @@ import java.util.HashSet;
 public class OrganismManager implements Commons {
 
     private ArrayList<Organism> organisms;  //array of all organisms
+    private ArrayList<Organism> deadOrgs;
 
     private Game game;          // game instance
 
@@ -52,28 +53,38 @@ public class OrganismManager implements Commons {
     private JDBC mysql;
     private int maxIntelligence;
     private int maxGeneration;
+
+    private int panelIndex;         //Current index in organism panel
+    private int idCounter;          //Id counter to assign id to new organisms
+    private String speciesName;     //name of the species
     
+    private boolean updatedNight;   //To check if night changes have been done
+    private boolean other;          //State indicating if 
+
 
     /**
      * Constructor of the organisms
      *
-     * @param game
+     * @param game game object
+     * @param other other flag
      */
-    public OrganismManager(Game game) {
+    public OrganismManager(Game game, boolean other) {
         panelIndex = 0;
         this.game = game;
+        this.other = other;
         organisms = new ArrayList<>();
+        deadOrgs = new ArrayList<>();
         int amount = 1;
         idCounter = 1;
         maxGeneration = 1;
 
         for (int i = 0; i < amount; i++) {
-            organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++));
+            organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
             organisms.get(i).setEgg(false);
             organisms.get(i).setBorn(true);
-            organisms.get(i).setMaturity(50);
+            organisms.get(i).setMaturity(100);
         }
-
+       
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
         mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
         
@@ -93,40 +104,23 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).tick();
             checkNeedMutation(organisms.get(i));
+
             checkKill(organisms.get(i));
             checkGeneration(organisms.get(i));
+        }
+      
+        for (int i = 0; i < deadOrgs.size(); i++) {
+            Organism org = deadOrgs.get(i);
+            org.tick();
+            
+            if (org.isAnimationDone()) {
+                deadOrgs.remove(org);
+            }
         }
         checkNight();
         updateMenuPanels();
     }
 
-    /**
-     * Perform action on mouse clicked
-     *
-     * @param x
-     * @param y
-     */
-    public void applyMouse(int x, int y) {
-        moveSwarm(x, y);
-    }
-
-    /**
-     * To move the entire swarm to the x and y given
-     *
-     * @param x
-     * @param y
-     */
-    public void moveSwarm(int x, int y) {
-        ArrayList<Point> points;
-        //if left clicked move the organisms to determined point
-
-        if (organisms.size() > 0) {
-            points = SwarmMovement.getPositions(x, y, organisms.size());
-            for (int i = 0; i < organisms.size(); i++) {
-                organisms.get(i).setPoint(points.get(i));
-            }
-        }
-    }
     public void calculateAverage() {
         for (int i = 0; i < organisms.size(); i++) {
             avg[0] += organisms.get(i).getSpeed();
@@ -144,24 +138,6 @@ public class OrganismManager implements Commons {
             statsPanel.setStealth(avg[1]);
             statsPanel.setStrength(avg[2]);
             statsPanel.setHealth(avg[3]);
-        }
-    }
-    
-    /**
-     * to move the swarm to the specified coordinates given there is an object
-     * in the middle
-     *
-     * @param x
-     * @param y
-     * @param obj
-     */
-    public void moveSwarm(int x, int y, int obj) {
-        ArrayList<Point> points;
-        //if left clicked move the organisms to determined point
-
-        points = SwarmMovement.getPositions(x - ORGANISM_SIZE_STAT / 2, y - ORGANISM_SIZE_STAT / 2, organisms.size(), obj);
-        for (int i = 0; i < organisms.size(); i++) {
-            organisms.get(i).setPoint(points.get(i));
         }
     }
 
@@ -196,19 +172,18 @@ public class OrganismManager implements Commons {
             }
         }
     }
-
+    
     /**
-     * deprecated
-     *
-     * @param x
-     * @param y
-     * @param obj
+     * Select organisms which are in the specified rectangle
+     * @param r Rectangle to check
      */
-    public void moveSwarmToPoint(int x, int y, int obj) {
-        Point p = new Point(x, y);
-
+    public void selectInRect(Rectangle r) {
         for (int i = 0; i < organisms.size(); i++) {
-            organisms.get(i).setPoint(p);
+            if (organisms.get(i).intersects(r) && !organisms.get(i).isEgg()) {
+                organisms.get(i).setSelected(true);
+            } else {
+                organisms.get(i).setSelected(false);
+            }
         }
     }
     
@@ -268,6 +243,9 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * Check if night changes need to be applied
+     */
     private void checkNight() {
         if (game.isNight()) {
             if (!updatedNight) {
@@ -293,7 +271,7 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < organisms.size(); i++) {
             //if mouse is countained in a certain organism
             if (organisms.get(i).getPerimeter().contains(game.getCamera().getAbsX(game.getMouseManager().getX()),
-                    game.getCamera().getAbsY(game.getMouseManager().getY())) && !organisms.get(i).isEgg()) {
+                    game.getCamera().getAbsY(game.getMouseManager().getY())) && !organisms.get(i).isEgg() && !organisms.get(i).isOther()) {
                 //sets new hover panel with that organism's location and information
                 h = new Hover(game.getMouseManager().getX(), game.getMouseManager().getY(), 170, 220,
                         organisms.get(i).getHunger(), organisms.get(i).getThirst(), organisms.get(i).getLife(), organisms.get(i).getCurrentMaxHealth(),
@@ -306,7 +284,13 @@ public class OrganismManager implements Commons {
             }
         }
     }
-
+    
+    /**
+     * get the absolute mod in the for a mod b
+     * @param a dividend
+     * @param b divisor
+     * @return real mod of a % b
+     */
     private int realMod(int a, int b) {
         return ((((a % b) + b) % b) + b) % b;
     }
@@ -329,6 +313,29 @@ public class OrganismManager implements Commons {
         
         return false;
     }
+    
+    /**
+     * In multiplayer, check if the opponent organisms are visible
+     */
+    public void checkOtherVisible() {
+        OrganismManager others = game.getOtherOrganisms();
+        
+        if (others == null) {
+            return;
+        }
+        for (int i = 0; i < others.getAmount(); i++) {
+            Organism org = others.getOrganism(i);
+            org.setVisible(false);
+            
+            for (int j = 0; j < organisms.size(); j++) {
+                Organism thisOrg = organisms.get(j);
+                
+                if (SwarmMovement.distanceBetweenTwoPoints(thisOrg.getX(), thisOrg.getY(), org.getX(), org.getY()) < MAX_SIGHT_DISTANCE + 350) {
+                    org.setVisible(true);
+                }
+            }
+        }
+    }
 
     /**
      * Check which organisms are in the selected area and toggle them
@@ -337,16 +344,19 @@ public class OrganismManager implements Commons {
      */
     public void checkSelection(Rectangle r) {
         for (int i = 0; i < organisms.size(); i++) {
-            organisms.get(i).setSelected(organisms.get(i).intersects(r));
+            if (!organisms.get(i).isEgg()) {
+                organisms.get(i).setSelected(organisms.get(i).intersects(r));
+            }
         }
     }
     
+    /**
+     * Reproduce an organism by creating another identical organism
+     * @param org Organism to reproduce 
+     */
     private void reproduce(Organism org) {
         
-        Organism offspring = new Organism(org.getX() + ORGANISM_SIZE_STAT, org.getY(), ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, org.getSkin(), idCounter++);
-        //generate an int for a chance of mutation
-        int mutationChance = (int) (Math.random() * (2 - 0));
-        //if it should not mutate
+        Organism offspring;
 
         offspring = org.cloneOrg();
         
@@ -357,25 +367,33 @@ public class OrganismManager implements Commons {
         offspring.setSearchFood(org.isSearchFood());
         offspring.setSearchWater(org.isSearchWater());
         offspring.setIntelligence(offspring.getIntelligence() + 15);
+
         org.setNeedOffspring(false);
         mysql.insertOrganism(speciesID,offspring.isDead() ? 1 : 0, offspring.getGeneration(), offspring.getSpeed(), offspring.getStealth(), offspring.getStrength(), offspring.getMaxHealth());   
     }
-private void updateOrganismsDB()
-{
-        mysql.updateOrganisms(this);
-}
+  
+    private void updateOrganismsDB() {
+            mysql.updateOrganisms(this);
+    }
+  
     /**
      * Check if an organism needs to be killed
-     *
-     * @param org
      */
-    private void checkKill(Organism org) {
-        if (org.isDead()) {
-            organisms.remove(org);
-            updateOrganismsDB();
+    public void checkKill() {
+        for (int i = 0; i < organisms.size(); i++) {
+            Organism org = organisms.get(i);
+            if (org.isDead()) {
+                updateOrganismsDB();
+                organisms.remove(org);
+                deadOrgs.add(org);
+            }
         }
     }
     
+    /**
+     * check if the organism needs to be mutated
+     * @param org Organism to check
+     */
     private void checkNeedMutation(Organism org) {
         if (org.isNeedMutation()) {
             mutPanel = new MutationPanel(org, MUTATION_PANEL_X, MUTATION_PANEL_Y, MUTATION_PANEL_WIDTH, MUTATION_PANEL_HEIGHT, game);
@@ -384,22 +402,32 @@ private void updateOrganismsDB()
             org.setNeedMutation(false);
         }
     }
-
+    
     /**
-     * sets a resource for all organisms (deprecated)
-     *
-     * @param resource
+     * Get the most intelligent organism of the species
+     * @return most intelligent organism
      */
-    public void setResource(Resource resource) {
-        for (int i = 0; i < organisms.size(); i++) {
-            organisms.get(i).setTarget(resource);
+    public Organism getMostIntelligent() {
+        Organism mostInt;
+        if (organisms.isEmpty()) {
+            return null;
         }
+        
+        mostInt = organisms.get(0);
+        
+        for (int i = 1; i < organisms.size(); i++) {
+            if (organisms.get(i).getIntelligence() > mostInt.getIntelligence() && !organisms.get(i).isEgg()) {
+                mostInt = organisms.get(i);
+            }
+        }
+        
+        return mostInt;
     }
 
     /**
      * sets a resource for selected organisms
      *
-     * @param resource
+     * @param resource resource to set
      */
     public void setSelectedResource(Resource resource) {
         for (int i = 0; i < organisms.size(); i++) {
@@ -434,13 +462,22 @@ private void updateOrganismsDB()
     /**
      * set the god command to selected organisms
      *
-     * @param value
+     * @param value state to set the seletec organisms
      */
     public void setSelectedGodCommand(boolean value) {
         for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).isSelected()) {
                 organisms.get(i).setGodCommand(value);
             }
+        }
+    }
+    
+    /**
+     * Deselect all organisms
+     */
+    public void clearSelection() {
+        for (int i = 0; i < organisms.size(); i++) {
+            organisms.get(i).setSelected(false);
         }
     }
 
@@ -489,6 +526,10 @@ private void updateOrganismsDB()
         return false;
     }
     
+    /**
+     * Check if one organisms has reached max intelligence
+     * @return true if at least one organisms has max intelligence
+     */
     public boolean isMaxIntelligence() {
         for (int i = 0; i < organisms.size(); i++) {
             if(maxIntelligence < organisms.get(i).getIntelligence())
@@ -504,6 +545,18 @@ private void updateOrganismsDB()
     }
 
     
+    /**
+     * Add an organism to the array
+     * @param org Organism to add
+     */
+    public void addOrganism(Organism org) {
+        organisms.add(org);
+    }
+    
+    /**
+     * Save the current state of the organisms to the print writer
+     * @param pw print writer
+     */
     public void save(PrintWriter pw) {
         /*
         Save organisms but drop if 
@@ -522,6 +575,11 @@ private void updateOrganismsDB()
         }
     }
     
+    /**
+     * Load the last save state of the organisms from the buffered reader
+     * @param br buffered reader
+     * @throws IOException 
+     */
     public void load(BufferedReader br) throws IOException {
         /*
         Update table the organisms from backup_organism
@@ -532,21 +590,42 @@ private void updateOrganismsDB()
         organisms.clear();
         skin = Integer.parseInt(br.readLine());
         for (int i = 0; i < am; i++) {
-            organisms.add(new Organism(0,0, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, skin, idCounter++));
+            organisms.add(new Organism(0,0, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, skin, idCounter++, other));
             organisms.get(i).load(br);
             mysql.insertOrganism(speciesID , 1 ,organisms.get(i).getGeneration(),organisms.get(i).getSpeed(),organisms.get(i).getStealth() , organisms.get(i).getStrength(),organisms.get(i).getMaxHealth());
         }
     }
     
+    /**
+     * Reset organisms to its initial state
+     */
     public void reset() {
         organisms.clear();
         
         idCounter = 1;
-        organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++));
+        
+        //If the game is mutliplayer, check where to position the first organism
+        if (game.getState() == Game.States.Multi) {
+            if (game.isServer() && !other) {
+                organisms.add(new Organism(INITIAL_POINT_HOST, INITIAL_POINT_HOST, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
+                organisms.get(0).setSkin(skin);
+            } else if (!game.isServer() && !other) {
+                organisms.add(new Organism(INITIAL_POINT_CLIENT, INITIAL_POINT_CLIENT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
+                organisms.get(0).setSkin(skin);
+            } else if (game.isServer() && other) {
+                organisms.add(new Organism(INITIAL_POINT_CLIENT, INITIAL_POINT_CLIENT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
+                organisms.get(0).setSkin(skin);
+            } else {
+                organisms.add(new Organism(INITIAL_POINT_HOST, INITIAL_POINT_HOST, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
+                organisms.get(0).setSkin(skin);
+            }
+        } else {
+            organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
+        }
         
         organisms.get(0).setEgg(false);
         organisms.get(0).setBorn(true);
-        organisms.get(0).setMaturity(50);
+        organisms.get(0).setMaturity(100);
 
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
         mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
@@ -559,7 +638,7 @@ private void updateOrganismsDB()
     /**
      * To render the organisms
      *
-     * @param g
+     * @param g graphics
      */
     public void render(Graphics g) {
         
@@ -580,22 +659,19 @@ private void updateOrganismsDB()
                 organisms.get(i).render(g);
             }
         }
-        //render the hover panel of an organism
 
-        if (!orgPanel.isActive() || !mutPanel.isActive() || !statsPanel.isActive()) {
-            if (h != null && isHover()) {
-                h.render(g);
-            }
-        }
         statsPanel.render(g);
-        //Handle orgPanel and mutPanel render in game to prevent other elements
-        //to overlap them
+
+        for (int i = 0; i < deadOrgs.size(); i++) {
+            deadOrgs.get(i).render(g);
+        }
+
     }
 
     /**
      * To set the hover status
      *
-     * @param hover
+     * @param hover hover state
      */
     public void setHover(boolean hover) {
         this.hover = hover;
@@ -613,7 +689,7 @@ private void updateOrganismsDB()
     /**
      * Set the skin of the organisms
      *
-     * @param skin
+     * @param skin new skin
      */
     public void setSkin(int skin) {
         this.skin = skin;
@@ -777,30 +853,58 @@ private void updateOrganismsDB()
         return mutPanel;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getAmount() {
         return organisms.size();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getIdCounter() {
         return idCounter;
     }
 
+    /**
+     *
+     * @param idCounter
+     */
     public void setIdCounter(int idCounter) {
         this.idCounter = idCounter;
     }
 
+    /**
+     * to get the species name
+     * @return speciesName
+     */
     public String getSpeciesName() {
         return speciesName;
     }
 
+    /**
+     * to set the species name
+     * @param speciesName name
+     */
     public void setSpeciesName(String speciesName) {
         this.speciesName = speciesName;
     }
 
+    /**
+     * to check if organisms have been updated to night
+     * @return updatedNight
+     */
     public boolean isUpdatedNight() {
         return updatedNight;
     }
 
+    /**
+     * to set updatedNight
+     * @param updatedNight updated night state
+     */
     public void setUpdatedNight(boolean updatedNight) {
         this.updatedNight = updatedNight;
     }
@@ -842,5 +946,19 @@ private void updateOrganismsDB()
         return avg;
     }
     
-    
+    /**
+     * to get the game object
+     * @return game object
+     */
+    public Game getGame() {
+        return game;
+    }
+
+    /**
+     * to get the hover object
+     * @return h
+     */
+    public Hover getH() {
+        return h;
+    }
 }

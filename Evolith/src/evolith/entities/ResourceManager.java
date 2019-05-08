@@ -49,6 +49,9 @@ public class ResourceManager implements Commons {
         plantsAmount = PLANTS_AMOUNT;
         deleteResources();
         respawnResources();
+    }
+    
+    public void init() {
         generateResources();
     }
     
@@ -62,7 +65,7 @@ public class ResourceManager implements Commons {
             
             //System.out.println("plants size: " + plants.size());
             
-            for (int j = 0; j < plants.size() - 1; j++) {
+            for (int j = 0; j < plants.size()-1; j++) {
                 if (plants.get(plants.size()-1).intersects(plants.get(j))) {
                     plants.remove(i);
                     i--;
@@ -105,8 +108,8 @@ public class ResourceManager implements Commons {
                 plants.remove(i);
             }
         }
-        
     }
+    
     public void generateResources(){
         Random randomGen = new Random();
         
@@ -136,13 +139,13 @@ public class ResourceManager implements Commons {
     }
     
     public Resource containsResource(int x, int y) {
-        for (int i = 0; i < plants.size()-1; i++) {
+        for (int i = 0; i < plants.size(); i++) {
             if (plants.get(i).getPerimeter().contains(x, y)) {
                 return plants.get(i);
             }
         }
         
-        for (int i = 0; i < waters.size()-1; i++) {
+        for (int i = 0; i < waters.size(); i++) {
             if (waters.get(i).getPerimeter().contains(x, y)) {
                 return waters.get(i);
             }
@@ -152,11 +155,11 @@ public class ResourceManager implements Commons {
     }
     
     public void emptyParasites() {
-        for (int i = 0; i < plants.size()-1; i++) {
+        for (int i = 0; i < plants.size(); i++) {
             plants.get(i).removeParasites();
         }
         
-        for (int i = 0; i < waters.size()-1; i++) {
+        for (int i = 0; i < waters.size(); i++) {
             waters.get(i).removeParasites();
         } 
     }
@@ -191,11 +194,13 @@ public class ResourceManager implements Commons {
         }
     }
     
-    public void reset() {
+    public void reset(boolean server) {
         plants.clear();
         waters.clear();
         
-        generateResources();
+        if (server) {
+            generateResources();
+        }
     }
     
     public int getPlantAmount() {
@@ -214,6 +219,23 @@ public class ResourceManager implements Commons {
         return waters.get(i);
     }
     
+    public void addPlant(Resource res) {
+        plants.add(res);
+    }
+    
+    public void removePlant(Resource res) {
+        System.out.println("REMOVING IN remove");
+        plants.remove(res);
+    }
+    
+    public void addWater(Resource res) {
+        waters.add(res);
+    }
+    
+    public void removeWater(Resource res) {
+        waters.remove(res);
+    }
+    
     public void tick() {
         for (int i = 0; i < plants.size(); i++) {
             plants.get(i).tick();
@@ -222,9 +244,6 @@ public class ResourceManager implements Commons {
         for (int i = 0; i < waters.size(); i++) {
             waters.get(i).tick();
         }
-        
-        deleteResources();
-        respawnResources();
     }
         
     public void render(Graphics g) {
@@ -235,5 +254,9 @@ public class ResourceManager implements Commons {
         for (int i = 0; i < waters.size(); i++) {
             waters.get(i).render(g);
         }
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

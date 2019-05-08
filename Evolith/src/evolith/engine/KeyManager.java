@@ -26,6 +26,7 @@ public class KeyManager implements KeyListener {
     public boolean g;
     public boolean c;
     public boolean esc;
+    public boolean space;
     
     public boolean num1;
     public boolean num2;
@@ -38,6 +39,7 @@ public class KeyManager implements KeyListener {
     public boolean prevnum3;
     public boolean prevg;
     public boolean prevc;
+    public boolean prevspace;
 
     protected boolean keys[];
 
@@ -158,6 +160,17 @@ public class KeyManager implements KeyListener {
             }
         } else {
             prevc = false;
+        }
+        
+        if (keys[KeyEvent.VK_SPACE]) {
+            if (!prevspace) {
+                space = true;
+                prevspace = true;
+            } else {
+                space = false;
+            }
+        } else {
+            prevspace = false;
         }
     }
 }

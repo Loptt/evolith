@@ -11,6 +11,6 @@ public class Evolith {
     public static void main(String[] args) throws SQLException {
         Game game = new Game("Evolith", 1000, 700);
         game.start();
-
+        //Evolith: START
     }
 }

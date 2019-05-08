@@ -43,6 +43,17 @@ public class InputKeyboard extends KeyManager {
     public boolean x;
     public boolean y;
     public boolean z;
+    public boolean num1;
+    public boolean num2;
+    public boolean num3;
+    public boolean num4;
+    public boolean num5;
+    public boolean num6;
+    public boolean num7;
+    public boolean num8;
+    public boolean num9;
+    public boolean num0;
+    public boolean period;
     
     public boolean delete;
     
@@ -72,6 +83,17 @@ public class InputKeyboard extends KeyManager {
     public boolean prevx;
     public boolean prevy;
     public boolean prevz;
+    public boolean prevnum1;
+    public boolean prevnum2;
+    public boolean prevnum3;
+    public boolean prevnum4;
+    public boolean prevnum5;
+    public boolean prevnum6;
+    public boolean prevnum7;
+    public boolean prevnum8;
+    public boolean prevnum9;
+    public boolean prevnum0;
+    public boolean prevperiod;
     
     public boolean prevdelete;
     
@@ -407,6 +429,121 @@ public class InputKeyboard extends KeyManager {
             }
         } else {
             prevdelete = false;
+        }
+        
+        if (keys[KeyEvent.VK_1]) {
+            if (!prevnum1) {
+                num1 = true;
+                prevnum1 = true;
+            } else {
+                num1 = false;
+            }
+        } else {
+            prevnum1 = false;
+        }
+        
+        if (keys[KeyEvent.VK_2]) {
+            if (!prevnum2) {
+                num2 = true;
+                prevnum2 = true;
+            } else {
+                num2 = false;
+            }
+        } else {
+            prevnum2 = false;
+        }
+        
+        if (keys[KeyEvent.VK_3]) {
+            if (!prevnum3) {
+                num3 = true;
+                prevnum3 = true;
+            } else {
+                num3 = false;
+            }
+        } else {
+            prevnum3 = false;
+        }
+        
+        if (keys[KeyEvent.VK_4]) {
+            if (!prevnum4) {
+                num4 = true;
+                prevnum4 = true;
+            } else {
+                num4 = false;
+            }
+        } else {
+            prevnum4 = false;
+        }
+        
+        if (keys[KeyEvent.VK_5]) {
+            if (!prevnum5) {
+                num5 = true;
+                prevnum5 = true;
+            } else {
+                num5 = false;
+            }
+        } else {
+            prevnum5 = false;
+        }
+        if (keys[KeyEvent.VK_6]) {
+            if (!prevnum6) {
+                num6 = true;
+                prevnum6 = true;
+            } else {
+                num6 = false;
+            }
+        } else {
+            prevnum6 = false;
+        }
+        if (keys[KeyEvent.VK_7]) {
+            if (!prevnum7) {
+                num7 = true;
+                prevnum7 = true;
+            } else {
+                num7 = false;
+            }
+        } else {
+            prevnum7 = false;
+        }
+        if (keys[KeyEvent.VK_8]) {
+            if (!prevnum8) {
+                num8 = true;
+                prevnum8 = true;
+            } else {
+                num8 = false;
+            }
+        } else {
+            prevnum8 = false;
+        }
+        if (keys[KeyEvent.VK_9]) {
+            if (!prevnum9) {
+                num9 = true;
+                prevnum9 = true;
+            } else {
+                num9 = false;
+            }
+        } else {
+            prevnum9 = false;
+        }
+        if (keys[KeyEvent.VK_0]) {
+            if (!prevnum0) {
+                num0 = true;
+                prevnum0 = true;
+            } else {
+                num0 = false;
+            }
+        } else {
+            prevnum0 = false;
+        }
+        if (keys[KeyEvent.VK_PERIOD]) {
+            if (!prevperiod) {
+                period = true;
+                prevperiod = true;
+            } else {
+                period = false;
+            }
+        } else {
+            prevperiod = false;
         }
     }
 }
