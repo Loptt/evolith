@@ -68,7 +68,7 @@ public class Campfire extends Item implements Commons{
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.campfire, game.getCamera().getRelX(x), game.getCamera().getRelY(y), width, height, null);
+        g.drawImage(Assets.campfire, game.getCamera().getRelX(x)-(width/2), game.getCamera().getRelY(y)-(height/2), width, height, null);
     }
 
     public int getRad() {
