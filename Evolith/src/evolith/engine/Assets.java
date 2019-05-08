@@ -173,6 +173,10 @@ public class Assets {
     public static SoundClip watersound;
     public static SoundClip grasssound;
     public static SoundClip aliensound;
+    
+    public static BufferedImage leg1prev;
+    public static BufferedImage leg2prev;
+    public static BufferedImage leg3prev;
 
     /**
      * Initializes the assets and links to the image folder
@@ -422,6 +426,10 @@ public class Assets {
         aliensound = new SoundClip("/sounds/aliensound.wav");
         
         repClock = ImageLoader.loadImage("/images/organisms/clock.png");
+        
+        leg1prev = ImageLoader.loadImage("/images/Traits/legs1prev.png");
+        leg2prev = ImageLoader.loadImage("/images/Traits/legs2prev.png");
+        leg3prev = ImageLoader.loadImage("/images/Traits/legs3prev.png");
     }
     
     /**

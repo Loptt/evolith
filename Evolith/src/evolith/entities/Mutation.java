@@ -34,6 +34,7 @@ public class Mutation implements Commons {
     private int tier;
     
     private BufferedImage sprite;
+    private BufferedImage mutSprite;
     
     private Organism org;
         
@@ -84,6 +85,17 @@ public class Mutation implements Commons {
     
     public BufferedImage getSprite(){
         return sprite;
+    }
+
+    public BufferedImage getMutSprite() {
+        if (mutSprite == null) {
+            return sprite;
+        }
+        return mutSprite;
+    }
+
+    public void setMutSprite(BufferedImage mutSprite) {
+        this.mutSprite = mutSprite;
     }
 
     public boolean isActive() {

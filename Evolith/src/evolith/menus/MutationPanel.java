@@ -124,17 +124,18 @@ public class MutationPanel extends Menu implements Commons {
                     //Check if no tier is active
                     if (!anyActive) {
                         organism.getOrgMutations().getMutations().get(selection - 1).get(tier).setActive(true); //Working fine
-                        organism.updateMutation(selection-1, 0);
+                        //organism.updateMutation(selection-1, 0);
                     } else {
                         //Deactivate current tier
                         organism.getOrgMutations().getMutations().get(selection - 1).get(tier + 1).setActive(true);
                         //Activate next tier
                         organism.getOrgMutations().getMutations().get(selection - 1).get(tier).setActive(false);
-                        organism.updateMutation(selection-1, tier + 1);
+                        //organism.updateMutation(selection-1, tier + 1);
                     }
 
                 }
                 buttons.get(0).setPressed(false);
+                organism.updateMutations(false);
                 selection = 0;
                 active = false;
                 organism.setEgg(false);
@@ -166,14 +167,8 @@ public class MutationPanel extends Menu implements Commons {
             organism.setCurrentSize(140);
             organism.setX(game.getCamera().getAbsX(x + 71));
             organism.setY(game.getCamera().getAbsY(y + 188));
-
-            for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
-                for (int j = 0; j < organism.getOrgMutations().getMutations().get(i).size(); j++) {
-                    if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
-                        organism.getOrgMutations().getMutations().get(i).get(j).render(g);
-                    }
-                }
-            }
+            
+            organism.getOrgMutations().render(g);
 
             organism.setCurrentSize(prevSize);
             organism.setX(prevX);
@@ -206,7 +201,7 @@ public class MutationPanel extends Menu implements Commons {
                 } else {
                     g.setColor(Color.WHITE);
                     g.setFont(fontEvolve);
-                    g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getSprite(), x + 331, y + 55 + i*115, 60, 60, null);
+                    g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getMutSprite(), x + 331, y + 55 + i*115, 60, 60, null);
                     g.drawString((String) hmap.get(organism.getOrgMutations().getMutations().get(i).get(j).getTier()), x + 468, y + 60 + i * 115);
                     g.drawString(organism.getOrgMutations().getMutations().get(i).get(j).getName(), x + 500, y + 60 + i * 115);
 
