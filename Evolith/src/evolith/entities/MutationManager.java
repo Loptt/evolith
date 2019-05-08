@@ -17,15 +17,22 @@ import java.util.ArrayList;
 
 /**
  *
- * @author ErickFrank
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class MutationManager implements Commons{
 
-    private ArrayList<ArrayList<Mutation>> mutations;
-    private Organism org;
-    private Game game;
+    private ArrayList<ArrayList<Mutation>> mutations;   //List of list of mutations
+    private Organism org;   //Organism
+    private Game game;      //Game object
     
-
+    /**
+     * MutationManager constructor
+     * @param org organism owner of mutations
+     * @param game game object
+     */
     public MutationManager(Organism org, Game game) {
         mutations = new ArrayList<ArrayList<Mutation>>();
         this.org = org;
@@ -35,7 +42,7 @@ public class MutationManager implements Commons{
         ArrayList<Mutation> m1 = new ArrayList<Mutation>();
         m1.add(new Mutation("Spine",20,0,0,0,false,1,-0.34,-0.35,1.72,1.72,game, org)); // Finished
         m1.add(new Mutation("Sting",20,-20,0,20,false,2,-0.1,0.95,0.8,0.8, game, org)); // Finished
-        m1.add(new Mutation("Claws",20,-20,0,0,false,3,-0.3,1,0.9,0.9, game, org));     // Asset must be changed
+        m1.add(new Mutation("Claws",20,-20,0,-20,false,3,-0.3,1,0.9,0.9, game, org));     // Asset must be changed
         m1.add(new Mutation("Horns",20,-20,0,-40,false,4,-0.5,-0.5,2,1, game, org));    // Finished
         mutations.add(m1);
 
@@ -49,7 +56,7 @@ public class MutationManager implements Commons{
         ArrayList<Mutation> m3 = new ArrayList<Mutation>();
         m3.add(new Mutation("Medium Size",0,0,20,0,false,1,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game, org));   // Finished
         m3.add(new Mutation("Big Size",20,-20,20,-20,false,2,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game, org)); // Finished
-        m3.add(new Mutation("Shell",-20 ,-40,40,0,false,3,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game, org));    // Finished
+        m3.add(new Mutation("Hard Skin",-20 ,-40,40,0,false,3,org.getX(),org.getY(),org.getWidth(),org.getHeight(), game, org));    // Finished
         mutations.add(m3);
         
         ArrayList<Mutation> m4 = new ArrayList<Mutation>();
@@ -63,12 +70,23 @@ public class MutationManager implements Commons{
             }
         }
         
+        mutations.get(1).get(0).setMutSprite(Assets.leg1prev);
+        mutations.get(1).get(1).setMutSprite(Assets.leg2prev);
+        mutations.get(1).get(2).setMutSprite(Assets.leg3prev);
     }
-
+    
+    /**
+     * to get the mutation matrix
+     * @return mutations
+     */
     public ArrayList<ArrayList<Mutation>> getMutations() {
         return mutations;
     }
     
+    /**
+     * to get the current strength tier
+     * @return strength tier
+     */
     public int getStrengthTier() {
         int tier = 0;
         for (int i = 0; i < mutations.get(0).size(); i++) {
@@ -80,6 +98,10 @@ public class MutationManager implements Commons{
         return tier;
     }
     
+    /**
+     * to get the current speed tier
+     * @return speed tier
+     */
     public int getSpeedTier() {
         int tier = 0;
         for (int i = 0; i < mutations.get(1).size(); i++) {
@@ -91,6 +113,10 @@ public class MutationManager implements Commons{
         return tier;
     }
     
+    /**
+     * to get the current health tier
+     * @return health tier
+     */
     public int getHealthTier() {
         int tier = 0;
         for (int i = 0; i < mutations.get(2).size(); i++) {
@@ -102,6 +128,10 @@ public class MutationManager implements Commons{
         return tier;
     }
     
+    /**
+     * to get the current stealth tier
+     * @return stealth tier
+     */
     public int getStealthTier() {
         int tier = 0;
         for (int i = 0; i < mutations.get(3).size(); i++) {
@@ -113,6 +143,10 @@ public class MutationManager implements Commons{
         return tier;
     }
     
+    /**
+     * To set the strength tier
+     * @param tier new tier
+     */
     public void setStrengthTier(int tier) {
         for (int i = 0; i < mutations.get(0).size(); i++) {
             if (i + 1 == tier) {
@@ -123,6 +157,10 @@ public class MutationManager implements Commons{
         }
     }
     
+    /**
+     * To set the speed tier
+     * @param tier new tier
+     */
     public void setSpeedTier(int tier) {
         for (int i = 0; i < mutations.get(1).size(); i++) {
             if (i + 1 == tier) {
@@ -133,6 +171,10 @@ public class MutationManager implements Commons{
         }
     }
     
+    /**
+     * To set the health tier
+     * @param tier new tier
+     */
     public void setHealthTier(int tier) {
         for (int i = 0; i < mutations.get(2).size(); i++) {
             if (i + 1 == tier) {
@@ -143,6 +185,10 @@ public class MutationManager implements Commons{
         }
     }
     
+    /**
+     * To set the stealth tier
+     * @param tier new tier
+     */
     public void setStealthTier(int tier) {
         for (int i = 0; i < mutations.get(3).size(); i++) {
             if (i + 1 == tier) {
@@ -153,6 +199,10 @@ public class MutationManager implements Commons{
         }
     }
     
+    /**
+     * To save the current mutations to the print writer
+     * @param pw print writer
+     */
     public void save(PrintWriter pw) {
         //Save the state of each mutation
         for (int i = 0; i < mutations.size(); i++) {
@@ -162,6 +212,11 @@ public class MutationManager implements Commons{
         }
     }
     
+    /**
+     * To load the last saved mutations from the buffered reader
+     * @param br buffered reader
+     * @throws IOException 
+     */
     public void load(BufferedReader br) throws IOException {
         for (int i = 0; i < mutations.size(); i++) {
             for (int j = 0; j < mutations.get(i).size(); j++) {
@@ -169,30 +224,28 @@ public class MutationManager implements Commons{
             }
         }
     }
-
-    /*
-    public void setMutationData(Mutation orgMutation, int stat, int tier){
-        orgMutation.setSpeed(mutations.get(stat).get(tier).getSpeed());
-        orgMutation.setStrength(mutations.get(stat).get(tier).getStrength());
-        orgMutation.setMaxHealth(mutations.get(stat).get(tier).getMaxHealth());
-        orgMutation.setStealth(mutations.get(stat).get(tier).getStealth());
-        orgMutation.setName(mutations.get(stat).get(tier).getName());
-        orgMutation.setActive(mutations.get(stat).get(tier).isActive());
-        orgMutation.setSprite(mutations.get(stat).get(tier).getSprite());
-        orgMutation.setX(mutations.get(stat).get(tier).getX());
-        orgMutation.setY(mutations.get(stat).get(tier).getY());
-        orgMutation.setWidth(mutations.get(stat).get(tier).getWidth());
-        orgMutation.setHeight(mutations.get(stat).get(tier).getHeight());
-    }
-    */
     
+    /**
+     * To render the mutations
+     * @param g graphics
+     */
     public void render(Graphics g){
-        for(int i=0; i<4; i++){
-            for(int j=0; j<mutations.get(i).size(); j++){
-                mutations.get(i).get(j).render(g);
-            }
+        for(int j=0; j<mutations.get(3).size(); j++){
+            mutations.get(3).get(j).render(g);
+        }
+        
+        for(int j=0; j<mutations.get(1).size(); j++){
+            mutations.get(1).get(j).render(g);
+        }
+        /*
+        for(int j=0; j<mutations.get(2).size(); j++){
+            mutations.get(2).get(j).render(g);
+        }*/
+        
+        for(int j=0; j<mutations.get(0).size(); j++){
+            mutations.get(0).get(j).render(g);
         }
     }
-    }
+}
     
    

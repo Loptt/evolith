@@ -268,6 +268,16 @@ public class Weather {
                 
         }
     }
+
+    public WeatherInstance getRain() {
+        return rain;
+    }
+
+    public WeatherInstance getStorm() {
+        return storm;
+    }
+    
+    
     
     
     public void setFalse(){

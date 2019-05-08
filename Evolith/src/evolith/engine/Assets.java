@@ -174,6 +174,18 @@ public class Assets {
     public static SoundClip grasssound;
     public static SoundClip aliensound;
 
+    public static BufferedImage campfire;
+    public static BufferedImage setCampfireOn;
+    public static BufferedImage setCampfireOff;
+    public static BufferedImage leg1prev;
+    public static BufferedImage leg2prev;
+    public static BufferedImage leg3prev;
+    
+    public static BufferedImage maxIntButtonOn;
+    public static BufferedImage maxIntButtonOff;
+    public static BufferedImage maxIntButtonOpp;
+
+
     /**
      * Initializes the assets and links to the image folder
      */
@@ -422,6 +434,18 @@ public class Assets {
         aliensound = new SoundClip("/sounds/aliensound.wav");
         
         repClock = ImageLoader.loadImage("/images/organisms/clock.png");
+
+        campfire = ImageLoader.loadImage("/images/organisms/campfire.png");
+        setCampfireOn = ImageLoader.loadImage("/images/panel/campfirebuttonon.png");
+        setCampfireOff = ImageLoader.loadImage("/images/panel/campfirebuttonoff.png");
+
+        leg1prev = ImageLoader.loadImage("/images/Traits/legs1prev.png");
+        leg2prev = ImageLoader.loadImage("/images/Traits/legs2prev.png");
+        leg3prev = ImageLoader.loadImage("/images/Traits/legs3prev.png");
+        
+        maxIntButtonOn = ImageLoader.loadImage("/images/buttonbar/maxinton.png");
+        maxIntButtonOff = ImageLoader.loadImage("/images/buttonbar/maxintoff.png");
+        maxIntButtonOpp = ImageLoader.loadImage("/images/buttonbar/oppmaxint.png");
     }
     
     /**

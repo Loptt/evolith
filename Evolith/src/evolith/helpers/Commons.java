@@ -103,7 +103,7 @@ public interface Commons {
     public static final int PREDATOR_SECONDS_TO_ROAM = 10;
     
 
-    public static final int BORN_TIME = 20;
+    public static final int BORN_TIME = 15;
     
     public static final int ORG_DATA_SIZE = 9;
     public static final int RES_DATA_SIZE = 7;
@@ -116,4 +116,5 @@ public interface Commons {
     public static final int MUTATION_CHANCE = 5; //Bigger, less chance
     
     public static final int CONNECTION_TIMEOUT_SEC = 5;
+    public static final int INT_FOR_CAMP = 5;
 }

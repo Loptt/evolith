@@ -1,6 +1,7 @@
 package evolith.menus;
 
 import evolith.engine.Assets;
+import evolith.entities.CampfireManager;
 import evolith.entities.Organism;
 import evolith.game.Game;
 import evolith.helpers.Commons;
@@ -36,6 +37,10 @@ public class OrganismPanel extends Menu implements Commons {
     private int timeOpen;
     private boolean tickToWrite;
     private boolean inputActive;
+    private boolean campfire;
+    
+    private CampfireManager campfires;
+    
 
     /**
      * Constructor of the panel initializes the reader and font
@@ -52,6 +57,7 @@ public class OrganismPanel extends Menu implements Commons {
         f = new FontLoader();
         inputReader = new InputReader(game);
         inputActive = false;
+        
     }
 
     /**
@@ -72,6 +78,7 @@ public class OrganismPanel extends Menu implements Commons {
         this.searchNext = false;
         this.searchPrev = false;
         this.reproduce = false;
+        this.campfire = false;
 
         this.index = 0;
         //Set display to true
@@ -85,10 +92,12 @@ public class OrganismPanel extends Menu implements Commons {
         // Arrow prev
         buttons.add(new Button(this.x - 100, this.y + PANEL_HEIGHT / 2, 50, 50, Assets.prevArrow));
         // Reproduce button 
-        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 400, 300, 75, Assets.organismPanel_reproduceButton_ON, Assets.organismPanel_reproduceButton_OFF));
+        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 380, 300, 75, Assets.organismPanel_reproduceButton_ON, Assets.organismPanel_reproduceButton_OFF));
         //Name button
         buttons.add(new Button(this.x + 110, this.y + 300, 193, 27));
-
+        //campfire
+        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 100, this.y + 480, 200, 50, Assets.setCampfireOn, Assets.setCampfireOff));
+        
         if (this.organism.getName() != null || this.organism.getName() != "") {
             inputReader = new InputReader(this.organism.getName(), game);
         } else {
@@ -97,6 +106,8 @@ public class OrganismPanel extends Menu implements Commons {
         this.timeOpen = 0;
         this.tickToWrite = false;
         inputActive = false;
+        
+        this.campfires = game.getCampfires();
     }
 
     /**
@@ -156,19 +167,38 @@ public class OrganismPanel extends Menu implements Commons {
         for (int i = 0; i < buttons.size(); i++) {
             if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
                 //if the mouse is over the button 
-                buttons.get(i).setActive(true);
-                //if left click change mouse status
-                if (game.getMouseManager().isLeft()) {
-                    //Sets the button to the pressed status
-                    buttons.get(i).setPressed(true);
-                    for (int j = 0; j < buttons.size(); j++) {
-                        if (i != j) {
-                            buttons.get(j).setPressed(false);
+                if(i!=6){
+                   buttons.get(i).setActive(true);
+                    //if left click change mouse status
+                    if (game.getMouseManager().isLeft()) {
+                        //Sets the button to the pressed status
+                        buttons.get(i).setPressed(true);
+                        for (int j = 0; j < buttons.size(); j++) {
+                            if (i != j) {
+                                buttons.get(j).setPressed(false);
+                            }
                         }
+                        //Turns off mouse 
+                        game.getMouseManager().setLeft(false); 
+                        break;
                     }
-                    //Turns off mouse 
-                    game.getMouseManager().setLeft(false);
-                    break;
+                }
+                else if(!campfires.isCooldown() && organism.getIntelligence() > INT_FOR_CAMP && game.getState() == Game.States.Play
+                    && !game.getWeather().getRain().isActive() && !game.getWeather().getStorm().isActive()){
+                    buttons.get(i).setActive(true);
+                    //if left click change mouse status
+                    if (game.getMouseManager().isLeft()) {
+                        //Sets the button to the pressed status
+                        buttons.get(i).setPressed(true);
+                        for (int j = 0; j < buttons.size(); j++) {
+                            if (i != j) {
+                                buttons.get(j).setPressed(false);
+                            }
+                        }
+                        //Turns off mouse 
+                        game.getMouseManager().setLeft(false);
+                        break;
+                    }
                 }
             } else {
                 //Sets the button to false if the button is hovered
@@ -233,6 +263,25 @@ public class OrganismPanel extends Menu implements Commons {
             inputActive = false;
         }
         
+        //campfires
+        if (buttons.get(6).isPressed() && game.getState() == Game.States.Play 
+                && !game.getWeather().getRain().isActive() && !game.getWeather().getStorm().isActive()) {
+            if (campfire) {
+                buttons.get(6).setPressed(false);
+                campfire = false;
+            } else if (organism.getIntelligence() > INT_FOR_CAMP) {
+                campfire = true;
+                buttons.get(6).setPressed(true);
+                int posx = organism.getX();
+                int posy = organism.getY();
+                if(campfires==null){
+                    System.out.println("null in button");
+                }
+                campfires.addCampfire(posx, posy);
+            }
+            active = false;
+        }
+        
         String name = organism.getName();
         
         if (name.length() > 1) {
@@ -277,7 +326,8 @@ public class OrganismPanel extends Menu implements Commons {
     public boolean isInputActive() {
         return inputActive;
     }
-
+    
+    
     @Override
     public void render(Graphics g) {
 
@@ -295,14 +345,16 @@ public class OrganismPanel extends Menu implements Commons {
         organism.setCurrentSize(196);
         organism.setX(game.getCamera().getAbsX(x + 83));
         organism.setY(game.getCamera().getAbsY(y + 70));
-
+        
+        organism.getOrgMutations().render(g);
+        /*
         for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
             for (int j = 0; j < organism.getOrgMutations().getMutations().get(i).size(); j++) {
                 if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
                     organism.getOrgMutations().getMutations().get(i).get(j).render(g);
                 }
             }
-        }
+        }*/
 
         organism.setCurrentSize(prevSize);
 
@@ -344,12 +396,16 @@ public class OrganismPanel extends Menu implements Commons {
         g.setColor(Color.WHITE);
         g.setFont(f.getFontEvolve());
 
-        for (int i = 0; i < buttons.size(); i++) {
+        for (int i = 0; i < buttons.size() - 1; i++) {
 
             if (i != 4 || organism.isNeedOffspring()) {
                 buttons.get(i).render(g);
             }
-
+        }
+        
+        if (!campfires.isCooldown() && organism.getIntelligence() > INT_FOR_CAMP && game.getState() == Game.States.Play
+                && !game.getWeather().getRain().isActive() && !game.getWeather().getStorm().isActive()) {
+            buttons.get(6).render(g);
         }
 
         if (timeOpen % 60 == 0) {

@@ -94,6 +94,7 @@ public class Organism extends Item implements Commons {
     private int alfa;               //Transparency value
     private boolean animationDone;  //Check if animation is done
     
+    private boolean inCamp;
     private Item pred;              //Predator chasing the organism
 
     /**
@@ -154,6 +155,7 @@ public class Organism extends Item implements Commons {
         drinking = false;
         selected = false;
         godCommand = false;
+        inCamp = false;
         
         damage = 0.05;
 
@@ -215,6 +217,7 @@ public class Organism extends Item implements Commons {
             }
         }
         
+        checkCamps();
         handleTarget();
         checkMovement();
         checkVitals(); 
@@ -429,6 +432,22 @@ public class Organism extends Item implements Commons {
         }
     }
     
+
+    private void checkCamps() {
+        Campfire camp;
+        for (int i = 0; i < game.getCampfires().getAmount(); i++) {
+            camp = game.getCampfires().getCamp(i);
+            
+            if (camp.containsRectInRad(getPerimeter())) {
+                inCamp = true;
+                return;
+            }
+        }
+        
+        inCamp = false;
+    }
+    
+
     /**
      * Process for the organism to be born
      */
@@ -520,7 +539,10 @@ public class Organism extends Item implements Commons {
                 }
             }
         }
-        
+        strength = strength > 0 ? strength : 0;
+        speed = speed > 0 ? speed : 0;
+        maxHealth = maxHealth > 0 ? maxHealth : 0;
+        stealth = stealth > 0 ? stealth : 0;;
         updateStats(other);
     }
     
@@ -536,9 +558,15 @@ public class Organism extends Item implements Commons {
             life = currentMaxHealth;
         }
         
-        currentSize = (int) (maxHealth * 0.5 + 30);
-        width = currentSize;
-        height = currentSize;
+        if (maxHealth >= 70) {
+            currentSize = (int) ((maxHealth-40) * 0.5 + 30);
+            width = currentSize;
+            height = currentSize;
+        } else {
+            currentSize = (int) ((maxHealth) * 0.5 + 30);
+            width = currentSize;
+            height = currentSize;
+        }
         
         stealthRange = MAX_SIGHT_DISTANCE - (stealth) * 9;
         
@@ -1651,5 +1679,13 @@ public class Organism extends Item implements Commons {
      */
     public boolean isAnimationDone() {
         return animationDone;
+    }
+
+    public boolean isInCamp() {
+        return inCamp;
+    }
+
+    public void setInCamp(boolean inCamp) {
+        this.inCamp = inCamp;
     }
 }

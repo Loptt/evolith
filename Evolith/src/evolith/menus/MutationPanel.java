@@ -81,93 +81,97 @@ public class MutationPanel extends Menu implements Commons {
     /**
      * To tick the mutation panel
      */
-    @Override
+@Override
     public void tick() {
-        //if not active return
-        if (!active) {
-            return;
-        }
-
-        for (int i = 0; i < buttons.size(); i++) {
-            if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
-                //if the mouse is over the button 
-                buttons.get(i).setActive(true);
-                //if left click change mouse status
-                if (game.getMouseManager().isLeft()) {
-                    buttons.get(i).setPressed(true);
-                    for (int j = 0; j < buttons.size(); j++) {
-                        if (i != j) {
-                            buttons.get(j).setPressed(false);
+        if (active) {
+            for (int i = 0; i < buttons.size(); i++) {
+                if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
+                    //if the mouse is over the button 
+                    buttons.get(i).setActive(true);
+                    //if left click change mouse status
+                    if (game.getMouseManager().isLeft()) {
+                        buttons.get(i).setPressed(true);
+                        for (int j = 0; j < buttons.size(); j++) {
+                            if (i != j) {
+                                buttons.get(j).setPressed(false);
+                            }
                         }
+                        game.getMouseManager().setLeft(false);
                     }
-                    //turn off the left click
-                    game.getMouseManager().setLeft(false);
-                }
-            } else {
-                buttons.get(i).setActive(false);
-            }
-        }
-        //reproduce and lay an egg
-        if (buttons.get(1).isPressed()) {
-            active = false;
-            organism.setEgg(false);
-        }
-        // select mutation tier 1
-        if (buttons.get(2).isPressed() && !organism.getOrgMutations().getMutations().get(0).get(organism.getOrgMutations().getMutations().get(0).size() - 1).isActive()) {
-            selection = 1;
-        }
-        // select mutation tier 2
-        if (buttons.get(3).isPressed() && !organism.getOrgMutations().getMutations().get(1).get(organism.getOrgMutations().getMutations().get(1).size() - 1).isActive()) {
-            selection = 2;
-        }
-        // select mutation tier 3
-        if (buttons.get(4).isPressed() && !organism.getOrgMutations().getMutations().get(2).get(organism.getOrgMutations().getMutations().get(2).size() - 1).isActive()) {
-            selection = 3;
-        }
-        // select mutation tier 4
-        if (buttons.get(5).isPressed() && !organism.getOrgMutations().getMutations().get(3).get(organism.getOrgMutations().getMutations().get(3).size() - 1).isActive()) {
-            selection = 4;
-        }
-
-        boolean anyActive = false;
-
-        //Evolve organism
-        if (selection != 0 && buttons.get(0).isPressed()) {
-            int tier = 0;
-
-            //Iterate over the specified type of mutation
-            for (int k = 0; k < organism.getOrgMutations().getMutations().get(selection - 1).size(); k++) {
-                if (organism.getOrgMutations().getMutations().get(selection - 1).get(k).isActive()) {
-                    //J has the current active tier
-                    tier = k;
-                    anyActive = true;
-                }
-            }
-            //Check if mutation is not already in the max tier
-            if (tier != organism.getOrgMutations().getMutations().get(selection - 1).size() - 1) {
-                //Check if no tier is active
-                if (!anyActive) {
-                    organism.getOrgMutations().getMutations().get(selection - 1).get(tier).setActive(true); //Working fine
-                    organism.updateMutation(selection - 1, 0);
                 } else {
-                    //Deactivate current tier
-                    organism.getOrgMutations().getMutations().get(selection - 1).get(tier + 1).setActive(true);
-                    //Activate next tier
-                    organism.getOrgMutations().getMutations().get(selection - 1).get(tier).setActive(false);
-                    organism.updateMutation(selection - 1, tier + 1);
+                    buttons.get(i).setActive(false);
                 }
+            }
+            if (buttons.get(1).isPressed()) {
+                active = false;
+                organism.setEgg(false);
+            }
+            if (buttons.get(2).isPressed() && !organism.getOrgMutations().getMutations().get(0).get(organism.getOrgMutations().getMutations().get(0).size() -1).isActive()) {
+                selection = 1;
 
             }
+            if (buttons.get(3).isPressed() && !organism.getOrgMutations().getMutations().get(1).get(organism.getOrgMutations().getMutations().get(1).size() -1).isActive()) {
 
-            buttons.get(0).setPressed(false);
-            selection = 0;
-            active = false;
-            organism.setEgg(false);
-            organism.setLife(organism.getCurrentMaxHealth());
+                selection = 2;
+
+            }
+            if (buttons.get(4).isPressed()  && !organism.getOrgMutations().getMutations().get(2).get(organism.getOrgMutations().getMutations().get(2).size() -1).isActive()) {
+
+                selection = 3;
+
+            }
+            if (buttons.get(5).isPressed()  && !organism.getOrgMutations().getMutations().get(3).get(organism.getOrgMutations().getMutations().get(3).size() -1).isActive()) {
+
+                selection = 4;
+
+            }
+            
+            boolean anyActive = false;
+            
+            //Evolve organism
+            if (selection != 0 && buttons.get(0).isPressed()) {
+                int tier = 0;
+                
+                //Iterate over the specified type of mutation
+                for (int k = 0; k < organism.getOrgMutations().getMutations().get(selection - 1).size(); k++) {
+                    if (organism.getOrgMutations().getMutations().get(selection - 1).get(k).isActive()) {
+                        //J has the current active tier
+                        tier = k;
+                        anyActive = true;
+                    }
+                }
+                //Check if mutation is not already in the max tier
+                if (tier != organism.getOrgMutations().getMutations().get(selection - 1).size() - 1) {
+                    //Check if no tier is active
+                    if (!anyActive) {
+                        organism.getOrgMutations().getMutations().get(selection - 1).get(tier).setActive(true); //Working fine
+                        //organism.updateMutation(selection-1, 0);
+                    } else {
+                        //Deactivate current tier
+                        organism.getOrgMutations().getMutations().get(selection - 1).get(tier + 1).setActive(true);
+                        //Activate next tier
+                        organism.getOrgMutations().getMutations().get(selection - 1).get(tier).setActive(false);
+                        //organism.updateMutation(selection-1, tier + 1);
+                    }
+
+                }
+                buttons.get(0).setPressed(false);
+                organism.updateMutations(false);
+                selection = 0;
+                active = false;
+                organism.setEgg(false);
+                organism.setLife(organism.getCurrentMaxHealth());
+            }
+
         }
+        /*
+        if(organism.isDead())
+        {
+            active = false;
+        }
+         */
 
     }
-
     /**
      * Render function of the graphics
      *
@@ -175,121 +179,106 @@ public class MutationPanel extends Menu implements Commons {
      */
     @Override
     public void render(Graphics g) {
-        //if not active return
-        if (!active) {
-            return;
-        }
-        //draw the mutation menu
-        g.drawImage(Assets.mutation_menu, x, y, width, height, null);
-        //render the organism selected
-        g.drawImage(Assets.orgColors.get(organism.getSkin()), x + 71, y + 188, 140, 140, null);
-        //set the previous location and dimension of the organism
-        int prevSize = organism.getCurrentSize();
-        int prevX = organism.getX();
-        int prevY = organism.getY();
-        //set the organism size to 140
-        organism.setCurrentSize(140);
-        organism.setX(game.getCamera().getAbsX(x + 71));
-        organism.setY(game.getCamera().getAbsY(y + 188));
+        if (active) {
+            
+            g.drawImage(Assets.mutation_menu, x, y, width, height, null);
+            
+            g.drawImage(Assets.orgColors.get(organism.getSkin()), x + 71, y + 188, 140, 140, null);
+            
+            int prevSize = organism.getCurrentSize();
+            int prevX = organism.getX();
+            int prevY = organism.getY();
+            
+            organism.setCurrentSize(140);
+            organism.setX(game.getCamera().getAbsX(x + 71));
+            organism.setY(game.getCamera().getAbsY(y + 188));
+            
+            organism.getOrgMutations().render(g);
 
-        //render the mutations applied
-        for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
-            for (int j = 0; j < organism.getOrgMutations().getMutations().get(i).size(); j++) {
-                if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
-                    organism.getOrgMutations().getMutations().get(i).get(j).render(g);
-                }
-            }
-        }
-        //render in scale 
-        organism.setCurrentSize(prevSize);
-        organism.setX(prevX);
-        organism.setY(prevY);
+            organism.setCurrentSize(prevSize);
+            organism.setX(prevX);
+            organism.setY(prevY);
 
-        for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
+            for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
 
-            g.setColor(Color.WHITE);
-            //render the bars with respect of the maximum quantity
-            g.fillRect(x + 495, y + 81 + 115 * i, (int) 60 * organism.getStrength() / MAX_STRENGTH, 15);
-            g.fillRect(x + 495, y + 106 + 115 * i, (int) 60 * organism.getMaxHealth() / MAX_SURVIVABILITY, 15);
-            g.fillRect(x + 613, y + 81 + 115 * i, (int) 60 * organism.getSpeed() / MAX_SPEED, 15);
-            g.fillRect(x + 613, y + 106 + 115 * i, (int) 60 * organism.getStealth() / MAX_STEALTH, 15);
-
-            int j = 0;
-
-            //Get current active tier
-            for (int k = 1; k <= organism.getOrgMutations().getMutations().get(i).size(); k++) {
-                if (organism.getOrgMutations().getMutations().get(i).get(k - 1).isActive()) {
-                    j = k;
-                }
-            }
-            //Draws selection rectangle
-            if (selection != 0) {
-                g.drawImage(Assets.mutation_select, x + 297, y + 25 + (selection - 1) * 115, 397, 120, null);
-            }
-            //Check if max tier
-            if (j == organism.getOrgMutations().getMutations().get(i).size()) {
-                g.drawImage(Assets.mutation_max_tier, x + 300, y + 30 + i * 115, 390, 110, null);
-            } else {
-                //Render the organism
                 g.setColor(Color.WHITE);
-                g.setFont(fontEvolve);
-                g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getSprite(), x + 331, y + 55 + i * 115, 60, 60, null);
-                //Render the cardinal number
-                g.drawString((String) hmap.get(organism.getOrgMutations().getMutations().get(i).get(j).getTier()), x + 468, y + 60 + i * 115);
-                g.drawString(organism.getOrgMutations().getMutations().get(i).get(j).getName(), x + 500, y + 60 + i * 115);
 
-                //Tier strength: if mutation increases or decreases strength is represented
-                if (organism.getOrgMutations().getMutations().get(i).get(j).getStrength() != 0) {
+                g.fillRect(x + 495, y + 81 + 115 * i, (int) 60 * organism.getStrength() / MAX_STRENGTH, 15);
+                g.fillRect(x + 495, y + 106 + 115 * i, (int) 60 * organism.getMaxHealth() / MAX_SURVIVABILITY, 15);
+                g.fillRect(x + 613, y + 81 + 115 * i, (int) 60 * organism.getSpeed() / MAX_SPEED, 15);
+                g.fillRect(x + 613, y + 106 + 115 * i, (int) 60 * organism.getStealth() / MAX_STEALTH, 15);
 
-                    if (organism.getOrgMutations().getMutations().get(i).get(j).getStrength() < 0) {
-                        g.setColor(Color.RED);
-                        g.fillRect(x + 495 + (int) 60 * ((organism.getStrength() + organism.getOrgMutations().getMutations().get(i).get(j).getStrength()) / MAX_STRENGTH), y + 81 + 115 * i, (int) 60 * -1 * organism.getOrgMutations().getMutations().get(i).get(j).getStrength() / MAX_STRENGTH, 15);
-                    } else {
-                        g.setColor(Color.GREEN);
-                        g.fillRect(x + 495 + (int) 60 * organism.getStrength() / MAX_STRENGTH, y + 81 + 115 * i, (int) 60 * organism.getOrgMutations().getMutations().get(i).get(j).getStrength() / MAX_STRENGTH, 15);
+                int j = 0;
+                
+                //Get current active tier
+                for (int k = 1; k <= organism.getOrgMutations().getMutations().get(i).size(); k++) {
+                    if (organism.getOrgMutations().getMutations().get(i).get(k-1).isActive()) {
+                        j = k;
                     }
                 }
-                //Tier Max Health: if mutation increases or decreases Max Health is represented
-                if (organism.getOrgMutations().getMutations().get(i).get(j).getMaxHealth() != 0) {
-                    if (organism.getOrgMutations().getMutations().get(i).get(j).getMaxHealth() < 0) {
-                        g.setColor(Color.RED);
-                        g.fillRect(x + 495 + (int) 60 * ((organism.getMaxHealth() + organism.getOrgMutations().getMutations().get(i).get(j).getStrength()) / MAX_SURVIVABILITY), y + 106 + 115 * i, (int) 60 * -1 * organism.getOrgMutations().getMutations().get(i).get(j).getMaxHealth() / MAX_SURVIVABILITY, 15);
-                    } else {
-                        g.setColor(Color.GREEN);
-                        g.fillRect(x + 495 + (int) 60 * organism.getMaxHealth() / MAX_SURVIVABILITY, y + 106 + 115 * i, (int) 60 * organism.getOrgMutations().getMutations().get(i).get(j).getMaxHealth() / MAX_SURVIVABILITY, 15);
-                    }
+                //Draws selection rectangle
+                if (selection != 0) {
+                    g.drawImage(Assets.mutation_select, x + 297, y + 25 + (selection - 1) * 115, 397, 120, null);
                 }
-                //Tier Stealth: if mutation increases or decreases Stealth is represented
-                if (organism.getOrgMutations().getMutations().get(i).get(j).getStealth() != 0) {
-                    if (organism.getOrgMutations().getMutations().get(i).get(j).getStealth() < 0) {
-                        g.setColor(Color.RED);
-                        g.fillRect(x + 613 + (int) 60 * ((organism.getStealth() + organism.getOrgMutations().getMutations().get(i).get(j).getStealth()) / MAX_STEALTH), y + 106 + 115 * i, (int) 60 * -1 * organism.getOrgMutations().getMutations().get(i).get(j).getStealth() / MAX_STEALTH, 15);
-                    } else {
-                        g.setColor(Color.GREEN);
-                        g.fillRect(x + 613 + (int) 60 * organism.getStealth() / MAX_STEALTH, y + 106 + 115 * i, (int) 60 * organism.getOrgMutations().getMutations().get(i).get(j).getStealth() / MAX_STEALTH, 15);
+                //Check if max tier
+                if (j == organism.getOrgMutations().getMutations().get(i).size()) {
+                    g.drawImage(Assets.mutation_max_tier, x + 300, y + 30 + i * 115, 390, 110, null);
+                } else {
+                    g.setColor(Color.WHITE);
+                    g.setFont(fontEvolve);
+                    g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getMutSprite(), x + 331, y + 55 + i*115, 60, 60, null);
+                    g.drawString((String) hmap.get(organism.getOrgMutations().getMutations().get(i).get(j).getTier()), x + 468, y + 60 + i * 115);
+                    g.drawString(organism.getOrgMutations().getMutations().get(i).get(j).getName(), x + 500, y + 60 + i * 115);
+
+                    if (organism.getOrgMutations().getMutations().get(i).get(j).getStrength() != 0) {
+
+                        if (organism.getOrgMutations().getMutations().get(i).get(j).getStrength() < 0) {
+                            g.setColor(Color.RED);
+                            g.fillRect(x + 495 + (int) 60 * ((organism.getStrength() + organism.getOrgMutations().getMutations().get(i).get(j).getStrength()) / MAX_STRENGTH), y + 81 + 115 * i, (int) 60 * -1 * organism.getOrgMutations().getMutations().get(i).get(j).getStrength() / MAX_STRENGTH, 15);
+                        } else {
+                            g.setColor(Color.GREEN);
+                            g.fillRect(x + 495 + (int) 60 * organism.getStrength() / MAX_STRENGTH, y + 81 + 115 * i, (int) 60 * organism.getOrgMutations().getMutations().get(i).get(j).getStrength() / MAX_STRENGTH, 15);
+                        }
                     }
-                }
-                //Tier Speed: if mutation increases or decreases Speed is represented
-                if (organism.getOrgMutations().getMutations().get(i).get(j).getSpeed() != 0) {
-                    if (organism.getOrgMutations().getMutations().get(i).get(j).getSpeed() < 0) {
-                        g.setColor(Color.RED);
-                        g.fillRect(x + 613 + (int) 60 * ((organism.getSpeed() + organism.getOrgMutations().getMutations().get(i).get(j).getSpeed()) / MAX_SPEED), y + 81 + 115 * i, (int) 60 * -1 * organism.getOrgMutations().getMutations().get(i).get(j).getSpeed() / MAX_SPEED, 15);
-                    } else {
-                        g.setColor(Color.GREEN);
-                        g.fillRect(x + 613 + (int) 60 * organism.getSpeed() / MAX_SPEED, y + 81 + 115 * i, (int) 60 * organism.getOrgMutations().getMutations().get(i).get(j).getSpeed() / MAX_SPEED, 15);
+                    if (organism.getOrgMutations().getMutations().get(i).get(j).getMaxHealth() != 0) {
+                        if (organism.getOrgMutations().getMutations().get(i).get(j).getMaxHealth() < 0) {
+                            g.setColor(Color.RED);
+                            g.fillRect(x + 495 + (int) 60 * ((organism.getMaxHealth() + organism.getOrgMutations().getMutations().get(i).get(j).getStrength()) / MAX_SURVIVABILITY), y + 106 + 115 * i, (int) 60 * -1 * organism.getOrgMutations().getMutations().get(i).get(j).getMaxHealth() / MAX_SURVIVABILITY, 15);
+                        } else {
+                            g.setColor(Color.GREEN);
+                            g.fillRect(x + 495 + (int) 60 * organism.getMaxHealth() / MAX_SURVIVABILITY, y + 106 + 115 * i, (int) 60 * organism.getOrgMutations().getMutations().get(i).get(j).getMaxHealth() / MAX_SURVIVABILITY, 15);
+                        }
+                    }
+                    if (organism.getOrgMutations().getMutations().get(i).get(j).getStealth() != 0) {
+                        if (organism.getOrgMutations().getMutations().get(i).get(j).getStealth() < 0) {
+                            g.setColor(Color.RED);
+                            g.fillRect(x + 613 + (int) 60 * ((organism.getStealth() + organism.getOrgMutations().getMutations().get(i).get(j).getStealth()) / MAX_STEALTH), y + 106 + 115 * i, (int) 60 * -1 * organism.getOrgMutations().getMutations().get(i).get(j).getStealth() / MAX_STEALTH, 15);
+                        } else {
+                            g.setColor(Color.GREEN);
+                            g.fillRect(x + 613 + (int) 60 * organism.getStealth() / MAX_STEALTH, y + 106 + 115 * i, (int) 60 * organism.getOrgMutations().getMutations().get(i).get(j).getStealth() / MAX_STEALTH, 15);
+                        }
+                    }
+                    if (organism.getOrgMutations().getMutations().get(i).get(j).getSpeed() != 0) {
+                        if (organism.getOrgMutations().getMutations().get(i).get(j).getSpeed() < 0) {
+                            g.setColor(Color.RED);
+                            g.fillRect(x + 613 + (int) 60 * ((organism.getSpeed() + organism.getOrgMutations().getMutations().get(i).get(j).getSpeed()) / MAX_SPEED), y + 81 + 115 * i, (int) 60 * -1 * organism.getOrgMutations().getMutations().get(i).get(j).getSpeed() / MAX_SPEED, 15);
+                        } else {
+                            g.setColor(Color.GREEN);
+                            g.fillRect(x + 613 + (int) 60 * organism.getSpeed() / MAX_SPEED, y + 81 + 115 * i, (int) 60 * organism.getOrgMutations().getMutations().get(i).get(j).getSpeed() / MAX_SPEED, 15);
+                        }
                     }
                 }
             }
-        }
 
-        for (int i = 0; i < buttons.size(); i++) {
+            for (int i = 0; i < buttons.size(); i++) {
 
-            if (selection != 0 || i != 0) {
-                buttons.get(i).render(g);
+                if (selection != 0 || i != 0) {
+                    buttons.get(i).render(g);
+                }
             }
         }
-
     }
+
 
     /**
      * To check if the mutation panel is active

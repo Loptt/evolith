@@ -32,30 +32,29 @@ public class OrganismManager implements Commons {
     private ArrayList<Organism> organisms;  //array of all organisms
     private ArrayList<Organism> deadOrgs;
 
-    private Game game;          // game instance
+    private Game game;                      // game instance
 
-    private Hover h;            // hover panel
-    private boolean hover;      // to know if hovering
+    private Hover h;                        // hover panel
+    private boolean hover;                  // to know if hovering
 
-    private int skin;           //skin id of the organisms
+    private int skin;                       //skin id of the organisms
 
-    private OrganismPanel orgPanel; //info panel 
-    private MutationPanel mutPanel; //Mutation panel
-    private StatisticsPanel statsPanel; //Statistics panel
+    private OrganismPanel orgPanel;         //info panel 
+    private MutationPanel mutPanel;         //Mutation panel
+    private StatisticsPanel statsPanel;     //Statistics panel
 
-    private int panelIndex;
-    private int idCounter;
-    private String speciesName;
-    private int speciesID;
-    
-    private boolean updatedNight;
-    private int avg[];
-    private JDBC mysql;
-    private int maxIntelligence;
-    private int maxGeneration;
+    private int panelIndex;                 //Current index in panel
+    private int idCounter;                  //Counter to assign ids
+    private String speciesName;             //Name of the species
+    private int speciesID;                  //ID of the speces
 
-    private boolean other;          //State indicating if 
+    private boolean updatedNight;           //Updated night state
+    private int avg[];                      //Average
+    private JDBC mysql;                     //MySql connection class
+    private int maxIntelligence;            //Max intelligence of organisms
+    private int maxGeneration;              //Max generation of organisms
 
+    private boolean other;                  //State indicating if organisms belong to opponent
 
     /**
      * Constructor of the organisms
@@ -110,10 +109,14 @@ public class OrganismManager implements Commons {
                 deadOrgs.remove(org);
             }
         }
+        
         checkNight();
         updateMenuPanels();
     }
-
+    
+    /**
+     * To calculate the average of organisms stats
+     */
     public void calculateAverage() {
         for (int i = 0; i < organisms.size(); i++) {
             avg[0] += organisms.get(i).getSpeed();
@@ -196,7 +199,7 @@ public class OrganismManager implements Commons {
                         panelIndex = i;
                     }
                 }
-
+                
                 while (orgPanel.isSearchNext() || orgPanel.isSearchPrev()) {
                     if (orgPanel.isSearchNext()) {
                         int auxIndex = orgPanel.getIndex();
@@ -364,7 +367,10 @@ public class OrganismManager implements Commons {
         org.setNeedOffspring(false);
         mysql.insertOrganism(speciesID,offspring.isDead() ? 1 : 0, offspring.getGeneration(), offspring.getSpeed(), offspring.getStealth(), offspring.getStrength(), offspring.getMaxHealth());   
     }
-  
+    
+    /**
+     * Update organisms in the database
+     */
     private void updateOrganismsDB() {
             mysql.updateOrganisms(this);
     }
@@ -847,24 +853,24 @@ public class OrganismManager implements Commons {
     }
 
     /**
-     *
-     * @return
+     * to get current organism amount
+     * @return amount of organisms
      */
     public int getAmount() {
         return organisms.size();
     }
 
     /**
-     *
-     * @return
+     * to get the id counter
+     * @return idCounter
      */
     public int getIdCounter() {
         return idCounter;
     }
 
     /**
-     *
-     * @param idCounter
+     * to set the idCounter
+     * @param idCounter new idCounter
      */
     public void setIdCounter(int idCounter) {
         this.idCounter = idCounter;
@@ -901,40 +907,76 @@ public class OrganismManager implements Commons {
     public void setUpdatedNight(boolean updatedNight) {
         this.updatedNight = updatedNight;
     }
-
+    
+    /**
+     * to get the species id
+     * @return speciedID
+     */
     public int getSpeciesID() {
         return speciesID;
     }
-
+    
+    /**
+     * to set the species id
+     * @param speciesID 
+     */
     public void setSpeciesID(int speciesID) {
         this.speciesID = speciesID;
     }
-
+    
+    /**
+     * to get max intelligence
+     * @return max intelligence
+     */
     public int getMaxIntelligence() {
         return maxIntelligence;
     }
-
+    
+    /**
+     * to set max intelligence
+     * @param maxIntelligence new max intelligence
+     */
     public void setMaxIntelligence(int maxIntelligence) {
         this.maxIntelligence = maxIntelligence;
     }
-
+    
+    /**
+     * to check if generation is updated
+     * @param o organism to check
+     */
     private void checkGeneration(Organism o) {
         if(o.getGeneration()>= maxGeneration)
             maxGeneration = o.getGeneration();
     }
-
+    
+    /**
+     * get max generation
+     * @return maxGeneration
+     */
     public int getMaxGeneration() {
         return maxGeneration;
     }
-
+    
+    /**
+     * to get stats panel
+     * @return statsPanel
+     */
     public StatisticsPanel getStatsPanel() {
         return statsPanel;
     }
-
+    
+    /**
+     * to set the stats panel
+     * @param statsPanel new stats panel
+     */
     public void setStatsPanel(StatisticsPanel statsPanel) {
         this.statsPanel = statsPanel;
     }
-
+    
+    /**
+     * to get an average
+     * @return avg
+     */
     public int[] getAvg() {
         return avg;
     }

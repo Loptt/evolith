@@ -10,6 +10,7 @@ import evolith.entities.ResourceManager;
 import evolith.entities.OrganismManager;
 import evolith.entities.PredatorManager;
 import evolith.engine.*;
+import evolith.entities.CampfireManager;
 import evolith.entities.Resource;
 import evolith.helpers.InputReader;
 import evolith.helpers.Selection;
@@ -92,6 +93,7 @@ public class Game implements Runnable, Commons {
     private StatisticsMenu statsMenu;
 
     private MaxIntelligenceButton maxIntButton; //Button to show the most intelligent organism
+    private MaxIntelligenceButton maxIntButtonOpp; //Button to show the most intelligent organism
 
     private Clock clock;                        // the time of the game
     private InputReader inputReader;            //To read text from keyboard
@@ -103,9 +105,11 @@ public class Game implements Runnable, Commons {
     private int prevWeatherChange;              //Time to change weather
 
     private Weather weather;                    //Weather manager
+
+    private CampfireManager campfires;
     
-    private int gameID;
-    private JDBC mysql;
+    private int gameID;                         //Id of the game
+    private JDBC mysql;                         //MySql connection object
 
     private boolean win;                        // To decide if the player has won
     private boolean server;                     // Decides if it is a server or not
@@ -129,6 +133,7 @@ public class Game implements Runnable, Commons {
         mainMenu = new MainMenu(0, 0, width, height, this);
         inputKeyboard = new InputKeyboard();
         minimap = new Minimap(MINIMAP_X, MINIMAP_Y, MINIMAP_WIDTH, MINIMAP_HEIGHT, this);
+        campfires = new CampfireManager(this);
 
         state = States.MainMenu;
         selection = new Selection(this);
@@ -213,7 +218,11 @@ public class Game implements Runnable, Commons {
         weather = new Weather(width, height, background);
         paused = false;
 
-        maxIntButton = new MaxIntelligenceButton(870, 400, 110, 30, Assets.backOn, Assets.backOff, organisms.getOrganism(0));
+        maxIntButton = new MaxIntelligenceButton(825, 210, 150, 70, Assets.maxIntButtonOn, Assets.maxIntButtonOff, organisms.getOrganism(0));
+        maxIntButtonOpp = new MaxIntelligenceButton(825, 290, 150, 70, Assets.maxIntButtonOpp, Assets.maxIntButtonOpp, organisms.getOrganism(0));
+        
+        maxIntButton.setyOff(36);
+        maxIntButtonOpp.setyOff(45);
     }
 
     /**
@@ -361,6 +370,8 @@ public class Game implements Runnable, Commons {
 
         //Tick all involved objects
         clock.tick();
+        campfires.tick();
+
         organisms.tick();
         resources.tick();
         predators.tick();
@@ -497,6 +508,7 @@ public class Game implements Runnable, Commons {
         }
 
         maxIntButton.setOrg(organisms.getMostIntelligent());
+        maxIntButtonOpp.setOrg(otherOrganisms.getMostIntelligent());
 
         checkGameOver();
     }
@@ -573,6 +585,10 @@ public class Game implements Runnable, Commons {
             state = States.Statistics;
         }
     }
+    
+    /**
+     * Tick statistics menu 
+    */
     private void statisticsTick(){
         
         statsMenu.tick();
@@ -646,16 +662,23 @@ public class Game implements Runnable, Commons {
 
         switch (weather.getState()) {
             case Clear:
+                resources.resetResources();
                 break;
             case Dry:
+                resources.reduceWaters(WATERS_AMOUNT/2);
                 break;
             case Rain:
+                resources.increaseResources(WATERS_AMOUNT+25);
                 break;
             case Storm:
+                //decrease number of small enemies
                 break;
             case Hail:
+                //decrease organism and predator movement speed
                 break;
             case Snow:
+                resources.reducePlants(PLANTS_AMOUNT/2);
+                resources.reduceWaters(WATERS_AMOUNT/2);
                 break;
         }
     }
@@ -944,8 +967,11 @@ public class Game implements Runnable, Commons {
         g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
 
         resources.render(g);
+        campfires.render(g);
+
         organisms.render(g);
         predators.render(g);
+
 
         if (night) {
             g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
@@ -1012,6 +1038,9 @@ public class Game implements Runnable, Commons {
         if (paused) {
             pauseMenu.render(g);
         }
+        
+        maxIntButton.render(g);
+        maxIntButtonOpp.render(g);
     }
 
     /**
@@ -1376,6 +1405,17 @@ public class Game implements Runnable, Commons {
         return weather;
     }
 
+    public Clock getClock() {
+        return clock;
+    }
+
+    public CampfireManager getCampfires() {
+        return campfires;
+    }
+    
+    
+    
+
     /**
      * start game
      */
@@ -1401,26 +1441,42 @@ public class Game implements Runnable, Commons {
         }
     }
 
+    /**
+     * to get game id
+     * @return gameID
+     */
     public int getGameID() {
         return gameID;
     }
 
+    /**
+     * to set game ID
+     * @param gameID new id
+     */
     public void setGameID(int gameID) {
         this.gameID = gameID;
     }
 
+    /**
+     * to get mysql connection
+     * @return mysql
+     */
     public JDBC getMysql() {
         return mysql;
     }
 
+    /**
+     * to set mysql connection
+     * @param mysql new mysql
+     */
     public void setMysql(JDBC mysql) {
         this.mysql = mysql;
     }
-
-    public Clock getClock() {
-        return clock;
-    }
-
+    
+    /**
+     * to get game statistics menu
+     * @return gameStats
+     */
     public GameStatisticsMenu getGameStats() {
         return gameStats;
     }
