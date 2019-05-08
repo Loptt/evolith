@@ -20,75 +20,81 @@ import java.io.PrintWriter;
 
 /**
  *
- * @author charles
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class Predator extends Item implements Commons {
 
-    private Point point;
-    private int maxVel;
-    private double acc;
-    private double xVel;
-    private double yVel;
-    private Game game;
+    private Point point;        //point to move
+    private int maxVel;         //Current max vel of the predator
+    private double acc;         //rate at which speed increases
+    private double xVel;        //speed in the x axis
+    private double yVel;        //speed in the y asis
+    private Game game;          //Game object
 
-    private Time time;
+    private Time time;          //Time object
     
-    private int maxHealth;
-    private double life;
-    private int hunger;
-    private int thirst;
+    private int maxHealth;      //Predator max life
+    private double life;        //Life of the predator
 
     private int prevHungerRed;  //Time in seconds at which hunger was previously reduced
     private int prevThirstRed;  //Time in seconds at which hunger was previously reduced
 
-    private boolean dead;
-    
-    private int size;
+    private boolean dead;       //Dead state
 
-    private boolean moving;
-    private boolean inPlant;
-    private boolean inWater;
-    private boolean inOrganism;
-    private boolean inResource;
-
-    private Organism target;
-    private Resource targetResource;
-    private Resource prevTargetResource;
-    private Resource prevprevTargetResource;
-    private boolean searchFood;
-    private boolean searchWater;
-
-    private boolean eating;
-    private boolean drinking;
+    private Organism target;                    //Current organism target
+    private Resource targetResource;            //Current resource targe
+    private Resource prevTargetResource;        //Previous target resource
+    private Resource prevprevTargetResource;    //Prevois previous target resource
     private boolean leaving;
     
-    private double damage;
-    private double stamina;
+    private double damage;                      //Current damage to organisms
+    private double stamina;                     //Current stamina
     
-    private boolean recovering;
-    private int id;
+    private boolean recovering;                 //Recovering state
+    private int id;                             //Unique identifier
     
-    private int chasingSpeed;
+    private int chasingSpeed;                   //Speed to chase organisms
     
-    private int absMaxVel;
-    private int prevResourceChangeSec;
-    private int prevPointGeneratedSec;
+    private int absMaxVel;                      //Absolute max velocity
+    private int prevResourceChangeSec;          //Seconds when last resource change occured
+    private int prevPointGeneratedSec;          //Seconds when last point generated occured
     
-    public enum Mode {Water, Roaming, Attacking};
-    private Mode mode;
-    private Mode prevMode;
+    /**
+     *
+     */
+    public enum Mode { 
+
+        /**
+         *
+         */
+        Water, 
+
+        /**
+         *
+         */
+        Roaming, 
+
+        /**
+         *
+         */
+        Attacking};   //Predator modes
+    private Mode mode;                          //Current mode
+    private Mode prevMode;                      //Previous mode
     
-    private boolean visible;
+    private boolean visible;                    //Visible state
 
     /**
-     * Constructor of the organism
+     * Constructor of the Predator
      *
-     * @param x
-     * @param y
-     * @param width
-     * @param height
-     * @param game
-     * @param id
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param width predator width
+     * @param height predator height
+     * @param game game object
+     * @param id unique identifier
      */
     public Predator(int x, int y, int width, int height, Game game, int id) {
         super(x, y, width, height);
@@ -103,22 +109,11 @@ public class Predator extends Item implements Commons {
         prevThirstRed = 0;
 
         dead = false;
-        inPlant = false;
-        inWater = false;
-        inResource = false;
-
-        searchFood = false;
-        searchWater = false;
-
-        eating = false;
-        drinking = false;
         
         leaving = false;
         
         maxHealth = 120;
-        
-        hunger = 100;
-        thirst = 100;
+
         life = maxHealth;
 
         time = new Time();
@@ -141,19 +136,13 @@ public class Predator extends Item implements Commons {
     }
 
     /**
-     * To tick the organism
+     * To tick the predator
      */
     @Override
     public void tick() {
-        //to determine the lifespan of the organism
         time.tick();
         
-        if (!game.isServer()) {
-            checkMovement();
-            checkVitals();
-            return;
-        }
-        
+        //If leaving, just move
         if (leaving) {
             checkMovement();
             checkVitals();
@@ -163,6 +152,7 @@ public class Predator extends Item implements Commons {
         
         autoLookTarget();
         
+        //Check each mode
         switch (mode) {
             case Attacking:
                 break;
@@ -197,9 +187,13 @@ public class Predator extends Item implements Commons {
         }
     }
     
+    /**
+     * Modify the predator to its 3 possible configurations
+     */
     private void applyVariances() {
         int chance = (int) (Math.random() * 10);
         
+        // 3/10 chance of becoming the big predator, only if there are more than 15 organisms
         if (chance < 3 && game.getOrganisms().getAmount() > 15) {
             //Big *scary*
             width = PREDATOR_SIZE + 20;
@@ -211,7 +205,7 @@ public class Predator extends Item implements Commons {
             
             maxHealth = 150;
             life = maxHealth;
-            
+            // 4 /10 chance of becoming the medium predator
         } else if (chance  < 7) {
             //Medium
             width = PREDATOR_SIZE;
@@ -220,6 +214,7 @@ public class Predator extends Item implements Commons {
             damage = 0.2;
             
             chasingSpeed = 2;
+            // 4 / 10 chance of becoming the small predator
         } else {
             //Small
             width = PREDATOR_SIZE - 20;
@@ -233,21 +228,9 @@ public class Predator extends Item implements Commons {
             life = 100;
         }
     }
-    
-    public double getLife() {
-        return life;
-    }
-
-    public Time getTime() {
-        return time;
-    }
-
-    public void setTime(Time time) {
-        this.time = time;
-    }
 
     /**
-     * Update the position of the organism accordingly
+     * Update the position of the predator accordingly
      */
     private void checkMovement() {
         moveToPoint();
@@ -285,6 +268,9 @@ public class Predator extends Item implements Commons {
         y += yVel;
     }
     
+    /**
+     * Check if the predator has left the map
+     */
     private void checkLeft() {
         if (x > BACKGROUND_WIDTH + 100) {
             kill();
@@ -303,6 +289,9 @@ public class Predator extends Item implements Commons {
         }
     }
     
+    /**
+     * Move to the designated point
+     */
     private void moveToPoint() {
         // if the organism is less than 25 units reduce velocity
         if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 25) {
@@ -310,22 +299,21 @@ public class Predator extends Item implements Commons {
             if (Math.abs((int) point.getX() - x) < 15 && Math.abs((int) point.getY() - y) < 15) {
                 // if the organism is less than 5 units reduce velocity
                 if (Math.abs((int) point.getX() - x) < 5 && Math.abs((int) point.getY() - y) < 5) {
-                    moving = false;
                     maxVel = 0;
                 } else {
-                    moving = true;
                     maxVel = (int) Math.ceil(absMaxVel / 3);
                 }
             } else {
-                moving = true;
                 maxVel = (int) Math.ceil(absMaxVel / 2);
             }
         } else {
-            moving = true;
             maxVel = absMaxVel / 1;
         }
     }
     
+    /**
+     * Check if the predator needs to change water
+     */
     private void waterChecking() {
         if (time.getSeconds() >= prevResourceChangeSec + PREDATOR_SECONDS_IN_RESOURCE) {
             lookNewTarget();
@@ -333,6 +321,9 @@ public class Predator extends Item implements Commons {
         }
     }
     
+    /**
+     * Roam the map
+     */
     private void roaming() {
         absMaxVel = 1;
         if (time.getSeconds() >= prevPointGeneratedSec + PREDATOR_SECONDS_TO_ROAM) {
@@ -341,6 +332,9 @@ public class Predator extends Item implements Commons {
         }
     }
     
+    /**
+     * Assign a new point to roam
+     */
     private void assignNewPoint() {
         int newX = (int) (Math.random() * (BACKGROUND_WIDTH - 200) + 100 );
         int newY = (int) (Math.random() * (BACKGROUND_HEIGHT - 200) + 100 );
@@ -352,17 +346,6 @@ public class Predator extends Item implements Commons {
      * To check the update and react to the vital stats of the organism
      */
     private void checkVitals() {
-        //Reduce hunger every x seconds defined in the commmons class
-        if (time.getSeconds() >= prevHungerRed + SECONDS_PER_HUNGER) {
-            hunger--;
-            prevHungerRed = (int) time.getSeconds();
-        }
-
-        //Reduce thirst every x seconds defined in the commmons class
-        if (time.getSeconds() >= prevThirstRed + SECONDS_PER_THIRST) {
-            thirst--;
-            prevThirstRed = (int) time.getSeconds();
-        }
         
         if (stamina <= 0) {
             recovering = true;
@@ -384,6 +367,9 @@ public class Predator extends Item implements Commons {
         }
     }
     
+    /**
+     * Handle current target
+     */
     public void handleTarget() {
         //If no target, do nothing
         if (target == null && targetResource != null) {
@@ -395,6 +381,9 @@ public class Predator extends Item implements Commons {
         }
     }
     
+    /**
+     * check if resource is still valid
+     */
     public void checkResourceStatus() {
         //Check if target exists
         if (targetResource != null) {
@@ -411,6 +400,9 @@ public class Predator extends Item implements Commons {
         }
     }
     
+    /**
+     * Look new target
+     */
     public void autoLookTarget() {
         //Finds closest organism or water
         Resource res = findNearestValidWater();
@@ -460,6 +452,9 @@ public class Predator extends Item implements Commons {
         }
     }
     
+    /**
+     * 
+     */
     private void lookNewTarget() {
         Resource closestWater = null; 
         double closestDistanceBetweenWaterAndOrganism = 1000000;
@@ -489,6 +484,10 @@ public class Predator extends Item implements Commons {
         targetResource = closestWater;
     }
     
+    /**
+     *
+     * @return
+     */
     public Organism findNearestOrganism(){
         Organism closestOrganism = null; 
         double closestDistanceBetweenPredatorAndOrganism = 1000000;
@@ -515,6 +514,10 @@ public class Predator extends Item implements Commons {
         return closestOrganism;
     }
     
+    /**
+     *
+     * @return
+     */
     public Resource findNearestValidWater() {
         Resource closestWater = null; 
         double closestDistanceBetweenWaterAndOrganism = 1000000;
@@ -538,6 +541,9 @@ public class Predator extends Item implements Commons {
         return closestWater;
     }
     
+    /**
+     *
+     */
     public void checkArrivalOnResource() {
         if (targetResource != null) {
             if (targetResource.intersects(this) && targetResource.getPredator() == null) {
@@ -556,6 +562,10 @@ public class Predator extends Item implements Commons {
         dead = true;
     }
     
+    /**
+     *
+     * @param pw
+     */
     public void save(PrintWriter pw) {
         pw.println(Integer.toString(id));
         
@@ -575,6 +585,11 @@ public class Predator extends Item implements Commons {
         pw.println(Integer.toString((int) stamina));
     }
     
+    /**
+     *
+     * @param br
+     * @throws IOException
+     */
     public void load(BufferedReader br) throws IOException {
         id = Integer.parseInt(br.readLine());
         
@@ -638,6 +653,30 @@ public class Predator extends Item implements Commons {
     public void setPoint(Point point) {
         this.point = point;
     }
+    
+    /**
+     *
+     * @return
+     */
+    public double getLife() {
+        return life;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Time getTime() {
+        return time;
+    }
+
+    /**
+     *
+     * @param time
+     */
+    public void setTime(Time time) {
+        this.time = time;
+    }
 
     /**
      * To check if the organism is dead
@@ -657,174 +696,178 @@ public class Predator extends Item implements Commons {
         this.dead = dead;
     }
 
-    public boolean isMoving() {
-        return moving;
-    }
-
-    public void setMoving(boolean moving) {
-        this.moving = moving;
-    }
-
-    public boolean isInPlant() {
-        return inPlant;
-    }
-
-    public void setInPlant(boolean inPlant) {
-        this.inPlant = inPlant;
-    }
-    
-    public void setInOrganism(boolean inOrganism){
-        this.inOrganism = inOrganism;
-    }
-
-    public boolean isInOrganism(){
-        return inOrganism;
-    }
-    
-    public boolean isInWater() {
-        return inWater;
-    }
-
-    public void setInWater(boolean inWater) {
-        this.inWater = inWater;
-    }
-
-    public boolean isInResource() {
-        return inResource;
-    }
-
-    public void setInResource(boolean inResource) {
-        this.inResource = inResource;
-    }
-
+    /**
+     *
+     * @return
+     */
     public Organism getTarget() {
         return target;
     }
     
+    /**
+     *
+     * @return
+     */
     public Resource getTargetResource(){
         return targetResource;
     }
     
+    /**
+     *
+     * @param target
+     */
     public void setTargetResource(Resource target){
         this.targetResource = target;
     }
 
+    /**
+     *
+     * @param target
+     */
     public void setTarget(Organism target) {
         this.target = target;
     }
-
-    public boolean isSearchFood() {
-        return searchFood;
-    }
-
-    public boolean isSearchWater() {
-        return searchWater;
-    }
-
-    public void setSearchFood(boolean searchFood) {
-        this.searchFood = searchFood;
-    }
-
-    public void setSearchWater(boolean searchWater) {
-        this.searchWater = searchWater;
-    }
-
-    public boolean isEating() {
-        return eating;
-    }
-
-    public boolean isDrinking() {
-        return drinking;
-    }
-
-    public void setEating(boolean eating) {
-        this.eating = eating;
-    }
-
-    public void setDrinking(boolean drinking) {
-        this.drinking = drinking;
-    }
-
-    public boolean isConsuming() {
-        return eating || drinking;
-    }
     
-    public void setHunger(int hunger){
-        this.hunger = hunger;
-    }
-    
-    public void setThirst(int thirst){
-        this.thirst = thirst;
-    }    
-
+    /**
+     *
+     * @return
+     */
     public double getDamage() {
         return damage;
     }
 
+    /**
+     *
+     * @param damage
+     */
     public void setDamage(double damage) {
         this.damage = damage;
     }
 
+    /**
+     *
+     * @param life
+     */
     public void setLife(double life) {
         this.life = life;
     }
 
+    /**
+     *
+     * @param stamina
+     */
     public void setStamina(double stamina) {
         this.stamina = stamina;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getStamina() {
         return stamina;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isRecovering() {
         return recovering;
     }
 
+    /**
+     *
+     * @param recovering
+     */
     public void setRecovering(boolean recovering) {
         this.recovering = recovering;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isLeaving() {
         return leaving;
     }
 
+    /**
+     *
+     * @param leaving
+     */
     public void setLeaving(boolean leaving) {
         this.leaving = leaving;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isVisible() {
         return visible;
     }
 
+    /**
+     *
+     * @param visible
+     */
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
 
+    /**
+     *
+     * @param absMaxVel
+     */
     public void setAbsMaxVel(int absMaxVel) {
         this.absMaxVel = absMaxVel;
     }
 
+    /**
+     *
+     * @param maxHealth
+     */
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
     }
 
+    /**
+     *
+     * @return
+     */
     public Mode getMode() {
         return mode;
     }
 
+    /**
+     *
+     * @param maxVel
+     */
     public void setMaxVel(int maxVel) {
         this.maxVel = maxVel;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getAbsMaxVel() {
         return absMaxVel;
     }
 
+    /**
+     *
+     * @param chasingSpeed
+     */
     public void setChasingSpeed(int chasingSpeed) {
         this.chasingSpeed = chasingSpeed;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getChasingSpeed() {
         return chasingSpeed;
     }

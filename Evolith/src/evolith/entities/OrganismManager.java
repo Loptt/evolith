@@ -799,48 +799,48 @@ public class OrganismManager implements Commons {
     }
 
     /**
-     *
-     * @return
+     * to get the species name
+     * @return speciesName
      */
     public String getSpeciesName() {
         return speciesName;
     }
 
     /**
-     *
-     * @param speciesName
+     * to set the species name
+     * @param speciesName name
      */
     public void setSpeciesName(String speciesName) {
         this.speciesName = speciesName;
     }
 
     /**
-     *
-     * @return
+     * to check if organisms have been updated to night
+     * @return updatedNight
      */
     public boolean isUpdatedNight() {
         return updatedNight;
     }
 
     /**
-     *
-     * @param updatedNight
+     * to set updatedNight
+     * @param updatedNight updated night state
      */
     public void setUpdatedNight(boolean updatedNight) {
         this.updatedNight = updatedNight;
     }
 
     /**
-     *
-     * @return
+     * to get the game object
+     * @return game object
      */
     public Game getGame() {
         return game;
     }
 
     /**
-     *
-     * @return
+     * to get the hover object
+     * @return h
      */
     public Hover getH() {
         return h;
