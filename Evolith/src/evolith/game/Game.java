@@ -786,6 +786,7 @@ public class Game implements Runnable, Commons {
         } else if (maxIntButton.hasMouse(mouseX, mouseY)) {
             camera.setX(maxIntButton.getOrg().getX() - width / 2);
             camera.setY(maxIntButton.getOrg().getY() - height / 2);
+            organisms.clearSelection();
             maxIntButton.getOrg().setSelected(true);
             //Lastly, activate selection
         } else {

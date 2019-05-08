@@ -39,18 +39,18 @@ public class OrganismManager implements Commons {
     private OrganismPanel orgPanel; //info panel 
     private MutationPanel mutPanel; //Mutation panel
 
-    private int panelIndex;
-    private int idCounter;
-    private String speciesName;
+    private int panelIndex;         //Current index in organism panel
+    private int idCounter;          //Id counter to assign id to new organisms
+    private String speciesName;     //name of the species
     
-    private boolean updatedNight;
-    private boolean other;
+    private boolean updatedNight;   //To check if night changes have been done
+    private boolean other;          //State indicating if 
 
     /**
      * Constructor of the organisms
      *
-     * @param game
-     * @param other
+     * @param game game object
+     * @param other other flag
      */
     public OrganismManager(Game game, boolean other) {
         panelIndex = 0;
@@ -98,52 +98,6 @@ public class OrganismManager implements Commons {
     }
 
     /**
-     * Perform action on mouse clicked
-     *
-     * @param x
-     * @param y
-     */
-    public void applyMouse(int x, int y) {
-        moveSwarm(x, y);
-    }
-
-    /**
-     * To move the entire swarm to the x and y given
-     *
-     * @param x
-     * @param y
-     */
-    public void moveSwarm(int x, int y) {
-        ArrayList<Point> points;
-        //if left clicked move the organisms to determined point
-
-        if (organisms.size() > 0) {
-            points = SwarmMovement.getPositions(x, y, organisms.size());
-            for (int i = 0; i < organisms.size(); i++) {
-                organisms.get(i).setPoint(points.get(i));
-            }
-        }
-    }
-
-    /**
-     * to move the swarm to the specified coordinates given there is an object
-     * in the middle
-     *
-     * @param x
-     * @param y
-     * @param obj
-     */
-    public void moveSwarm(int x, int y, int obj) {
-        ArrayList<Point> points;
-        //if left clicked move the organisms to determined point
-
-        points = SwarmMovement.getPositions(x - ORGANISM_SIZE_STAT / 2, y - ORGANISM_SIZE_STAT / 2, organisms.size(), obj);
-        for (int i = 0; i < organisms.size(); i++) {
-            organisms.get(i).setPoint(points.get(i));
-        }
-    }
-
-    /**
      * move the selected organisms to an indicated x and y coordinate
      *
      * @param x coordinate in the x axis
@@ -174,22 +128,11 @@ public class OrganismManager implements Commons {
             }
         }
     }
-
-    /**
-     * deprecated
-     *
-     * @param x
-     * @param y
-     * @param obj
-     */
-    public void moveSwarmToPoint(int x, int y, int obj) {
-        Point p = new Point(x, y);
-
-        for (int i = 0; i < organisms.size(); i++) {
-            organisms.get(i).setPoint(p);
-        }
-    }
     
+    /**
+     * Select organisms which are in the specified rectangle
+     * @param r Rectangle to check
+     */
     public void selectInRect(Rectangle r) {
         for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).intersects(r) && !organisms.get(i).isEgg()) {
@@ -249,6 +192,9 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * Check if night changes need to be applied
+     */
     private void checkNight() {
         if (game.isNight()) {
             if (!updatedNight) {
@@ -287,7 +233,13 @@ public class OrganismManager implements Commons {
             }
         }
     }
-
+    
+    /**
+     * get the absolute mod in the for a mod b
+     * @param a dividend
+     * @param b divisor
+     * @return real mod of a % b
+     */
     private int realMod(int a, int b) {
         return ((((a % b) + b) % b) + b) % b;
     }
@@ -311,6 +263,9 @@ public class OrganismManager implements Commons {
         return false;
     }
     
+    /**
+     * In multiplayer, check if the opponent organisms are visible
+     */
     public void checkOtherVisible() {
         OrganismManager others = game.getOtherOrganisms();
         
@@ -344,6 +299,10 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * Reproduce an organism by creating another identical organism
+     * @param org Organism to reproduce 
+     */
     private void reproduce(Organism org) {
         
         Organism offspring;
@@ -365,7 +324,6 @@ public class OrganismManager implements Commons {
 
     /**
      * Check if an organism needs to be killed
-     *
      */
     public void checkKill() {
         for (int i = 0; i < organisms.size(); i++) {
@@ -378,6 +336,10 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * check if the organism needs to be mutated
+     * @param org Organism to check
+     */
     private void checkNeedMutation(Organism org) {
         if (org.isNeedMutation()) {
             mutPanel = new MutationPanel(org, MUTATION_PANEL_X, MUTATION_PANEL_Y, MUTATION_PANEL_WIDTH, MUTATION_PANEL_HEIGHT, game);
@@ -387,6 +349,10 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * Get the most intelligent organism of the species
+     * @return most intelligent organism
+     */
     public Organism getMostIntelligent() {
         Organism mostInt;
         if (organisms.isEmpty()) {
@@ -405,21 +371,9 @@ public class OrganismManager implements Commons {
     }
 
     /**
-     * sets a resource for all organisms (deprecated)
-     *
-     * @param resource
-     */
-    public void setResource(Resource resource) {
-        for (int i = 0; i < organisms.size(); i++) {
-            organisms.get(i).safeLeaveResource();
-            organisms.get(i).setTarget(resource);
-        }
-    }
-
-    /**
      * sets a resource for selected organisms
      *
-     * @param resource
+     * @param resource resource to set
      */
     public void setSelectedResource(Resource resource) {
         for (int i = 0; i < organisms.size(); i++) {
@@ -454,7 +408,7 @@ public class OrganismManager implements Commons {
     /**
      * set the god command to selected organisms
      *
-     * @param value
+     * @param value state to set the seletec organisms
      */
     public void setSelectedGodCommand(boolean value) {
         for (int i = 0; i < organisms.size(); i++) {
@@ -464,6 +418,9 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * Deselect all organisms
+     */
     public void clearSelection() {
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).setSelected(false);
@@ -515,6 +472,10 @@ public class OrganismManager implements Commons {
         return false;
     }
     
+    /**
+     * Check if one organisms has reached max intelligence
+     * @return true if at least one organisms has max intelligence
+     */
     public boolean isMaxIntelligence() {
         for (int i = 0; i < organisms.size(); i++) {
             if (organisms.get(i).getIntelligence() >= MAX_INTELLIGENCE) {
@@ -525,10 +486,18 @@ public class OrganismManager implements Commons {
         return false;
     }
     
+    /**
+     * Add an organism to the array
+     * @param org Organism to add
+     */
     public void addOrganism(Organism org) {
         organisms.add(org);
     }
     
+    /**
+     * Save the current state of the organisms to the printwriter
+     * @param pw print writer
+     */
     public void save(PrintWriter pw) {
         //Save amount
         pw.println(Integer.toString(organisms.size()));
@@ -542,6 +511,11 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * Load the last save state of the organisms from the buffered reader
+     * @param br buffered reader
+     * @throws IOException 
+     */
     public void load(BufferedReader br) throws IOException {
         int am = Integer.parseInt(br.readLine());
         organisms.clear();
@@ -554,11 +528,15 @@ public class OrganismManager implements Commons {
         }
     }
     
+    /**
+     * Reset organisms to its initial state
+     */
     public void reset() {
         organisms.clear();
         
         idCounter = 1;
         
+        //If the game is mutliplayer, check where to position the first organism
         if (game.getState() == Game.States.Multi) {
             if (game.isServer() && !other) {
                 organisms.add(new Organism(INITIAL_POINT_HOST, INITIAL_POINT_HOST, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
@@ -591,7 +569,7 @@ public class OrganismManager implements Commons {
     /**
      * To render the organisms
      *
-     * @param g
+     * @param g graphics
      */
     public void render(Graphics g) {
         
@@ -616,15 +594,12 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < deadOrgs.size(); i++) {
             deadOrgs.get(i).render(g);
         }
-
-        //Handle orgPanel and mutPanel render in game to prevent other elements
-        //to overlap them
     }
 
     /**
      * To set the hover status
      *
-     * @param hover
+     * @param hover hover state
      */
     public void setHover(boolean hover) {
         this.hover = hover;
@@ -642,7 +617,7 @@ public class OrganismManager implements Commons {
     /**
      * Set the skin of the organisms
      *
-     * @param skin
+     * @param skin new skin
      */
     public void setSkin(int skin) {
         this.skin = skin;
