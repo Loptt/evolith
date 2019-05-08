@@ -23,9 +23,16 @@ public class SoundEffectManager {
     private Song rainSound;
     private Song stormSound;
     private Song windSound;
+    private Song backSound;
+    private Song nextSound;
+    private Song overSound;
+    private Song winSound;
     private int secondStartAlien;
     private Time time;
-    private boolean predator, water, plant, organism, rain, storm, wind, start;
+    private boolean predator, water, plant, organism, rain, storm, snow, next, back, win, over;
+    private Song rainsound;
+    private Song stormsound;
+    private Song snowsound;
 
     /**
      * Sound effects manager constructor
@@ -39,11 +46,19 @@ public class SoundEffectManager {
         organism = false;
         rain = false;
         storm = false;
-        wind = false;
-        start = false;
-        predatorSound = new Song(Assets.aliensound, 3);
+        snow = false;
+        next = false;
+        back = false;
+        win = false;
+        over = false;
+        predatorSound = new Song(Assets.aliensound, 5);
         waterSound = new Song(Assets.watersound, 1);
         plantSound = new Song(Assets.grasssound, 1); 
+        nextSound = new Song(Assets.nextsound, 1);
+        backSound = new Song(Assets.backsound, 1);
+        rainsound = new Song(Assets.rainsound, 40);
+        stormsound = new Song(Assets.stormsound, 40);
+        snowsound = new Song(Assets.snowsound, 40);
         secondStartAlien = 0;
     }
     
@@ -66,6 +81,35 @@ public class SoundEffectManager {
         if(plant){
             plantSound.play();
             plant  = false;
+        }
+        if(next){
+            nextSound.play();
+            next = false;
+        }
+        if(back){
+            backSound.play();
+            back = false;
+        }
+        if(win){
+            winSound.play();
+            win =false;
+        }
+        if(over){
+            overSound.play();
+            over = false;
+        }
+        if(rain){
+            rainsound.play();
+            rain = false;
+        }
+        if(storm){
+            stormsound.play();
+            storm = false;
+        }
+        if(snow){
+            System.out.println("snow plays");
+            snowsound.play();
+            snow = false;
         }
         
     }
@@ -90,6 +134,22 @@ public class SoundEffectManager {
     public void playPlant() {
         plant = true;
     }
+    
+    public void playNext(){
+        next = true;
+    }
+    
+    public void playBack(){
+        back = true;
+    }
+    
+    public void playWin(){
+        win = true;
+    }
+    
+    public void playOver(){
+        over = true;
+    }
 
     /**
      * To set the predator's status
@@ -109,7 +169,32 @@ public class SoundEffectManager {
         return predator;
     }
     
+    public void playRain(){
+        rain = true;
+    }
     
+    public void stopRain(){
+        rain = false;
+        rainsound.stop();
+    }
+    
+    public void playStorm(){
+        storm = true;
+    }
+    
+    public void stopStorm(){
+        storm = false;
+        stormsound.stop();
+    }
+    
+    public void playSnow(){
+        snow = true;
+    }
+    
+    public void stopSnow(){
+        snow = false;
+        snowsound.stop();
+    }
     
     private class Song {
         private SoundClip clip;
@@ -122,6 +207,10 @@ public class SoundEffectManager {
         
         public void play() {
             clip.play();
+        }
+        
+        public void stop(){
+            clip.stop();
         }
     }
     

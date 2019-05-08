@@ -47,8 +47,11 @@ public class Weather {
     private Background background;      //Current background
     private int prevWeather;            //Previous weather
     
+    private Game game;
+
     private Animation raindrops;        //Rain animation
     private Animation snowhail;         //snow animation
+
 
     /**
      * Weather constructor
@@ -56,10 +59,11 @@ public class Weather {
      * @param height
      * @param background
      */
-    public Weather(int width, int height, Background background) {
+    public Weather(int width, int height, Background background, Game game) {
         this.width = width;
         this.height = height;
         this.background = background;
+        this.game = game;
         
         state = State.Clear;
         prevState = State.Clear;
@@ -87,8 +91,6 @@ public class Weather {
         states.get(0).add(State.Rain);
         states.get(0).add(State.Dry);
         
-        states.get(0).add(State.Hail);
-        
         //Dry
         states.get(1).add(State.Dry);
         states.get(1).add(State.Rain);
@@ -106,7 +108,7 @@ public class Weather {
         states.get(4).add(State.Hail);
         states.get(4).add(State.Clear);
         states.get(4).add(State.Snow);
-        
+
         //Snow
         states.get(5).add(State.Clear);
         
@@ -174,10 +176,12 @@ public class Weather {
             case Clear:
                 state = State.Clear;
                 clear.setActive(true);
+                game.getSfx().stopRain();
+                game.getSfx().stopStorm();
+                game.getSfx().stopSnow();
                 prevWeather = 0;
                 background.setImageDay(clear.getDay());
                 background.setImageNight(clear.getNight());
-                
                 break;
             case Dry:
                 state = State.Dry;
@@ -189,6 +193,7 @@ public class Weather {
             case Rain:
                 state = State.Rain;
                 rain.setActive(true);
+                game.getSfx().playRain();
                 prevWeather = 2;
                 background.setImageDay(rain.getDay());
                 background.setImageNight(rain.getNight());
@@ -196,6 +201,8 @@ public class Weather {
             case Storm:
                 state = State.Storm;
                 storm.setActive(true);
+                game.getSfx().playStorm();
+                game.getSfx().stopRain();
                 prevWeather = 3;
                 background.setImageDay(storm.getDay());
                 background.setImageNight(storm.getNight());
@@ -210,6 +217,7 @@ public class Weather {
             case Snow:
                 state = State.Snow;
                 snow.setActive(true);
+                game.getSfx().playSnow();
                 prevWeather = 5;
                 background.setImageDay(snow.getDay());
                 background.setImageNight(snow.getNight());

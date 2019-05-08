@@ -182,10 +182,13 @@ public class Game implements Runnable, Commons {
      * initializing the display window of the game
      */
     private void init() {
+
         mysql.updateBackup();
+
         clock = new Clock(0, 0, 100, 100);
         display = new Display(title, width, height);
         Assets.init();
+        sfx = new SoundEffectManager();
 
         background = new Background(5000, 5000, width, height);
         buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
@@ -196,7 +199,6 @@ public class Game implements Runnable, Commons {
         statsMenu = new StatisticsMenu(0,0,width,height,this,false,mysql);
 
         musicManager = new MusicManager();
-        sfx = new SoundEffectManager();
         //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
         organisms = new OrganismManager(this, false);
         predators = new PredatorManager(this);
@@ -214,8 +216,8 @@ public class Game implements Runnable, Commons {
         mysql.insertOrganism(organisms.getSpeciesID() , 1 ,organisms.getOrganism(0).getGeneration(),organisms.getOrganism(0).getSpeed(),organisms.getOrganism(0).getStealth() , organisms.getOrganism(0).getStrength(),organisms.getOrganism(0).getMaxHealth());
         mysql.getAverage();
 
+        weather = new Weather(width, height, background, this);
 
-        weather = new Weather(width, height, background);
         paused = false;
 
         maxIntButton = new MaxIntelligenceButton(825, 210, 150, 70, Assets.maxIntButtonOn, Assets.maxIntButtonOff, organisms.getOrganism(0));
@@ -268,7 +270,11 @@ public class Game implements Runnable, Commons {
         mainMenu.setActive(true);
         mainMenu.tick();
 
+        sfx.tick();
+
+
         //If play is clicked, go to mode menu
+
         if (mainMenu.isClickPlay()) {
             mainMenu.setActive(false);
             state = States.ModeMenu;
@@ -292,6 +298,8 @@ public class Game implements Runnable, Commons {
     private void modeTick() {
         modeMenu.tick();
         inputKeyboard.tick();
+        sfx.tick();
+        
 
         //If single player is chosen, go to setup menu
         if (modeMenu.isSingle()) {
@@ -335,6 +343,8 @@ public class Game implements Runnable, Commons {
      */
     private void instructionsTick() {
         instructionMenu.tick();
+        sfx.tick();
+        
 
         //If instructions screens are over, return to main menu
         if (instructionMenu.isOver()) {
@@ -349,6 +359,7 @@ public class Game implements Runnable, Commons {
         setupMenu.tick();
         setupMenu.setActive(true);
         inputKeyboard.tick();
+        sfx.tick();
 
         //If play is clicked, go to single player play state
         if (setupMenu.isClickPlay()) {
@@ -716,7 +727,7 @@ public class Game implements Runnable, Commons {
                 resources.reduceWaters(WATERS_AMOUNT/2);
                 break;
             case Rain:
-                resources.increaseResources(WATERS_AMOUNT+25);
+                resources.increaseResources(WATERS_AMOUNT*2);
                 break;
             case Storm:
                 //decrease number of small enemies

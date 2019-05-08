@@ -212,6 +212,7 @@ public class SetupMenu extends Menu {
         } 
             
         if(buttons.get(0).isPressed()){
+            game.getSfx().playNext();
             setClickPlay(true);
             mysql.updateSpeciesName(game.getGameID(),name);
             setActive(false);

@@ -101,6 +101,7 @@ public class MainMenu extends Menu implements Commons {
                     buttons.get(i).setActive(true);
                     //if left click change mouse status
                     if (game.getMouseManager().isLeft()) {
+                        game.getSfx().playNext();
                         buttons.get(i).setPressed(true);
                         game.getMouseManager().setLeft(false);
                     }
