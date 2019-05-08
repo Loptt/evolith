@@ -608,8 +608,6 @@ public class Organism extends Item implements Commons {
                 safeLeaveResource();
                 beingChased = true;
                 pred = p;
-            } else {
-
             }
         }
     }
@@ -632,19 +630,13 @@ public class Organism extends Item implements Commons {
                 if (o.intersects(this) && !o.isEgg()) {
                     life -= o.getDamage();
                 }
-            } else {
-
             }
-            
-            //CHANGE
-           
         }
     }
     
      /**
-     * Generate a point to run when an organism is being chased by a predator
+     * Generate a point to run when an organism is being chased by a predator or opponent
      *
-     * @param pred the predator to check
      * @return the generated point
      */
     public Point generateEscapePointPred() {
@@ -654,10 +646,14 @@ public class Organism extends Item implements Commons {
         if (SwarmMovement.distanceBetweenTwoPoints(x, y, pred.getX(), pred.getY()) < 20) {
             generatedPoint = new Point(findNearestOrganism().getX(), findNearestOrganism().getY());
         }
-
+        
+        //Create a point in the contrary direction of the enemy
         generatedPoint.x = x + (x - pred.getX()) + SwarmMovement.generateRandomness(100);
         generatedPoint.y = y + (y - pred.getY()) + SwarmMovement.generateRandomness(100);
-
+        
+        /**
+         * Limit the point to the map size
+         */
         if (generatedPoint.x <= 0) {
             generatedPoint.x = 100;
         }
@@ -673,12 +669,11 @@ public class Organism extends Item implements Commons {
         if (generatedPoint.y >= BACKGROUND_HEIGHT) {
             generatedPoint.y = BACKGROUND_HEIGHT - 100;
         }
-        //System.out.println("generating point: (" + generatedPoint.x + "," + generatedPoint.y+")");
 
         return generatedPoint;
     }
     
-        /**
+     /**
      * Checks if the target resource for each organism is still valid (has qty
      * and is not full) if not, leave and look for another target resource
      */
