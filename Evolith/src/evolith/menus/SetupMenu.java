@@ -15,8 +15,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author moisesfernandez
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class SetupMenu extends Menu {
     private boolean active;
@@ -35,7 +37,15 @@ public class SetupMenu extends Menu {
     private int timeOpen;
     private boolean tickToWrite;
     private JDBC mysql;
-
+    /**
+     * Constructor of the setup menu
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param game
+     * @param mysql 
+     */
     public SetupMenu(int x, int y, int width, int height, Game game, JDBC mysql) {
         super(x, y, width, height, game);
         active = true;
@@ -66,55 +76,93 @@ public class SetupMenu extends Menu {
         this.tickToWrite = false;
         this.mysql = mysql;
     }
-    
+    /**
+     * To set if the panel is active
+     * @return active
+     */
     public boolean isActive(){
         return active;
     }
-
+    /**
+     * To get the name of the species
+     * @return name
+     */
     public String getName() {
         return name;
     }
-
+    /**
+     * To set the name of the species
+     * @param name 
+     */
     public void setName(String name) {
         this.name = name;
     }
-
+    /**
+     * To get the time open of the connection
+     * @return 
+     */
     public int getTimeOpen() {
         return timeOpen;
-    }
-
+    }   
+    /**
+     * To set the time connection open
+     * @param timeOpen 
+     */
     public void setTimeOpen(int timeOpen) {
         this.timeOpen = timeOpen;
     }
-
+    /**
+     * To get the status of the tick to write
+     * @return 
+     */
     public boolean isTickToWrite() {
         return tickToWrite;
     }
-
+    /**
+     * To set the status of the tick to write 
+     * @param tickToWrite 
+     */
     public void setTickToWrite(boolean tickToWrite) {
         this.tickToWrite = tickToWrite;
     }
-    
+    /**
+     * To set the status of the menu
+     * @param active 
+     */
     public void setActive(boolean active){
         this.active = active;
     }
-
+    /**
+     * To check the click in the button PLAY
+     * @return 
+     */
     public boolean isClickPlay() {
         return clickPlay;
     }
-
+    /**
+     * To set the click in the button PLAY
+     * @param clickPlay 
+     */
     public void setClickPlay(boolean clickPlay) {
         this.clickPlay = clickPlay;
     }
-
+    /**
+     * To get the option of the menu
+     * @return 
+     */
     public int getOption() {
         return option;
     }
-
+    /**
+     * To set the option of the menu
+     * @param option 
+     */
     public void setOption(int option) {
         this.option = option;
     }
-    
+    /**
+     * To tick
+     */
     @Override
     public void tick() {
         
@@ -175,7 +223,10 @@ public class SetupMenu extends Menu {
             buttons.get(5).setPressed(false);
         }
     }
-
+    /**
+     * To render the graphics
+     * @param g 
+     */
     @Override
     public void render(Graphics g) {
         g.drawImage(Assets.setupSpeciesBackground, 0, 0, 1000, 700, null);

@@ -289,45 +289,75 @@ public class OrganismPanel extends Menu implements Commons {
             organism.setName(name);
         }
     }
-
+    /**
+     * Returns if the search is the previous
+     * @return searchPrev
+     */
     public boolean isSearchPrev() {
         return searchPrev;
     }
-
+    /**
+     * Set the search to the previous
+     * @param searchPrev 
+     */
     public void setSearchPrev(boolean searchPrev) {
         this.searchPrev = searchPrev;
     }
-
+    /**
+     * Check if the organism is reproducible
+     * @return reproduce
+     */
     public boolean isReproduce() {
         return reproduce;
     }
-
+    /**
+     * To set if the organism is reproducible
+     * @param reproduce 
+     */
     public void setReproduce(boolean reproduce) {
         this.reproduce = reproduce;
 
     }
-
+    /**
+     * To search the next organism
+     * @return searchNext
+     */
     public boolean isSearchNext() {
         return searchNext;
     }
-
+    /**
+     * To set if the next organism is being searched
+     * @param searchNext 
+     */
     public void setSearchNext(boolean searchNext) {
         this.searchNext = searchNext;
     }
-
+    /**
+     * To check if the panel is active
+     * @return 
+     */
     public boolean isActive() {
         return active;
     }
-
+    /**
+     * To set active the panel
+     * @param active 
+     */
     public void setActive(boolean active) {
         this.active = active;
     }
-
+    /**
+     * To check if the input is active
+     * @return inputActive
+     */
     public boolean isInputActive() {
         return inputActive;
     }
     
-    
+    /**
+     * To render the graphics of the panel
+     * @param g 
+     */
     @Override
     public void render(Graphics g) {
 
