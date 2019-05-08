@@ -11,7 +11,8 @@ BEGIN;
     GROUP BY O.species_id
     ORDER BY G.game_score DESC
     LIMIT 10;
-    
+
+    SELECT 'TOP RANKING of players';
     SELECT player_name, species_name, game_duration, game_score, SUM(O.organism_alive), MAX(O.organism_generation), SUM(O.organism_kills), MAX(O.organism_lifespan)
     FROM player P, game G, species S, organism O
     WHERE P.player_id = G.player_id AND S.game_id = G.game_id AND O.species_id = S.species_id
@@ -27,5 +28,6 @@ BEGIN;
     ORDER BY G.game_score DESC
     LIMIT 10;
 
-
+    SELECT 'LAST GAME ID'
+    SELECT game_id FROM game ORDER BY game_id DESC LIMIT 1;
     

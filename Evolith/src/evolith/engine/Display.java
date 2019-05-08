@@ -17,12 +17,12 @@ public class Display {
     private JFrame jframe;
     private Canvas canvas;
 
-    private String title;
-    private int width;
-    private int height;
+    private String title;   // The title of the display
+    private int width;      // The width of the display
+    private int height;     // The height of the display
 
     /**
-     * initializes the values for the application game
+     * Initializes the values for the application game
      *
      * @param title to display the title of the window
      * @param width to set the width
@@ -35,8 +35,8 @@ public class Display {
         createDisplay();
     }
 
-    /*
-    * create the app and the canvas and add the canvas to the window app
+    /**
+     * Create the app and the canvas and add the canvas to the window app
      */
     public void createDisplay() {
         jframe = new JFrame(title);
@@ -57,18 +57,19 @@ public class Display {
 
     }
 
-    /*
-    * to get the canvas of the game
-    * @return the canvas
+    /**
+     * To get the canvas of the game
+     * 
+     * @return canvas
      */
     public Canvas getCanvas() {
         return canvas;
     }
 
     /**
-     * To get jframe
+     * To get the jframe of the game
      *
-     * @return
+     * @return jframe
      */
     public JFrame getJframe() {
         return jframe;

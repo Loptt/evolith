@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package evolith.menus;
 
 import evolith.engine.Assets;
@@ -13,56 +8,57 @@ import static evolith.helpers.Commons.MAX_SPEED;
 import static evolith.helpers.Commons.MAX_STEALTH;
 import static evolith.helpers.Commons.MAX_STRENGTH;
 import static evolith.helpers.Commons.MAX_SURVIVABILITY;
-import evolith.helpers.InputReader;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Graphics;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
- * @author ErickFrank
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class MutationPanel extends Menu implements Commons {
 
-    private Organism organism;
+    private Organism organism;                  // to mutate the organism selected
 
-    private String fontPath;
-    private String name;
-    private boolean active;
-    private Font fontEvolve;
-    private InputStream is;
-    private HashMap<Integer, String> hmap;
+    private boolean active;                     // to determine if the panel is active
+    private Font fontEvolve;                    // the main font
+    private HashMap<Integer, String> hmap;      // cardinal number conversion
+    private int selection;                      // tier selection of the mutation
 
-    private int selection;
-
+    /**
+     * Constructor of the mutation panel
+     *
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param game
+     */
     public MutationPanel(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
-        fontPath = "/Fonts/MADE-Evolve-Sans-Regular.ttf";
-        this.is = OrganismPanel.class.getResourceAsStream(fontPath);
-        try {
-            fontEvolve = Font.createFont(Font.TRUETYPE_FONT, is);
-            fontEvolve = fontEvolve.deriveFont(18f);
-        } catch (FontFormatException ex) {
-            Logger.getLogger(MutationPanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(MutationPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
+    /**
+     * Constructor of the panel with the buttons, position, dimension and
+     * specific organism
+     *
+     * @param organism
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param game
+     */
     public MutationPanel(Organism organism, int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
         this.organism = organism;
         //Evolve
-        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 - 250, this.y + MUTATION_PANEL_HEIGHT+10, 240, 60, Assets.mutationPanel_evolveButton_ON,Assets.mutationPanel_evolveButton_OFF));
+        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 - 250, this.y + MUTATION_PANEL_HEIGHT + 10, 240, 60, Assets.mutationPanel_evolveButton_ON, Assets.mutationPanel_evolveButton_OFF));
         //Not Evolve
-        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 + 250, this.y + MUTATION_PANEL_HEIGHT+10, 240, 60, Assets.mutationPanel_not_evolveButton_ON,Assets.mutationPanel_not_evolveButton_OFF));
+        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 + 250, this.y + MUTATION_PANEL_HEIGHT + 10, 240, 60, Assets.mutationPanel_not_evolveButton_ON, Assets.mutationPanel_not_evolveButton_OFF));
         //Strength
         buttons.add(new Button(x + 300, y + 30, 390, 110));
         //Speed
@@ -73,6 +69,7 @@ public class MutationPanel extends Menu implements Commons {
         buttons.add(new Button(x + 300, y + 375, 390, 110));
         selection = 0;
         active = false;
+        //conversion of the cardinal numbers
         hmap = new HashMap<Integer, String>();
         hmap.put(1, "I");
         hmap.put(2, "II");
@@ -81,7 +78,10 @@ public class MutationPanel extends Menu implements Commons {
 
     }
 
-    @Override
+    /**
+     * To tick the mutation panel
+     */
+@Override
     public void tick() {
         if (active) {
             for (int i = 0; i < buttons.size(); i++) {
@@ -145,17 +145,18 @@ public class MutationPanel extends Menu implements Commons {
                     //Check if no tier is active
                     if (!anyActive) {
                         organism.getOrgMutations().getMutations().get(selection - 1).get(tier).setActive(true); //Working fine
-                        organism.updateMutation(selection-1, 0);
+                        //organism.updateMutation(selection-1, 0);
                     } else {
                         //Deactivate current tier
                         organism.getOrgMutations().getMutations().get(selection - 1).get(tier + 1).setActive(true);
                         //Activate next tier
                         organism.getOrgMutations().getMutations().get(selection - 1).get(tier).setActive(false);
-                        organism.updateMutation(selection-1, tier + 1);
+                        //organism.updateMutation(selection-1, tier + 1);
                     }
 
                 }
                 buttons.get(0).setPressed(false);
+                organism.updateMutations(false);
                 selection = 0;
                 active = false;
                 organism.setEgg(false);
@@ -171,7 +172,11 @@ public class MutationPanel extends Menu implements Commons {
          */
 
     }
-    
+    /**
+     * Render function of the graphics
+     *
+     * @param g
+     */
     @Override
     public void render(Graphics g) {
         if (active) {
@@ -187,14 +192,8 @@ public class MutationPanel extends Menu implements Commons {
             organism.setCurrentSize(140);
             organism.setX(game.getCamera().getAbsX(x + 71));
             organism.setY(game.getCamera().getAbsY(y + 188));
-
-            for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
-                for (int j = 0; j < organism.getOrgMutations().getMutations().get(i).size(); j++) {
-                    if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
-                        organism.getOrgMutations().getMutations().get(i).get(j).render(g);
-                    }
-                }
-            }
+            
+            organism.getOrgMutations().render(g);
 
             organism.setCurrentSize(prevSize);
             organism.setX(prevX);
@@ -227,7 +226,7 @@ public class MutationPanel extends Menu implements Commons {
                 } else {
                     g.setColor(Color.WHITE);
                     g.setFont(fontEvolve);
-                    g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getSprite(), x + 331, y + 55 + i*115, 60, 60, null);
+                    g.drawImage(organism.getOrgMutations().getMutations().get(i).get(j).getMutSprite(), x + 331, y + 55 + i*115, 60, 60, null);
                     g.drawString((String) hmap.get(organism.getOrgMutations().getMutations().get(i).get(j).getTier()), x + 468, y + 60 + i * 115);
                     g.drawString(organism.getOrgMutations().getMutations().get(i).get(j).getName(), x + 500, y + 60 + i * 115);
 
@@ -280,46 +279,21 @@ public class MutationPanel extends Menu implements Commons {
         }
     }
 
-    public ArrayList<Button> getButtons() {
-        return buttons;
-    }
-    
-    public Organism getOrganism() {
-        return organism;
-    }
 
-    public void setOrganism(Organism organism) {
-        this.organism = organism;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public HashMap<Integer, String> getHmap() {
-        return hmap;
-    }
-
-    public void setHmap(HashMap<Integer, String> hmap) {
-        this.hmap = hmap;
-    }
-
-    public int getSelection() {
-        return selection;
-    }
-
-    public void setSelection(int selection) {
-        this.selection = selection;
-    }
-
+    /**
+     * To check if the mutation panel is active
+     *
+     * @return
+     */
     public boolean isActive() {
         return active;
     }
 
+    /**
+     * To set the mutation panel status
+     *
+     * @param active
+     */
     public void setActive(boolean active) {
         this.active = active;
     }

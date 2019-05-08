@@ -11,12 +11,12 @@ import java.awt.image.BufferedImage;
  */
 public class Animation {
 
-    private int speed; //animation speed
-    private int index; // number of the animation frame
-    private long lastTime; //last ticked time
-    private long timer; //curent time
+    private int speed;      // Animation speed
+    private int index;      // Number of the animation frame
+    private long lastTime;  // Last ticked time
+    private long timer;     // Curent time
 
-    private boolean done;
+    private boolean done;   // When the is animation over
 
     private BufferedImage[] frames;
 
@@ -39,14 +39,14 @@ public class Animation {
     /**
      * To get the current frame of the animation
      *
-     * @return
+     * @return frames[index]
      */
     public BufferedImage getCurrentFrame() {
         return frames[index];
     }
 
     /**
-     * to update the animation every frame
+     * To update the animation every frame
      */
     public void tick() {
         timer += System.currentTimeMillis() - lastTime;
@@ -64,7 +64,7 @@ public class Animation {
     }
 
     /**
-     * to set done
+     * To set done
      *
      * @param done
      */

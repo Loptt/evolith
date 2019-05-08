@@ -19,7 +19,7 @@ public abstract class Menu {
     protected int width;
     protected int height;
     protected Game game;
-    
+
     protected ArrayList<Button> buttons; //Buttons in the menu
 
     /**
@@ -47,16 +47,17 @@ public abstract class Menu {
     public Rectangle getPerimeter() {
         return new Rectangle(x, y, width, height);
     }
-    
+
     /**
      * Check if the menu contains the mouse given as coordinates
+     *
      * @param x
      * @param y
-     * @return 
+     * @return
      */
     public boolean hasMouse(int x, int y) {
         return getPerimeter().contains(x, y);
-    } 
+    }
 
     /**
      * To get x

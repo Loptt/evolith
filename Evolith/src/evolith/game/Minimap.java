@@ -23,10 +23,8 @@ import java.awt.Graphics;
  * @author Moisés Fernández
  */
 public class Minimap extends Menu implements Commons{
-    private int width, height, x, y;
-    private int relativeX, relativeY;
-    //private Game game;
-    private Color organismsColor;
+    private int relativeX, relativeY; //relative x and y coordinates
+    private Color organismsColor; //Color of the organisms
     
     /**
      * Initalizes the minimap with the parameters
@@ -42,6 +40,12 @@ public class Minimap extends Menu implements Commons{
         organismsColor = new Color(0, 0, 0);
     }
     
+    /**
+     * Take the x and y positions 
+     * @param mouseX the mouse x position
+     * @param mouseY the mouse x position
+     * @param camera the camera object
+     */
     public void applyMouse(int mouseX, int mouseY, Camera camera) {
         relativeX = mouseX - MINIMAP_X + MINIMAP_WIDTH;
         relativeY = mouseY - MINIMAP_Y + MINIMAP_HEIGHT;
@@ -81,7 +85,7 @@ public class Minimap extends Menu implements Commons{
     /**
      * To set the x of the minimap
      *
-     * @param x
+     * @param x x coordinate
      */
     public void setX(int x) {
         this.x = x;
@@ -90,7 +94,7 @@ public class Minimap extends Menu implements Commons{
     /**
      * To set the y of the minimap
      *
-     * @param y
+     * @param y y coordinate
      */
     public void setY(int y) {
         this.y = y;
@@ -114,6 +118,10 @@ public class Minimap extends Menu implements Commons{
         return y;
     }
     
+    /**
+     * to render the minimap in the game
+     * @param g graphics
+     */
     public void render(Graphics g) {
         g.drawImage(game.getBackground().getCurrentFullBackground(), MINIMAP_X, MINIMAP_Y, MINIMAP_WIDTH, MINIMAP_HEIGHT, null);
         
@@ -165,7 +173,10 @@ public class Minimap extends Menu implements Commons{
         g.drawRect(MINIMAP_X + game.getCamera().getX() / 30, MINIMAP_Y + game.getCamera().getY() / 30, game.getWidth() / 30 + 2, game.getHeight() / 30 + 2);
         g.drawImage(Assets.minimapFrame, MINIMAP_X, MINIMAP_Y, null);
     }
-
+    
+    /**
+     * to tick the minimap
+     */
     @Override
     public void tick() {
     }

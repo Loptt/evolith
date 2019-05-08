@@ -51,6 +51,12 @@ public interface Commons {
     public static final int PANEL_HEIGHT = 369;
     public static final int BUTTON_CLOSE_DIMENSION = 40;
     
+    public static final int PANEL_STATS_X = 50;
+    public static final int PANEL_STATS_Y = 115;
+    public static final int PANEL_STATS_WIDTH = 732;
+    public static final int PANEL_STATS_HEIGHT = 517;
+    public static final int BUTTON_STATS_CLOSE_DIMENSION = 40;
+    
     public static final int MUTATION_PANEL_X = 50;
     public static final int MUTATION_PANEL_Y = 75;
     public static final int MUTATION_PANEL_WIDTH = 732;
@@ -85,10 +91,10 @@ public interface Commons {
     public static final Color BLUE_GREEN_COLOR = new Color(1, 196, 181);
     public static final Color ORANGE_COLOR = new Color(239, 186, 1);
     public static final Color PINK_COLOR = new Color(255, 111, 199);
-    
+    //public static final Color BLUE_TRANSPARENT = new Color(1,196,181,0.75f);
     public static final Color FONT_COLOR = new Color(9, 255, 200);
     
-    public static final int CONSUMING_RATE = 1;
+    public static final double CONSUMING_RATE = 0.3;
     
     public static final int DAY_CYCLE_DURATION_SECONDS = 60;
     public static final int WEATHER_CYCLE_DURATION_SECONDS = 10;
@@ -97,15 +103,18 @@ public interface Commons {
     public static final int PREDATOR_SECONDS_TO_ROAM = 10;
     
 
-    public static final int BORN_TIME = 20;
+    public static final int BORN_TIME = 15;
     
     public static final int ORG_DATA_SIZE = 9;
     public static final int RES_DATA_SIZE = 7;
     public static final int PRE_DATA_SIZE = 6;
 
-    public static final int STATISTICS_DIMENSION = 400;
+    public static final int STATISTICS_DIMENSION = 175;
+    public static final int STATISTICS_DIMENSION_OVER = 205;
+    public static final int STATISTICS_CIRCLE_DIMENSION = 250;
     public static final int STATISTICS_POINT_DIMENSION = 20;
-    public static final int MUTATION_CHANCE = 9;
+    public static final int MUTATION_CHANCE = 5; //Bigger, less chance
     
-    
+    public static final int CONNECTION_TIMEOUT_SEC = 5;
+    public static final int INT_FOR_CAMP = 5;
 }

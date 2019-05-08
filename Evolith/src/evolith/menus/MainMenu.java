@@ -1,20 +1,12 @@
 package evolith.menus;
 
-import evolith.database.JDBC;
 import evolith.game.Game;
 import evolith.engine.Assets;
 import evolith.helpers.Commons;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Point;
-import java.math.BigInteger;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- *
  * @author Erick González
  * @author Carlos Estrada
  * @author Víctor Villarreal
@@ -45,9 +37,8 @@ public class MainMenu extends Menu implements Commons {
         buttons.add(new Button(BUTTON_PLAY_X, BUTTON_PLAY_Y, BUTTON_PLAY_WIDTH, BUTTON_PLAY_HEIGHT)); // Play button
         buttons.add(new Button(BUTTON_INSTRUCTIONS_X, BUTTON_INSTRUCTIONS_Y, BUTTON_INSTRUCTIONS_WIDTH, BUTTON_INSTRUCTIONS_HEIGHT)); // Instructions button
     }
-
     /**
-     * To
+     * To change the status of the menu
      *
      * @return active
      */
@@ -81,11 +72,17 @@ public class MainMenu extends Menu implements Commons {
     public void setClickPlay(boolean clickPlay) {
         this.clickPlay = clickPlay;
     }
-
+    /**
+     * To check if the menu is clicked inside
+     * @return clickIns
+     */
     public boolean isClickIns() {
         return clickIns;
     }
-
+        /**
+     * To check if the menu is clicked inside
+     * @return clickIns
+     */
     public void setClickIns(boolean clickIns) {
         this.clickIns = clickIns;
     }
@@ -113,14 +110,14 @@ public class MainMenu extends Menu implements Commons {
                 }
                 
             }
-            
+            //if the play button is clicked turn off
             if (buttons.get(0).isPressed()) {
                 setClickPlay(true);
                 setActive(false);
                 buttons.get(0).setPressed(false);
                 buttons.get(1).setPressed(false);
             }
-            
+            //if the instructions button is clicked turn off
             if (buttons.get(1).isPressed()) {
                 setClickIns(true);
                 setActive(false);
@@ -128,6 +125,7 @@ public class MainMenu extends Menu implements Commons {
                 buttons.get(1).setPressed(false);
             }
         }
+
     }
 
     /**
@@ -145,8 +143,6 @@ public class MainMenu extends Menu implements Commons {
             g.drawImage(Assets.startPlay, 0, 0, 1000, 700, null);
         } else if (active && buttons.get(1).isActive()) {
             g.drawImage(Assets.startInstructions, 0, 0, 1000, 700, null);
-        }
-        g.setColor(BLUE_GREEN_COLOR);
-        //stats.render(g);  
+        } 
     }
 }

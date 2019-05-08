@@ -25,12 +25,13 @@ import java.util.ArrayList;
  */
 public class Weather {
     
+    //Possible weathers
     public enum State {
         Clear, Dry, Rain, Hail, Snow, Storm
     }
-    private State state;
-    private State prevState;
-    private ArrayList<ArrayList<State>>states;
+    private State state;        //Current state
+    private State prevState;    //Prevois state
+    private ArrayList<ArrayList<State>>states; //All states
     
     private WeatherInstance clear = new WeatherInstance(Assets.backgroundDay, Assets.backgroundNight, Assets.noBackground, 0, true);
     private WeatherInstance rain = new WeatherInstance(Assets.backgroundDay, Assets.backgroundRainNight, Assets.backgroundFilter, 0, false);
@@ -39,25 +40,24 @@ public class Weather {
     private WeatherInstance storm = new WeatherInstance(Assets.backgroundDay, Assets.backgroundRainNight, Assets.backgroundFilter, 0, false);
     private WeatherInstance snow = new WeatherInstance(Assets.backgroundSnow, Assets.backgroundSnowNight, Assets.coldLayer, 0, false);
     
-    private int width, height;
+    private int width, height;      //Width and height
     
-    private Clock clock;
-    private int prevSecDayCycleChange;
-    private Background background;
-    private int prevWeather;
-    
-    private Animation raindrops;
-    private Animation snowhail;
+    private Clock clock;                //Clock for time keeping
+    private int prevSecDayCycleChange;  //To monitor day cycles
+    private Background background;      //Current background
+    private int prevWeather;            //Previous weather
     
     private Game game;
 
+    private Animation raindrops;        //Rain animation
+    private Animation snowhail;         //snow animation
+
+
     /**
-     *
-     * @param img
-     * @param width
+     * Weather constructor
+     * @param width 
      * @param height
-     * @param cameraWidth
-     * @param cameraHeight
+     * @param background
      */
     public Weather(int width, int height, Background background, Game game) {
         this.width = width;
@@ -118,14 +118,6 @@ public class Weather {
     }
 
     /**
-     * To get the background subimage depending on the camera height and width
-     *
-     * @param x
-     * @param y
-     * @return
-     */
-
-    /**
      * To get the width of the background
      *
      * @return
@@ -142,19 +134,34 @@ public class Weather {
     public int getHeight() {
         return height;
     }
-
+    
+    /**
+     * To set the state
+     * @param state state
+     */
     public void setState(State state) {
         this.state = state;
     }
-
+    
+    /**
+     * To get the current state
+     * @return state
+     */
     public State getState() {
         return state;
     }
-
+    
+    /**
+     * to get the previous state
+     * @return prevState
+     */
     public State getPrevState() {
         return prevState;
     }
     
+    /**
+     * to tick the animations
+     */
     public void tick(){
         raindrops.tick();
         snowhail.tick();

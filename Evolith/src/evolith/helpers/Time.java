@@ -10,7 +10,7 @@ import evolith.helpers.Commons;
  */
 public class Time implements Commons {
 
-    private int ticker; // counter that represents the frames in a second
+    private long ticker; // counter that represents the frames in a second
     private double hour; // time represented in hours
     private double minutes; // time represented in minutes
     private double seconds; // time represented in seconds
@@ -32,7 +32,7 @@ public class Time implements Commons {
      *
      * @return
      */
-    public int getTicker() {
+    public long getTicker() {
         return ticker;
     }
 
@@ -41,7 +41,7 @@ public class Time implements Commons {
      *
      * @param ticker
      */
-    public void setTicker(int ticker) {
+    public void setTicker(long ticker) {
         this.ticker = ticker;
     }
 
