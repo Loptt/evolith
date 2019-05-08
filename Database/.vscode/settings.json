@@ -1,0 +1,16 @@
+{
+    "git.ignoreLimitWarning": true,
+    "sqltools.connections": [
+        {
+            "askForPassword": false,
+            "connectionTimeout": 30,
+            "database": "Evolith",
+            "dialect": "MySQL",
+            "name": "Evolith",
+            "password": "Evoadmin1$",
+            "port": 3306,
+            "server": "SG-Evolith-496-master.servers.m ongodirector.com",
+            "username": "evadmin"
+        }
+    ]
+}

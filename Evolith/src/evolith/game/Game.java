@@ -1,5 +1,6 @@
 package evolith.game;
 
+import evolith.database.JDBC;
 import evolith.menus.MainMenu;
 import evolith.menus.SetupMenu;
 import evolith.menus.ButtonBarMenu;
@@ -12,12 +13,14 @@ import evolith.engine.*;
 import evolith.entities.Resource;
 import evolith.helpers.InputReader;
 import evolith.helpers.Selection;
+import evolith.menus.GameStatisticsMenu;
 import evolith.menus.Button;
 import evolith.menus.InstructionMenu;
 import evolith.menus.MaxIntelligenceButton;
 import evolith.menus.ModeMenu;
 import evolith.menus.OverMenu;
 import evolith.menus.PauseMenu;
+import evolith.menus.StatisticsMenu;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -72,55 +75,21 @@ public class Game implements Runnable, Commons {
 
     private PredatorManager predators;          //Main enemies
 
-    /**
-     *
-     */
-    public enum States {
-
-        /**
-         *
-         */
-        MainMenu,
-
-        /**
-         *
-         */
-        GameOver,
-
-        /**
-         *
-         */
-        Play,
-
-        /**
-         *
-         */
-        Instructions,
-
-        /**
-         *
-         */
-        SetupMenu,
-
-        /**
-         *
-         */
-        Multi,
-
-        /**
-         *
-         */
-        ModeMenu
+    private enum States {
+        MainMenu, Paused, GameOver, Play, Instructions, SetupMenu, Statistics, Multi, ModeMenu
     } // status of the flow of the game once running
     private States state;
 
     private MainMenu mainMenu;                  // main menu
+
     private ButtonBarMenu buttonBar;            // Top bar which indicates what organisms should do
+    private GameStatisticsMenu gameStats;
     private SetupMenu setupMenu;                //Menu to choose color and 
     private PauseMenu pauseMenu;                // Menu in pause
     private OverMenu overMenu;                  // Game over menu
     private InstructionMenu instructionMenu;    // Instructions menu
     private ModeMenu modeMenu;                  // Menu to choose game mode
+    private StatisticsMenu statsMenu;
 
     private MaxIntelligenceButton maxIntButton; //Button to show the most intelligent organism
 
@@ -134,6 +103,9 @@ public class Game implements Runnable, Commons {
     private int prevWeatherChange;              //Time to change weather
 
     private Weather weather;                    //Weather manager
+    
+    private int gameID;
+    private JDBC mysql;
 
     private boolean win;                        // To decide if the player has won
     private boolean server;                     // Decides if it is a server or not
@@ -165,6 +137,10 @@ public class Game implements Runnable, Commons {
         server = true;
         prevSecDayCycleChange = 0;
         win = false;
+
+        this.mysql = new JDBC();
+        this.gameID = mysql.getLastGameID() + 1;
+
         prevWeatherChange = 0;
 
     }
@@ -201,15 +177,18 @@ public class Game implements Runnable, Commons {
      * initializing the display window of the game
      */
     private void init() {
-
+        mysql.updateBackup();
         clock = new Clock(0, 0, 100, 100);
         display = new Display(title, width, height);
         Assets.init();
 
         background = new Background(5000, 5000, width, height);
         buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
-        setupMenu = new SetupMenu(0, 0, width, height, this);
+        gameStats = new GameStatisticsMenu(0,0,0,0,this);
+        setupMenu = new SetupMenu(0, 0, width, height, this,mysql);
         pauseMenu = new PauseMenu(width / 2 - 250 / 2, height / 2 - 300 / 2, 250, 300, this);
+
+        statsMenu = new StatisticsMenu(0,0,width,height,this,false,mysql);
 
         musicManager = new MusicManager();
         sfx = new SoundEffectManager();
@@ -223,12 +202,18 @@ public class Game implements Runnable, Commons {
         display.getJframe().addMouseMotionListener(mouseManager);
         display.getCanvas().addMouseListener(mouseManager);
         display.getCanvas().addMouseMotionListener(mouseManager);
+        
+        mysql.insertGame(gameID, clock.getSeconds());
+        mysql.insertSpecies(gameID);
+        organisms.setSpeciesID(mysql.getSpeciesID(gameID));
+        mysql.insertOrganism(organisms.getSpeciesID() , 1 ,organisms.getOrganism(0).getGeneration(),organisms.getOrganism(0).getSpeed(),organisms.getOrganism(0).getStealth() , organisms.getOrganism(0).getStrength(),organisms.getOrganism(0).getMaxHealth());
+        mysql.getAverage();
+
 
         weather = new Weather(width, height, background);
         paused = false;
 
         maxIntButton = new MaxIntelligenceButton(870, 400, 110, 30, Assets.backOn, Assets.backOff, organisms.getOrganism(0));
-
     }
 
     /**
@@ -251,13 +236,18 @@ public class Game implements Runnable, Commons {
                 break;
             case Play:
                 playTick();
+                if(clock.getTicker() % 600 == 0)
+                    mysql.updateTimeGame(gameID, clock.getSeconds());
                 break;
             case Multi:
                 multiTick();
                 break;
             case GameOver:
                 overTick();
+            case Statistics:
+                statisticsTick();
         }
+        
 
     }
 
@@ -284,6 +274,7 @@ public class Game implements Runnable, Commons {
             state = States.Instructions;
             mainMenu.setClickIns(false);
         }
+        
     }
 
     /**
@@ -374,6 +365,7 @@ public class Game implements Runnable, Commons {
         resources.tick();
         predators.tick();
         buttonBar.tick();
+        gameStats.tick();
         selection.tick();
         weather.tick();
         sfx.tick();
@@ -578,8 +570,20 @@ public class Game implements Runnable, Commons {
         //If statistics button is pressed, go to stats screen
         if (overMenu.isStats()) {
             overMenu.setStats(false);
-            System.out.println("STATS NOT READY");
+            state = States.Statistics;
         }
+    }
+    private void statisticsTick(){
+        
+        statsMenu.tick();
+        
+        if(statsMenu.isMainMenu())
+        {
+            statsMenu.setMainMenu(false);
+            state = States.MainMenu;
+            resetGame();
+        }
+        
     }
 
     /**
@@ -760,8 +764,9 @@ public class Game implements Runnable, Commons {
          * it prevents the organisms to move when the player clicks on the
          * button bar
          */
-        //First if the organism panel or the mutation panel are active, ignore the click
-        if (organisms.isOrgPanelActive() || organisms.isMutPanelActive()) {
+
+        //First in hierarchy are the panels
+        if (organisms.isOrgPanelActive() || organisms.isMutPanelActive() || organisms.isStatsPanelActive()) {
             //Let the panels handle mouse activity
             //Next check the selection
         } else if (selection.isActive()) {
@@ -773,12 +778,17 @@ public class Game implements Runnable, Commons {
         } else if (buttonBar.hasMouse(mouseX, mouseY)) {
             //Process the mouse in the button bar
             buttonBar.applyMouse(mouseX, mouseY);
+            
             organisms.setSelectedSearchFood(buttonBar.isFoodActive());
             organisms.setSelectedSearchWater(buttonBar.isWaterActive());
             organisms.setSelectedAggressiveness(buttonBar.isFightActive());
             organisms.emptySelectedTargets();
             mouseManager.setLeft(false);
-            //Next check the minimap
+            //Next, check the stats
+        } else if(gameStats.hasMouse(mouseX, mouseY)){
+            gameStats.applyMouse(mouseX, mouseY);
+            mouseManager.setLeft(false);
+          //Next, check the minimap
         } else if (minimap.hasMouse(mouseX, mouseY)) {
             minimap.applyMouse(mouseX, mouseY, camera);
             mouseManager.setLeft(false);
@@ -805,6 +815,8 @@ public class Game implements Runnable, Commons {
         if (buttonBar.hasMouse(mouseX, mouseY)) {
             mouseManager.setRight(false);
             //Second in hierarchy is the minimap
+        } else if(gameStats.hasMouse(mouseX, mouseY)){
+            mouseManager.setRight(false);
         } else if (minimap.hasMouse(mouseX, mouseY)) {
             mouseManager.setRight(false);
             //Lastly, move the   
@@ -853,6 +865,7 @@ public class Game implements Runnable, Commons {
             win = false;
             System.out.println("OVER");
             overMenu = new OverMenu(0, 0, width, height, this, win);
+            statsMenu.setWin(win);
         }
 
         /**
@@ -865,6 +878,7 @@ public class Game implements Runnable, Commons {
             state = States.GameOver;
             win = true;
             overMenu = new OverMenu(0, 0, width, height, this, win);
+            statsMenu.setWin(win);
         }
     }
 
@@ -905,15 +919,17 @@ public class Game implements Runnable, Commons {
                 case Play:
                     playRender(g);
                     break;
-
                 case Multi:
                     multiRender(g);
                     break;
                 case GameOver:
                     overRender(g);
                     break;
+                case Statistics:
+                    statsMenu.render(g);
+                    break;
             }
-
+          
             bs.show();
             g.dispose();
         }
@@ -938,6 +954,7 @@ public class Game implements Runnable, Commons {
         weather.render(g);
         minimap.render(g);
         buttonBar.render(g);
+        gameStats.render(g);
 
         if (selection.isActive()) {
             selection.render(g);
@@ -1139,8 +1156,22 @@ public class Game implements Runnable, Commons {
         night = false;
 
         organisms.reset();
-        predators.reset();
+        predators.reset();  
         resources.reset(true);
+        
+        try {
+            gameID = mysql.getLastGameID() + 1;
+            mysql.insertGame(gameID, clock.getTicker());
+            mysql.insertSpecies(gameID);
+            organisms.setSpeciesID(mysql.getSpeciesID(gameID));
+            mysql.insertOrganism(organisms.getSpeciesID() , 1 ,organisms.getOrganism(0).getGeneration(),organisms.getOrganism(0).getSpeed(),organisms.getOrganism(0).getStealth() , organisms.getOrganism(0).getStrength(),organisms.getOrganism(0).getMaxHealth());
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+
     }
 
     /**
@@ -1368,5 +1399,29 @@ public class Game implements Runnable, Commons {
                 ie.printStackTrace();
             }
         }
+    }
+
+    public int getGameID() {
+        return gameID;
+    }
+
+    public void setGameID(int gameID) {
+        this.gameID = gameID;
+    }
+
+    public JDBC getMysql() {
+        return mysql;
+    }
+
+    public void setMysql(JDBC mysql) {
+        this.mysql = mysql;
+    }
+
+    public Clock getClock() {
+        return clock;
+    }
+
+    public GameStatisticsMenu getGameStats() {
+        return gameStats;
     }
 }

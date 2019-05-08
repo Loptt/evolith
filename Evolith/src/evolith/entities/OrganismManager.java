@@ -1,5 +1,6 @@
 package evolith.entities;
 
+import evolith.database.JDBC;
 import evolith.game.Game;
 import evolith.menus.Hover;
 import evolith.helpers.SwarmMovement;
@@ -7,6 +8,7 @@ import evolith.helpers.Commons;
 import evolith.menus.MutationPanel;
 
 import evolith.menus.OrganismPanel;
+import evolith.menus.StatisticsPanel;
 
 import java.awt.Graphics;
 import java.awt.Point;
@@ -14,6 +16,7 @@ import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -38,6 +41,18 @@ public class OrganismManager implements Commons {
 
     private OrganismPanel orgPanel; //info panel 
     private MutationPanel mutPanel; //Mutation panel
+    private StatisticsPanel statsPanel; //Statistics panel
+
+    private int panelIndex;
+    private int idCounter;
+    private String speciesName;
+    private int speciesID;
+    
+    private boolean updatedNight;
+    private int avg[];
+    private JDBC mysql;
+    private int maxIntelligence;
+    private int maxGeneration;
 
     private int panelIndex;         //Current index in organism panel
     private int idCounter;          //Id counter to assign id to new organisms
@@ -45,6 +60,7 @@ public class OrganismManager implements Commons {
     
     private boolean updatedNight;   //To check if night changes have been done
     private boolean other;          //State indicating if 
+
 
     /**
      * Constructor of the organisms
@@ -60,6 +76,7 @@ public class OrganismManager implements Commons {
         deadOrgs = new ArrayList<>();
         int amount = 1;
         idCounter = 1;
+        maxGeneration = 1;
 
         for (int i = 0; i < amount; i++) {
             organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
@@ -73,8 +90,13 @@ public class OrganismManager implements Commons {
         
         updatedNight = false;
         speciesName = "";
-    }
-
+        avg = new int[4];
+        this.mysql =  game.getMysql();
+        //this.speciesID = mysql.getSpeciesID( game.getGameID());
+        this.maxIntelligence = 0;
+        statsPanel = new StatisticsPanel(PANEL_STATS_X,PANEL_STATS_Y,0,0,game,false,true,207,250);
+        }
+    
     /**
      * updates all organisms
      */
@@ -82,8 +104,11 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).tick();
             checkNeedMutation(organisms.get(i));
+
+            checkKill(organisms.get(i));
+            checkGeneration(organisms.get(i));
         }
-        
+      
         for (int i = 0; i < deadOrgs.size(); i++) {
             Organism org = deadOrgs.get(i);
             org.tick();
@@ -92,9 +117,28 @@ public class OrganismManager implements Commons {
                 deadOrgs.remove(org);
             }
         }
-        
         checkNight();
         updateMenuPanels();
+    }
+
+    public void calculateAverage() {
+        for (int i = 0; i < organisms.size(); i++) {
+            avg[0] += organisms.get(i).getSpeed();
+            avg[1] += organisms.get(i).getStealth();
+            avg[2] += organisms.get(i).getStrength();
+            avg[3] += organisms.get(i).getMaxHealth();
+        }
+
+        if (!organisms.isEmpty()) {
+            avg[0] /= organisms.size();
+            avg[1] /= organisms.size();
+            avg[2] /= organisms.size();
+            avg[3] /= organisms.size();
+            statsPanel.setSpeed(avg[0]);
+            statsPanel.setStealth(avg[1]);
+            statsPanel.setStrength(avg[2]);
+            statsPanel.setHealth(avg[3]);
+        }
     }
 
     /**
@@ -147,6 +191,7 @@ public class OrganismManager implements Commons {
      * update all menu panels of the organisms
      */
     private void updateMenuPanels() {
+        
         if (orgPanel.isActive()) {
             orgPanel.tick();
             setHover(false);
@@ -187,7 +232,13 @@ public class OrganismManager implements Commons {
         } else if (mutPanel.isActive()) {
             mutPanel.tick();
             setHover(false);
-        } else {
+        } else if(statsPanel.isActive())
+        {
+            calculateAverage();
+            statsPanel.tick();
+            setHover(false);
+        }
+        else {
             checkHover();
         }
     }
@@ -311,17 +362,20 @@ public class OrganismManager implements Commons {
         
       //  if((orgPanel.isReproduce() && mutPanel.getButtons().get(0).isPressed()) || (orgPanel.isReproduce() && !mutPanel.isActive()) ){
         orgPanel.setReproduce(false);
-        offspring.setId(idCounter + 1);
-        idCounter++;
+        offspring.setId(idCounter-1);
         organisms.add(offspring);
         offspring.setSearchFood(org.isSearchFood());
         offspring.setSearchWater(org.isSearchWater());
         offspring.setIntelligence(offspring.getIntelligence() + 15);
 
         org.setNeedOffspring(false);
-        
+        mysql.insertOrganism(speciesID,offspring.isDead() ? 1 : 0, offspring.getGeneration(), offspring.getSpeed(), offspring.getStealth(), offspring.getStrength(), offspring.getMaxHealth());   
     }
-
+  
+    private void updateOrganismsDB() {
+            mysql.updateOrganisms(this);
+    }
+  
     /**
      * Check if an organism needs to be killed
      */
@@ -329,10 +383,10 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < organisms.size(); i++) {
             Organism org = organisms.get(i);
             if (org.isDead()) {
+                updateOrganismsDB();
                 organisms.remove(org);
                 deadOrgs.add(org);
             }
-            
         }
     }
     
@@ -478,6 +532,10 @@ public class OrganismManager implements Commons {
      */
     public boolean isMaxIntelligence() {
         for (int i = 0; i < organisms.size(); i++) {
+            if(maxIntelligence < organisms.get(i).getIntelligence())
+            {
+                maxIntelligence = organisms.get(i).getIntelligence();
+            }
             if (organisms.get(i).getIntelligence() >= MAX_INTELLIGENCE) {
                 return true;
             }
@@ -485,6 +543,7 @@ public class OrganismManager implements Commons {
         
         return false;
     }
+
     
     /**
      * Add an organism to the array
@@ -499,6 +558,11 @@ public class OrganismManager implements Commons {
      * @param pw print writer
      */
     public void save(PrintWriter pw) {
+        /*
+        Save organisms but drop if 
+        */
+        mysql.updateOrganisms(this);
+        //mysql.saveOrganisms(this);
         //Save amount
         pw.println(Integer.toString(organisms.size()));
         
@@ -517,14 +581,18 @@ public class OrganismManager implements Commons {
      * @throws IOException 
      */
     public void load(BufferedReader br) throws IOException {
+        /*
+        Update table the organisms from backup_organism
+        */
+        
+        
         int am = Integer.parseInt(br.readLine());
         organisms.clear();
-        
         skin = Integer.parseInt(br.readLine());
-        
         for (int i = 0; i < am; i++) {
-            organisms.add(new Organism(0,0, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, skin, 0, other));
+            organisms.add(new Organism(0,0, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, skin, idCounter++, other));
             organisms.get(i).load(br);
+            mysql.insertOrganism(speciesID , 1 ,organisms.get(i).getGeneration(),organisms.get(i).getSpeed(),organisms.get(i).getStealth() , organisms.get(i).getStrength(),organisms.get(i).getMaxHealth());
         }
     }
     
@@ -564,6 +632,7 @@ public class OrganismManager implements Commons {
         
         updatedNight = false;
         speciesName = "";
+        
     }
 
     /**
@@ -590,10 +659,13 @@ public class OrganismManager implements Commons {
                 organisms.get(i).render(g);
             }
         }
-        
+
+        statsPanel.render(g);
+
         for (int i = 0; i < deadOrgs.size(); i++) {
             deadOrgs.get(i).render(g);
         }
+
     }
 
     /**
@@ -757,6 +829,13 @@ public class OrganismManager implements Commons {
     public boolean isMutPanelActive() {
         return mutPanel.isActive();
     }
+    /**
+     * to check if statsPanel is active
+     * @return mutPanel.isActive()
+     */
+    public boolean isStatsPanelActive() {
+        return statsPanel.isActive();
+    }
 
     /**
      * to get the orgPanel
@@ -830,6 +909,43 @@ public class OrganismManager implements Commons {
         this.updatedNight = updatedNight;
     }
 
+    public int getSpeciesID() {
+        return speciesID;
+    }
+
+    public void setSpeciesID(int speciesID) {
+        this.speciesID = speciesID;
+    }
+
+    public int getMaxIntelligence() {
+        return maxIntelligence;
+    }
+
+    public void setMaxIntelligence(int maxIntelligence) {
+        this.maxIntelligence = maxIntelligence;
+    }
+
+    private void checkGeneration(Organism o) {
+        if(o.getGeneration()>= maxGeneration)
+            maxGeneration = o.getGeneration();
+    }
+
+    public int getMaxGeneration() {
+        return maxGeneration;
+    }
+
+    public StatisticsPanel getStatsPanel() {
+        return statsPanel;
+    }
+
+    public void setStatsPanel(StatisticsPanel statsPanel) {
+        this.statsPanel = statsPanel;
+    }
+
+    public int[] getAvg() {
+        return avg;
+    }
+    
     /**
      * to get the game object
      * @return game object

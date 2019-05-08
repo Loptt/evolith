@@ -113,7 +113,9 @@ public class Organism extends Item implements Commons {
         this.game = game;
         this.skin = skin;
         this.id = id;
+
         this.other = other;
+
         point = new Point(x, y);
         maxVel = 2;
         absMaxVel = 2;
