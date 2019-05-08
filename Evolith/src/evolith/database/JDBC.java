@@ -231,7 +231,7 @@ public class JDBC {
      */
     public void updateOrganisms(OrganismManager om) {
         //Query to update organisms' intelligence
-        String updateIntelligence = "UPDATE species SET species_intelligence = " + Integer.toString(om.getMaxIntelligence()) + "WHERE species_id = " + Integer.toString(om.getSpeciesID());
+        String updateIntelligence = "UPDATE species SET species_intelligence = " + Integer.toString(om.getMaxIntelligence()) + " WHERE species_id = " + Integer.toString(om.getSpeciesID()) + ";" ;
 
         try {
             //Creates a new statement from the connection of the databases
@@ -239,9 +239,11 @@ public class JDBC {
             //Updates the manager from the id
             for (int i = 0; i < om.getAmount(); i++) {
                 myStatement.executeUpdate("UPDATE backup_organism SET backup_organism_alive = " + Integer.toString(om.getOrganism(i).isDead() ? 0 : 1) + ", backup_organism_generation = " + Integer.toString(om.getOrganism(i).getGeneration()) + ", backup_organism_speed =" + Integer.toString(om.getOrganism(i).getSpeed()) + ", backup_organism_stealth =" + Integer.toString(om.getOrganism(i).getStealth()) + ", backup_organism_strength = " + Integer.toString(om.getOrganism(i).getStrength()) + ", backup_organism_max_health = " + Integer.toString(om.getOrganism(i).getMaxHealth()) + " WHERE backup_organism_id = " + Integer.toString(om.getOrganism(i).getId()) + ";");
+                
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            System.out.println("error 1");
         }
 
         try {
@@ -253,6 +255,7 @@ public class JDBC {
         } catch (Exception e) {
             //Prints out the exceptions
             System.out.println(e.getMessage());
+            System.out.println("error 2");
         }
     }
 
