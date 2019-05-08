@@ -172,6 +172,10 @@ public class OrganismPanel extends Menu implements Commons {
         if (!active) {
             return;
         }
+        
+        if (inputActive) {
+            game.getInputKeyboard().tick();
+        }
 
         organism.setName(inputReader.getSpeciesName());
         //Checks the mouse positon relative to the button
@@ -362,14 +366,16 @@ public class OrganismPanel extends Menu implements Commons {
         organism.setCurrentSize(196);
         organism.setX(game.getCamera().getAbsX(x + 83));
         organism.setY(game.getCamera().getAbsY(y + 70));
-
+        
+        organism.getOrgMutations().render(g);
+        /*
         for (int i = 0; i < organism.getOrgMutations().getMutations().size(); i++) {
             for (int j = 0; j < organism.getOrgMutations().getMutations().get(i).size(); j++) {
                 if (organism.getOrgMutations().getMutations().get(i).get(j).isActive()) {
                     organism.getOrgMutations().getMutations().get(i).get(j).render(g);
                 }
             }
-        }
+        }*/
 
         organism.setCurrentSize(prevSize);
 

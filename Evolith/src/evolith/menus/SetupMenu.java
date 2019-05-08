@@ -5,6 +5,7 @@
  */
 package evolith.menus;
 
+import evolith.database.JDBC;
 import evolith.game.Game;
 import evolith.engine.Assets;
 import evolith.helpers.Commons;
@@ -38,8 +39,9 @@ public class SetupMenu extends Menu {
     private InputStream is;
     private int timeOpen;
     private boolean tickToWrite;
+    private JDBC mysql;
 
-    public SetupMenu(int x, int y, int width, int height, Game game) {
+    public SetupMenu(int x, int y, int width, int height, Game game, JDBC mysql) {
         super(x, y, width, height, game);
         active = true;
         clickPlay = false;
@@ -67,7 +69,7 @@ public class SetupMenu extends Menu {
         }
         this.timeOpen = 0;
         this.tickToWrite = false;
-        
+        this.mysql = mysql;
     }
     
     public boolean isActive(){
@@ -168,6 +170,7 @@ public class SetupMenu extends Menu {
             
         if(buttons.get(0).isPressed()){
             setClickPlay(true);
+            mysql.updateSpeciesName(game.getGameID(),name);
             setActive(false);
             buttons.get(0).setPressed(false);
             buttons.get(1).setPressed(false);

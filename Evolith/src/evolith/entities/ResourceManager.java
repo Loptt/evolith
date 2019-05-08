@@ -22,9 +22,6 @@ import java.util.Random;
  * @author Víctor Villarreal
  * @author Moisés Fernández
  */
-
-
-
 public class ResourceManager implements Commons {
 
     private ArrayList<Resource> plants;    // arrays of the plants
@@ -32,14 +29,14 @@ public class ResourceManager implements Commons {
     private Game game;                  //game instance
 
     private int watersAmount;                 //max amount of waters
-    private int plantsAmount;
-    private int deadWaters; 
-    private int deadPlants;
+    private int plantsAmount;                 //max amount of plants
+    private int deadWaters;                   //dead waters
+    private int deadPlants;                   //dead plants
 
     /**
      * Constructor of the plants in the game
      *
-     * @param game
+     * @param game Game object
      */
     public ResourceManager(Game game) {
         this.game = game;
@@ -51,10 +48,16 @@ public class ResourceManager implements Commons {
         respawnResources();
     }
     
+    /**
+     * initialize resources
+     */
     public void init() {
         generateResources();
     }
     
+    /**
+     * create new resources
+     */
     public void respawnResources(){
         Random randomGen = new Random();
         for (int i = 0; i < deadPlants; ++i) {
@@ -65,7 +68,7 @@ public class ResourceManager implements Commons {
             
             //System.out.println("plants size: " + plants.size());
             
-            for (int j = 0; j < plants.size() - 1; j++) {
+            for (int j = 0; j < plants.size()-1; j++) {
                 if (plants.get(plants.size()-1).intersects(plants.get(j))) {
                     plants.remove(i);
                     i--;
@@ -91,7 +94,7 @@ public class ResourceManager implements Commons {
         }
     
     }
-    
+
     public void resetResources(){
         Random randomGen = new Random();
         watersAmount = WATERS_AMOUNT;
@@ -159,6 +162,9 @@ public class ResourceManager implements Commons {
         plantsAmount = plants.size();
     }
     
+    /**
+     * Delete dead resrouces
+     */
     public void deleteResources(){
         deadWaters = 0;
         deadPlants = 0;
@@ -176,6 +182,9 @@ public class ResourceManager implements Commons {
         }
     }
     
+    /**
+     * Generate new resources
+     */
     public void generateResources(){
         Random randomGen = new Random();
         
@@ -204,6 +213,12 @@ public class ResourceManager implements Commons {
         }
     }
     
+    /**
+     * Check if the coordinates contain a resource
+     * @param x x coordinate
+     * @param y y coordinate
+     * @return the contained resource
+     */
     public Resource containsResource(int x, int y) {
         for (int i = 0; i < plants.size(); i++) {
             if (plants.get(i).getPerimeter().contains(x, y)) {
@@ -220,16 +235,23 @@ public class ResourceManager implements Commons {
         return null;
     }
     
+    /**
+     * empty parasites in all resources
+     */
     public void emptyParasites() {
-        for (int i = 0; i < plants.size()-1; i++) {
+        for (int i = 0; i < plants.size(); i++) {
             plants.get(i).removeParasites();
         }
         
-        for (int i = 0; i < waters.size()-1; i++) {
+        for (int i = 0; i < waters.size(); i++) {
             waters.get(i).removeParasites();
         } 
     }
     
+    /**
+     * Save current game state to the print writer
+     * @param pw print writer
+     */
     public void save(PrintWriter pw) {
         pw.println(Integer.toString(plants.size()));
         for (int i = 0; i < plants.size(); i++) {
@@ -242,6 +264,11 @@ public class ResourceManager implements Commons {
         }
     }
     
+    /**
+     * Load last saved state from the buffered reader
+     * @param br buffered reader
+     * @throws IOException 
+     */
     public void load(BufferedReader br) throws IOException {
         int plantam = Integer.parseInt(br.readLine());
         plants.clear();
@@ -260,6 +287,10 @@ public class ResourceManager implements Commons {
         }
     }
     
+    /**
+     * Restart values to their initial states
+     * @param server if it is a server
+     */
     public void reset(boolean server) {
         plants.clear();
         waters.clear();
@@ -269,35 +300,69 @@ public class ResourceManager implements Commons {
         }
     }
     
+    /**
+     * to get the current plants amount
+     * @return plants amount
+     */
     public int getPlantAmount() {
         return plants.size();
     }
     
+    /**
+     * to get the current water amount
+     * @return water amount
+     */
     public int getWaterAmount() {
         return waters.size();
     }
     
+    /**
+     * to get the plant at an index
+     * @param i index
+     * @return plant at index
+     */
     public Resource getPlant(int i) {
         return plants.get(i);
     }
     
+    /**
+     * to get the water at an index
+     * @param i index
+     * @return water at index
+     */
     public Resource getWater(int i) {
         return waters.get(i);
     }
     
+    /**
+     * to add a plant to the array
+     * @param res plant to add
+     */
     public void addPlant(Resource res) {
         plants.add(res);
     }
     
+    /**
+     * to remove a plant from the array
+     * @param res plant to remove
+     */
     public void removePlant(Resource res) {
         System.out.println("REMOVING IN remove");
         plants.remove(res);
     }
     
+    /**
+     * to add a water to the array
+     * @param res water to add
+     */
     public void addWater(Resource res) {
         waters.add(res);
     }
     
+    /**
+     * to remove a water from the array
+     * @param res water to remove
+     */
     public void removeWater(Resource res) {
         waters.remove(res);
     }
@@ -310,6 +375,9 @@ public class ResourceManager implements Commons {
         return waters;
     }
     
+    /**
+     * to tick the plants and waters
+     */
     public void tick() {
         for (int i = 0; i < plants.size(); i++) {
             plants.get(i).tick();
@@ -320,6 +388,10 @@ public class ResourceManager implements Commons {
         }
     }
         
+    /**
+     * to render the plants and waters
+     * @param g graphics
+     */
     public void render(Graphics g) {
         for (int i = 0; i < plants.size(); i++) {
             plants.get(i).render(g);
@@ -330,6 +402,10 @@ public class ResourceManager implements Commons {
         }
     }
 
+    /**
+     * to get the game object
+     * @return
+     */
     public Game getGame() {
         return game;
     }

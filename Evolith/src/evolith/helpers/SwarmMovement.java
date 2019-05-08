@@ -155,6 +155,14 @@ public class SwarmMovement implements Commons {
         return (int) (Math.random() * random - random / 2);
     }
     
+    /**
+     * To get the distance between two coordinates
+     * @param x1 x from first coordinate
+     * @param y1 y from first coordinate
+     * @param x2 x from second coordinate
+     * @param y2 y from second coordinate
+     * @return distance
+     */
     public static double distanceBetweenTwoPoints(double x1, double y1, double x2, double y2){
         return Math.sqrt(Math.pow(x1-x2,2) + Math.pow(y1-y2,2));
     }

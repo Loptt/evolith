@@ -9,13 +9,16 @@ import java.awt.event.KeyEvent;
 
 /**
  *
- * @author moisesfernandez
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class InputKeyboard extends KeyManager {
     private boolean keys[];
     
     /**
-     * Keys to be used in the game
+     * Keys to be used to type in the game
      */
     public boolean a;
     public boolean b;

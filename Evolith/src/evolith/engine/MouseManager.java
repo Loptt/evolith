@@ -150,6 +150,11 @@ public class MouseManager implements MouseListener, MouseMotionListener {
         this.left = left;
     }
 
+    /**
+     * To set the status of the right button
+     * 
+     * @param right 
+     */
     public void setRight(boolean right) {
         this.right = right;
     }

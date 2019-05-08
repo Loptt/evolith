@@ -26,17 +26,17 @@ public class PredatorManager implements Commons {
     private ArrayList<Predator> predators;  //array of all organisms
     private int amount;                     //max organism amount
 
-    private Game game;                      // game instance
-    private int idCounter;
+    private Game game;          // game instance
+    private int idCounter;      //Counter to assign ids
     
-    private int currentMaxAmount;
+    private int currentMaxAmount; //current max predator amount
     
-    private boolean purged;
+    private boolean purged;       //purged stat
 
     /**
-     * Constructor of the organisms
+     * Constructor of the predators
      *
-     * @param game
+     * @param game game object
      */
     public PredatorManager(Game game) {
         this.game = game;
@@ -44,26 +44,6 @@ public class PredatorManager implements Commons {
         idCounter = 0;
         currentMaxAmount = PREDATORS_AMOUNT;
         purged = false;
-/*
-        for (int i = 0; i < amount; i++) {
-            predators.add(new Predator(INITIAL_POINT + i*100, INITIAL_POINT + i*100, PREDATOR_SIZE, PREDATOR_SIZE, game));
-        }*/
-        
-        /*
-        Random randomGen = new Random();
-        
-        int newWidthPredators = (int) Math.ceil(5000/Math.sqrt(PREDATORS_AMOUNT) );
-        int newHeightPredators = (int) Math.ceil(5000/Math.sqrt(PREDATORS_AMOUNT) );
-         
-        for (int i = newWidthPredators; i < 5000; i += newWidthPredators){
-            for (int j = newHeightPredators; j < 5000; j += newHeightPredators){
-                int xCoord, yCoord; 
-                xCoord = randomGen.nextInt(newWidthPredators) + j;
-                yCoord = randomGen.nextInt(newHeightPredators) + i;
-                predators.add(new Predator(xCoord, yCoord, PREDATOR_SIZE, PREDATOR_SIZE, game, ++idCounter));
-            }
-        }
-        */
         
         int separation = BACKGROUND_WIDTH / (PREDATORS_AMOUNT / 4);
         
@@ -73,12 +53,10 @@ public class PredatorManager implements Commons {
             predators.add(new Predator(-1000, separation*i, PREDATOR_SIZE, PREDATOR_SIZE, game, ++idCounter));
             predators.add(new Predator(BACKGROUND_WIDTH + 1000, separation*i, PREDATOR_SIZE, PREDATOR_SIZE, game, ++idCounter));
         }
-        
-        //predators.add(new Predator(INITIAL_POINT, INITIAL_POINT, PREDATOR_SIZE, PREDATOR_SIZE, game, 0));
     }
 
     /**
-     * updates all organisms
+     * updates all predators
      */
     public void tick() {
         for (int i = 0; i < predators.size(); i++) { 
@@ -93,15 +71,18 @@ public class PredatorManager implements Commons {
         }
         
         if (game.isNight()) {
-            currentMaxAmount = PREDATORS_AMOUNT + 4;
+            currentMaxAmount = PREDATORS_AMOUNT + 4 * (game.getOrganisms().getAmount() / 10);
             purged = false;
         } else {
-            currentMaxAmount = PREDATORS_AMOUNT;
+            currentMaxAmount = PREDATORS_AMOUNT + 2 * (game.getOrganisms().getAmount() / 10);;
         }
         
         checkPredatorsAmount();
     }
     
+    /**
+     * Check if predator amount is under the allowed limit
+     */
     private void checkPredatorsAmount() {
         if (predators.size() < currentMaxAmount && game.isNight()) {
             int missing = currentMaxAmount - predators.size();
@@ -159,12 +140,19 @@ public class PredatorManager implements Commons {
         }
     }
     
+    /**
+     * Check if a predator needs to be removed
+     */
     public void checkKill() {
         for (int i = 0; i < predators.size(); i++) { 
             checkKill(predators.get(i));
         }
     }
     
+    /**
+     * Check if predators and organisms are intersecting to remove life, also check visible
+     * @param pred predator to check
+     */
     private void checkWithOrganisms(Predator pred) {
         //Check status with every organism
         pred.setVisible(false);
@@ -191,6 +179,10 @@ public class PredatorManager implements Commons {
         }
     }
     
+    /**
+     * Check with opponent organisms
+     * @param pred predator to check
+     */
     private void checkWithOtherOrganisms(Predator pred) {
         for (int j = 0; j < game.getOtherOrganisms().getOrganismsAmount(); j++) {
             Organism org = game.getOtherOrganisms().getOrganism(j);
@@ -205,7 +197,7 @@ public class PredatorManager implements Commons {
     /**
      * Check if an organism needs to be killed
      *
-     * @param org
+     * @param pred predator to check
      */
     private void checkKill(Predator pred) {
         if (pred.isDead()) {
@@ -214,6 +206,10 @@ public class PredatorManager implements Commons {
         }
     }
     
+    /**
+     * Save current predators state to print writer
+     * @param pw print writer
+     */
     public void save(PrintWriter pw) {
         pw.println(Integer.toString(predators.size()));
         
@@ -222,6 +218,11 @@ public class PredatorManager implements Commons {
         }
     }
     
+    /**
+     * load last saved state from buffered reader
+     * @param br buffered reader
+     * @throws IOException 
+     */
     public void load(BufferedReader br) throws IOException {
         int am = Integer.parseInt(br.readLine());
         predators.clear();
@@ -232,6 +233,9 @@ public class PredatorManager implements Commons {
         }
     }
     
+    /**
+     * Reset predators to its initial values
+     */
     public void reset() {
         predators.clear();
         idCounter = 0;
@@ -248,7 +252,7 @@ public class PredatorManager implements Commons {
     /**
      * To render the organisms
      *
-     * @param g
+     * @param g graphics
      */
     public void render(Graphics g) {
 
@@ -271,15 +275,28 @@ public class PredatorManager implements Commons {
 
         return positions;
     }
-
+    
+    /**
+     * Get predator at position i
+     * @param i position
+     * @return predator at position i
+     */
     public Predator getPredator(int i){
         return predators.get(i);
     }
-
+    
+    /**
+     * Get the current predator amount
+     * @return 
+     */
     public int getPredatorAmount() {
         return predators.size();
     }
-
+    
+    /**
+     * Get the game object
+     * @return game
+     */
     public Game getGame() {
         return game;
     }

@@ -10,7 +10,10 @@ import java.util.ArrayList;
 
 /**
  *
- * @author victor
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class SoundEffectManager {
     private Song predatorSound;
@@ -24,6 +27,10 @@ public class SoundEffectManager {
     private Time time;
     private boolean predator, water, plant, organism, rain, storm, wind, start;
 
+    /**
+     * Sound effects manager constructor
+     * 
+     */
     public SoundEffectManager() {
         time = new Time();
         predator = false;
@@ -40,6 +47,9 @@ public class SoundEffectManager {
         secondStartAlien = 0;
     }
     
+    /**
+     * To update the object each frame
+     */
     public void tick() {
         time.tick();
         if(predator){
@@ -60,22 +70,41 @@ public class SoundEffectManager {
         
     }
     
+    /**
+     * Play the predator's sound
+     */
     public void playAlien() {
         predator = true;
     }
     
+    /**
+     * Play the water's sound
+     */
     public void playWater() {
         water = true;
     }
     
+    /**
+     * Play the plant's sound
+     */
     public void playPlant() {
         plant = true;
     }
 
+    /**
+     * To set the predator's status
+     * 
+     * @param predator 
+     */
     public void setPredator(boolean predator) {
         this.predator = predator;
     }
 
+    /**
+     * To get the predator's status
+     * 
+     * @return predator
+     */
     public boolean isPredator() {
         return predator;
     }

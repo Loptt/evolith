@@ -16,7 +16,9 @@ import java.util.ArrayList;
  */
 public class Assets {
     public static SoundClip ricardomilos;
-    public static SoundClip fatrat;
+    public static SoundClip fatrat_afterlife;
+    public static SoundClip fatrat_threnody;
+    public static SoundClip originalsong;
 
     public static BufferedImage backgroundDay; //background image
     public static BufferedImage backgroundNight; //background image
@@ -94,6 +96,12 @@ public class Assets {
     public static BufferedImage statsMenuButtonOff;
     
     public static ArrayList<BufferedImage> instructions;
+    
+    public static BufferedImage statsiconOff;
+    public static BufferedImage statsiconOn;
+    public static BufferedImage rankPanel;
+    public static BufferedImage statsPanel;
+
 
     public static ArrayList<BufferedImage> modes;
     public static BufferedImage singlePlayerOn;
@@ -165,17 +173,23 @@ public class Assets {
     public static SoundClip watersound;
     public static SoundClip grasssound;
     public static SoundClip aliensound;
-    
+
     public static BufferedImage campfire;
     public static BufferedImage setCampfireOn;
     public static BufferedImage setCampfireOff;
+    public static BufferedImage leg1prev;
+    public static BufferedImage leg2prev;
+    public static BufferedImage leg3prev;
+
 
     /**
      * Initializes the assets and links to the image folder
      */
     public static void init() {
-        ricardomilos = new SoundClip("/sounds/ricardomilos.wav"); 
-        fatrat = new SoundClip("/sounds/fatrat.wav"); 
+        ricardomilos = new SoundClip("/sounds/ricardomilos.wav");
+        fatrat_afterlife = new SoundClip("/sounds/fatrat_afterlife.wav");
+        fatrat_threnody = new SoundClip("/sounds/fatrat_threnody.wav");
+        originalsong = new SoundClip("/sounds/originalsong.wav");
         
         // Pause Menu
         PMLoadButtonOff = ImageLoader.loadImage("/images/pausemenu/loadbutton.png");
@@ -308,6 +322,11 @@ public class Assets {
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions4.png"));
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions5.png"));
         instructions.add(ImageLoader.loadImage("/images/instructions/instructions6.png"));
+   
+        statsiconOff = ImageLoader.loadImage("/images/ranking/statsoff.png");
+        statsiconOn = ImageLoader.loadImage("/images/ranking/statson.png");
+        statsPanel = ImageLoader.loadImage("/images/ranking/statspanel.png");
+        rankPanel = ImageLoader.loadImage("/images/ranking/rankingpanel.png");
 
         modes = new ArrayList<>();
         modes.add(ImageLoader.loadImage("/images/multiplayer/modescreen.png"));
@@ -411,19 +430,22 @@ public class Assets {
         aliensound = new SoundClip("/sounds/aliensound.wav");
         
         repClock = ImageLoader.loadImage("/images/organisms/clock.png");
-        
+
         campfire = ImageLoader.loadImage("/images/organisms/campfire.png");
         setCampfireOn = ImageLoader.loadImage("/images/panel/campfirebuttonon.png");
         setCampfireOff = ImageLoader.loadImage("/images/panel/campfirebuttonoff.png");
 
-        
+        leg1prev = ImageLoader.loadImage("/images/Traits/legs1prev.png");
+        leg2prev = ImageLoader.loadImage("/images/Traits/legs2prev.png");
+        leg3prev = ImageLoader.loadImage("/images/Traits/legs3prev.png");
     }
     
     /**
      * SLOWS DOWN GAME
+     * 
      * @param img
      * @param angle
-     * @return 
+     * @return rotated
      */
     public static BufferedImage rotateImage(BufferedImage img, double angle) {
         
@@ -456,6 +478,13 @@ public class Assets {
         return rotated;
     }
     
+    /**
+     * Set alpha
+     * 
+     * @param alpha
+     * @param img
+     * @return img
+     */
     public static BufferedImage setAlpha(byte alpha, BufferedImage img) {
         alpha %= 0xff; 
         for (int cx=0;cx<img.getWidth();cx++) {          

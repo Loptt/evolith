@@ -56,10 +56,21 @@ public abstract class Item {
         return getPerimeter().intersects(item.getPerimeter());
     }
     
+    /**
+     * TI check if the item intersects a rectangle object
+     * @param r the rectangle
+     * @return true if intersection occurs
+     */
     public boolean intersects(Rectangle r) {
         return getPerimeter().intersects(r);
     }
     
+    /**
+     * Check if the item has the mouse over it
+     * @param x mouse x position
+     * @param y mouse y position
+     * @return true if the item has the mouse
+     */
     public boolean hasMouse(int x, int y) {
         return getPerimeter().contains(x, y);
     }
@@ -67,7 +78,7 @@ public abstract class Item {
     /**
      * To get x
      *
-     * @return
+     * @return x
      */
     public int getX() {
         return x;
@@ -76,7 +87,7 @@ public abstract class Item {
     /**
      * To get y
      *
-     * @return
+     * @return y
      */
     public int getY() {
         return y;
@@ -85,7 +96,7 @@ public abstract class Item {
     /**
      * To set x
      *
-     * @param x
+     * @param x x coordinate
      */
     public void setX(int x) {
         this.x = x;
@@ -94,7 +105,7 @@ public abstract class Item {
     /**
      * to set y
      *
-     * @param y
+     * @param y coordinate
      */
     public void setY(int y) {
         this.y = y;
@@ -103,7 +114,7 @@ public abstract class Item {
     /**
      * to get width
      *
-     * @return
+     * @return width
      */
     public int getWidth() {
         return width;
@@ -112,7 +123,7 @@ public abstract class Item {
     /**
      * to set width
      *
-     * @return
+     * @return height
      */
     public int getHeight() {
         return height;
@@ -121,7 +132,7 @@ public abstract class Item {
     /**
      * to set height
      *
-     * @param height
+     * @param height the height
      */
     public void setHeight(int height) {
         this.height = height;
@@ -130,12 +141,16 @@ public abstract class Item {
     /**
      * to set width
      *
-     * @param width
+     * @param width the width
      */
     public void setWidth(int width) {
         this.width = width;
     }
-
+    
+    /**
+     * to get the radius
+     * @return radius
+     */
     public Circle getRadius() {
         return radius;
     }
@@ -148,7 +163,7 @@ public abstract class Item {
     /**
      * To render the item
      *
-     * @param g
+     * @param g graphics
      */
     public abstract void render(Graphics g);
 }
