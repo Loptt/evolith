@@ -51,13 +51,13 @@ public class Organism extends Item implements Commons {
     private int thirst;         //thirst of the organism
     private int maturity;       //maturity level of the organsim
     private int generation;     //generation level of the organsim
-    private int skin;
+    private int skin;           //Skin asset selected
 
     private int prevHungerRed;  //Time in seconds at which hunger was previously reduced
     private int prevThirstRed;  //Time in seconds at which hunger was previously reduced
     private int prevMatInc;     //Time in seconds at which maturity was previously increased
     private int prevPointGenerated;
-    private int prevIntelResInc;
+    private int prevIntelResInc; //Time in seconds at which intelligence was previously increased
 
     private boolean needOffspring;  //Value indicating if the organisms needs to reproduce
     private boolean dead;           //Whether the organism is dead or not
@@ -79,22 +79,22 @@ public class Organism extends Item implements Commons {
     private boolean godCommand;     //If the organism has received an explicit movement command from the player
     
     private double damage;          //Amount of damage the organism deals to predators
-    private int stealthRange;
+    private int stealthRange;       //Range at which the organism can be detected
     
-    private int currentMaxHealth;
-    private int currentSize;
-    private int hatchTime;
+    private int currentMaxHealth;   //Max health of the organism
+    private int currentSize;        //Size of the organism
+    private int hatchTime;          //Time to hatch
     
-    private boolean egg;
-    private boolean born;
-    private boolean needMutation;
-    private boolean other;
-    private boolean visible;
+    private boolean egg;            //State if organism is an egg
+    private boolean born;           //State if organism is born
+    private boolean needMutation;   //State if organism needs to be mutated
+    private boolean other;          //State if organism belongs to opponent in multiplayer
+    private boolean visible;        //State if the organism is rederable in multiplayer
     
-    private int alfa;
-    private boolean animationDone;
+    private int alfa;               //Transparency value
+    private boolean animationDone;  //Check if animation is done
     
-    private Item pred;
+    private Item pred;              //Predator chasing the organism
 
     /**
      * Constructor of the organism
@@ -106,6 +106,7 @@ public class Organism extends Item implements Commons {
      * @param game the game object where the organism resides
      * @param skin the id of the selected skin
      * @param id the unique identifier
+     * @param other state if the organism belongs to the opponent in mutliplayer
      */
     public Organism(int x, int y, int width, int height, Game game, int skin, int id, boolean other) {
         super(x, y, width, height);
@@ -182,6 +183,7 @@ public class Organism extends Item implements Commons {
         //to determine the lifespan of the organism
         time.tick();
         
+        //If dead, play animation
         if (dead) {
             alfa -= 1;
             if (alfa <= 0) {
@@ -191,16 +193,19 @@ public class Organism extends Item implements Commons {
             return;
         }
         
+        //If egg, check vitals and do nothing
         if (egg) {
             checkVitals();
             return;
         }
         
+        //If other, check movement and do nothing
         if (other) {
             checkMovement();
             return;
         }
         
+        //If not other, check predators and others
         if (!other) {
             checkPredators();   
             if (game.getOtherOrganisms() != null) {
@@ -301,7 +306,7 @@ public class Organism extends Item implements Commons {
      * To check the update and react to the vital stats of the organism
      */
     private void checkVitals() {
-        //Reduce hunger every x seconds defined in the commmons class
+        //Iif egg, check hatch time and life
         if (egg) {
             hatchTime = (int) time.getSeconds();
             if (time.getSeconds() >= BORN_TIME && !born) {
@@ -317,12 +322,13 @@ public class Organism extends Item implements Commons {
             }
             
             if (life <= 0) {
-                dead = true;
+                kill();
             }
             
             return;
         }
         
+        //Reduce hunger every x seconds
         if (time.getSeconds() >= prevHungerRed + SECONDS_PER_HUNGER && !eating) {
             hunger--;
             prevHungerRed = (int) time.getSeconds();
@@ -334,21 +340,37 @@ public class Organism extends Item implements Commons {
             prevThirstRed = (int) time.getSeconds();
         }
         
+        //If vitals are over 90, increase intelligence accordingly to reward the player
         if ((hunger >= 90 || thirst >= 90) && time.getSeconds() >= prevIntelResInc + SECONDS_PER_FULL_RES_INTEL) {
-            intelligence++;
+            if (hunger >= 90) {
+                intelligence++;
+            }
+            
+            if (thirst >= 90) {
+                intelligence++;
+            }
+            
+            if (hunger >= 90 && thirst >= 90) {
+                intelligence++;
+            }
+            
             prevIntelResInc = (int) time.getSeconds();
         }
         
+        //If hunger is less than 0, decrease life
         if (hunger <= 0) {
             hunger = 0;
             life -= 0.05;
         }
         
+        //If hunger is less than 0, decrease life
         if (thirst <= 0) {
             thirst = 0;
             life -= 0.05;
         }
-        
+        /**
+         * Limit hunger and thirst to 100
+         */
         if (hunger > 100) {
             hunger = 100;
         }
@@ -377,12 +399,17 @@ public class Organism extends Item implements Commons {
             kill();
         }
         
+        //If life reaches 0, kill the organism
         if (life <= 0) {
             kill();
         }
     }
     
+    /**
+     * Decide whether to fight or flight in presence of an enemy
+     */
     private void escapeOrFight() {
+        //If not aggresive, then escape
         if (!aggressive) {
             //Escape
 
@@ -390,6 +417,7 @@ public class Organism extends Item implements Commons {
             if (!godCommand) {
                 point = generateEscapePointPred();
             }
+        //Else move to the enemy position
         } else {
             if (!godCommand) {
                 int randX = SwarmMovement.generateRandomness(100);
@@ -399,9 +427,12 @@ public class Organism extends Item implements Commons {
         }
     }
     
+    /**
+     * Process for the organism to be born
+     */
     private void born() {        
         born = true;
-        //Check if a mutation will occur. Chance is 1/4 now
+        //Check if a mutation will occur. Chance is defined in the commons class
         if (((int) (Math.random() * MUTATION_CHANCE) == 0) && !other && !game.getOrganisms().getMutPanel().isActive()) {
             needMutation = true;
         } else {
@@ -411,7 +442,7 @@ public class Organism extends Item implements Commons {
     }
     
     /**
-     * Update according to its current target
+     * Update movement according to its current target
      */
     public void handleTarget() {
         //If no target, do nothing
@@ -426,7 +457,7 @@ public class Organism extends Item implements Commons {
     }
 
     /**
-     * Kill the organism
+     * Kill the organism and leave the current resource
      */
     public void kill() {
         dead = true;
@@ -437,8 +468,8 @@ public class Organism extends Item implements Commons {
     
     /**
      * Update its stats and vitals with its current mutations
-     * @param trait
-     * @param newTier 
+     * @param trait trait index
+     * @param newTier tier index
      */
     public void updateMutation(int trait, int newTier){
         int currStrength = strength + getOrgMutations().getMutations().get(trait).get(newTier).getStrength();
@@ -454,6 +485,10 @@ public class Organism extends Item implements Commons {
         updateStats(false);
     }
     
+    /**
+     * update stats values with current mutations
+     * @param other state if organism is opponent
+     */
     public void updateMutations(boolean other) {
         strength = 0;
         speed = 0;
@@ -485,6 +520,10 @@ public class Organism extends Item implements Commons {
         updateStats(other);
     }
     
+    /**
+     * Take current stats defined by mutations and transform them to useful numbers 
+     * @param other 
+     */
     private void updateStats(boolean other) {
         //Transform stat numbers to useful numbers
         currentMaxHealth = maxHealth * 2 + 100;
@@ -551,9 +590,9 @@ public class Organism extends Item implements Commons {
         }
     }
     
-        /**
-     * Check for predators nearby and act accordingly
-     */
+    /**
+    * Check for predators nearby and act accordingly
+    */
     private void checkPredators() {
         PredatorManager predators = game.getPredators();
         
@@ -564,7 +603,7 @@ public class Organism extends Item implements Commons {
             Predator p = predators.getPredator(j);
             
 
-            //If predator is in the range of the organism
+            //If predator is in the range of the organism, run or fight
             if (SwarmMovement.distanceBetweenTwoPoints(x, y, p.getX(), p.getY()) < MAX_SIGHT_DISTANCE) {
                 safeLeaveResource();
                 beingChased = true;
@@ -575,13 +614,16 @@ public class Organism extends Item implements Commons {
         }
     }
     
+    /**
+    * Check for opponents nearby and act accordingly
+    */
     private void checkOthers() {
         OrganismManager others = game.getOtherOrganisms();
         
         for (int i = 0; i < others.getAmount(); i++) {
             Organism o = others.getOrganism(i);
 
-            //If predator is in the range of the organism
+            //If opponent is in the range of the organism
             if (SwarmMovement.distanceBetweenTwoPoints(x, y, o.getX(), o.getY()) < o.getStealthRange()) {
                 safeLeaveResource();
                 beingChased = true;
