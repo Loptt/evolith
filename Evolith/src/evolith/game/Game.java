@@ -162,10 +162,10 @@ public class Game implements Runnable, Commons {
      * initializing the display window of the game
      */
     private void init() {
-
         clock = new Clock(0, 0, 100, 100);
         display = new Display(title, width, height);
         Assets.init();
+        sfx = new SoundEffectManager();
 
         background = new Background(5000, 5000, width, height);
         buttonBar = new ButtonBarMenu(10, 10, 505, 99, this);
@@ -173,7 +173,6 @@ public class Game implements Runnable, Commons {
         pauseMenu = new PauseMenu(width / 2 - 250 / 2, height / 2 - 300 / 2, 250, 300, this);
         
         musicManager = new MusicManager();
-        sfx = new SoundEffectManager();
         //minimap = new Minimap(MINIMAP_X,MINIMAP_Y,MINIMAP_WIDTH,MINIMAP_HEIGHT, this);
         organisms = new OrganismManager(this, false);
         predators = new PredatorManager(this);
@@ -229,6 +228,7 @@ public class Game implements Runnable, Commons {
         musicManager.stop();
         mainMenu.setActive(true);
         mainMenu.tick();
+        sfx.tick();
         if (mainMenu.isClickPlay()) {
             mainMenu.setActive(false);
             state = States.ModeMenu;
@@ -247,6 +247,7 @@ public class Game implements Runnable, Commons {
     private void modeTick() {
         modeMenu.tick();
         inputKeyboard.tick();
+        sfx.tick();
         
         if (modeMenu.isSingle()) {
             resetGame();
@@ -282,6 +283,7 @@ public class Game implements Runnable, Commons {
     
     private void instructionsTick() {
         instructionMenu.tick();
+        sfx.tick();
         
         if (instructionMenu.isOver()) {
             state = States.MainMenu;
@@ -295,6 +297,7 @@ public class Game implements Runnable, Commons {
         setupMenu.tick();
         setupMenu.setActive(true);
         inputKeyboard.tick();
+        sfx.tick();
 
         if (setupMenu.isClickPlay()) {
             initSinglePlayer();
@@ -540,7 +543,7 @@ public class Game implements Runnable, Commons {
                 resources.reduceWaters(WATERS_AMOUNT/2);
                 break;
             case Rain:
-                resources.increaseResources(WATERS_AMOUNT+25);
+                resources.increaseResources(WATERS_AMOUNT*2);
                 break;
             case Storm:
                 //decrease number of small enemies
