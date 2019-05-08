@@ -12,7 +12,7 @@ import java.awt.Color;
 public interface Commons {
     // This class contains all the constants used in the game
     
-    public static final int MAX_INTELLIGENCE = 1000;        //This marks the end of a game
+    public static final int MAX_INTELLIGENCE = 500;        //This marks the end of a game
     
     public static final int ORGANISM_SIZE_STAT = 20;            // organism size
     public static final int MAX_ORGANISM_AMOUNT = 256;      // maximum organism amount
@@ -118,5 +118,5 @@ public interface Commons {
     public static final int MUTATION_CHANCE = 5; //Bigger, less chance
     
     public static final int CONNECTION_TIMEOUT_SEC = 5;
-    public static final int INT_FOR_CAMP = 150;
+    public static final int INT_FOR_CAMP = 100;
 }
