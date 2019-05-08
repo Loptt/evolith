@@ -71,7 +71,6 @@ public class OrganismManager implements Commons {
        
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
         mutPanel = new MutationPanel(0, 0, 0, 0, this.game);
-        
         updatedNight = false;
         speciesName = "";
     }

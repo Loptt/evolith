@@ -167,6 +167,7 @@ public class SetupMenu extends Menu {
         } 
             
         if(buttons.get(0).isPressed()){
+            game.getSfx().playNext();
             setClickPlay(true);
             setActive(false);
             buttons.get(0).setPressed(false);

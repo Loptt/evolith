@@ -111,6 +111,7 @@ public class ModeMenu extends Menu {
         switch(currentPage) {
             case 0: 
                 if (buttons.get(0).isPressed()) {
+                    game.getSfx().playNext();
                     single = true;
                     load = false;
                     host = false;
@@ -119,6 +120,7 @@ public class ModeMenu extends Menu {
                 }
                 
                 if (buttons.get(1).isPressed()) {
+                    game.getSfx().playNext();
                     single = false;
                     load = true;
                     host = false;
@@ -128,11 +130,13 @@ public class ModeMenu extends Menu {
                 }
                 
                 if (buttons.get(2).isPressed()) {
+                    game.getSfx().playNext();
                     buttons.get(2).setPressed(false);
                     currentPage = 1;
                 }
                 
                 if (buttons.get(3).isPressed()) {
+                    game.getSfx().playBack();
                     buttons.get(3).setPressed(false);
                     toMainMenu = true;
                 }
@@ -140,23 +144,27 @@ public class ModeMenu extends Menu {
             case 1:
                 if (buttons.get(4).isPressed()) {
                     System.out.println("HOST");
+                    game.getSfx().playNext();
                     buttons.get(4).setPressed(false);
                     game.mutliInitServer();
                     currentPage = 2;
                 }
                 
                 if (buttons.get(5).isPressed()) {
+                    game.getSfx().playNext();
                     System.out.println("CLIENT");
                     buttons.get(5).setPressed(false);
                     currentPage = 3;
                 }
                 if (buttons.get(3).isPressed()) {
+                    game.getSfx().playBack();
                     buttons.get(3).setPressed(false);
                     currentPage = 0;
                 }
                 break;
             case 2:
                 if (buttons.get(3).isPressed()) {
+                    game.getSfx().playBack();
                     buttons.get(3).setPressed(false);
                     currentPage = 1;
                     if (game.getNetwork() != null) {
@@ -186,6 +194,7 @@ public class ModeMenu extends Menu {
                 address = inputReader.getSpeciesName();
                 
                 if (buttons.get(3).isPressed()) {
+                    game.getSfx().playBack();
                     buttons.get(3).setPressed(false);
                     currentPage = 1;
                     if (game.getNetwork() != null) {
@@ -194,6 +203,7 @@ public class ModeMenu extends Menu {
                 }
                 
                 if (buttons.get(5).isPressed()) {
+                    game.getSfx().playNext();
                     buttons.get(5).setPressed(false);
                     game.multiInitClient(address);
                 }
