@@ -80,11 +80,17 @@ public class MaxIntelligenceButton extends Button {
     public Organism getOrg() {
         return org;
     }
-
+    /**
+     * To set the y off
+     * @param yOff 
+     */
     public void setyOff(int yOff) {
         this.yOff = yOff;
     }
-
+    /**
+     * To get the status of y
+     * @return 
+     */
     public int getyOff() {
         return yOff;
     }
