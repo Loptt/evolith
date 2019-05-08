@@ -9,7 +9,10 @@ import evolith.engine.Assets;
 import evolith.game.Game;
 import evolith.game.Item;
 import evolith.helpers.Commons;
+import evolith.helpers.SwarmMovement;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 
 /**
  *
@@ -20,6 +23,8 @@ public class Campfire extends Item implements Commons{
     boolean over;
     int count;
     Game game;
+    
+    int rad;
     
     public Campfire(int x, int y, int width, int height, Game game){
         super(x, y, width, height);
@@ -65,6 +70,32 @@ public class Campfire extends Item implements Commons{
     public void render(Graphics g) {
         g.drawImage(Assets.campfire, game.getCamera().getRelX(x)-(width/2), game.getCamera().getRelY(y)-(height/2), width, height, null);
     }
+
+    public int getRad() {
+        return width / 2;
+    }
     
+    public Point getCenter() {
+        return new Point(x + width/2, y + height / 2);
+    }
     
+    public boolean containsRectInRad(Rectangle r) {
+        if (SwarmMovement.distanceBetweenTwoPoints(r.x, r.y, x + width / 2, y + height / 2) < getRad()) {
+            return true;
+        }
+        
+        if (SwarmMovement.distanceBetweenTwoPoints(r.x + r.width, r.y, x + width / 2, y + height / 2) < getRad()) {
+            return true;
+        }
+        
+        if (SwarmMovement.distanceBetweenTwoPoints(r.x, r.y + r.height, x + width / 2, y + height / 2) < getRad()) {
+            return true;
+        }
+        
+        if (SwarmMovement.distanceBetweenTwoPoints(r.x + r.width, r.y + r.height, x + width / 2, y + height / 2) < getRad()) {
+            return true;
+        }
+        
+        return false;
+    }
 }
