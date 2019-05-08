@@ -104,8 +104,8 @@ public class Game implements Runnable, Commons {
 
     private Weather weather;                    //Weather manager
     
-    private int gameID;
-    private JDBC mysql;
+    private int gameID;                         //Id of the game
+    private JDBC mysql;                         //MySql connection object
 
     private boolean win;                        // To decide if the player has won
     private boolean server;                     // Decides if it is a server or not
@@ -573,6 +573,10 @@ public class Game implements Runnable, Commons {
             state = States.Statistics;
         }
     }
+    
+    /**
+     * Tick statistics menu 
+    */
     private void statisticsTick(){
         
         statsMenu.tick();
@@ -1401,26 +1405,50 @@ public class Game implements Runnable, Commons {
         }
     }
 
+    /**
+     * to get game id
+     * @return gameID
+     */
     public int getGameID() {
         return gameID;
     }
 
+    /**
+     * to set game ID
+     * @param gameID new id
+     */
     public void setGameID(int gameID) {
         this.gameID = gameID;
     }
 
+    /**
+     * to get mysql connection
+     * @return mysql
+     */
     public JDBC getMysql() {
         return mysql;
     }
 
+    /**
+     * to set mysql connection
+     * @param mysql new mysql
+     */
     public void setMysql(JDBC mysql) {
         this.mysql = mysql;
     }
 
+    /**
+     * to get clock
+     * @return clock
+     */
     public Clock getClock() {
         return clock;
     }
 
+    /**
+     * to get game statistics menu
+     * @return gameStats
+     */
     public GameStatisticsMenu getGameStats() {
         return gameStats;
     }

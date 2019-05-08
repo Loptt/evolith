@@ -17,15 +17,22 @@ import java.util.ArrayList;
 
 /**
  *
- * @author ErickFrank
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class MutationManager implements Commons{
 
-    private ArrayList<ArrayList<Mutation>> mutations;
-    private Organism org;
-    private Game game;
+    private ArrayList<ArrayList<Mutation>> mutations;   //List of list of mutations
+    private Organism org;   //Organism
+    private Game game;      //Game object
     
-
+    /**
+     * MutationManager constructor
+     * @param org organism owner of mutations
+     * @param game game object
+     */
     public MutationManager(Organism org, Game game) {
         mutations = new ArrayList<ArrayList<Mutation>>();
         this.org = org;
@@ -67,11 +74,19 @@ public class MutationManager implements Commons{
         mutations.get(1).get(1).setMutSprite(Assets.leg2prev);
         mutations.get(1).get(2).setMutSprite(Assets.leg3prev);
     }
-
+    
+    /**
+     * to get the mutation matrix
+     * @return mutations
+     */
     public ArrayList<ArrayList<Mutation>> getMutations() {
         return mutations;
     }
     
+    /**
+     * to get the current strength tier
+     * @return strength tier
+     */
     public int getStrengthTier() {
         int tier = 0;
         for (int i = 0; i < mutations.get(0).size(); i++) {
@@ -83,6 +98,10 @@ public class MutationManager implements Commons{
         return tier;
     }
     
+    /**
+     * to get the current speed tier
+     * @return speed tier
+     */
     public int getSpeedTier() {
         int tier = 0;
         for (int i = 0; i < mutations.get(1).size(); i++) {
@@ -94,6 +113,10 @@ public class MutationManager implements Commons{
         return tier;
     }
     
+    /**
+     * to get the current health tier
+     * @return health tier
+     */
     public int getHealthTier() {
         int tier = 0;
         for (int i = 0; i < mutations.get(2).size(); i++) {
@@ -105,6 +128,10 @@ public class MutationManager implements Commons{
         return tier;
     }
     
+    /**
+     * to get the current stealth tier
+     * @return stealth tier
+     */
     public int getStealthTier() {
         int tier = 0;
         for (int i = 0; i < mutations.get(3).size(); i++) {
@@ -116,6 +143,10 @@ public class MutationManager implements Commons{
         return tier;
     }
     
+    /**
+     * To set the strength tier
+     * @param tier new tier
+     */
     public void setStrengthTier(int tier) {
         for (int i = 0; i < mutations.get(0).size(); i++) {
             if (i + 1 == tier) {
@@ -126,6 +157,10 @@ public class MutationManager implements Commons{
         }
     }
     
+    /**
+     * To set the speed tier
+     * @param tier new tier
+     */
     public void setSpeedTier(int tier) {
         for (int i = 0; i < mutations.get(1).size(); i++) {
             if (i + 1 == tier) {
@@ -136,6 +171,10 @@ public class MutationManager implements Commons{
         }
     }
     
+    /**
+     * To set the health tier
+     * @param tier new tier
+     */
     public void setHealthTier(int tier) {
         for (int i = 0; i < mutations.get(2).size(); i++) {
             if (i + 1 == tier) {
@@ -146,6 +185,10 @@ public class MutationManager implements Commons{
         }
     }
     
+    /**
+     * To set the stealth tier
+     * @param tier new tier
+     */
     public void setStealthTier(int tier) {
         for (int i = 0; i < mutations.get(3).size(); i++) {
             if (i + 1 == tier) {
@@ -156,6 +199,10 @@ public class MutationManager implements Commons{
         }
     }
     
+    /**
+     * To save the current mutations to the print writer
+     * @param pw print writer
+     */
     public void save(PrintWriter pw) {
         //Save the state of each mutation
         for (int i = 0; i < mutations.size(); i++) {
@@ -165,6 +212,11 @@ public class MutationManager implements Commons{
         }
     }
     
+    /**
+     * To load the last saved mutations from the buffered reader
+     * @param br buffered reader
+     * @throws IOException 
+     */
     public void load(BufferedReader br) throws IOException {
         for (int i = 0; i < mutations.size(); i++) {
             for (int j = 0; j < mutations.get(i).size(); j++) {
@@ -173,6 +225,10 @@ public class MutationManager implements Commons{
         }
     }
     
+    /**
+     * To render the mutations
+     * @param g graphics
+     */
     public void render(Graphics g){
         for(int j=0; j<mutations.get(3).size(); j++){
             mutations.get(3).get(j).render(g);

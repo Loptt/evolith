@@ -183,47 +183,90 @@ public class Resource extends Item implements Commons{
     boolean hasParasite(Organism org) {
         return map.containsKey(org);
     }
-
+    
+    /**
+     * To get current quantity
+     * @return quantity
+     */
     public int getQuantity() {
         return quantity;
     }
-
+    
+    /**
+     * To set current quantity
+     * @param quantity new quantity
+     */
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
+    
+    /**
+     * to check if full
+     * @return full
+     */
     public boolean isFull() {
         return full;
     }
 
+    /**
+     * to set full state
+     * @param full full state
+     */
     public void setFull(boolean full) {
         this.full = full;
     }
 
+    /**
+     * to get resource type
+     * @return type
+     */
     public ResourceType getType() {
         return type;
     }
 
+    /**
+     * to set resource type
+     * @param type new type
+     */
     public void setType(ResourceType type) {
         this.type = type;
     }
 
+    /**
+     * to check if over
+     * @return over
+     */
     public boolean isOver() {
         return over;
     }
 
+    /**
+     * to set over
+     * @param over over state
+     */
     public void setOver(boolean over) {
         this.over = over;
     }
 
+    /**
+     * to get current predator
+     * @return predator
+     */
     public Predator getPredator() {
         return predator;
     }
 
+    /**
+     * to set new predator
+     * @param predator new predator
+     */
     public void setPredator(Predator predator) {
         this.predator = predator;
     }
     
+    /**
+     * To tick the resource
+     */
     @Override
     public void tick() {
         time.tick();
@@ -258,7 +301,11 @@ public class Resource extends Item implements Commons{
         }
 
     }
-
+    
+    /**
+     * To render the resource
+     * @param g graphics
+     */
     @Override
     public void render(Graphics g) {
         switch(type) {
@@ -287,22 +334,42 @@ public class Resource extends Item implements Commons{
         g.drawRect(game.getCamera().getRelX(x) + 9, game.getCamera().getRelY(y) + 85, 87, 8);
     }
 
+    /**
+     * to check if update
+     * @return update
+     */
     public boolean isUpdate() {
         return update;
     }
 
+    /**
+     * to set update state
+     * @param update update state
+     */
     public void setUpdate(boolean update) {
         this.update = update;
     }
     
+    /**
+     * to check if plant
+     * @return true if plant
+     */
     public boolean isPlant() {
         return type == ResourceType.Plant;
     }
 
+    /**
+     * to check add state
+     * @return add
+     */
     public boolean isAdd() {
         return add;
     }
 
+    /**
+     * to set add state
+     * @param add add state
+     */
     public void setAdd(boolean add) {
         this.add = add;
     }
