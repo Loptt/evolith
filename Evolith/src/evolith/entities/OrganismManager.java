@@ -54,11 +54,6 @@ public class OrganismManager implements Commons {
     private int maxIntelligence;
     private int maxGeneration;
 
-    private int panelIndex;         //Current index in organism panel
-    private int idCounter;          //Id counter to assign id to new organisms
-    private String speciesName;     //name of the species
-    
-    private boolean updatedNight;   //To check if night changes have been done
     private boolean other;          //State indicating if 
 
 
@@ -104,8 +99,6 @@ public class OrganismManager implements Commons {
         for (int i = 0; i < organisms.size(); i++) {
             organisms.get(i).tick();
             checkNeedMutation(organisms.get(i));
-
-            checkKill(organisms.get(i));
             checkGeneration(organisms.get(i));
         }
       

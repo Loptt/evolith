@@ -75,7 +75,7 @@ public class Game implements Runnable, Commons {
 
     private PredatorManager predators;          //Main enemies
 
-    private enum States {
+    public enum States {
         MainMenu, Paused, GameOver, Play, Instructions, SetupMenu, Statistics, Multi, ModeMenu
     } // status of the flow of the game once running
     private States state;
@@ -1161,7 +1161,7 @@ public class Game implements Runnable, Commons {
         
         try {
             gameID = mysql.getLastGameID() + 1;
-            mysql.insertGame(gameID, clock.getTicker());
+            mysql.insertGame(gameID, clock.getSeconds());
             mysql.insertSpecies(gameID);
             organisms.setSpeciesID(mysql.getSpeciesID(gameID));
             mysql.insertOrganism(organisms.getSpeciesID() , 1 ,organisms.getOrganism(0).getGeneration(),organisms.getOrganism(0).getSpeed(),organisms.getOrganism(0).getStealth() , organisms.getOrganism(0).getStrength(),organisms.getOrganism(0).getMaxHealth());

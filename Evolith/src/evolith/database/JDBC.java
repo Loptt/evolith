@@ -26,8 +26,8 @@ public class JDBC {
     public JDBC() {
 
         url = "jdbc:mysql://SG-Evolith-496-master.servers.mongodirector.com:3306/Evolith"; // url to the database
-        user = "sgroot"; // main user
-        password = "a6yaRypnDU-29cBS"; // user's password
+        user = "carladmin"; // main user
+        password = "Carldmin1$"; // user's password
         //tries to connect through the specified pathway of the driver else sends out a connection error
         try {
             myConnection = DriverManager.getConnection(url, user, password);
