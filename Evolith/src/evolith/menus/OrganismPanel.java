@@ -72,6 +72,8 @@ public class OrganismPanel extends Menu implements Commons {
      */
     public OrganismPanel(int x, int y, int width, int height, Game game, Organism org) {
         super(x, y, width, height, game);
+        
+        f = new FontLoader();
 
         this.organism = org;
         //Sets all events to false
