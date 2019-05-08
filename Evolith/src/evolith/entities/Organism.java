@@ -94,6 +94,7 @@ public class Organism extends Item implements Commons {
     private int alfa;               //Transparency value
     private boolean animationDone;  //Check if animation is done
     
+    private boolean inCamp;
     private Item pred;              //Predator chasing the organism
 
     /**
@@ -154,6 +155,7 @@ public class Organism extends Item implements Commons {
         drinking = false;
         selected = false;
         godCommand = false;
+        inCamp = false;
         
         damage = 0.05;
 
@@ -215,6 +217,7 @@ public class Organism extends Item implements Commons {
             }
         }
         
+        checkCamps();
         handleTarget();
         checkMovement();
         checkVitals(); 
@@ -429,6 +432,22 @@ public class Organism extends Item implements Commons {
         }
     }
     
+
+    private void checkCamps() {
+        Campfire camp;
+        for (int i = 0; i < game.getCampfires().getAmount(); i++) {
+            camp = game.getCampfires().getCamp(i);
+            
+            if (camp.containsRectInRad(getPerimeter())) {
+                inCamp = true;
+                return;
+            }
+        }
+        
+        inCamp = false;
+    }
+    
+
     /**
      * Process for the organism to be born
      */
@@ -1661,5 +1680,13 @@ public class Organism extends Item implements Commons {
      */
     public boolean isAnimationDone() {
         return animationDone;
+    }
+
+    public boolean isInCamp() {
+        return inCamp;
+    }
+
+    public void setInCamp(boolean inCamp) {
+        this.inCamp = inCamp;
     }
 }

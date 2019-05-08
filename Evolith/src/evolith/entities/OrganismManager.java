@@ -47,7 +47,7 @@ public class OrganismManager implements Commons {
     private int idCounter;                  //Counter to assign ids
     private String speciesName;             //Name of the species
     private int speciesID;                  //ID of the speces
-    
+
     private boolean updatedNight;           //Updated night state
     private int avg[];                      //Average
     private JDBC mysql;                     //MySql connection class
@@ -55,7 +55,6 @@ public class OrganismManager implements Commons {
     private int maxGeneration;              //Max generation of organisms
 
     private boolean other;                  //State indicating if organisms belong to opponent
-
 
     /**
      * Constructor of the organisms
@@ -199,7 +198,7 @@ public class OrganismManager implements Commons {
                         panelIndex = i;
                     }
                 }
-
+                
                 while (orgPanel.isSearchNext() || orgPanel.isSearchPrev()) {
                     if (orgPanel.isSearchNext()) {
                         int auxIndex = orgPanel.getIndex();

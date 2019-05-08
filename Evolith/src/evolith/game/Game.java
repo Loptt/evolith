@@ -10,6 +10,7 @@ import evolith.entities.ResourceManager;
 import evolith.entities.OrganismManager;
 import evolith.entities.PredatorManager;
 import evolith.engine.*;
+import evolith.entities.CampfireManager;
 import evolith.entities.Resource;
 import evolith.helpers.InputReader;
 import evolith.helpers.Selection;
@@ -103,6 +104,8 @@ public class Game implements Runnable, Commons {
     private int prevWeatherChange;              //Time to change weather
 
     private Weather weather;                    //Weather manager
+
+    private CampfireManager campfires;
     
     private int gameID;                         //Id of the game
     private JDBC mysql;                         //MySql connection object
@@ -129,6 +132,7 @@ public class Game implements Runnable, Commons {
         mainMenu = new MainMenu(0, 0, width, height, this);
         inputKeyboard = new InputKeyboard();
         minimap = new Minimap(MINIMAP_X, MINIMAP_Y, MINIMAP_WIDTH, MINIMAP_HEIGHT, this);
+        campfires = new CampfireManager(this);
 
         state = States.MainMenu;
         selection = new Selection(this);
@@ -361,6 +365,8 @@ public class Game implements Runnable, Commons {
 
         //Tick all involved objects
         clock.tick();
+        campfires.tick();
+
         organisms.tick();
         resources.tick();
         predators.tick();
@@ -650,16 +656,23 @@ public class Game implements Runnable, Commons {
 
         switch (weather.getState()) {
             case Clear:
+                resources.resetResources();
                 break;
             case Dry:
+                resources.reduceWaters(WATERS_AMOUNT/2);
                 break;
             case Rain:
+                resources.increaseResources(WATERS_AMOUNT+25);
                 break;
             case Storm:
+                //decrease number of small enemies
                 break;
             case Hail:
+                //decrease organism and predator movement speed
                 break;
             case Snow:
+                resources.reducePlants(PLANTS_AMOUNT/2);
+                resources.reduceWaters(WATERS_AMOUNT/2);
                 break;
         }
     }
@@ -948,8 +961,11 @@ public class Game implements Runnable, Commons {
         g.drawImage(background.getBackground(camera.getX(), camera.getY()), 0, 0, width, height, null);
 
         resources.render(g);
+        campfires.render(g);
+
         organisms.render(g);
         predators.render(g);
+
 
         if (night) {
             g.drawImage(Assets.backgroundFilter, 0, 0, width, height, null);
@@ -1379,6 +1395,17 @@ public class Game implements Runnable, Commons {
     public Weather getWeather() {
         return weather;
     }
+
+    public Clock getClock() {
+        return clock;
+    }
+
+    public CampfireManager getCampfires() {
+        return campfires;
+    }
+    
+    
+    
 
     /**
      * start game

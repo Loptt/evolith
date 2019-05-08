@@ -1,6 +1,7 @@
 package evolith.menus;
 
 import evolith.engine.Assets;
+import evolith.entities.CampfireManager;
 import evolith.entities.Organism;
 import evolith.game.Game;
 import evolith.helpers.Commons;
@@ -37,6 +38,10 @@ public class OrganismPanel extends Menu implements Commons {
     private int timeOpen;
     private boolean tickToWrite;
     private boolean inputActive;
+    private boolean campfire;
+    
+    private CampfireManager campfires;
+    
 
     /**
      * Constructor of the panel initializes the reader and font
@@ -62,6 +67,7 @@ public class OrganismPanel extends Menu implements Commons {
         }
         inputReader = new InputReader(game);
         inputActive = false;
+        
     }
 
     /**
@@ -82,6 +88,7 @@ public class OrganismPanel extends Menu implements Commons {
         this.searchNext = false;
         this.searchPrev = false;
         this.reproduce = false;
+        this.campfire = false;
 
         this.index = 0;
         //Set display to true
@@ -98,7 +105,9 @@ public class OrganismPanel extends Menu implements Commons {
         buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 400, 300, 75, Assets.organismPanel_reproduceButton_ON, Assets.organismPanel_reproduceButton_OFF));
         //Name button
         buttons.add(new Button(this.x + 110, this.y + 300, 193, 27));
-
+        //campfire
+        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 450, 300, 75, Assets.setCampfireOn, Assets.setCampfireOff));
+        
         if (this.organism.getName() != null || this.organism.getName() != "") {
             inputReader = new InputReader(this.organism.getName(), game);
         } else {
@@ -107,6 +116,8 @@ public class OrganismPanel extends Menu implements Commons {
         this.timeOpen = 0;
         this.tickToWrite = false;
         inputActive = false;
+        
+        this.campfires = game.getCampfires();
     }
 
     /**
@@ -171,19 +182,37 @@ public class OrganismPanel extends Menu implements Commons {
         for (int i = 0; i < buttons.size(); i++) {
             if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
                 //if the mouse is over the button 
-                buttons.get(i).setActive(true);
-                //if left click change mouse status
-                if (game.getMouseManager().isLeft()) {
-                    //Sets the button to the pressed status
-                    buttons.get(i).setPressed(true);
-                    for (int j = 0; j < buttons.size(); j++) {
-                        if (i != j) {
-                            buttons.get(j).setPressed(false);
+                if(i!=6){
+                   buttons.get(i).setActive(true);
+                    //if left click change mouse status
+                    if (game.getMouseManager().isLeft()) {
+                        //Sets the button to the pressed status
+                        buttons.get(i).setPressed(true);
+                        for (int j = 0; j < buttons.size(); j++) {
+                            if (i != j) {
+                                buttons.get(j).setPressed(false);
+                            }
                         }
+                        //Turns off mouse 
+                        game.getMouseManager().setLeft(false); 
+                        break;
                     }
-                    //Turns off mouse 
-                    game.getMouseManager().setLeft(false);
-                    break;
+                }
+                else if(!game.getWeather().getRain().isActive() && !game.getWeather().getStorm().isActive() && !campfires.isCooldown()){
+                    buttons.get(i).setActive(true);
+                    //if left click change mouse status
+                    if (game.getMouseManager().isLeft()) {
+                        //Sets the button to the pressed status
+                        buttons.get(i).setPressed(true);
+                        for (int j = 0; j < buttons.size(); j++) {
+                            if (i != j) {
+                                buttons.get(j).setPressed(false);
+                            }
+                        }
+                        //Turns off mouse 
+                        game.getMouseManager().setLeft(false);
+                        break;
+                    }
                 }
             } else {
                 //Sets the button to false if the button is hovered
@@ -248,6 +277,24 @@ public class OrganismPanel extends Menu implements Commons {
             inputActive = false;
         }
         
+        //campfires
+        if (buttons.get(6).isPressed()) {
+            if (campfire) {
+                buttons.get(6).setPressed(false);
+                campfire = false;
+            } else {
+                campfire = true;
+                buttons.get(6).setPressed(true);
+                int posx = organism.getX();
+                int posy = organism.getY();
+                if(campfires==null){
+                    System.out.println("null in button");
+                }
+                campfires.addCampfire(posx, posy);
+            }
+            active = false;
+        }
+        
         String name = organism.getName();
         
         if (name.length() > 1) {
@@ -300,7 +347,8 @@ public class OrganismPanel extends Menu implements Commons {
     public boolean isInputActive() {
         return inputActive;
     }
-
+    
+    
     @Override
     public void render(Graphics g) {
 
@@ -376,6 +424,8 @@ public class OrganismPanel extends Menu implements Commons {
             }
 
         }
+        
+        buttons.get(6).render(g);
 
         if (timeOpen % 60 == 0) {
             timeOpen = 0;

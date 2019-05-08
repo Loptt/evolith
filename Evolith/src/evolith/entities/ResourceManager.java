@@ -92,8 +92,74 @@ public class ResourceManager implements Commons {
                 }
             }
         }
-  
     
+    }
+
+    public void resetResources(){
+        Random randomGen = new Random();
+        watersAmount = WATERS_AMOUNT;
+        plantsAmount = PLANTS_AMOUNT;
+        while(plants.size()<PLANTS_AMOUNT){
+            int xCoord, yCoord; 
+            xCoord = randomGen.nextInt(5000) + 1;
+            yCoord = randomGen.nextInt(5000) + 1;
+            plants.add(new Resource(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE, game, Resource.ResourceType.Plant));
+        }
+        while(waters.size()<WATERS_AMOUNT){
+            int xCoord, yCoord; 
+            xCoord = randomGen.nextInt(5000) + 1;
+            yCoord = randomGen.nextInt(5000) + 1;
+            waters.add(new Resource(xCoord, yCoord, WATER_SIZE, WATER_SIZE, game, Resource.ResourceType.Water));
+        }
+        int i=0;
+        while(plants.size()>plantsAmount){
+            plants.remove(i);
+            i++;
+        }
+        int j=0;
+        while(waters.size()>watersAmount){
+            waters.remove(j);
+            j++;
+        }
+        
+    }
+    
+    public void reducePlants(int max){
+        int i=0;
+        while(plants.size()>max){
+            plants.get(i).setOver(true);
+            plants.remove(i);
+            plantsAmount = plants.size();
+            i++;
+        }
+    }
+    
+    public void reduceWaters(int max){
+        int i=0;
+        while(waters.size()>max){
+            waters.get(i).setOver(true);
+            waters.remove(i);
+            watersAmount = waters.size();
+            i++;
+        }
+    }
+    
+    public void increaseResources(int max){
+        Random randomGen = new Random();
+        while(plants.size()<max){
+            int xCoord, yCoord; 
+            xCoord = randomGen.nextInt(5000) + 1;
+            yCoord = randomGen.nextInt(5000) + 1;
+            plants.add(new Resource(xCoord, yCoord, PLANT_SIZE, PLANT_SIZE, game, Resource.ResourceType.Plant));
+        }
+        while(waters.size()<max){
+            int xCoord, yCoord; 
+            xCoord = randomGen.nextInt(5000) + 1;
+            yCoord = randomGen.nextInt(5000) + 1;
+            waters.add(new Resource(xCoord, yCoord, WATER_SIZE, WATER_SIZE, game, Resource.ResourceType.Water));
+        }
+        watersAmount = waters.size();
+        plantsAmount = plants.size();
     }
     
     /**
@@ -122,8 +188,8 @@ public class ResourceManager implements Commons {
     public void generateResources(){
         Random randomGen = new Random();
         
-        int newWidthWaters = (int) Math.ceil( 5000/Math.sqrt(WATERS_AMOUNT) );
-        int newHeightWaters = (int) Math.ceil( 5000/Math.sqrt(WATERS_AMOUNT) );
+        int newWidthWaters = (int) Math.ceil( 5000/Math.sqrt(watersAmount) );
+        int newHeightWaters = (int) Math.ceil( 5000/Math.sqrt(watersAmount) );
          
         for(int i=newWidthWaters; i<5000 - 2 * newWidthWaters; i+=newWidthWaters){
             for(int j=newHeightWaters; j<5000 - 2 * newHeightWaters; j+=newHeightWaters){
@@ -134,8 +200,8 @@ public class ResourceManager implements Commons {
             }
         }
         
-        int newWidthPlants = (int) Math.ceil( 5000/Math.sqrt(PLANTS_AMOUNT) );
-        int newHeightPlants = (int) Math.ceil( 5000/Math.sqrt(PLANTS_AMOUNT) );
+        int newWidthPlants = (int) Math.ceil( 5000/Math.sqrt(plantsAmount) );
+        int newHeightPlants = (int) Math.ceil( 5000/Math.sqrt(plantsAmount) );
         
         for(int i = newWidthPlants; i < 5000 - 2 * newWidthPlants; i += newWidthPlants){
             for(int j = newHeightPlants; j < 5000 - 2 * newHeightPlants; j += newHeightPlants){
@@ -299,6 +365,14 @@ public class ResourceManager implements Commons {
      */
     public void removeWater(Resource res) {
         waters.remove(res);
+    }
+
+    public ArrayList<Resource> getPlants() {
+        return plants;
+    }
+
+    public ArrayList<Resource> getWaters() {
+        return waters;
     }
     
     /**
