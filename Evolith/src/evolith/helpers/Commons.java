@@ -118,5 +118,5 @@ public interface Commons {
     public static final int MUTATION_CHANCE = 5; //Bigger, less chance
     
     public static final int CONNECTION_TIMEOUT_SEC = 5;
-    public static final int INT_FOR_CAMP = 5;
+    public static final int INT_FOR_CAMP = 150;
 }
