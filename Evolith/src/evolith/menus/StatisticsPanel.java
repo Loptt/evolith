@@ -26,13 +26,10 @@ import java.util.logging.Logger;
  */
 public class StatisticsPanel extends Menu implements Commons {
 
-    private boolean connected;
     private boolean ingame;
     private boolean active;
     private FontLoader f;
-    ArrayList<Point> points;
-    ArrayList<Point> pointsInner;
-
+    
     private int pointsX[];
     private int pointsY[];
     private int pointsYAvg[];
@@ -48,9 +45,6 @@ public class StatisticsPanel extends Menu implements Commons {
     private int strength;
     private int avg[];
     private JDBC mysql;
-    
-    
-    private Point pMiddle;
 
     public StatisticsPanel(int x, int y, int width, int height, Game game, boolean active, boolean ingame,int centerX, int centerY) {
         super(x, y, width, height, game);
@@ -58,6 +52,7 @@ public class StatisticsPanel extends Menu implements Commons {
         f = new FontLoader();
         this.mysql = game.getMysql();
         this.active = active;
+        this.game = game;
         this.speed = 100;
         this.stealth = 100;
         this.health = 100;
@@ -69,7 +64,7 @@ public class StatisticsPanel extends Menu implements Commons {
         this.pointsXAvg = new int[4];
         this.pointsYAvg = new int[4];
         this.ingame = ingame;
-        this.game = game;
+        
         this.centerX = centerX;
         this.centerY = centerY;
         
@@ -77,15 +72,15 @@ public class StatisticsPanel extends Menu implements Commons {
             try {
                 avg = mysql.getAverage();
 
-                this.pointsXAvg[0] = (int) ((-STATISTICS_DIMENSION * avg[0] / MAX_SPEED) / 2 + x+centerX );
-                this.pointsXAvg[1] = (int) ((STATISTICS_DIMENSION  * avg[1] / MAX_STEALTH) / 2 + x+centerX );
-                this.pointsXAvg[2] = (int) ((STATISTICS_DIMENSION  * avg[2] / MAX_STRENGTH) / 2 + x+centerX );
-                this.pointsXAvg[3] = (int) ((-STATISTICS_DIMENSION * avg[3] / MAX_HEALTH) / 2 + x+centerX );
+                this.pointsXAvg[0] = (int) ((-STATISTICS_DIMENSION_OVER * avg[0] / MAX_SPEED) / 2 + x+centerX );
+                this.pointsXAvg[1] = (int) ((STATISTICS_DIMENSION_OVER  * avg[1] / MAX_STEALTH) / 2 + x+centerX );
+                this.pointsXAvg[2] = (int) ((STATISTICS_DIMENSION_OVER  * avg[2] / MAX_STRENGTH) / 2 + x+centerX );
+                this.pointsXAvg[3] = (int) ((-STATISTICS_DIMENSION_OVER * avg[3] / MAX_HEALTH) / 2 + x+centerX );
 
-                this.pointsYAvg[0] = (int) ((-STATISTICS_DIMENSION * avg[0]/ MAX_SPEED) / 2 + y + centerY);
-                this.pointsYAvg[1] = (int) ((-STATISTICS_DIMENSION * avg[1]/ MAX_STEALTH) / 2 + y+centerY);
-                this.pointsYAvg[2] = (int) ((STATISTICS_DIMENSION  * avg[2]/ MAX_STRENGTH) / 2 + y+centerY);
-                this.pointsYAvg[3] = (int) ((STATISTICS_DIMENSION  * avg[3] / MAX_HEALTH) / 2 + y +centerY);
+                this.pointsYAvg[0] = (int) ((-STATISTICS_DIMENSION_OVER * avg[0]/ MAX_SPEED) / 2 + y + centerY);
+                this.pointsYAvg[1] = (int) ((-STATISTICS_DIMENSION_OVER * avg[1]/ MAX_STEALTH) / 2 + y + centerY);
+                this.pointsYAvg[2] = (int) ((STATISTICS_DIMENSION_OVER  * avg[2]/ MAX_STRENGTH) / 2 + y+ centerY);
+                this.pointsYAvg[3] = (int) ((STATISTICS_DIMENSION_OVER  * avg[3] / MAX_HEALTH) / 2 + y + centerY);
             } catch(Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -122,12 +117,11 @@ public class StatisticsPanel extends Menu implements Commons {
             }
         }
     if(ingame){    
+        
         if (buttons.get(0).isPressed()) {
             active = false;
             buttons.get(0).setPressed(false);
         }
-    }
-        
         this.pointsX[0] = (int) ((-STATISTICS_DIMENSION * speed / MAX_SPEED) / 2 + x+centerX );
         this.pointsX[1] = (int) ((STATISTICS_DIMENSION * stealth / MAX_STEALTH) / 2 + x+centerX );
         this.pointsX[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + x+centerX );
@@ -137,6 +131,20 @@ public class StatisticsPanel extends Menu implements Commons {
         this.pointsY[1] = (int) ((-STATISTICS_DIMENSION * stealth / MAX_STEALTH) / 2 + y+centerY);
         this.pointsY[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + y+centerY);
         this.pointsY[3] = (int) ((STATISTICS_DIMENSION * health / MAX_HEALTH) / 2 + y +centerY);
+    }else
+    {
+        this.pointsX[0] = (int) ((-STATISTICS_DIMENSION_OVER * speed / MAX_SPEED) / 2 + x+centerX );
+        this.pointsX[1] = (int) ((STATISTICS_DIMENSION_OVER * stealth / MAX_STEALTH) / 2 + x+centerX );
+        this.pointsX[2] = (int) ((STATISTICS_DIMENSION_OVER * strength / MAX_STRENGTH) / 2 + x+centerX );
+        this.pointsX[3] = (int) ((-STATISTICS_DIMENSION_OVER * health / MAX_HEALTH) / 2 + x+centerX );
+        
+        this.pointsY[0] = (int) ((-STATISTICS_DIMENSION_OVER * speed / MAX_SPEED) / 2 + y + centerY);
+        this.pointsY[1] = (int) ((-STATISTICS_DIMENSION_OVER * stealth / MAX_STEALTH) / 2 + y+centerY);
+        this.pointsY[2] = (int) ((STATISTICS_DIMENSION_OVER * strength / MAX_STRENGTH) / 2 + y+centerY);
+        this.pointsY[3] = (int) ((STATISTICS_DIMENSION_OVER * health / MAX_HEALTH) / 2 + y +centerY);
+
+    }
+
     }
  
     @Override
@@ -170,27 +178,70 @@ public class StatisticsPanel extends Menu implements Commons {
             for (int i = 0; i < buttons.size(); i++) {
                 buttons.get(i).render(g);
             }
+                   
+            g.setColor(new Color(9,255,200, 170));
+            g.fillPolygon(pointsX, pointsY, 4);
+
+            g2.setStroke(new BasicStroke(2));
+
+            g2.drawLine(pointsX[0],pointsY[0],pointsX[1],pointsY[1]);
+            g2.drawLine(pointsX[1],pointsY[1],pointsX[2],pointsY[2]);
+            g2.drawLine(pointsX[2],pointsY[2],pointsX[3],pointsY[3]);
+            g2.drawLine(pointsX[3],pointsY[3],pointsX[0],pointsY[0]);
+        
        } else{
             g.setColor(new Color(255,211,0, 170));
             g.fillPolygon(pointsXAvg, pointsYAvg, 4);
             g2.setColor(new Color(255,211,0));
             g2.setStroke(new BasicStroke(2));
+            
             g2.drawLine(pointsXAvg[0],pointsYAvg[0],pointsXAvg[1],pointsYAvg[1]);
             g2.drawLine(pointsXAvg[1],pointsYAvg[1],pointsXAvg[2],pointsYAvg[2]);
             g2.drawLine(pointsXAvg[2],pointsYAvg[2],pointsXAvg[3],pointsYAvg[3]);
             g2.drawLine(pointsXAvg[3],pointsYAvg[3],pointsXAvg[0],pointsYAvg[0]);
+            
+            g.setColor(new Color(9,255,200, 170));
+            g.fillPolygon(pointsX, pointsY, 4);
+
+            g2.setStroke(new BasicStroke(2));
+
+            g2.drawLine(pointsX[0],pointsY[0],pointsX[1],pointsY[1]);
+            g2.drawLine(pointsX[1],pointsY[1],pointsX[2],pointsY[2]);
+            g2.drawLine(pointsX[2],pointsY[2],pointsX[3],pointsY[3]);
+            g2.drawLine(pointsX[3],pointsY[3],pointsX[0],pointsY[0]);
+            
+            g.setFont(f.getFontEvolve().deriveFont(17f));
+            g.setColor(Color.WHITE);
+            g.setFont(f.getFontEvolve().deriveFont(17f));
+            g.drawString("Speed", 55, 248 );
+            g.drawString("Strength", 335 , 248);
+            g.drawString("Stealth", 49 , 467);
+            g.drawString("Max Health", 333 , 467);
+            
+            
+            
+            
+            
+            g2.setStroke(new BasicStroke(2));
+            
+            g.setColor(new Color(255,211,0, 170));
+            g.fillOval(73, 523, 20, 20);
+            g2.setColor(new Color(255,211,0));
+            g2.drawOval(72, 522, 21, 21);
+            
+            g.setColor(Color.WHITE);
+            g.drawString("Average", 101, 538 );
+            
+            g.setColor(new Color(9,255,200, 170));
+            g.fillOval(252, 523, 20, 20);
+            
+            g2.setColor(new Color(9,255,200));
+            g2.drawOval(251, 522, 21, 21);
+            
+            g.setColor(Color.WHITE);
+            g.drawString("Your Species", 280, 538 );
        }
-       
-        g.setColor(new Color(9,255,200, 170));
-        g.fillPolygon(pointsX, pointsY, 4);
-       
-        g2.setStroke(new BasicStroke(2));
-        
-        g2.drawLine(pointsX[0],pointsY[0],pointsX[1],pointsY[1]);
-        g2.drawLine(pointsX[1],pointsY[1],pointsX[2],pointsY[2]);
-        g2.drawLine(pointsX[2],pointsY[2],pointsX[3],pointsY[3]);
-        g2.drawLine(pointsX[3],pointsY[3],pointsX[0],pointsY[0]);
-        
+
 
         
     }

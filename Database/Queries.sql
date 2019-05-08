@@ -48,3 +48,5 @@ organism_stealth INT,
 organism_strength INT,
 organism_max_health INT,
 SELECT AVG(organism_speed),AVG(organism_strength),AVG(organism_speed),AVG(organism_max_health) FROM organism
+
+SELECT species_name, game_duration, MAX(species_intelligence) FROM game G JOIN species S ON S.game_id = G.game_id GROUP BY S.species_id ORDER BY S.species_intelligence DESC, G.game_duration ASC LIMIT 10;

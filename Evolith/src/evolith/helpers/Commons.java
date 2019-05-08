@@ -103,6 +103,7 @@ public interface Commons {
     public static final int BORN_TIME = 20;
 
     public static final int STATISTICS_DIMENSION = 175;
+    public static final int STATISTICS_DIMENSION_OVER = 205;
     public static final int STATISTICS_CIRCLE_DIMENSION = 250;
     public static final int STATISTICS_POINT_DIMENSION = 20;
 }

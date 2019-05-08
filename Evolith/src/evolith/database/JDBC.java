@@ -36,13 +36,14 @@ public class JDBC {
 
         try {
             myStatement = myConnection.createStatement();
-            myResult = JDBC.myStatement.executeQuery("SELECT species_name, game_duration, MAX(organism_generation) FROM game G JOIN species S ON S.game_id = G.game_id JOIN organism O ON O.species_id = S.species_id GROUP BY O.species_id ORDER BY S.species_intelligence DESC LIMIT 10;");
+            myResult = JDBC.myStatement.executeQuery("SELECT species_name, game_duration, MAX(species_intelligence) FROM game G JOIN species S ON S.game_id = G.game_id GROUP BY S.species_id ORDER BY S.species_intelligence DESC, G.game_duration ASC LIMIT 10;");
             while (myResult.next()) {
                 ArrayList<Object> Res = new ArrayList<Object>(3);
                 Res.add(myResult.getString(1));
                 Res.add(Integer.toString(myResult.getInt(2)));
                 Res.add(Integer.toString(myResult.getInt(3)));
                 myRanking.add(Res);
+                System.out.println(Res.get(0) + " "+ Res.get(1) + " " + Res.get(2));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
