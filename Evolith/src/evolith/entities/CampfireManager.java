@@ -30,7 +30,7 @@ public class CampfireManager implements Commons {
     }
     
     public void addCampfire(int x, int y){
-        campfires.add(new Campfire(x, y, 250, 250, game));
+        campfires.add(new Campfire(x, y, 350, 350, game));
         prevTime = game.getClock().getSeconds();
         cooldown = true;
     }
