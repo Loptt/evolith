@@ -774,38 +774,74 @@ public class OrganismManager implements Commons {
         return mutPanel;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getAmount() {
         return organisms.size();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getIdCounter() {
         return idCounter;
     }
 
+    /**
+     *
+     * @param idCounter
+     */
     public void setIdCounter(int idCounter) {
         this.idCounter = idCounter;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getSpeciesName() {
         return speciesName;
     }
 
+    /**
+     *
+     * @param speciesName
+     */
     public void setSpeciesName(String speciesName) {
         this.speciesName = speciesName;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isUpdatedNight() {
         return updatedNight;
     }
 
+    /**
+     *
+     * @param updatedNight
+     */
     public void setUpdatedNight(boolean updatedNight) {
         this.updatedNight = updatedNight;
     }
 
+    /**
+     *
+     * @return
+     */
     public Game getGame() {
         return game;
     }
 
+    /**
+     *
+     * @return
+     */
     public Hover getH() {
         return h;
     }
