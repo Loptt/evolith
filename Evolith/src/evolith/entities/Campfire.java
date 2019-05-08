@@ -48,7 +48,7 @@ public class Campfire extends Item implements Commons{
     public void decreaseLife(){
         count++;
         if(count>=60){
-            life = life - 20;
+            life = life - 5;
             count = 0;
             if(life<=0){
                 over = true;

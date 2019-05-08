@@ -414,7 +414,7 @@ public class Assets {
         
         campfire = ImageLoader.loadImage("/images/organisms/campfire.png");
         setCampfireOn = ImageLoader.loadImage("/images/panel/campfirebuttonon.png");
-        setCampfireOff = ImageLoader.loadImage("/images/panel/campfirebuttonon.png");
+        setCampfireOff = ImageLoader.loadImage("/images/panel/campfirebuttonoff.png");
 
         
     }

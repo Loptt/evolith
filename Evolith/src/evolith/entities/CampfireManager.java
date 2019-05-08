@@ -16,25 +16,23 @@ import java.util.ArrayList;
  */
 public class CampfireManager implements Commons {
     private ArrayList<Campfire> campfires;  //array of all organisms
-    private int amount;                     //max organism amount
 
     private Game game;                      // game instance
-    private int idCounter;
     
-    private int currentMaxAmount;
-    
-    private boolean purged;
+    private int prevTime;
+    private boolean cooldown;
     
     public CampfireManager(Game game){
         this.game = game;
         campfires = new ArrayList<Campfire>();
-        purged = false;
-        currentMaxAmount = 5;
-        idCounter = 0;
+        cooldown = false;
+        prevTime = -61;
     }
     
     public void addCampfire(int x, int y){
         campfires.add(new Campfire(x, y, 250, 250, game));
+        prevTime = game.getClock().getSeconds();
+        cooldown = true;
     }
     
     public void tick(){
@@ -44,12 +42,23 @@ public class CampfireManager implements Commons {
             }
             checkCampfires();
         }
+        
+        checkCooldown();
+    }
+    
+    public void checkCooldown(){
+        if(game.getClock().getSeconds()>prevTime+60){
+            cooldown = false;
+        }
     }
     
     public void checkCampfires(){
         if(campfires.size()>0){
             for(int i=0; i<campfires.size();i++){
                 if(campfires.get(i).isOver()){
+                    campfires.remove(i);
+                }
+                else if(game.getWeather().getRain().isActive() || game.getWeather().getStorm().isActive()){
                     campfires.remove(i);
                 }
             }
@@ -62,6 +71,11 @@ public class CampfireManager implements Commons {
             }
         }
     }
+
+    public boolean isCooldown() {
+        return cooldown;
+    }
+    
     
     public void render(Graphics g){
         if(campfires.size()>0){

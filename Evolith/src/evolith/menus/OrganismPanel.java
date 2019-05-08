@@ -41,6 +41,7 @@ public class OrganismPanel extends Menu implements Commons {
     private boolean campfire;
     
     private CampfireManager campfires;
+    
 
     /**
      * Constructor of the panel initializes the reader and font
@@ -117,9 +118,6 @@ public class OrganismPanel extends Menu implements Commons {
         inputActive = false;
         
         this.campfires = game.getCampfires();
-        if(campfires==null){
-            System.out.println("null at start");
-        }
     }
 
     /**
@@ -180,19 +178,37 @@ public class OrganismPanel extends Menu implements Commons {
         for (int i = 0; i < buttons.size(); i++) {
             if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
                 //if the mouse is over the button 
-                buttons.get(i).setActive(true);
-                //if left click change mouse status
-                if (game.getMouseManager().isLeft()) {
-                    //Sets the button to the pressed status
-                    buttons.get(i).setPressed(true);
-                    for (int j = 0; j < buttons.size(); j++) {
-                        if (i != j) {
-                            buttons.get(j).setPressed(false);
+                if(i!=6){
+                   buttons.get(i).setActive(true);
+                    //if left click change mouse status
+                    if (game.getMouseManager().isLeft()) {
+                        //Sets the button to the pressed status
+                        buttons.get(i).setPressed(true);
+                        for (int j = 0; j < buttons.size(); j++) {
+                            if (i != j) {
+                                buttons.get(j).setPressed(false);
+                            }
                         }
+                        //Turns off mouse 
+                        game.getMouseManager().setLeft(false); 
+                        break;
                     }
-                    //Turns off mouse 
-                    game.getMouseManager().setLeft(false);
-                    break;
+                }
+                else if(!game.getWeather().getRain().isActive() && !game.getWeather().getStorm().isActive() && !campfires.isCooldown()){
+                    buttons.get(i).setActive(true);
+                    //if left click change mouse status
+                    if (game.getMouseManager().isLeft()) {
+                        //Sets the button to the pressed status
+                        buttons.get(i).setPressed(true);
+                        for (int j = 0; j < buttons.size(); j++) {
+                            if (i != j) {
+                                buttons.get(j).setPressed(false);
+                            }
+                        }
+                        //Turns off mouse 
+                        game.getMouseManager().setLeft(false);
+                        break;
+                    }
                 }
             } else {
                 //Sets the button to false if the button is hovered
@@ -327,7 +343,8 @@ public class OrganismPanel extends Menu implements Commons {
     public boolean isInputActive() {
         return inputActive;
     }
-
+    
+    
     @Override
     public void render(Graphics g) {
 
