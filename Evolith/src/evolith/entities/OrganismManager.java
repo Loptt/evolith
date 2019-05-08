@@ -837,6 +837,10 @@ private void updateOrganismsDB()
     public void setStatsPanel(StatisticsPanel statsPanel) {
         this.statsPanel = statsPanel;
     }
+
+    public int[] getAvg() {
+        return avg;
+    }
     
     
 }

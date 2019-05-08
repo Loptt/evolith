@@ -55,8 +55,8 @@ public class StatisticsPanel extends Menu implements Commons {
         this.game = game;
         this.speed = 100;
         this.stealth = 100;
-        this.health = 100;
         this.strength = 100;
+        this.health = 100;
         this.avg = new int[4];
         
         this.pointsX = new int[4];
@@ -87,7 +87,7 @@ public class StatisticsPanel extends Menu implements Commons {
         }else{
         //Close Button
         buttons.add(new Button(PANEL_STATS_X + PANEL_STATS_WIDTH -BUTTON_CLOSE_DIMENSION/2, PANEL_STATS_Y-BUTTON_CLOSE_DIMENSION/2, BUTTON_CLOSE_DIMENSION, BUTTON_CLOSE_DIMENSION,Assets.organismPanel_close));
-        
+            
         }
     }
 
@@ -131,8 +131,14 @@ public class StatisticsPanel extends Menu implements Commons {
         this.pointsY[1] = (int) ((-STATISTICS_DIMENSION * stealth / MAX_STEALTH) / 2 + y+centerY);
         this.pointsY[2] = (int) ((STATISTICS_DIMENSION * strength / MAX_STRENGTH) / 2 + y+centerY);
         this.pointsY[3] = (int) ((STATISTICS_DIMENSION * health / MAX_HEALTH) / 2 + y +centerY);
+        
     }else
     {
+        this.speed = game.getOrganisms().getAvg()[0];
+        this.stealth = game.getOrganisms().getAvg()[1];
+        this.strength = game.getOrganisms().getAvg()[2];
+        this.health = game.getOrganisms().getAvg()[3];
+        
         this.pointsX[0] = (int) ((-STATISTICS_DIMENSION_OVER * speed / MAX_SPEED) / 2 + x+centerX );
         this.pointsX[1] = (int) ((STATISTICS_DIMENSION_OVER * stealth / MAX_STEALTH) / 2 + x+centerX );
         this.pointsX[2] = (int) ((STATISTICS_DIMENSION_OVER * strength / MAX_STRENGTH) / 2 + x+centerX );
@@ -142,6 +148,7 @@ public class StatisticsPanel extends Menu implements Commons {
         this.pointsY[1] = (int) ((-STATISTICS_DIMENSION_OVER * stealth / MAX_STEALTH) / 2 + y+centerY);
         this.pointsY[2] = (int) ((STATISTICS_DIMENSION_OVER * strength / MAX_STRENGTH) / 2 + y+centerY);
         this.pointsY[3] = (int) ((STATISTICS_DIMENSION_OVER * health / MAX_HEALTH) / 2 + y +centerY);
+        
 
     }
 
@@ -238,9 +245,6 @@ public class StatisticsPanel extends Menu implements Commons {
             g.setColor(Color.WHITE);
             g.drawString("Your Species", 280, 538 );
        }
-
-
-        
     }
 
     public void setSpeed(int speed) {

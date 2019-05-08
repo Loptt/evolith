@@ -503,12 +503,14 @@ public class Game implements Runnable, Commons {
             win = false;
             System.out.println("OVER");
             overMenu = new OverMenu(0, 0, width, height, this, win);
+            statsMenu.setWin(win);
         }
         
         if (organisms.isMaxIntelligence() || true) {
             state = States.GameOver;
             win = true;
             overMenu = new OverMenu(0, 0, width, height, this, win);
+            statsMenu.setWin(win);
         }
     }
 

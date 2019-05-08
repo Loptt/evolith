@@ -10,6 +10,7 @@ import evolith.engine.Assets;
 import evolith.game.Game;
 import static evolith.helpers.Commons.BLUE_GREEN_COLOR;
 import evolith.helpers.FontLoader;
+import java.awt.Color;
 import java.awt.Graphics;
 
 /**
@@ -73,7 +74,6 @@ public class StatisticsMenu extends Menu {
             buttons.get(0).setPressed(false);
         }
         statsPanel.tick();
-
     }
 
     @Override
@@ -83,17 +83,27 @@ public class StatisticsMenu extends Menu {
         g.setFont(f.getFontEvolve().deriveFont(17f));
         g.drawImage(Assets.rankPanel, x, y, width, height, null);
 
-        if (win) {
-            g.drawString("Trascended", x, y);
-        } else {
-            g.drawString("Extinct", x, y);
-        }
         
         statsPanel.render(g);
         rankPanel.render(g);
         for (int i = 0; i < buttons.size(); i++) {
             buttons.get(i).render(g);
         }
+        
+        g.setFont(f.getFontEvolve().deriveFont(30f));
+        if (win) {
+            g.setColor(Color.GREEN);
+           
+            g.drawString("Trascended", 165, 180);
+        } else {
+            g.setColor(Color.RED);
+            
+            g.drawString("Extinct", 165, 180);
+        }
     }
 
+    public void setWin(boolean win) {
+        this.win = win;
+    }
+    
 }

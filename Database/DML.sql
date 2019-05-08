@@ -1,3 +1,13 @@
+DROP TABLE IF EXISTS organism; 
+DROP TABLE IF EXISTS backup_organism;
+DROP TABLE IF EXISTS species;
+DROP TABLE IF EXISTS game; 
+
+DELETE FROM organism; ALTER TABLE organism AUTO_INCREMENT = 1;
+DELETE FROM backup_organism; ALTER TABLE backup_organism AUTO_INCREMENT = 1;
+DELETE FROM species; ALTER TABLE species AUTO_INCREMENT = 1;
+DELETE FROM game; ALTER TABLE game AUTO_INCREMENT = 1;
+
 INSERT INTO 
 player(player_name) VALUES
 ("Erick"),
@@ -242,24 +252,4 @@ VALUES
 (0,5,80,40,80,80,2),
 (0,5,80,40,80,80,2),
 (0,5,80,40,80,80,2),
-(0,5,80,40,80,80,2)
-;
-
-
-DROP
-
-DROP TABLE IF EXISTS mutation; 
-DROP TABLE IF EXISTS organism; 
-DROP TABLE IF EXISTS backup_organism;
-DROP TABLE IF EXISTS species;
-DROP TABLE IF EXISTS game; 
-DROP TABLE IF EXISTS player;
-
-DELETE FROM mutation; ALTER TABLE mutation AUTO_INCREMENT = 1;
-DELETE FROM organism; ALTER TABLE organism AUTO_INCREMENT = 1;
-DELETE FROM backup_organism; ALTER TABLE backup_organism AUTO_INCREMENT = 1;
-DELETE FROM species; ALTER TABLE species AUTO_INCREMENT = 1;
-DELETE FROM game; ALTER TABLE game AUTO_INCREMENT = 1;
-DELETE FROM player;ALTER TABLE player AUTO_INCREMENT = 1;
-
-INSERT INTO species(game_id,species_name) VALUES (" + Integer.toString(gameID)+", \' " + name+"\'; 
+(0,5,80,40,80,80,2);

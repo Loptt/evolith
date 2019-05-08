@@ -17,35 +17,38 @@ public class JDBC {
     public static Connection myConnection;
     public static Statement myStatement;
     public static ResultSet myResult;
+
     /**
-     * Constructor of the database connection through the driver manager.
-     * The url is the connection through which the JDBC driver connects to the servers.
-     * Mysql protocol handles the reconnection. 
+     * Constructor of the database connection through the driver manager. The
+     * url is the connection through which the JDBC driver connects to the
+     * servers. Mysql protocol handles the reconnection.
      */
     public JDBC() {
-        
+
         url = "jdbc:mysql://SG-Evolith-496-master.servers.mongodirector.com:3306/Evolith"; // url to the database
         user = "sgroot"; // main user
         password = "a6yaRypnDU-29cBS"; // user's password
         //tries to connect through the specified pathway of the driver else sends out a connection error
         try {
             myConnection = DriverManager.getConnection(url, user, password);
-            
-           // System.out.println("Connection made of user: " + user + " with password " + password);
+
+            // System.out.println("Connection made of user: " + user + " with password " + password);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
+
     /**
      * Function to get the top ranking games of Evolith
+     *
      * @return myRanking
-     * @throws SQLException 
+     * @throws SQLException
      */
     public ArrayList<ArrayList<Object>> getRanking() throws SQLException {
         //Matrix to store the ranking and useful information about the game
         ArrayList<ArrayList<Object>> myRanking = new ArrayList<ArrayList<Object>>();
         //String that queries the species name, game duration and the maximum intelligence of the species.
-        String getRanking ="SELECT species_name, game_duration, MAX(species_intelligence) FROM game G JOIN species S ON S.game_id = G.game_id GROUP BY S.species_id ORDER BY S.species_intelligence DESC, G.game_duration ASC LIMIT 10;";
+        String getRanking = "SELECT species_name, game_duration, MAX(species_intelligence) FROM game G JOIN species S ON S.game_id = G.game_id GROUP BY S.species_id ORDER BY S.species_intelligence DESC, G.game_duration ASC LIMIT 8;";
         //Executes the previous query
         try {
             //Creates a new statement from the connection of the database
@@ -67,10 +70,13 @@ public class JDBC {
         }
         return myRanking;
     }
+
     /**
-     * To get the last game ID of the game to identify the game and generate future queries
+     * To get the last game ID of the game to identify the game and generate
+     * future queries
+     *
      * @return gameID
-     * @throws SQLException 
+     * @throws SQLException
      */
     public int getLastGameID() throws SQLException {
         //Initializes the games
@@ -94,10 +100,13 @@ public class JDBC {
 
         return gameID;
     }
+
     /**
-     * Inserts a new game with the gameid and sets a new game duration according to the time spent
+     * Inserts a new game with the gameid and sets a new game duration according
+     * to the time spent
+     *
      * @param gameID
-     * @param ticker 
+     * @param ticker
      */
     public void insertGame(int gameID, int ticker) {
         //Query
@@ -114,10 +123,12 @@ public class JDBC {
         }
 
     }
+
     /**
      * Updates the game's time from the ticker and the game id
+     *
      * @param gameID
-     * @param ticker 
+     * @param ticker
      */
     public void updateTimeGame(int gameID, int ticker) {
         //Query to update
@@ -133,15 +144,17 @@ public class JDBC {
         }
 
     }
+
     /**
      * Inserts the species with the name and the game id
+     *
      * @param gameID
-     * @param name 
+     * @param name
      */
     public void insertSpecies(int gameID, String name) {
         //Query
         String insertSpecies = "INSERT INTO species(game_id,species_name) VALUES ( " + Integer.toString(gameID) + ", \" " + name + " \" );";
-        
+
         try {
             //Creates a new statement from the connection of the database
             myStatement = myConnection.createStatement();
@@ -152,8 +165,10 @@ public class JDBC {
             System.out.println(e.getMessage());
         }
     }
+
     /**
      * To get the speciesID from the gameID
+     *
      * @param gameID
      * @return speciesID
      */
@@ -161,7 +176,7 @@ public class JDBC {
         //Initialiazes the species ID to 0
         int speciesID = 0;
         //Query to get the speciesID
-        String getSpeciesID =  "SELECT species_id FROM species WHERE game_id =" + Integer.toString(gameID) + ";";
+        String getSpeciesID = "SELECT species_id FROM species WHERE game_id =" + Integer.toString(gameID) + ";";
         try {
             //Creates a new statement from the connection of the database
             myStatement = myConnection.createStatement();
@@ -176,42 +191,48 @@ public class JDBC {
             //Prints out the exception
             System.out.println(e.getMessage());
         }
-        
+
         return speciesID;
 
     }
+
     /**
-     * Inserts an organism with a specific generation, speed, stealth, strength and maxHealth
+     * Inserts an organism with a specific generation, speed, stealth, strength
+     * and maxHealth
+     *
      * @param speciesID
      * @param i
      * @param generation
      * @param speed
      * @param stealth
      * @param strength
-     * @param maxHealth 
+     * @param maxHealth
      */
     public void insertOrganism(int speciesID, int i, int generation, int speed, int stealth, int strength, int maxHealth) {
         //Query
         String insertOrganism = "INSERT INTO backup_organism(backup_organism_alive,backup_organism_generation,backup_organism_speed,backup_organism_stealth,backup_organism_strength,backup_organism_max_health,species_id) VALUES(" + Integer.toString(i) + "," + Integer.toString(generation) + "," + Integer.toString(speed) + "," + Integer.toString(stealth) + "," + Integer.toString(strength) + "," + Integer.toString(maxHealth) + "," + Integer.toString(speciesID) + ");";
-        
+
         try {
             //Creates a new statement from the connection of the database
             myStatement = myConnection.createStatement();
             //Execute and stores the result of the query
-            myStatement.executeUpdate(insertOrganism); 
+            myStatement.executeUpdate(insertOrganism);
         } catch (Exception e) {
             //Prints out the exception
             System.out.println(e.getMessage());
         }
     }
+
     /**
-     * Updates the organism from the database and updates the intelligence of the species
-     * @param om 
+     * Updates the organism from the database and updates the intelligence of
+     * the species
+     *
+     * @param om
      */
     public void updateOrganisms(OrganismManager om) {
         //Query to update organisms' intelligence
-         String updateIntelligence = "UPDATE species SET species_intelligence = " + Integer.toString(om.getMaxIntelligence())  +"WHERE species_id = " + Integer.toString(om.getSpeciesID());
-       
+        String updateIntelligence = "UPDATE species SET species_intelligence = " + Integer.toString(om.getMaxIntelligence()) + "WHERE species_id = " + Integer.toString(om.getSpeciesID());
+
         try {
             //Creates a new statement from the connection of the databases
             myStatement = myConnection.createStatement();
@@ -222,27 +243,29 @@ public class JDBC {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        
+
         try {
             //Creates a new statement from the connection of the database
             myStatement = myConnection.createStatement();
             //Execute and stores the result of the query
             myStatement.executeUpdate(updateIntelligence);
-  
+
         } catch (Exception e) {
             //Prints out the exceptions
             System.out.println(e.getMessage());
         }
     }
+
     /**
      * Updates the species name
+     *
      * @param gameID
-     * @param name 
+     * @param name
      */
     public void updateSpeciesName(int gameID, String name) {
         //Query to update the species name
         String updateSpeciesName = "UPDATE species SET species_name = \" " + name + " \" WHERE game_id = " + Integer.toString(gameID) + ";";
-        
+
         try {
             //Creates a new statement from the connection of the databases
             myStatement = myConnection.createStatement();
@@ -254,14 +277,16 @@ public class JDBC {
         }
 
     }
+
     /**
      * Initialize a record with a new species
-     * @param gameID 
+     *
+     * @param gameID
      */
     public void insertSpecies(int gameID) {
         //Query 
-        String insertSpecies ="INSERT INTO species(game_id) VALUES (" + Integer.toString(gameID) + ");";
-        
+        String insertSpecies = "INSERT INTO species(game_id) VALUES (" + Integer.toString(gameID) + ");";
+
         try {
             //Creates a new statement from the connection of the databases
             myStatement = myConnection.createStatement();
@@ -273,14 +298,15 @@ public class JDBC {
         }
 
     }
+
     /**
-     * Updates the backup organism from the database and inserts it to the 
+     * Updates the backup organism from the database and inserts it to the
      */
     public void updateBackup() {
         //Queries that delete  inserts all the content from one to another
         String mysqlDelete = "DELETE FROM backup_organism;";
         String modifyAutoIncrement = " ALTER TABLE backup_organism AUTO_INCREMENT = 1;";
-        
+
         try {
             //Creates a new statement from the connection of the databases
             myStatement = myConnection.createStatement();
@@ -312,28 +338,35 @@ public class JDBC {
         }
 
     }
+
     /**
      * Gets the average attributes of an organism
+     *
      * @return avg
      */
-    public int[] getAverage()
-    {   
-        //Initializes
+    public int[] getAverage() {
+        //Initializes the array
         int avg[] = new int[4];
-        
+
+        //Query
+        String getAverage = "SELECT AVG(organism_speed),AVG(organism_strength),AVG(organism_speed),AVG(organism_max_health) FROM organism;";
+
         try {
+            //Creates a new statement from the connection of the databases
             myStatement = myConnection.createStatement();
-            myResult = JDBC.myStatement.executeQuery("SELECT AVG(organism_speed),AVG(organism_strength),AVG(organism_speed),AVG(organism_max_health) FROM organism;");
-            while(myResult.next()){
-             avg[0] = myResult.getInt(1);
-             avg[1] = myResult.getInt(2);
-             avg[2] = myResult.getInt(3);
-             avg[3] = myResult.getInt(4);
-             }
+            //Execute and stores the result of the query
+            myResult = JDBC.myStatement.executeQuery(getAverage);
+
+            while (myResult.next()) {
+                avg[0] = myResult.getInt(1);
+                avg[1] = myResult.getInt(2);
+                avg[2] = myResult.getInt(3);
+                avg[3] = myResult.getInt(4);
+                //Prints out the exceptions
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        
         return avg;
     }
 }

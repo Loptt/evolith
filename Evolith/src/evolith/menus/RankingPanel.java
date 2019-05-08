@@ -50,7 +50,7 @@ public class RankingPanel extends Menu implements Commons {
 
         for (int i = 0; i < myRanking.size(); i++) {
             for (int j = 0; j < myRanking.get(i).size(); j++) {
-                g.drawString((String) myRanking.get(i).get(j), 475 + j * 126, 257 + i * 55);
+                g.drawString((String) myRanking.get(i).get(j) , 475 + j * 145, 257 + i * 54);
             }
         }
 
