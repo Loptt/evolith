@@ -47,7 +47,7 @@ public class CampfireManager implements Commons {
     }
     
     public void checkCooldown(){
-        if(game.getClock().getSeconds()>prevTime+60){
+        if(game.getClock().getSeconds()>prevTime+40){
             cooldown = false;
         }
     }
