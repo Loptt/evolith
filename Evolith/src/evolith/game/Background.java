@@ -13,12 +13,12 @@ import java.awt.image.BufferedImage;
  */
 public class Background {
 
-    private BufferedImage imageDay;
-    private BufferedImage imageNight;
+    private BufferedImage imageDay;     //The day background image
+    private BufferedImage imageNight;   //The night background image
 
-    private int cameraWidth, cameraHeight;
-    private int width, height;
-    private boolean night;
+    private int cameraWidth, cameraHeight; //The camera width and height
+    private int width, height;              //The background width and height
+    private boolean night;                  //The night state
 
     /**
      *
@@ -40,8 +40,8 @@ public class Background {
     /**
      * To get the background subimage depending on the camera height and width
      *
-     * @param x
-     * @param y
+     * @param x starting x coordinate
+     * @param y starting y coordinate
      * @return
      */
     public BufferedImage getBackground(int x, int y) {
@@ -55,7 +55,7 @@ public class Background {
     /**
      * To get the width of the background
      *
-     * @return
+     * @return width
      */
     public int getWidth() {
         return width;
@@ -64,12 +64,16 @@ public class Background {
     /**
      * To get the height of the background
      *
-     * @return
+     * @return height
      */
     public int getHeight() {
         return height;
     }
     
+    /**
+     * to get the current background
+     * @return background image
+     */
     public BufferedImage getCurrentFullBackground() {
         if (!night) {
             return imageDay;
@@ -78,18 +82,27 @@ public class Background {
         }
     }
 
+    /**
+     * set the night state
+     * @param night night boolean
+     */
     public void setNight(boolean night) {
         this.night = night;
     }
-
+    
+    /**
+     * set the day image
+     * @param imageDay day buffered image
+     */
     public void setImageDay(BufferedImage imageDay) {
         this.imageDay = imageDay;
     }
-
+    
+    /**
+     * set the night image
+     * @param imageNight night buffered image
+     */
     public void setImageNight(BufferedImage imageNight) {
         this.imageNight = imageNight;
     }
-    
-    
-    
 }
