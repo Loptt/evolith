@@ -24,9 +24,9 @@ import java.util.Random;
 public class PredatorManager implements Commons {
 
     private ArrayList<Predator> predators;  //array of all organisms
-    private int amount;         //max organism amount
+    private int amount;                     //max organism amount
 
-    private Game game;          // game instance
+    private Game game;                      // game instance
     private int idCounter;
     
     private int currentMaxAmount;

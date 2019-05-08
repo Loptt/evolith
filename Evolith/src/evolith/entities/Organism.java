@@ -95,6 +95,7 @@ public class Organism extends Item implements Commons {
     private boolean animationDone;
     
     private Item pred;
+    
 
     /**
      * Constructor of the organism

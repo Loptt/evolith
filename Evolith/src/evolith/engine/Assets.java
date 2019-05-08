@@ -165,6 +165,10 @@ public class Assets {
     public static SoundClip watersound;
     public static SoundClip grasssound;
     public static SoundClip aliensound;
+    
+    public static BufferedImage campfire;
+    public static BufferedImage setCampfireOn;
+    public static BufferedImage setCampfireOff;
 
     /**
      * Initializes the assets and links to the image folder
@@ -408,6 +412,10 @@ public class Assets {
         
         repClock = ImageLoader.loadImage("/images/organisms/clock.png");
         
+        campfire = ImageLoader.loadImage("/images/organisms/campfire.png");
+        setCampfireOn = ImageLoader.loadImage("/images/panel/campfirebuttonon.png");
+        setCampfireOff = ImageLoader.loadImage("/images/panel/campfirebuttonon.png");
+
         
     }
     

@@ -45,6 +45,7 @@ public class OrganismManager implements Commons {
     
     private boolean updatedNight;
     private boolean other;
+    
 
     /**
      * Constructor of the organisms
@@ -205,7 +206,7 @@ public class OrganismManager implements Commons {
                         panelIndex = i;
                     }
                 }
-
+                
                 while (orgPanel.isSearchNext() || orgPanel.isSearchPrev()) {
                     if (orgPanel.isSearchNext()) {
                         int auxIndex = orgPanel.getIndex();
