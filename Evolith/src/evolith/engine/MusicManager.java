@@ -13,11 +13,14 @@ import java.util.ArrayList;
  * @author moisesfernandez
  */
 public class MusicManager {
-    private ArrayList<Song> songs;
-    private int currentSong;
-    private int secondStart;
-    private Time time;
+    private ArrayList<Song> songs;  // Array of the songs of the game
+    private int currentSong;        // The number of the song being played
+    private int secondStart;        // The second at which a song starts
+    private Time time;              // To manage the time while the songs are played
 
+    /**
+     * The constructor of the music manager
+     */
     public MusicManager() {
         time = new Time();
         songs = new ArrayList<Song>();  
@@ -26,11 +29,13 @@ public class MusicManager {
         songs.add(new Song(Assets.originalsong, 29));
     }
     
+    /**
+     * Updates every frame
+     */
     public void tick() {
         time.tick();
         
-        System.out.println(time.getSeconds() + " " + secondStart + " " + songs.get(currentSong).duration);
-        
+        // To play the next song when the time passed exceeds the current song's duration
         if (time.getSeconds() >= secondStart + songs.get(currentSong).duration) {
             currentSong++;
             
@@ -40,6 +45,9 @@ public class MusicManager {
         }
     }
     
+    /**
+     * To start playing the songs
+     */
     public void play() {
         time.setTicker(0);
         currentSong = 0;
@@ -48,6 +56,9 @@ public class MusicManager {
         songs.get(currentSong).play();
     }
     
+    /**
+     * To stop playing the songs
+     */
     public void stop() {
         time.setTicker(0);
         secondStart = 0;
@@ -55,18 +66,30 @@ public class MusicManager {
     }
     
     private class Song {
-        private SoundClip clip;
-        private int duration;
+        private SoundClip clip;     // A song
+        private int duration;       // The duration of the song
         
+        /**
+         * The constructor of a song
+         * 
+         * @param clip
+         * @param duration 
+         */
         public Song (SoundClip clip, int duration) {
             this.clip = clip;
             this.duration = duration;
         }
         
+        /**
+         * Play a song
+         */
         public void play() {
             clip.play();
         }
         
+        /**
+         * Stop a song
+         */
         public void stop() {
             clip.stop();
         }
