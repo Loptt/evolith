@@ -5,6 +5,7 @@ import evolith.entities.CampfireManager;
 import evolith.entities.Organism;
 import evolith.game.Game;
 import evolith.helpers.Commons;
+import evolith.helpers.FontLoader;
 import evolith.helpers.InputReader;
 import java.awt.Color;
 import java.awt.Font;
@@ -17,17 +18,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author ErickFrank
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class OrganismPanel extends Menu implements Commons {
 
     private Organism organism;              //Organism that is being displayed in the panel
-
-    private String fontPath;                //Path to where the font is located
-    private Font fontEvolve;                //Font used in the organism panel
-    private InputStream is;                 //Manages the input of the name in the panel
-
+    private FontLoader f;
     private InputReader inputReader;        //Manages the input keyboard of the name in the panel
 
     private boolean active;                 //Determines whether the panel is active     
@@ -55,16 +54,7 @@ public class OrganismPanel extends Menu implements Commons {
     public OrganismPanel(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
         active = false;
-        fontPath = "/Fonts/MADE-Evolve-Sans-Regular.ttf";
-        this.is = OrganismPanel.class.getResourceAsStream(fontPath);
-        try {
-            fontEvolve = Font.createFont(Font.TRUETYPE_FONT, is);
-            fontEvolve = fontEvolve.deriveFont(20f);
-        } catch (FontFormatException ex) {
-            Logger.getLogger(OrganismPanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(OrganismPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        f = new FontLoader();
         inputReader = new InputReader(game);
         inputActive = false;
         
@@ -82,6 +72,8 @@ public class OrganismPanel extends Menu implements Commons {
      */
     public OrganismPanel(int x, int y, int width, int height, Game game, Organism org) {
         super(x, y, width, height, game);
+        
+        f = new FontLoader();
 
         this.organism = org;
         //Sets all events to false
@@ -102,11 +94,11 @@ public class OrganismPanel extends Menu implements Commons {
         // Arrow prev
         buttons.add(new Button(this.x - 100, this.y + PANEL_HEIGHT / 2, 50, 50, Assets.prevArrow));
         // Reproduce button 
-        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 400, 300, 75, Assets.organismPanel_reproduceButton_ON, Assets.organismPanel_reproduceButton_OFF));
+        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 380, 300, 75, Assets.organismPanel_reproduceButton_ON, Assets.organismPanel_reproduceButton_OFF));
         //Name button
         buttons.add(new Button(this.x + 110, this.y + 300, 193, 27));
         //campfire
-        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 150, this.y + 450, 300, 75, Assets.setCampfireOn, Assets.setCampfireOff));
+        buttons.add(new Button(this.x + PANEL_WIDTH / 2 - 100, this.y + 480, 200, 50, Assets.setCampfireOn, Assets.setCampfireOff));
         
         if (this.organism.getName() != null || this.organism.getName() != "") {
             inputReader = new InputReader(this.organism.getName(), game);
@@ -162,17 +154,12 @@ public class OrganismPanel extends Menu implements Commons {
      */
     @Override
     public void tick() {
-        /*if(organism.isDead())
-        {
-            active = false;
-        }*/
-        //Reads the input
-
+        
         //If the panel is not active, do nothing
         if (!active) {
             return;
         }
-        
+        //Reads the input
         if (inputActive) {
             game.getInputKeyboard().tick();
         }
@@ -198,7 +185,8 @@ public class OrganismPanel extends Menu implements Commons {
                         break;
                     }
                 }
-                else if(!game.getWeather().getRain().isActive() && !game.getWeather().getStorm().isActive() && !campfires.isCooldown()){
+                else if(!campfires.isCooldown() && organism.getIntelligence() > INT_FOR_CAMP && game.getState() == Game.States.Play
+                    && !game.getWeather().getRain().isActive() && !game.getWeather().getStorm().isActive()){
                     buttons.get(i).setActive(true);
                     //if left click change mouse status
                     if (game.getMouseManager().isLeft()) {
@@ -278,11 +266,12 @@ public class OrganismPanel extends Menu implements Commons {
         }
         
         //campfires
-        if (buttons.get(6).isPressed()) {
+        if (buttons.get(6).isPressed() && game.getState() == Game.States.Play 
+                && !game.getWeather().getRain().isActive() && !game.getWeather().getStorm().isActive()) {
             if (campfire) {
                 buttons.get(6).setPressed(false);
                 campfire = false;
-            } else {
+            } else if (organism.getIntelligence() > INT_FOR_CAMP) {
                 campfire = true;
                 buttons.get(6).setPressed(true);
                 int posx = organism.getX();
@@ -302,53 +291,75 @@ public class OrganismPanel extends Menu implements Commons {
             organism.setName(name);
         }
     }
-
+    /**
+     * Returns if the search is the previous
+     * @return searchPrev
+     */
     public boolean isSearchPrev() {
         return searchPrev;
     }
-
+    /**
+     * Set the search to the previous
+     * @param searchPrev 
+     */
     public void setSearchPrev(boolean searchPrev) {
         this.searchPrev = searchPrev;
     }
-
+    /**
+     * Check if the organism is reproducible
+     * @return reproduce
+     */
     public boolean isReproduce() {
         return reproduce;
     }
-
+    /**
+     * To set if the organism is reproducible
+     * @param reproduce 
+     */
     public void setReproduce(boolean reproduce) {
         this.reproduce = reproduce;
 
     }
-
+    /**
+     * To search the next organism
+     * @return searchNext
+     */
     public boolean isSearchNext() {
         return searchNext;
     }
-
+    /**
+     * To set if the next organism is being searched
+     * @param searchNext 
+     */
     public void setSearchNext(boolean searchNext) {
         this.searchNext = searchNext;
     }
-
+    /**
+     * To check if the panel is active
+     * @return 
+     */
     public boolean isActive() {
         return active;
     }
-
+    /**
+     * To set active the panel
+     * @param active 
+     */
     public void setActive(boolean active) {
         this.active = active;
     }
-
-    public ArrayList<Button> getButtons() {
-        return buttons;
-    }
-
-    public void setButtons(ArrayList<Button> buttons) {
-        this.buttons = buttons;
-    }
-    
+    /**
+     * To check if the input is active
+     * @return inputActive
+     */
     public boolean isInputActive() {
         return inputActive;
     }
     
-    
+    /**
+     * To render the graphics of the panel
+     * @param g 
+     */
     @Override
     public void render(Graphics g) {
 
@@ -410,22 +421,24 @@ public class OrganismPanel extends Menu implements Commons {
         
         // Edit
         g.setColor(Color.WHITE);
-        g.setFont(fontEvolve);
+        g.setFont(f.getFontEvolve());
         g.drawString(Integer.toString(organism.getGeneration()), x + 474, y + 286);
         g.drawString(Double.toString(organism.getTime().getSeconds()), x + 458, y + 313);
 
         g.setColor(Color.WHITE);
-        g.setFont(fontEvolve);
+        g.setFont(f.getFontEvolve());
 
-        for (int i = 0; i < buttons.size(); i++) {
+        for (int i = 0; i < buttons.size() - 1; i++) {
 
             if (i != 4 || organism.isNeedOffspring()) {
                 buttons.get(i).render(g);
             }
-
         }
         
-        buttons.get(6).render(g);
+        if (!campfires.isCooldown() && organism.getIntelligence() > INT_FOR_CAMP && game.getState() == Game.States.Play
+                && !game.getWeather().getRain().isActive() && !game.getWeather().getStorm().isActive()) {
+            buttons.get(6).render(g);
+        }
 
         if (timeOpen % 60 == 0) {
             timeOpen = 0;

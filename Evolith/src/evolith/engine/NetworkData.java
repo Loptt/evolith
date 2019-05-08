@@ -58,8 +58,8 @@ public class NetworkData implements Commons {
             
             //Get vitals
             data[index++] = (byte) ((int) (org.getLife()));
-            data[index++] = (byte) (org.getHunger());
-            data[index++] = (byte) (org.getThirst());
+            data[index++] = (byte) (org.getIntelligence() / 256);
+            data[index++] = (byte) (org.getIntelligence());
             
             //Get mutations
             data[index++] = convertMutations(org.getOrgMutations());
@@ -304,8 +304,7 @@ public class NetworkData implements Commons {
         int y;
         
         double life;
-        int hunger;
-        int thirst;
+        int intelligence;
         
         if (orgs == null) {
             return;
@@ -344,9 +343,9 @@ public class NetworkData implements Commons {
             org.setPoint(new Point(x, y));
             
             life = (double) ((int) unsignByte((data[index++])));
-            hunger = data[index++];
-            thirst = data[index++];
+            intelligence = unsignByte(data[index++]) * 256 + unsignByte(data[index++]);
             org.setLife(life);
+            org.setIntelligence(intelligence);
             
             parseMutations(org.getOrgMutations(), data, index++);
             getExtraInfo(org, orgs, data, index++, true);
@@ -360,8 +359,10 @@ public class NetworkData implements Commons {
             org.setPoint(new Point(x, y));
             
             life = (double) ((int) (data[index++]));
-            hunger = data[index++];
-            thirst = data[index++];
+            intelligence = unsignByte(data[index++]) * 256 + unsignByte(data[index++]);
+            
+            org.setLife(life);
+            org.setIntelligence(intelligence);
             
             parseMutations(org.getOrgMutations(), data, index++);
             getExtraInfo(org, orgs, data, index++, true);

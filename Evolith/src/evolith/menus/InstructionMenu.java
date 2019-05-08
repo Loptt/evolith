@@ -1,6 +1,7 @@
 package evolith.menus;
 
 import evolith.engine.Assets;
+import evolith.engine.SoundEffectManager;
 import evolith.game.Game;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -14,9 +15,11 @@ import java.util.ArrayList;
  */
 public class InstructionMenu extends Menu {
     
+    private SoundEffectManager sounds;
     private ArrayList<BufferedImage> images;            //contains the instructions assets
     private int currentImage;                           //index of the current image
     private boolean over;                               // to check if the instructions are over
+    
     /**
      * Contructor with the dimension and position of the instructions menu
      * @param x
@@ -39,7 +42,9 @@ public class InstructionMenu extends Menu {
         images.add(Assets.instructions.get(4));     //Fifth instructions image
         images.add(Assets.instructions.get(5));     //Sixth instructions image
         
-        buttons.add(new Button(920, 625, 55, 50, Assets.nextArrow, Assets.nextArrow)); // Next arrow button
+        buttons.add(new Button(920, 625, 55, 50, Assets.nextArrow, Assets.nextArrow)); //Next
+        sounds = game.getSfx();
+
     }
     /**
      * To check if the instructions are over
@@ -66,6 +71,7 @@ public class InstructionMenu extends Menu {
             buttons.get(0).setActive(true);
             //if left click change mouse status and changes the image
             if (game.getMouseManager().isLeft()) {
+                game.getSfx().playNext();
                 game.getMouseManager().setLeft(false);
                 currentImage++;
             }

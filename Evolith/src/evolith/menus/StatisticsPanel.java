@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package evolith.menus;
 
 import evolith.database.JDBC;
@@ -21,31 +16,44 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
- *
- * @author ErickFrank
+ * @author Erick González
+ * @author Carlos Estrada
+ * @author Víctor Villarreal
+ * @author Moisés Fernández
  */
 public class StatisticsPanel extends Menu implements Commons {
 
-    private boolean ingame;
-    private boolean active;
-    private FontLoader f;
+    private boolean ingame;             //checks if the panel is in game
+    private boolean active;             //checks if the panel is active
+    private FontLoader f;               //loads the font
     
-    private int pointsX[];
-    private int pointsY[];
-    private int pointsYAvg[];
-    private int pointsXAvg[];
+    private int pointsX[];              // points of the polygon of the traits
+    private int pointsY[];              // points of the polygon of the traits
+    private int pointsYAvg[];           // points of the polygon of the average traits
+    private int pointsXAvg[];           // points of the polygon of the average traits
     
-    private int centerX;
-    private int centerY;
+    private int centerX;                //center of the circle of the polygon
+    private int centerY;                 //center of the circle of the polygon
 
-    private Game game;
-    private int speed;
-    private int stealth;
-    private int health;
-    private int strength;
-    private int avg[];
-    private JDBC mysql;
-
+    private Game game;                  //game 
+    private int speed;                  // speed of the organism
+    private int stealth;                // stealth of the organism
+    private int health;                 // health of the organism
+    private int strength;               // strength of the organism
+    private int avg[];                  // average of the organism
+    private JDBC mysql;                 // manages the connection with the database
+    /**
+     * Constructor of the statistics panel
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param game
+     * @param active
+     * @param ingame
+     * @param centerX
+     * @param centerY 
+     */
     public StatisticsPanel(int x, int y, int width, int height, Game game, boolean active, boolean ingame,int centerX, int centerY) {
         super(x, y, width, height, game);
         
@@ -67,7 +75,6 @@ public class StatisticsPanel extends Menu implements Commons {
         
         this.centerX = centerX;
         this.centerY = centerY;
-        
         if(!ingame){
             try {
                 avg = mysql.getAverage();
@@ -90,7 +97,9 @@ public class StatisticsPanel extends Menu implements Commons {
             
         }
     }
-
+    /**
+     * To tick the panel of the statistics
+     */
     @Override
     public void tick() {
         //Checks the mouse positon relative to the button
@@ -153,14 +162,17 @@ public class StatisticsPanel extends Menu implements Commons {
     }
 
     }
- 
+    /**
+     * Renders the statistics panel
+     * @param g 
+     */
     @Override
     public void render(Graphics g) {
+        
         if(!active)
             return;
         
        Graphics2D g2 = (Graphics2D) g;
-       
        if(ingame){
             g.drawImage(Assets.statsPanel, PANEL_STATS_X, PANEL_STATS_Y, PANEL_STATS_WIDTH, PANEL_STATS_HEIGHT, null);
 
@@ -246,27 +258,45 @@ public class StatisticsPanel extends Menu implements Commons {
             g.drawString("Your Species", 280, 538 );
        }
     }
-
+    /**
+     * Sets the speed of the average
+     * @param speed 
+     */
     public void setSpeed(int speed) {
         this.speed = speed;
     }
-
+    /**
+     * Sets the stealth of the average
+     * @param stealth 
+     */
     public void setStealth(int stealth) {
         this.stealth = stealth;
     }
-
+    /**
+     * Sets the health of the average
+     * @param health 
+     */
     public void setHealth(int health) {
         this.health = health;
     }
-
+    /**
+     * Sets the strength of the average
+     * @param strength 
+     */
     public void setStrength(int strength) {
         this.strength = strength;
     }
-
+    /**
+     *  Checks if the active of the average
+     * @return 
+     */
     public boolean isActive() {
         return active;
     }
-
+    /**
+     *  Sets the active of the average
+     * @param active 
+     */
     public void setActive(boolean active) {
         this.active = active;
     }

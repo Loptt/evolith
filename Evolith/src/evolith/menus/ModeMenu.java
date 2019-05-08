@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package evolith.menus;
 
 import evolith.engine.Assets;
@@ -26,41 +21,41 @@ import java.util.logging.Logger;
  * @author Moisés Fernández
  */
 public class ModeMenu extends Menu {
-    
+
     private ArrayList<BufferedImage> backgrounds;
     private int currentPage;
-    
+
     private boolean single;             // to check if the single mode is active
     private boolean load;               // to check if the load mode is active
     private boolean host;               // to check if the host mode is active
     private boolean join;               // to check if the join mode is active
     private boolean toMainMenu;         // to check if the main menu mode is active
-    
+
     private InputReader inputReader;    //handle the input of the keyboard
-    
+
     private String fontPath;            //relative path to the font
     private String address;             //address of the connection
     private Font fontEvolve;            //main font 
     private InputStream is;             //handles the input 
     private int timeOpen;               //handles the time of the connection 
     private boolean tickToWrite;        //handle the ticking writing
-    
+
     public ModeMenu(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
         currentPage = 0;
-        
+
         backgrounds = new ArrayList<>(); //array with the background modes
         //add the background images of the modes
         backgrounds.add(Assets.modes.get(0));
         backgrounds.add(Assets.modes.get(1));
         backgrounds.add(Assets.modes.get(2));
         backgrounds.add(Assets.modes.get(3));
-        
+
         buttons.add(new Button(game.getWidth() / 2 - 400 / 2, 200, 400, 80, Assets.singlePlayerOn, Assets.singlePlayerOff)); //Single player
         buttons.add(new Button(game.getWidth() / 2 - 400 / 2, 330, 400, 80, Assets.loadModeOn, Assets.loadModeOff)); //Load player
         buttons.add(new Button(game.getWidth() / 2 - 400 / 2, 460, 400, 80, Assets.multiplayerOn, Assets.multiplayerOff)); //Multiplayer
         buttons.add(new Button(game.getWidth() / 2 - 250 / 2, 575, 250, 60, Assets.backOn, Assets.backOff)); //Back
-        
+
         buttons.add(new Button(game.getWidth() / 2 - 400 / 2, 300, 400, 80, Assets.hostOn, Assets.hostOff)); //Host
         buttons.add(new Button(game.getWidth() / 2 - 400 / 2, 450, 400, 80, Assets.joinOn, Assets.joinOff)); //Join
         //initalize all states in false
@@ -73,7 +68,7 @@ public class ModeMenu extends Menu {
         this.address = "localhost";
         //initializes the input reader
         inputReader = new InputReader(game);
-        
+
         //sets the path of the font
         fontPath = "/Fonts/MADE-Evolve-Sans-Regular.ttf";
         this.is = OrganismPanel.class.getResourceAsStream(fontPath);
@@ -88,22 +83,22 @@ public class ModeMenu extends Menu {
         this.timeOpen = 0;
         this.tickToWrite = false;
     }
+
     /**
      * Ticks the button
      */
     @Override
     public void tick() {
-        for(int i=0; i<buttons.size(); i++){
-            if(buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())){
+        for (int i = 0; i < buttons.size(); i++) {
+            if (buttons.get(i).hasMouse(game.getMouseManager().getX(), game.getMouseManager().getY())) {
                 //if the mouse is over the button
                 buttons.get(i).setActive(true);
                 //if mouse is clicked then set pressed
-                if(game.getMouseManager().isLeft()){
+                if (game.getMouseManager().isLeft()) {
                     System.out.println("PRESSED: " + i);
                     buttons.get(i).setPressed(true);
                 }
-            }
-            else {
+            } else {
                 buttons.get(i).setActive(false);
             }
         }
@@ -112,10 +107,11 @@ public class ModeMenu extends Menu {
         //the address of the connection to multiplayer is read
         address = inputReader.getSpeciesName();
         //handles the mode selected
-        switch(currentPage) {
+        switch (currentPage) {
             //Single player
-            case 0: 
+            case 0:
                 if (buttons.get(0).isPressed()) {
+                    game.getSfx().playNext();
                     single = true;
                     load = false;
                     host = false;
@@ -123,18 +119,21 @@ public class ModeMenu extends Menu {
                     buttons.get(0).setPressed(false);
                 }
                 if (buttons.get(1).isPressed()) {
+                    game.getSfx().playNext();
                     single = false;
                     load = true;
                     host = false;
                     join = false;
                     buttons.get(1).setPressed(false);
-                    
+
                 }
                 if (buttons.get(2).isPressed()) {
+                    game.getSfx().playNext();
                     buttons.get(2).setPressed(false);
                     currentPage = 1;
                 }
                 if (buttons.get(3).isPressed()) {
+                    game.getSfx().playBack();
                     buttons.get(3).setPressed(false);
                     toMainMenu = true;
                 }
@@ -144,17 +143,20 @@ public class ModeMenu extends Menu {
                 //If the host is selected initilize the server locally
                 if (buttons.get(4).isPressed()) {
                     System.out.println("HOST");
+                    game.getSfx().playNext();
                     buttons.get(4).setPressed(false);
                     game.mutliInitServer();
                     currentPage = 2;
                 }
                 //if its the client change the screen
                 if (buttons.get(5).isPressed()) {
+                    game.getSfx().playNext();
                     System.out.println("CLIENT");
                     buttons.get(5).setPressed(false);
                     currentPage = 3;
                 }
                 if (buttons.get(3).isPressed()) {
+                    game.getSfx().playBack();
                     buttons.get(3).setPressed(false);
                     currentPage = 0;
                 }
@@ -163,6 +165,7 @@ public class ModeMenu extends Menu {
             case 2:
                 //cancel the multiplayer connection
                 if (buttons.get(3).isPressed()) {
+                    game.getSfx().playBack();
                     buttons.get(3).setPressed(false);
                     currentPage = 1;
                     if (game.getNetwork() != null) {
@@ -182,12 +185,11 @@ public class ModeMenu extends Menu {
             case 3:
                 //increases the time that the connection is open
                 timeOpen++;
-                
+
                 //limits the input of the keyboard
                 if (game.getG().getFontMetrics().stringWidth(inputReader.getSpeciesName()) > 383) {
                     inputReader.setOnlyDelete(true);
-                }
-                else {
+                } else {
                     inputReader.setOnlyDelete(false);
                 }
                 //reads the input and updates the address of the connection
@@ -195,6 +197,7 @@ public class ModeMenu extends Menu {
                 address = inputReader.getSpeciesName();
                 //cancel the multiplayer connection
                 if (buttons.get(3).isPressed()) {
+                    game.getSfx().playBack();
                     buttons.get(3).setPressed(false);
                     currentPage = 1;
                     if (game.getNetwork() != null) {
@@ -203,6 +206,7 @@ public class ModeMenu extends Menu {
                 }
                 //initialize the client mode 
                 if (buttons.get(5).isPressed()) {
+                    game.getSfx().playNext();
                     buttons.get(5).setPressed(false);
                     game.multiInitClient(address);
                 }
@@ -216,7 +220,7 @@ public class ModeMenu extends Menu {
                     } else {
                         System.out.println("NOT READY");
                     }
-                    
+
                     game.getNetwork().sendReady(true);
                 } else {
                 }
@@ -226,14 +230,16 @@ public class ModeMenu extends Menu {
             buttons.get(i).setPressed(false);
         }
     }
+
     /**
      * To render the images
-     * @param g 
+     *
+     * @param g
      */
     @Override
     public void render(Graphics g) {
         g.drawImage(backgrounds.get(currentPage), x, y, width, height, null);
-        
+
         switch (currentPage) {
             //single player
             case 0:
@@ -265,81 +271,101 @@ public class ModeMenu extends Menu {
                     tickToWrite = !tickToWrite;
                 }
 
-                g.drawString(address, x + 407, y + 567);
+                g.drawString(address, x + 330, y + 400);
                 int width = g.getFontMetrics().stringWidth(address);
 
                 if (tickToWrite && !inputReader.isOnlyDelete()) {
-                    g.drawString("l", x + 407 + width, y + 567);
+                    g.drawString("l", x + 330 + width, y + 400);
                 }
                 break;
         }
     }
+
     /**
      * To check if the mode is main menu
+     *
      * @return toMainMenu
      */
     public boolean isToMainMenu() {
         return toMainMenu;
     }
+
     /**
      * To check if the mode is single player
+     *
      * @return single
      */
     public boolean isSingle() {
         return single;
     }
+
     /**
      * To check if the mode is load
+     *
      * @return load
      */
     public boolean isLoad() {
         return load;
     }
+
     /**
      * To check if the user is the host
+     *
      * @return host
      */
     public boolean isHost() {
         return host;
     }
+
     /**
      * To check if the user is joining a game
+     *
      * @return join
      */
     public boolean isJoin() {
         return join;
     }
+
     /**
      * To set the status of the main menu
-     * @param toMainMenu 
+     *
+     * @param toMainMenu
      */
     public void setToMainMenu(boolean toMainMenu) {
         this.toMainMenu = toMainMenu;
     }
+
     /**
      * To set the status of the single mode
-     * @param single 
+     *
+     * @param single
      */
     public void setSingle(boolean single) {
         this.single = single;
     }
+
     /**
      * To set the load status
-     * @param load 
+     *
+     * @param load
      */
     public void setLoad(boolean load) {
         this.load = load;
     }
+
     /**
      * To set if the user is host or client
-     * @param host 
+     *
+     * @param host
      */
     public void setHost(boolean host) {
         this.host = host;
     }
+
     /**
      * To set if the player is joining a game
-     * @param join 
+     *
+     * @param join
      */
     public void setJoin(boolean join) {
         this.join = join;

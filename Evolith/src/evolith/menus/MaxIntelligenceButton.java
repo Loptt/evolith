@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 public class MaxIntelligenceButton extends Button {
     
     private Organism org;   // organism with the max intelligence
+    private int yOff;       //intelligence bar y offset
     /**
      * Constructor of the maximum intelligence button with on and off state
      * @param x
@@ -63,7 +64,7 @@ public class MaxIntelligenceButton extends Button {
         super.render(g);
         //to set the new color and background of the button
         g.setColor(new Color(255,215,0));
-        g.fillRect(x + 21, y + 36, (int) 109 * org.getIntelligence() / MAX_INTELLIGENCE, 20);
+        g.fillRect(x + 21, y + yOff, (int) 109 * org.getIntelligence() / MAX_INTELLIGENCE, 20);
     }
     /**
      * To set the organism with the max intelligence
@@ -78,5 +79,19 @@ public class MaxIntelligenceButton extends Button {
      */
     public Organism getOrg() {
         return org;
+    }
+    /**
+     * To set the y off
+     * @param yOff 
+     */
+    public void setyOff(int yOff) {
+        this.yOff = yOff;
+    }
+    /**
+     * To get the status of y
+     * @return 
+     */
+    public int getyOff() {
+        return yOff;
     }
 }

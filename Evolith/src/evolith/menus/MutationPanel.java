@@ -8,12 +8,9 @@ import static evolith.helpers.Commons.MAX_SPEED;
 import static evolith.helpers.Commons.MAX_STEALTH;
 import static evolith.helpers.Commons.MAX_STRENGTH;
 import static evolith.helpers.Commons.MAX_SURVIVABILITY;
-import evolith.helpers.FontLoader;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -24,24 +21,44 @@ import java.util.HashMap;
  */
 public class MutationPanel extends Menu implements Commons {
 
-    private Organism organism;
+    private Organism organism;                  // to mutate the organism selected
 
-    private boolean active;
-    private Font fontEvolve;
-    private HashMap<Integer, String> hmap;
-    private int selection;
+    private boolean active;                     // to determine if the panel is active
+    private Font fontEvolve;                    // the main font
+    private HashMap<Integer, String> hmap;      // cardinal number conversion
+    private int selection;                      // tier selection of the mutation
 
+    /**
+     * Constructor of the mutation panel
+     *
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param game
+     */
     public MutationPanel(int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
     }
 
+    /**
+     * Constructor of the panel with the buttons, position, dimension and
+     * specific organism
+     *
+     * @param organism
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param game
+     */
     public MutationPanel(Organism organism, int x, int y, int width, int height, Game game) {
         super(x, y, width, height, game);
         this.organism = organism;
         //Evolve
-        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 - 250, this.y + MUTATION_PANEL_HEIGHT+10, 240, 60, Assets.mutationPanel_evolveButton_ON,Assets.mutationPanel_evolveButton_OFF));
+        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 - 250, this.y + MUTATION_PANEL_HEIGHT + 10, 240, 60, Assets.mutationPanel_evolveButton_ON, Assets.mutationPanel_evolveButton_OFF));
         //Not Evolve
-        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 + 250, this.y + MUTATION_PANEL_HEIGHT+10, 240, 60, Assets.mutationPanel_not_evolveButton_ON,Assets.mutationPanel_not_evolveButton_OFF));
+        buttons.add(new Button(this.x + MUTATION_PANEL_WIDTH / 2 + 250, this.y + MUTATION_PANEL_HEIGHT + 10, 240, 60, Assets.mutationPanel_not_evolveButton_ON, Assets.mutationPanel_not_evolveButton_OFF));
         //Strength
         buttons.add(new Button(x + 300, y + 30, 390, 110));
         //Speed
@@ -52,6 +69,7 @@ public class MutationPanel extends Menu implements Commons {
         buttons.add(new Button(x + 300, y + 375, 390, 110));
         selection = 0;
         active = false;
+        //conversion of the cardinal numbers
         hmap = new HashMap<Integer, String>();
         hmap.put(1, "I");
         hmap.put(2, "II");
@@ -60,7 +78,10 @@ public class MutationPanel extends Menu implements Commons {
 
     }
 
-    @Override
+    /**
+     * To tick the mutation panel
+     */
+@Override
     public void tick() {
         if (active) {
             for (int i = 0; i < buttons.size(); i++) {
@@ -151,7 +172,11 @@ public class MutationPanel extends Menu implements Commons {
          */
 
     }
-    
+    /**
+     * Render function of the graphics
+     *
+     * @param g
+     */
     @Override
     public void render(Graphics g) {
         if (active) {
@@ -254,11 +279,21 @@ public class MutationPanel extends Menu implements Commons {
         }
     }
 
-    
+
+    /**
+     * To check if the mutation panel is active
+     *
+     * @return
+     */
     public boolean isActive() {
         return active;
     }
 
+    /**
+     * To set the mutation panel status
+     *
+     * @param active
+     */
     public void setActive(boolean active) {
         this.active = active;
     }
