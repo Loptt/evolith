@@ -463,6 +463,8 @@ public class Organism extends Item implements Commons {
      */
     public void kill() {
         dead = true;
+        safeLeaveResource();
+        
         if (target != null && target.hasParasite(this)) {
             target.removeParasite(this);
         }
