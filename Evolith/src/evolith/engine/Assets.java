@@ -180,6 +180,10 @@ public class Assets {
     public static BufferedImage leg1prev;
     public static BufferedImage leg2prev;
     public static BufferedImage leg3prev;
+    
+    public static BufferedImage maxIntButtonOn;
+    public static BufferedImage maxIntButtonOff;
+    public static BufferedImage maxIntButtonOpp;
 
 
     /**
@@ -438,6 +442,10 @@ public class Assets {
         leg1prev = ImageLoader.loadImage("/images/Traits/legs1prev.png");
         leg2prev = ImageLoader.loadImage("/images/Traits/legs2prev.png");
         leg3prev = ImageLoader.loadImage("/images/Traits/legs3prev.png");
+        
+        maxIntButtonOn = ImageLoader.loadImage("/images/buttonbar/maxinton.png");
+        maxIntButtonOff = ImageLoader.loadImage("/images/buttonbar/maxintoff.png");
+        maxIntButtonOpp = ImageLoader.loadImage("/images/buttonbar/oppmaxint.png");
     }
     
     /**
