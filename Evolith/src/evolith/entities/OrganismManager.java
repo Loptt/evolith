@@ -658,8 +658,6 @@ public class OrganismManager implements Commons {
             }
         }
 
-        statsPanel.render(g);
-
         for (int i = 0; i < deadOrgs.size(); i++) {
             deadOrgs.get(i).render(g);
         }

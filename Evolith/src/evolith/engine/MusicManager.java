@@ -56,7 +56,12 @@ public class MusicManager {
         currentSong = 0;
         secondStart = (int) time.getSeconds();
         
+        for (int i = 0; i < songs.size(); i++) {
+            songs.get(i).stop();
+        }
+        
         songs.get(currentSong).play();
+
     }
     
     /**
@@ -66,6 +71,10 @@ public class MusicManager {
         time.setTicker(0);
         secondStart = 0;
         songs.get(currentSong).stop();
+        
+        for (int i = 0; i < songs.size(); i++) {
+            songs.get(i).stop();
+        }
     }
     
     private class Song {

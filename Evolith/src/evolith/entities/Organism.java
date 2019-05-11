@@ -354,11 +354,11 @@ public class Organism extends Item implements Commons {
             if (thirst >= 90) {
                 intelligence++;
             }
-            
+            /*
             if (hunger >= 90 && thirst >= 90) {
                 intelligence++;
             }
-            
+            */
             prevIntelResInc = (int) time.getSeconds();
         }
         
@@ -928,6 +928,7 @@ public class Organism extends Item implements Commons {
         pw.println(Integer.toString((int) hunger));
         pw.println(Integer.toString((int) thirst));
         pw.println(Integer.toString(maturity));
+        pw.println(Integer.toString(intelligence));
 
         //Save Activities
         pw.println(Integer.toString(searchFood ? 1 : 0));
@@ -969,6 +970,7 @@ public class Organism extends Item implements Commons {
         hunger = Integer.parseInt(br.readLine());
         thirst = Integer.parseInt(br.readLine());
         maturity = Integer.parseInt(br.readLine());
+        intelligence = Integer.parseInt(br.readLine());
         
         searchFood = Integer.parseInt(br.readLine()) == 1;
         searchWater = Integer.parseInt(br.readLine()) == 1;

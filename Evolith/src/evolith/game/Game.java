@@ -649,6 +649,7 @@ public class Game implements Runnable, Commons {
         {
             statsMenu.setMainMenu(false);
             state = States.MainMenu;
+            musicManager.stop();
             resetGame();
             
             if (network != null) {
@@ -1050,7 +1051,9 @@ public class Game implements Runnable, Commons {
             organisms.getOrgPanel().render(g);
         } else if (organisms.isMutPanelActive()) {
             organisms.getMutPanel().render(g);
-        } else if (organisms.getH() != null && organisms.isHover()) {
+        } else if (organisms.getStatsPanel().isActive()) {
+            organisms.getStatsPanel().render(g);
+        } else if(organisms.getH() != null && organisms.isHover()) {
             organisms.getH().render(g);
         }
 
