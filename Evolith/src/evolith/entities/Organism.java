@@ -400,14 +400,14 @@ public class Organism extends Item implements Commons {
         }
 
         //Once the organisms reaches max maturity, kill it
-        if (maturity >= MAX_MATURITY) {
+        /*if (maturity >= MAX_MATURITY) {
             kill();
-        }
+        }*/
         
         //If life reaches 0, kill the organism
-        if (life <= 0) {
+     /*   if (life <= 0) {
             kill();
-        }
+        }*/
     }
     
     /**
