@@ -411,14 +411,14 @@ public class Game implements Runnable, Commons {
 
         manageMouse();
         manageKeyboard();
-/*
+
         //Change the day cycle 
-        if (clock.getSeconds() >= prevSecDayCycleChange + DAY_CYCLE_DURATION_SECONDS) {
+        /*if (clock.getSeconds() >= prevSecDayCycleChange + 10) {
             night = !night;
             background.setNight(night);
             prevSecDayCycleChange = clock.getSeconds();
-        }
-*/
+        }*/
+
         maxIntButton.setOrg(organisms.getMostIntelligent());
 
         //Update resources
@@ -1058,7 +1058,7 @@ public class Game implements Runnable, Commons {
         }
 
         if (paused) {
-            pauseMenu.render(g);
+            //pauseMenu.render(g);
         }
 
         maxIntButton.render(g);
