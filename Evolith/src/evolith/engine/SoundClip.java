@@ -166,13 +166,14 @@ public class SoundClip {
         }
         //vuelve a empezar el sound clip
         clip.setFramePosition(0);
-
+/*
         //Reproduce el sonido con repeticion opcional.
         if (looping) {
             clip.loop(Clip.LOOP_CONTINUOUSLY);
         } else {
             clip.loop(repeat);
         }
+        */
     }
 
     /**

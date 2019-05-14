@@ -388,7 +388,7 @@ public class Game implements Runnable, Commons {
 
         organisms.tick();
         resources.tick();
-        //predators.tick();
+        predators.tick();
         buttonBar.tick();
         gameStats.tick();
         selection.tick();
