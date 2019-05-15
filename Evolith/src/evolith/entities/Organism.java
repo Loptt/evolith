@@ -397,17 +397,19 @@ public class Organism extends Item implements Commons {
             if (maturity == 140) {
                 needOffspring = true;
             }
+            
+            needOffspring = true;
         }
 
         //Once the organisms reaches max maturity, kill it
-        /*if (maturity >= MAX_MATURITY) {
+        if (maturity >= MAX_MATURITY) {
             kill();
-        }*/
+        }
         
         //If life reaches 0, kill the organism
-     /*   if (life <= 0) {
+        if (life <= 0) {
             kill();
-        }*/
+        }
     }
     
     /**
@@ -1029,7 +1031,7 @@ public class Organism extends Item implements Commons {
             //Warning that the organism can reproduce
             if(isNeedOffspring()){
                 g.setColor(Color.BLACK);
-                g.drawImage(Assets.repClock, game.getCamera().getRelX(getX() - width / 2), game.getCamera().getRelY(getY() - width / 2) - 5, 15, 17, null);
+                //g.drawImage(Assets.repClock, game.getCamera().getRelX(getX() - width / 2), game.getCamera().getRelY(getY() - width / 2) - 5, 15, 17, null);
                 //g.fillOval(game.getCamera().getRelX(getX() - width / 2), game.getCamera().getRelY(getY() - width / 2), currentSize / 2, currentSize / 2);
             }
 

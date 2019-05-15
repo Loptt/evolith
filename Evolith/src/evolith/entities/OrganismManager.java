@@ -68,7 +68,7 @@ public class OrganismManager implements Commons {
         this.other = other;
         organisms = new ArrayList<>();
         deadOrgs = new ArrayList<>();
-        int amount = 4;
+        int amount = 1;
         idCounter = 1;
         maxGeneration = 1;
 
@@ -619,26 +619,13 @@ public class OrganismManager implements Commons {
             }
         } else {
             organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
-            organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
-            organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
-            organisms.add(new Organism(INITIAL_POINT, INITIAL_POINT, ORGANISM_SIZE_STAT, ORGANISM_SIZE_STAT, game, 0, idCounter++, other));
         }
         
         organisms.get(0).setEgg(false);
         organisms.get(0).setBorn(true);
         organisms.get(0).setMaturity(100);
-        
-        organisms.get(1).setEgg(false);
-        organisms.get(1).setBorn(true);
-        organisms.get(1).setMaturity(100);
-        
-        organisms.get(2).setEgg(false);
-        organisms.get(2).setBorn(true);
-        organisms.get(2).setMaturity(100);
-        
-        organisms.get(3).setEgg(false);
-        organisms.get(3).setBorn(true);
-        organisms.get(3).setMaturity(100);
+        organisms.get(0).setSkin(skin);
+
 
         orgPanel = new OrganismPanel(0, 0, 0, 0, this.game);
         mutPanel = new MutationPanel(0, 0, 0, 0, this.game);

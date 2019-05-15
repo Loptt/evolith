@@ -90,9 +90,7 @@ public class Weather {
         //states.get(0).add(State.Clear);
         //states.get(0).add(State.Rain);
 
-                  states.get(0).add(State.Snow);
-                states.get(0).add(State.Snow);
-                states.get(0).add(State.Snow);
+                states.get(0).add(State.Clear);
         
         //Dry
         states.get(1).add(State.Dry);

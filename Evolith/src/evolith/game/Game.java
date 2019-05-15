@@ -398,11 +398,11 @@ public class Game implements Runnable, Commons {
         musicManager.tick();
 
         //Change weather when the duration has passed
-        /*if (clock.getSeconds() >= prevWeatherChange + WEATHER_CYCLE_DURATION_SECONDS) {
+        if (clock.getSeconds() >= prevWeatherChange + WEATHER_CYCLE_DURATION_SECONDS) {
             weather.changeWeather();
             prevWeatherChange = clock.getSeconds();
             changeEnvironmentToWeather();
-        }*/
+        }
 
         //Only tick camera when the organism panel is not active
         if (!organisms.getOrgPanel().isInputActive()) {
@@ -411,9 +411,9 @@ public class Game implements Runnable, Commons {
 
         manageMouse();
         manageKeyboard();
-
+/*
         //Change the day cycle 
-        /*if (clock.getSeconds() >= prevSecDayCycleChange + 10) {
+        if (clock.getSeconds() >= prevSecDayCycleChange + 10) {
             night = !night;
             background.setNight(night);
             prevSecDayCycleChange = clock.getSeconds();
